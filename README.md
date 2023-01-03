@@ -21,11 +21,14 @@
 ## 주제 선정 이유
 
 ## 페이지
+Medecine.jsx => 박수빈
+Compare.jsx => 이재정
 
 
 
 ## 공통 컴포넌트
-Header.jsx
+Header.jsx => 김수정
+Layout.jsx => 김수정
 
 
 ## 와이어프레임
