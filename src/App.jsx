@@ -1,9 +1,12 @@
-import { BrowserRouter, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import ComparePage from './pages/Compare';
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes></Routes>
+      <Routes>
+        <Route exact path='/compare' element={<ComparePage />} />
+      </Routes>
     </BrowserRouter>
   );
 }
