@@ -22,12 +22,14 @@
 
 ## 페이지
 Medecine.jsx => 박수빈
+
 Compare.jsx => 이재정
 
 
 
 ## 공통 컴포넌트
 Header.jsx => 김수정
+
 Layout.jsx => 김수정
 
 
