@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useLayoutEffect } from 'react';
 
 const ComparePage = () => {
   const versusList = [
@@ -18,6 +18,7 @@ const ComparePage = () => {
         { material: '모르핀', 분량: '100', 단위: '밀리그램' },
         { material: '수면제', 분량: '200', 단위: '밀리그램' },
         { material: '마약', 분량: '500', 단위: '밀리그램' },
+        { material: '미원', 분량: '500', 단위: '밀리그램' },
       ],
     },
     {
@@ -31,81 +32,69 @@ const ComparePage = () => {
         { material: '모르핀', 분량: '100', 단위: '밀리그램' },
         { material: '수면제', 분량: '250', 단위: '밀리그램' },
         { material: '마약', 분량: '200', 단위: '밀리그램' },
+        { material: '사랑', 분량: '500', 단위: '밀리그램' },
       ],
     },
   ];
 
-  //   const medicine1 = {
-  //     medicineName: versusList[0].itemName,
-  //   };
-  //   const medicine2 = {
-  //     medicineName: versusList[1].itemName,
-  //   };
+  const medicineA = {
+    medicineName: versusList[0].itemName,
+  };
+  const medicineB = {
+    medicineName: versusList[1].itemName,
+  };
+  const inPill = [];
 
-  const medicineIngredient = [medicine1, medicine2];
+  const medicineIngredient = [medicineA, medicineB];
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    // medicineA에 속성 추가
     for (let i = 1; i < versusList[0].materialName.length; i++) {
-      medicine1[versusList[0].materialName[i].material] = Number(
+      //inPill배열에 추가되지 않은 성분일 경우 해당 성분 추가
+      if (!inPill.includes(versusList[0].materialName[i].material)) {
+        inPill.push(versusList[0].materialName[i].material);
+      }
+
+      //객체에 '성분 : 분량' 방식으로 추가
+      medicineA[versusList[0].materialName[i].material] = Number(
         versusList[0].materialName[i].분량
       );
-
-      //   const addMedicine = {
-      //     [versusList[0].materialName[i].material]: Number(
-      //       versusList[0].materialName[i].분량
-      //     ),
-      //   };
-      //   setMedicine1(addMedicine);
     }
+    // medicineB에 속성 추가
     for (let i = 1; i < versusList[1].materialName.length; i++) {
-      medicine2[versusList[1].materialName[i].material] = Number(
+      //inPill배열에 추가되지 않은 성분일 경우 해당 성분 추가
+      if (!inPill.includes(versusList[1].materialName[i].material)) {
+        inPill.push(versusList[1].materialName[i].material);
+      }
+
+      //객체에 '성분 : 분량' 방식으로 추가
+      medicineB[versusList[1].materialName[i].material] = Number(
         versusList[1].materialName[i].분량
       );
-
-      //   const addMedicine2 = {
-      //     [versusList[1].materialName[i].material]: Number(
-      //       versusList[1].materialName[i].분량
-      //     ),
-      //   };
-      //   setMedicine2(addMedicine2);
     }
   }, []);
 
   //   --------------------------------------------------------------
 
   useLayoutEffect(() => {
-    let root = am5.Root.new('chartdiv');
+    const root = am5.Root.new('chartdiv');
 
     root.setThemes([am5themes_Animated.new(root)]);
 
-    let chart = root.container.children.push(
+    const chart = root.container.children.push(
       am5xy.XYChart.new(root, {
         panX: false,
         panY: false,
-        wheelX: 'panY',
-        wheelY: 'zoomY',
+
+        // 스크롤 이벤트 시 애니메이션 활용 여부
+        // wheelX: 'panY',
+        // wheelY: 'zoomY',
+
         layout: root.verticalLayout,
       })
     );
 
-    let inPill = ['모르핀', '수면제', '마약'];
-
-    const medicineIngredient1 = [
-      {
-        medicineName: '게보린정(수출명:돌로린정)',
-        모르핀: 200,
-        수면제: 1500,
-        마약: 700,
-      },
-      {
-        medicineName: '게보린정1(수출명:돌로린정)',
-        모르핀: 20,
-        수면제: 100,
-        마약: 400,
-      },
-    ];
-
-    let yAxis = chart.yAxes.push(
+    const yAxis = chart.yAxes.push(
       am5xy.CategoryAxis.new(root, {
         categoryField: 'medicineName',
         renderer: am5xy.AxisRendererY.new(root, {}),
@@ -114,7 +103,7 @@ const ComparePage = () => {
     );
     yAxis.data.setAll(medicineIngredient);
 
-    let xAxis = chart.xAxes.push(
+    const xAxis = chart.xAxes.push(
       am5xy.ValueAxis.new(root, {
         min: 0,
         max: 100,
@@ -125,7 +114,7 @@ const ComparePage = () => {
       })
     );
 
-    let legend = chart.children.push(
+    const legend = chart.children.push(
       am5.Legend.new(root, {
         centerX: am5.p50,
         x: am5.p50,
@@ -133,10 +122,18 @@ const ComparePage = () => {
     );
 
     for (let i = 0; i < inPill.length; i++) {
-      let series = chart.series.push(
+      const series = chart.series.push(
         am5xy.ColumnSeries.new(root, {
+          // 차트 border 설정
+          stroke: am5.color(0xffffff),
+          strokeWidth: 2,
+
+          // 속성이름
           name: inPill[i],
+
+          //쌓아올리는 막대 구분
           stacked: true,
+
           xAxis: xAxis,
           yAxis: yAxis,
           baseAxis: yAxis,
@@ -147,13 +144,16 @@ const ComparePage = () => {
       );
       series.data.setAll(medicineIngredient);
 
+      // 마우스 오버 시 문구 출력
       series.columns.template.setAll({
         tooltipText: '{name}: {valueX}mg',
         tooltipY: am5.percent(100),
       });
 
       series.appear();
-      series.bullets.push(function () {
+
+      // 차트 가운데 라벨
+      series.bullets.push(() => {
         return am5.Bullet.new(root, {
           sprite: am5.Label.new(root, {
             text: "{valueXTotalPercent.formatNumber('#.#')}%",
@@ -175,41 +175,33 @@ const ComparePage = () => {
 
   //   --------------------------------------------------------------
   return (
-    <Layout>
-      <Wrap>
-        <MainWrap>
-          <div className='title'>선택한 약품 비교하기</div>
-          <div className='versus'>
-            {versusList.map((list) => (
-              <div className='card' key={list.itemName}>
-                <div
-                  className='cardImg'
-                  style={{
-                    backgroundImage: `url(${list.itemImage})`,
-                  }}></div>
-                <div className='cardName'>{list.itemName}</div>
-                <div className='cardContentDesc'>{list.entpName}</div>
-                <div className='cardContentDesc'>{list.etcOtcCode}</div>
-                <button>이 약품만 보러가기</button>
-              </div>
-            ))}
-          </div>
-        </MainWrap>
-        <SubWrap>
-          <div className='title'>그래프 비교</div>
-          <div id='chartdiv' style={{ width: '90%', height: '290px' }}></div>
-        </SubWrap>
-      </Wrap>
-    </Layout>
+    <Wrap>
+      <MainWrap>
+        <div className='title'>선택한 약품 비교하기</div>
+        <div className='versus'>
+          {versusList.map((list) => (
+            <div className='card' key={list.itemName}>
+              <div
+                className='cardImg'
+                style={{
+                  backgroundImage: `url(${list.itemImage})`,
+                }}></div>
+              <div className='cardName'>{list.itemName}</div>
+              <div className='cardContentDesc'>{list.entpName}</div>
+              <div className='cardContentDesc'>{list.etcOtcCode}</div>
+              <button>이 약품만 보러가기</button>
+            </div>
+          ))}
+        </div>
+      </MainWrap>
+      <SubWrap>
+        <div className='title'>그래프 비교</div>
+        <div id='chartdiv' style={{ width: '90%', height: '290px' }}></div>
+      </SubWrap>
+    </Wrap>
   );
 };
 
-const Layout = styled.div`
-  max-width: 1380px;
-  width: 100%;
-  margin: 0 auto;
-  padding-top: 60px;
-`;
 const Wrap = styled.div`
   width: 100%;
 `;
