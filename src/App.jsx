@@ -2,9 +2,11 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 //page
 import ComparePage from './pages/Compare';
+import Login from './pages/Login';
 
 // 컴포넌트
 import Layout from './components/layout/Layout';
+import Header from './components/layout/Header';
 
 function App() {
   return (
@@ -17,6 +19,16 @@ function App() {
             <Layout>
               <ComparePage />
             </Layout>
+          }
+        />
+        <Route
+          exact
+          path='/login'
+          element={
+            <>
+              <Header />
+              <Login />
+            </>
           }
         />
       </Routes>
