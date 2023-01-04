@@ -1,12 +1,22 @@
-import { BrowserRouter, Routes } from 'react-router-dom';
-import Layout from './components/layout/Layout';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
+import Header from './components/layout/Header';
 
 function App() {
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes></Routes>
-      </Layout>
+      <Routes>
+        <Route
+          exact
+          path='/login'
+          element={
+            <>
+              <Header />
+              <Login />
+            </>
+          }
+        />
+      </Routes>
     </BrowserRouter>
   );
 }
