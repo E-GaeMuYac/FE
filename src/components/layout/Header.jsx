@@ -37,7 +37,7 @@ const LogoBox = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
-  padding-left: 100px;
+  justify-content: center;
   font-size: 40px;
   font-weight: 700;
 `;
@@ -45,9 +45,8 @@ const LogoBox = styled.div`
 const CategoryBox = styled.div`
   width: 60%;
   height: 100%;
-  padding-left: 160px;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
   gap: 80px;
   align-items: center;
   font-size: 23px;
@@ -63,7 +62,7 @@ const SignBox = styled.div`
   width: 20%;
   height: 100%;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
   gap: 40px;
   align-items: center;
 `;
