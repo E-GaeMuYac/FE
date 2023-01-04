@@ -7,6 +7,7 @@ import Login from './pages/Login';
 // 컴포넌트
 import Layout from './components/layout/Layout';
 import Header from './components/layout/Header';
+import Signup from './pages/Signup';
 
 function App() {
   return (
@@ -28,6 +29,16 @@ function App() {
             <>
               <Header />
               <Login />
+            </>
+          }
+        />
+        <Route
+          exact
+          path='/signup'
+          element={
+            <>
+              <Header />
+              <Signup />
             </>
           }
         />
