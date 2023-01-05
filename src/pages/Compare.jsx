@@ -1,15 +1,41 @@
 import styled from 'styled-components';
+
+import qs from 'qs';
+
+import { useLocation } from 'react-router-dom';
 import { useEffect, useLayoutEffect, useState } from 'react';
+
+//component
+import TabBar from '../components/common/Tabbar';
 
 // 그래프 라이브러리
 import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
-import TabBar from '../components/common/Tabbar';
-import { useLocation } from 'react-router-dom';
-import qs from 'qs';
 
-const GraphTop3 = ({ medicineInfo }) => {
+const VersusContent = ({ medicineInfo, query }) => {
+  // ------------------------------------------------------------
+  const [versusContentDesc, setVersusContentDesc] = useState('');
+
+  useEffect(() => {
+    switch (query) {
+      case '효능 효과':
+        setVersusContentDesc(medicineInfo.eeDocData);
+        break;
+      case '용법 용량':
+        setVersusContentDesc(medicineInfo.udDocData);
+        break;
+      case '첨가물':
+        setVersusContentDesc(medicineInfo.ingrName);
+        break;
+      case '보관 방법':
+        setVersusContentDesc(medicineInfo.eeDocData);
+        break;
+    }
+  }, [query]);
+  // ------------------------------------------------------------
+  //그래프 부분
+
   const [totalWeight, setTotalWeight] = useState(0);
 
   // 전체 무게 초기화
@@ -83,29 +109,34 @@ const GraphTop3 = ({ medicineInfo }) => {
     setTop3NumberNum(top3NumberNumData);
     setTop3NumberName(top3NumberNameData);
   }, []);
+
   return (
-    <div className='graphTop3'>
-      <div className='graphTop3Content'>
-        <div className='graphTop3Title'>{medicineInfo.itemName}</div>
-        <div className='graphTop3Material'>
-          <div className='materialPercent'>
-            {Math.round((topNumberNum / totalWeight) * 100)}%
+    <div className='versusContentWrap'>
+      {query === '성분 순위' ? (
+        <>
+          <div className='graphTop3Title'>{medicineInfo.itemName}</div>
+          <div className='graphTop3Material'>
+            <div className='materialPercent'>
+              {Math.round((topNumberNum / totalWeight) * 100)}%
+            </div>
+            <div className='materialName'>{topNumberName}</div>
           </div>
-          <div className='materialName'>{topNumberName}</div>
-        </div>
-        <div className='graphTop3Material'>
-          <div className='materialPercent'>
-            {Math.round((topNO2Num / totalWeight) * 100)}%
+          <div className='graphTop3Material'>
+            <div className='materialPercent'>
+              {Math.round((topNO2Num / totalWeight) * 100)}%
+            </div>
+            <div className='materialName'>{topNO2Name}</div>
           </div>
-          <div className='materialName'>{topNO2Name}</div>
-        </div>
-        <div className='graphTop3Material'>
-          <div className='materialPercent'>
-            {Math.round((top3NumberNum / totalWeight) * 100)}%
+          <div className='graphTop3Material'>
+            <div className='materialPercent'>
+              {Math.round((top3NumberNum / totalWeight) * 100)}%
+            </div>
+            <div className='materialName'>{top3NumberName}</div>
           </div>
-          <div className='materialName'>{top3NumberName}</div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <>{versusContentDesc}</>
+      )}
     </div>
   );
 };
@@ -114,7 +145,6 @@ const ComparePage = () => {
   const location = useLocation().pathname;
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
-    // 문자열 맨 앞의 ?를 생력
   }).tab;
 
   const versusList = [
@@ -124,6 +154,9 @@ const ComparePage = () => {
         'https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
       entpName: '삼진제약(주)',
       etcOtcCode: '일반의약품',
+      eeDocData: '정신이 몽롱해지고 곧...',
+      udDocData: '용법용량 블라블라',
+      ingrName: 'ingr, ingr, ingr, ingr',
       materialName: [
         { 총량: '1정 중 1300밀리그램' },
         { material: '모르핀', 분량: '100', 단위: '밀리그램' },
@@ -138,6 +171,9 @@ const ComparePage = () => {
         'https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
       entpName: '삼진제약(주)',
       etcOtcCode: '일반의약품',
+      eeDocData: '기강이 해이해지고 곧...',
+      udDocData: '용법용량 블라블라',
+      ingrName: 'ingr, ingr, ingr, ingr',
       materialName: [
         { 총량: '1정 중 550밀리그램' },
         { material: '모르핀', 분량: '100', 단위: '밀리그램' },
@@ -150,10 +186,10 @@ const ComparePage = () => {
   //   --------------------------------------------------------------
   // 그래프
 
-  const medicineA = {
+  let medicineA = {
     medicineName: versusList[0].itemName,
   };
-  const medicineB = {
+  let medicineB = {
     medicineName: versusList[1].itemName,
   };
   const inPill = [];
@@ -204,6 +240,15 @@ const ComparePage = () => {
         layout: root.verticalLayout,
       })
     );
+
+    //차트 색 변경
+    chart
+      .get('colors')
+      .set('colors', [
+        am5.color(0xcb76ff),
+        am5.color(0x6faffa),
+        am5.color(0xfde284),
+      ]);
 
     // y축 라벨, 그리드 없애기
     const yRenderer = am5xy.AxisRendererY.new(root, {});
@@ -335,8 +380,8 @@ const ComparePage = () => {
       <TabBar location={location} query={query} />
       <SubWrap>
         <div className='content'>
-          <GraphTop3 medicineInfo={versusList[0]} />
-          <GraphTop3 medicineInfo={versusList[1]} />
+          <VersusContent medicineInfo={versusList[0]} query={query} />
+          <VersusContent medicineInfo={versusList[1]} query={query} />
         </div>
       </SubWrap>
     </Wrap>
@@ -412,12 +457,11 @@ const SubWrap = styled.div`
   .content {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 42px;
   }
-  .graphTop3 {
-    width: 330px;
-    background-color: #d9d9d9;
+  .versusContentWrap {
+    width: 90%;
+    background-color: #ebebeb;
     border-radius: 25px;
     padding: 24px 25px;
   }
