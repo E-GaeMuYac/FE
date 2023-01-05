@@ -25,12 +25,18 @@ Medecine.jsx => 박수빈
 
 Compare.jsx => 이재정
 
+Login.jsx => 김수정
+
+Signup.jsx => 김수정
+
 
 
 ## 공통 컴포넌트
 Header.jsx => 김수정
 
 Layout.jsx => 김수정
+
+TabBar.jsx => 이재정
 
 
 ## 와이어프레임
