@@ -5,6 +5,9 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
+import TabBar from '../components/common/Tabbar';
+import { useLocation } from 'react-router-dom';
+import qs from 'qs';
 
 const GraphTop3 = ({ medicineInfo }) => {
   const [totalWeight, setTotalWeight] = useState(0);
@@ -108,6 +111,12 @@ const GraphTop3 = ({ medicineInfo }) => {
 };
 
 const ComparePage = () => {
+  const location = useLocation().pathname;
+  const query = qs.parse(window.location.search, {
+    ignoreQueryPrefix: true,
+    // 문자열 맨 앞의 ?를 생력
+  }).tab;
+
   const versusList = [
     {
       itemName: '타이레노오오오오올',
@@ -149,7 +158,7 @@ const ComparePage = () => {
   };
   const inPill = [];
 
-  const medicineIngredient = [medicineB, medicineA];
+  const medicineIngredient = [medicineA, medicineB];
 
   useLayoutEffect(() => {
     // medicineA에 속성 추가
@@ -292,7 +301,6 @@ const ComparePage = () => {
       root.dispose();
     };
   }, []);
-
   //   --------------------------------------------------------------
   return (
     <Wrap>
@@ -324,6 +332,7 @@ const ComparePage = () => {
           </div>
         </div>
       </MainWrap>
+      <TabBar location={location} query={query} />
       <SubWrap>
         <div className='content'>
           <GraphTop3 medicineInfo={versusList[0]} />
