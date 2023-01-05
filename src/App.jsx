@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Layout from './components/layout/Layout';
 import Header from './components/layout/Header';
 import Signup from './pages/Signup';
+import CompareBox from './components/common/CompareBox';
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           }
         />
       </Routes>
+      <CompareBox />
     </BrowserRouter>
   );
 }
