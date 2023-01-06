@@ -1,11 +1,12 @@
 import React, { useLayoutEffect, useState, useEffect } from 'react';
+import { useLocation } from 'react-router';
+import qs from 'qs';
 import styled from 'styled-components';
+
 import defaultImg from '../assets/img/pill_image.png';
 import star1Img from '../assets/img/Star1.png';
 import star2Img from '../assets/img/Star2.png';
 import { ReactComponent as Pick } from '../assets/img/pick.svg';
-import { useLocation } from 'react-router';
-import qs from 'qs';
 
 // 그래프 라이브러리
 import * as am5 from '@amcharts/amcharts5';
@@ -246,7 +247,7 @@ const Detail = () => {
               <RightLabel>삼진제약(주)</RightLabel>
             </div>
             <Categorize>{medicineItem.productType}</Categorize>
-            <ReviewWrap>
+            {/* <ReviewWrap>
               <Star>
                 <img src={star1Img} alt='' />
                 <img src={star1Img} alt='' />
@@ -255,8 +256,8 @@ const Detail = () => {
                 <img src={star2Img} alt='' />
               </Star>
               <Review>(203개)</Review>
-            </ReviewWrap>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            </ReviewWrap> */}
+            <div className='boxWrap'>
               <Picked>
                 <Pick />
               </Picked>
@@ -366,6 +367,11 @@ const WrapContents = styled.div`
     justify-content: center;
     margin-top: 22px;
   }
+  .boxWrap {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
 `;
 
 const Image = styled.img`
@@ -417,7 +423,7 @@ const Categorize = styled.div`
   margin: auto;
   justify-content: center;
   align-items: center;
-  margin-top: 16px;
+  margin-top: 20px;
 `;
 
 const ReviewWrap = styled.div`
