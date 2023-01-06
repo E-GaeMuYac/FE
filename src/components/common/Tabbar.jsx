@@ -42,8 +42,8 @@ const TabBar = ({ location, query }) => {
         '보관 방법',
       ]);
     }
-    if (location === '/detail') {
-      setTabList(['효능 효과', '용법 용량', '첨가물', '보관 방법', '주의사항']);
+    if (location.includes('/detail')) {
+      setTabList(['효능 효과', '용법 용량', '첨가물', '주의사항']);
     }
   }, [location]);
 
@@ -69,10 +69,11 @@ const Wrap = styled.div`
     align-items: center;
     justify-content: center;
     list-style: none;
+    gap: 30px;
   }
 `;
 const TabName = styled.div`
-  width: 100px;
+  /* width: 100px; */
   height: 100%;
   display: flex;
   align-items: center;
