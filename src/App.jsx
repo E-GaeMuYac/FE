@@ -44,7 +44,7 @@ function App() {
           }
         />
         <Route
-          path='/'
+          path='/detail/:id'
           element={
             <Layout>
               <Detail />
