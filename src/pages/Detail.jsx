@@ -1,13 +1,20 @@
 import React, { useLayoutEffect, useState, useEffect } from 'react';
+import { useLocation } from 'react-router';
+import qs from 'qs';
 import styled from 'styled-components';
+
 import defaultImg from '../assets/img/pill_image.png';
 import star1Img from '../assets/img/Star1.png';
 import star2Img from '../assets/img/Star2.png';
+import { ReactComponent as Pick } from '../assets/img/pick.svg';
 
 // 그래프 라이브러리
 import * as am5 from '@amcharts/amcharts5';
 import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
+
+// 컴포넌트
+import TabBar from '../components/common/Tabbar';
 
 const GraphTop3 = ({ medicineInfo }) => {
   const [totalWeight, setTotalWeight] = useState(0);
@@ -109,13 +116,50 @@ const GraphTop3 = ({ medicineInfo }) => {
   );
 };
 
+const BottomContents = ({ medicineInfo, query }) => {
+  const [ContentDesc, setContentDesc] = useState('');
+
+  useEffect(() => {
+    switch (query) {
+      case '용법 용량':
+        setContentDesc(medicineInfo.udDocData);
+        break;
+      case '첨가물':
+        setContentDesc(medicineInfo.ingrName);
+        break;
+      case '주의사항':
+        setContentDesc(medicineInfo.nbDocData);
+        break;
+    }
+  }, [query]);
+  return (
+    <div>
+      {query === '효능 효과' ? (
+        <div>{medicineInfo.eeDocData}</div>
+      ) : (
+        <>{ContentDesc}</>
+      )}
+    </div>
+  );
+};
+
 const Detail = () => {
+  const location = useLocation().pathname;
+  const query = qs.parse(window.location.search, {
+    ignoreQueryPrefix: true,
+  }).tab;
+
   const medicineItem = {
     itemName: '타이레노오오오오올',
     itemImage:
       'https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
     entpName: '삼진제약(주)',
+    productType: '해열.진통.소염제',
     etcOtcCode: '일반의약품',
+    eeDocData: '효능효과 블라블라',
+    udDocData: '용법 용량',
+    ingrName: '첨가물1, 첨가물2, 첨가물3',
+    nbDocData: '주의 사항',
     materialName: [
       { 총량: '1정 중 1300밀리그램' },
       { material: '모르핀', 분량: '100', 단위: '밀리그램' },
@@ -181,6 +225,7 @@ const Detail = () => {
     );
 
     legend.data.setAll(series.dataItems);
+    legend.data.setAll(series.dataItems);
 
     // Play initial series animation
     series.appear(1000, 100);
@@ -191,49 +236,64 @@ const Detail = () => {
   }, []);
 
   return (
-    <TopSection>
-      <CardBox>
-        <WrapContents>
-          <Image src={defaultImg} alt='' />
-          <Name>게보린정(수출명:돌로린정)</Name>
-          <div className='labelWrap'>
-            <LeftLabel>일반의약품</LeftLabel>
-            <RightLabel>삼진제약(주)</RightLabel>
-          </div>
-          <Categorize>해열.진통.소염제</Categorize>
-          <ReviewWrap>
-            <Star>
-              <img src={star1Img} alt='' />
-              <img src={star1Img} alt='' />
-              <img src={star1Img} alt='' />
-              <img src={star1Img} alt='' />
-              <img src={star2Img} alt='' />
-            </Star>
-            <Review>(203개)</Review>
-          </ReviewWrap>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Pick></Pick>
-            <CompareBox>비교함 담기</CompareBox>
-          </div>
-        </WrapContents>
-      </CardBox>
-      <MiddleCardBox>
-        <GraphLabel>성분 그래프</GraphLabel>
-        <div id='chartdiv' />
-      </MiddleCardBox>
-      <RightCardBox>
-        <GraphLabel>성분 상위 3개</GraphLabel>
-        <div id='chartdiv2' />
-        <GraphTop3 medicineInfo={medicineItem} />
-      </RightCardBox>
-    </TopSection>
+    <>
+      <TopSection>
+        <CardBox>
+          <WrapContents>
+            <Image src={defaultImg} alt='' />
+            <Name>게보린정(수출명:돌로린정)</Name>
+            <div className='labelWrap'>
+              <LeftLabel>일반의약품</LeftLabel>
+              <RightLabel>삼진제약(주)</RightLabel>
+            </div>
+            <Categorize>{medicineItem.productType}</Categorize>
+            {/* <ReviewWrap>
+              <Star>
+                <img src={star1Img} alt='' />
+                <img src={star1Img} alt='' />
+                <img src={star1Img} alt='' />
+                <img src={star1Img} alt='' />
+                <img src={star2Img} alt='' />
+              </Star>
+              <Review>(203개)</Review>
+            </ReviewWrap> */}
+            <div className='boxWrap'>
+              <Picked>
+                <Pick />
+              </Picked>
+              <CompareBox>비교함 담기</CompareBox>
+            </div>
+          </WrapContents>
+        </CardBox>
+        <MiddleCardBox>
+          <GraphLabel>성분 그래프</GraphLabel>
+          <div id='chartdiv' />
+        </MiddleCardBox>
+        <RightCardBox>
+          <GraphLabel>성분 상위 3개</GraphLabel>
+          <GraphTop3 medicineInfo={medicineItem} />
+        </RightCardBox>
+      </TopSection>
+      <TabBar location={location} query={query} />
+      <BottomSection>
+        <BottomContents medicineInfo={medicineItem} query={query} />
+      </BottomSection>
+    </>
   );
 };
 
 const TopSection = styled.div`
   width: 100%;
-  border-bottom: 2px solid #d9d9d9;
   display: flex;
+`;
+
+const BottomSection = styled.div`
+  width: 1320px;
+  height: 325px;
+  border-radius: 23px;
+  background-color: #ebebeb;
+  display: flex;
+  padding: 34px 30px;
 `;
 
 const CardBox = styled.div`
@@ -241,7 +301,7 @@ const CardBox = styled.div`
   height: 485px;
   margin: auto;
   border-radius: 25px;
-  border: 1.5px solid #d0d0d0;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
 `;
 
 const MiddleCardBox = styled.div`
@@ -249,8 +309,7 @@ const MiddleCardBox = styled.div`
   height: 485px;
   margin: auto;
   border-radius: 25px;
-  border: 1.5px solid #d9d9d9;
-  background-color: #d9d9d9;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
   #chartdiv {
     display: flex;
     margin: auto;
@@ -266,17 +325,14 @@ const RightCardBox = styled.div`
   height: 485px;
   margin: auto;
   border-radius: 25px;
-  border: 1.5px solid #d9d9d9;
-  background-color: #d9d9d9;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
   .graphTop3 {
     width: 330px;
-    background-color: #d9d9d9;
-    border-radius: 25px;
-    padding: 24px 25px;
+    margin-top: 76px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 42px;
+    gap: 50px;
   }
   .graphTop3Material {
     display: flex;
@@ -284,14 +340,15 @@ const RightCardBox = styled.div`
     margin-bottom: 30px;
   }
   .materialPercent {
-    font-size: 24px;
-    line-height: 35px;
-    font-weight: bold;
+    font-size: 28px;
+    line-height: 41px;
+    font-weight: 900;
     margin-right: 13px;
   }
   .materialName {
-    font-size: 18px;
-    line-height: 26px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 34px;
     color: #242424;
   }
 `;
@@ -309,6 +366,11 @@ const WrapContents = styled.div`
     margin: auto;
     justify-content: center;
     margin-top: 22px;
+  }
+  .boxWrap {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
   }
 `;
 
@@ -361,7 +423,7 @@ const Categorize = styled.div`
   margin: auto;
   justify-content: center;
   align-items: center;
-  margin-top: 16px;
+  margin-top: 20px;
 `;
 
 const ReviewWrap = styled.div`
@@ -392,12 +454,13 @@ const Review = styled.div`
   margin-top: 16px;
 `;
 
-const Pick = styled.div`
+const Picked = styled.div`
   width: 50px;
   height: 50px;
   background-color: #d9d9d9;
   display: flex;
   align-items: center;
+  justify-content: center;
   margin-top: 18px;
 `;
 
@@ -412,6 +475,7 @@ const CompareBox = styled.div`
   font-size: 14px;
   font-weight: 700;
   line-height: 20px;
+  cursor: pointer;
 `;
 
 const GraphLabel = styled.div`
