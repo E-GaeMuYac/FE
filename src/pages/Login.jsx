@@ -3,6 +3,13 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Login = () => {
+  const redirectUri = process.env.REACT_APP_REDIRECT_URI;
+  const clientId = process.env.REACT_APP_CLIENT_ID;
+
+  const kakaoHandler = () => {
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
+  };
+
   return (
     <div>
       <BackGround>
@@ -23,7 +30,9 @@ const Login = () => {
               <FindAccount>아이디 / 비밀번호 찾기</FindAccount>
             </ManageAccount>
             <SocialLogin>
-              <SocialBtn>카카오로 로그인</SocialBtn>
+              <SocialBtn type='button' onClick={kakaoHandler}>
+                카카오로 로그인
+              </SocialBtn>
               <SocialBtn>NAVER로 로그인</SocialBtn>
               <SocialBtn>GOOGLE로 로그인</SocialBtn>
             </SocialLogin>

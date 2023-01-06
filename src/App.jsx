@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Header from './components/layout/Header';
 import Signup from './pages/Signup';
+import KakaoRedirect from './components/socialLogin/KakaoRedirect';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             </>
           }
         />
+        <Route exact path='/kakaologin' element={<KakaoRedirect />} />
       </Routes>
     </BrowserRouter>
   );
