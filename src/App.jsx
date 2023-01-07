@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 //page
 import ComparePage from './pages/Compare';
 import Login from './pages/Login';
+import Search from './pages/Search';
 import Detail from './pages/Detail';
 
 // 컴포넌트
@@ -15,6 +16,24 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route
+          exact
+          path='/search'
+          element={
+            <Layout>
+              <Search />
+            </Layout>
+          }
+        />
+        <Route
+          exact
+          path='/compare'
+          element={
+            <Layout>
+              <ComparePage />
+            </Layout>
+          }
+        />
         <Route
           exact
           path='/login'

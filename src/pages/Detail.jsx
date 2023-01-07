@@ -3,10 +3,10 @@ import { useLocation } from 'react-router';
 import qs from 'qs';
 import styled from 'styled-components';
 
-import defaultImg from '../assets/img/pill_image.png';
-import star1Img from '../assets/img/Star1.png';
-import star2Img from '../assets/img/Star2.png';
-import { ReactComponent as Pick } from '../assets/img/pick.svg';
+// import defaultImg from '../assets/img/pill_image.png';
+// import star1Img from '../assets/img/Star1.png';
+// import star2Img from '../assets/img/Star2.png';
+// import { ReactComponent as Pick } from '../assets/img/pick.svg';
 
 // 그래프 라이브러리
 import * as am5 from '@amcharts/amcharts5';
@@ -240,7 +240,8 @@ const Detail = () => {
       <TopSection>
         <CardBox>
           <WrapContents>
-            <Image src={defaultImg} alt='' />
+            {/* <Image src={defaultImg} alt='' /> */}
+            <Image imgUrl={medicineItem.itemImage} />
             <Name>게보린정(수출명:돌로린정)</Name>
             <div className='labelWrap'>
               <LeftLabel>일반의약품</LeftLabel>
@@ -259,7 +260,8 @@ const Detail = () => {
             </ReviewWrap> */}
             <div className='boxWrap'>
               <Picked>
-                <Pick />
+                {/* <Pick /> */}
+                <div className='pickedImg'></div>
               </Picked>
               <CompareBox>비교함 담기</CompareBox>
             </div>
@@ -374,11 +376,19 @@ const WrapContents = styled.div`
   }
 `;
 
-const Image = styled.img`
+// const Image = styled.img`
+//   width: 340px;
+//   height: 140px;
+//   margin: auto;
+//   display: flex;
+// `;
+
+const Image = styled.div`
   width: 340px;
   height: 140px;
-  margin: auto;
-  display: flex;
+  background-image: ${({ imgUrl }) => `url(${imgUrl})`};
+  background-size: 120%;
+  background-position: center;
 `;
 
 const Name = styled.div`
@@ -462,6 +472,14 @@ const Picked = styled.div`
   align-items: center;
   justify-content: center;
   margin-top: 18px;
+  .pickedImg {
+    width: 34px;
+    height: 34px;
+    background-image: url('/assets/image/icon_heart1.png');
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+  }
 `;
 
 const CompareBox = styled.div`
