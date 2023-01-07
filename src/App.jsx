@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ComparePage from './pages/Compare';
 import Login from './pages/Login';
 import Search from './pages/Search';
+import Detail from './pages/Detail';
 
 // 컴포넌트
 import Layout from './components/layout/Layout';
@@ -51,6 +52,23 @@ function App() {
               <Header />
               <Signup />
             </>
+          }
+        />
+        <Route
+          exact
+          path='/compare'
+          element={
+            <Layout>
+              <ComparePage />
+            </Layout>
+          }
+        />
+        <Route
+          path='/detail/:id'
+          element={
+            <Layout>
+              <Detail />
+            </Layout>
           }
         />
       </Routes>

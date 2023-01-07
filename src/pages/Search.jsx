@@ -146,7 +146,9 @@ const Search = () => {
               </div>
               <div className='listTag'>해열•진통•소염제</div>
               <div className='btnWrap'>
-                <div className='btnLike'></div>
+                <div className='btnLike'>
+                  <div className='btnLikeImg'></div>
+                </div>
                 <div className='btnInBox'>보관함 담기</div>
               </div>
             </li>
@@ -386,6 +388,16 @@ const SearchResultWrap = styled.div`
     height: 100%;
     background-color: #d9d9d9;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btnLikeImg {
+    width: 26px;
+    height: 26px;
+    background-image: url('/assets/image/icon_heart1.png');
+    background-size: cover;
+    background-position: center;
   }
   .btnInBox {
     width: 214px;
