@@ -8,7 +8,7 @@ const Search = () => {
   //약 검색 종류 데이터 모음
   const [searchSortList, setSearchSortList] = useState([
     '약 이름',
-    '약 성분',
+    '약 효능',
     '약 분류',
   ]);
   const [searchKinds, setSearchKinds] = useState('약 이름');
@@ -18,6 +18,8 @@ const Search = () => {
   //약 검색 input 용 데이터모음
   const [inputValue, setInputValue] = useState('');
   const [searchedWord, setSearchedWord] = useState('');
+
+  const [isActiveDeleteBtn, setIsActiveDeleteBtn] = useState(false);
 
   const searchSortRemove = () => {
     setIsOpenSearchSort(false);
@@ -39,8 +41,8 @@ const Search = () => {
   useEffect(() => {
     if (searchKinds === '약 이름') {
       setSearchKindsCode('itemName');
-    } else if (searchKinds === '약 성분') {
-      setSearchKindsCode('materialName');
+    } else if (searchKinds === '약 효능') {
+      setSearchKindsCode('eeDocData');
     } else if (searchKinds === '약 분류') {
       setSearchKindsCode('productType');
     }
@@ -50,6 +52,18 @@ const Search = () => {
   const changeInputValue = ({ target: { value } }) => {
     setInputValue(value);
   };
+  // input에 적은 글 삭제
+  const deleteSearchValue = () => {
+    setInputValue('');
+  };
+
+  useEffect(() => {
+    if (inputValue.length > 0) {
+      setIsActiveDeleteBtn(true);
+    } else {
+      setIsActiveDeleteBtn(false);
+    }
+  }, [inputValue]);
 
   //서치 시작
   const doingSearch = async () => {
@@ -62,17 +76,14 @@ const Search = () => {
             `);
       console.log(data);
     }
-    setInputValue('');
+    deleteSearchValue();
   };
 
   return (
     <Wrap>
-      {!searchedWord ? (
-        <SearchCommentWrap>
-          <div>원하는 약을 검색해보세요!</div>
-        </SearchCommentWrap>
-      ) : null}
-      <SearchBarWrap isOpenSearchSort={isOpenSearchSort}>
+      <SearchBarWrap
+        isOpenSearchSort={isOpenSearchSort}
+        isActiveDeleteBtn={isActiveDeleteBtn}>
         <div className='searchBar'>
           <div className='searchSortWrap'>
             <div className='searchSortHeaderWrap' onClick={searchSortOpen}>
@@ -114,6 +125,11 @@ const Search = () => {
               }
             }}
           />
+          <div className='deleteSearchInputValue'>
+            <div
+              className='deleteSearchInputValueBtn'
+              onClick={deleteSearchValue}></div>
+          </div>
         </div>
         <div className='searchBtn' onClick={doingSearch}></div>
       </SearchBarWrap>
@@ -161,12 +177,6 @@ const Search = () => {
 
 const Wrap = styled.div`
   padding-top: 100px;
-`;
-const SearchCommentWrap = styled.div`
-  height: 110px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 const SearchBarWrap = styled.div`
   margin: 0 auto 46px;
@@ -235,6 +245,7 @@ const SearchBarWrap = styled.div`
     background-position: center;
   }
   .searchinput {
+    width: 600px;
     font-size: 20px;
     font-weight: bold;
     line-height: 100%;
@@ -244,6 +255,23 @@ const SearchBarWrap = styled.div`
   }
   .searchinput::placeholder {
     color: #868686;
+  }
+  .deleteSearchInputValue {
+    flex-grow: 1;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .deleteSearchInputValueBtn {
+    display: ${({ isActiveDeleteBtn }) =>
+      isActiveDeleteBtn ? 'blick' : 'none'};
+    width: 24px;
+    height: 24px;
+    background-image: url('/assets/image/icon_delete1.png');
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
   }
   .searchBtn {
     width: 42px;
