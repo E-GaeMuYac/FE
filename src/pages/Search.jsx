@@ -1,6 +1,7 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
+import { api } from '../apis/apiInstance';
 
 const Search = () => {
   const [searhArr, setSearhArr] = useState([]);
@@ -65,19 +66,51 @@ const Search = () => {
     }
   }, [inputValue]);
 
+  const { refetch, data } = useQuery({
+    // query 키
+    queryKey: ['getSearchData', searchKindsCode, searchedWord],
+    // query 함수
+    queryFn: (params) => getSearchData(params),
+    // 자동 랜더링 삭제
+    enabled: false,
+    // 자동 리랜더링 삭제
+    refetchOnWindowFocus: false,
+    //에러 확인
+    onError: () => {
+      console.error('Error');
+    },
+  });
+
+  //searchDate 호출 함수
+  const getSearchData = async (params) => {
+    const data = api.get(
+      `/api/products/medicines?type=${params.queryKey[1]}&value=${params.queryKey[2]}`
+    );
+    return data;
+  };
+
   //서치 시작
-  const doingSearch = async () => {
+  const doingSearch = () => {
     if (inputValue.trim()) {
       // 결과 창 단어 교체
       setSearchedWord(inputValue);
-
-      const { data } =
-        await axios.get(`${process.env.REACT_APP_URL}/api/products/medicine?type=${searchKindsCode}&value=${inputValue}
-            `);
-      console.log(data);
     }
     deleteSearchValue();
   };
+
+  // searchedWord가 변경될 때만 refetch
+  useEffect(() => {
+    if (searchedWord) {
+      refetch();
+    }
+  }, [searchedWord]);
+
+  // data가 undefined가 아닐 때 state 변경
+  useEffect(() => {
+    if (data) {
+      setSearhArr(data.data);
+    }
+  }, [data]);
 
   return (
     <Wrap>
@@ -147,27 +180,29 @@ const Search = () => {
           <div className='searchTop'>
             <div className='searchTitleWrap'>
               <div className='searchText'>'{searchedWord}'</div>
-              <div className='searchListNum'>검색 결과 4개</div>
+              <div className='searchListNum'>검색 결과 {searhArr.length}개</div>
             </div>
             <div className='searchSort'>추천순</div>
           </div>
           <ul className='searchList'>
-            <li>
-              <div className='listImg'></div>
-              <div className='listName'>게보린정(수출명:돌로린정)</div>
-              <div className='listSubTextWrap'>
-                <div className='listSubText'>일반의약품</div>
-                <hr />
-                <div className='listSubText'>삼진제약(주)</div>
-              </div>
-              <div className='listTag'>해열•진통•소염제</div>
-              <div className='btnWrap'>
-                <div className='btnLike'>
-                  <div className='btnLikeImg'></div>
+            {searhArr.map((list) => (
+              <SearchListWrap key={list.medicineId} image={list.itemImage}>
+                <div className='listImg'></div>
+                <div className='listName'>{list.itemName}</div>
+                <div className='listSubTextWrap'>
+                  <div className='listSubText'>{list.etcOtcCode}</div>
+                  <hr />
+                  <div className='listSubText'>{list.entpName}</div>
                 </div>
-                <div className='btnInBox'>보관함 담기</div>
-              </div>
-            </li>
+                <div className='listTag'>{list.productType}</div>
+                <div className='btnWrap'>
+                  <div className='btnLike'>
+                    <div className='btnLikeImg'></div>
+                  </div>
+                  <div className='btnInBox'>보관함 담기</div>
+                </div>
+              </SearchListWrap>
+            ))}
           </ul>
         </SearchResultWrap>
       ) : null}
@@ -352,23 +387,27 @@ const SearchResultWrap = styled.div`
     margin: 0;
     margin-bottom: 218px;
   }
-  .searchList li {
-    padding: 30px 34px;
-    width: 256px;
-    height: 298px;
-    border: 1px solid #d0d0d0;
-    border-radius: 25px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-  }
+`;
+const SearchListWrap = styled.li`
+  padding: 30px 34px;
+  width: 256px;
+  height: 298px;
+  border: 1px solid #d0d0d0;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   .listImg {
     width: 100%;
     height: 110px;
-    background-image: url('https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4');
-    background-size: cover;
+    background-image: ${({ image }) =>
+      image
+        ? `url(${image})`
+        : `url('https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4')`};
+    background-size: contain;
     background-position: center;
     margin-bottom: 24px;
+    background-repeat: no-repeat;
   }
   .listSubTextWrap {
     display: flex;
@@ -385,16 +424,26 @@ const SearchResultWrap = styled.div`
     margin: 0 8px;
   }
   .listSubText {
+    width: 126px;
+    text-align: center;
     font-size: 15px;
     line-height: 22px;
     color: #868686;
     font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .listName {
     font-size: 20px;
     line-height: 29px;
     font-weight: bold;
     margin-bottom: 22px;
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .listTag {
     padding: 10px;
