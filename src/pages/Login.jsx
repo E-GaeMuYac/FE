@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { api } from '../apis/apiInstance';
+import { useCookies } from 'react-cookie';
 
 const Login = () => {
   const navigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies(['rememberEmail']);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isRemember, setIsRemember] = useState(false);
+
+  useEffect(() => {
+    if (cookies.rememberEmail !== undefined) {
+      setEmail(cookies.rememberEmail);
+      setIsRemember(true);
+    }
+  }, []);
 
   const idHandler = (e) => {
     setEmail(e.target.value);
@@ -14,6 +25,15 @@ const Login = () => {
 
   const pwHandler = (e) => {
     setPassword(e.target.value);
+  };
+
+  const checkboxHandler = (e) => {
+    setIsRemember(e.target.checked);
+    if (e.target.checked) {
+      setCookie('rememberEmail', email);
+    } else {
+      removeCookie('rememberEmail');
+    }
   };
 
   const loginHandler = (e) => {
@@ -31,11 +51,15 @@ const Login = () => {
         email,
         password,
       });
+      const accesstoken = res.headers.accesstoken;
+      const refreshtoken = res.headers.refreshtoken;
+      localStorage.setItem('accessToken', accesstoken);
+      localStorage.setItem('refreshToken', refreshtoken);
+
       alert(res.data.msg);
       navigate('/');
     } catch (e) {
       alert(e.response.data.errorMessage);
-      console.log(e);
     }
   };
 
@@ -47,8 +71,9 @@ const Login = () => {
             <LogoWrapper>LOGO 서비스 네임</LogoWrapper>
             <FormWrapper>
               <Input
-                type='text'
-                placeholder='아이디'
+                type='email'
+                placeholder='이메일'
+                defaultValue={email}
                 onChange={idHandler}></Input>
               <Input
                 type='password'
@@ -58,7 +83,12 @@ const Login = () => {
                 로그인
               </SubmitBtn>
               <SaveId>
-                <CheckBox type='checkbox' id='saveId' />
+                <CheckBox
+                  type='checkbox'
+                  id='saveId'
+                  checked={isRemember}
+                  onChange={checkboxHandler}
+                />
                 <label htmlFor='saveId'>아이디 저장</label>
               </SaveId>
             </FormWrapper>
