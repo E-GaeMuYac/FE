@@ -51,11 +51,15 @@ const Login = () => {
         email,
         password,
       });
+      const accesstoken = res.headers.accesstoken;
+      const refreshtoken = res.headers.refreshtoken;
+      localStorage.setItem('accessToken', accesstoken);
+      localStorage.setItem('refreshToken', refreshtoken);
+
       alert(res.data.msg);
       navigate('/');
     } catch (e) {
       alert(e.response.data.errorMessage);
-      console.log(e);
     }
   };
 
