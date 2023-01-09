@@ -6,6 +6,7 @@ const KakaoRedirect = () => {
   const type = process.env.NODE_ENV;
 
   const api = axios.create({ baseURL: process.env.REACT_APP_API_ENDPOINT });
+
   useEffect(() => {
     kakaoLogin(code);
   }, []);

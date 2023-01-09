@@ -3,6 +3,7 @@ import Login from './pages/Login';
 import Header from './components/layout/Header';
 import Signup from './pages/Signup';
 import KakaoRedirect from './components/socialLogin/KakaoRedirect';
+import NaverRedirect from './components/socialLogin/NaverRedirect';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           }
         />
         <Route exact path='/kakaologin' element={<KakaoRedirect />} />
+        <Route exact path='/naverlogin' element={<NaverRedirect />} />
       </Routes>
     </BrowserRouter>
   );

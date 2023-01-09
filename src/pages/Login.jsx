@@ -1,14 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Login = () => {
-  const redirectUri = process.env.REACT_APP_REDIRECT_URI;
-  const clientId = process.env.REACT_APP_CLIENT_ID;
-
   const kakaoHandler = () => {
+    const redirectUri = process.env.REACT_APP_REDIRECT_URI;
+    const clientId = process.env.REACT_APP_CLIENT_ID;
     window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
   };
+
+  const naverHandler = () => {
+    const redirectUri_n = process.env.REACT_APP_N_REDIRECT_URI;
+    const clientId_n = process.env.REACT_APP_N_CLIENT_ID;
+    window.location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId_n}&state=test&redirect_uri=${redirectUri_n}`;
+  };
+
+  // const { naver } = window;
+  // const naverLogin = new naver.LoginWithNaverId({
+  //   clientId: process.env.REACT_APP_N_CLIENT_ID,
+  //   callbackUrl: process.env.REACT_APP_N_REDIRECT_URI,
+  //   isPopup: false,
+  //   loginButton: {
+  //     color: 'green',
+  //     type: 3,
+  //     height: 50,
+  //   },
+  // });
+  // console.log(process.env.REACT_APP_N_REDIRECT_URI);
+
+  // useEffect(() => {
+  //   naverLogin.init();
+  // });
 
   return (
     <div>
@@ -33,7 +55,9 @@ const Login = () => {
               <SocialBtn type='button' onClick={kakaoHandler}>
                 카카오로 로그인
               </SocialBtn>
-              <SocialBtn>NAVER로 로그인</SocialBtn>
+              <SocialBtn type='button' onClick={naverHandler}>
+                NAVER로 로그인
+              </SocialBtn>
               <SocialBtn>GOOGLE로 로그인</SocialBtn>
             </SocialLogin>
           </LoginWrapper>
