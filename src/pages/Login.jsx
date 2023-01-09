@@ -1,8 +1,44 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { api } from '../apis/apiInstance';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const idHandler = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const pwHandler = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const loginHandler = (e) => {
+    e.preventDefault();
+    if (email === '' || password === '') {
+      alert('아이디와 비밀번호를 모두 입력하세요!');
+    } else {
+      normalLogin({ email, password });
+    }
+  };
+
+  const normalLogin = async ({ email, password }) => {
+    try {
+      const res = await api.post(`/api/users/login/normal`, {
+        email,
+        password,
+      });
+      alert(res.data.msg);
+      navigate('/');
+    } catch (e) {
+      alert(e.response.data.errorMessage);
+      console.log(e);
+    }
+  };
+
   return (
     <div>
       <BackGround>
@@ -10,12 +46,20 @@ const Login = () => {
           <LoginWrapper>
             <LogoWrapper>LOGO 서비스 네임</LogoWrapper>
             <FormWrapper>
-              <Input type='text' placeholder='아이디'></Input>
-              <Input type='password' placeholder='패스워드'></Input>
-              <SubmitBtn>로그인</SubmitBtn>
+              <Input
+                type='text'
+                placeholder='아이디'
+                onChange={idHandler}></Input>
+              <Input
+                type='password'
+                placeholder='패스워드'
+                onChange={pwHandler}></Input>
+              <SubmitBtn type='button' onClick={loginHandler}>
+                로그인
+              </SubmitBtn>
               <SaveId>
                 <CheckBox type='checkbox' id='saveId' />
-                <label for='saveId'>아이디 저장</label>
+                <label htmlFor='saveId'>아이디 저장</label>
               </SaveId>
             </FormWrapper>
             <ManageAccount>
@@ -72,7 +116,7 @@ const LogoWrapper = styled.div`
   font-weight: 700;
 `;
 
-const FormWrapper = styled.div`
+const FormWrapper = styled.form`
   width: 100%;
   height: 350px;
   margin-top: 30px;
