@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
+
 import styled from 'styled-components';
-import { api } from '../apis/apiInstance';
+
+import { useGetSearchQuery } from '../query/searchQuery';
 
 const Search = () => {
   const [searhArr, setSearhArr] = useState([]);
@@ -66,28 +67,8 @@ const Search = () => {
     }
   }, [inputValue]);
 
-  const { refetch, data } = useQuery({
-    // query 키
-    queryKey: ['getSearchData', searchKindsCode, searchedWord],
-    // query 함수
-    queryFn: (params) => getSearchData(params),
-    // 자동 랜더링 삭제
-    enabled: false,
-    // 자동 리랜더링 삭제
-    refetchOnWindowFocus: false,
-    //에러 확인
-    onError: () => {
-      console.error('Error');
-    },
-  });
-
-  //searchDate 호출 함수
-  const getSearchData = async (params) => {
-    const data = api.get(
-      `/api/products/medicines?type=${params.queryKey[1]}&value=${params.queryKey[2]}`
-    );
-    return data;
-  };
+  //서치 훅 호출
+  const [refetch, data] = useGetSearchQuery(searchKindsCode, searchedWord);
 
   //서치 시작
   const doingSearch = () => {
