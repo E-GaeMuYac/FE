@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { useRecoilState } from 'recoil';
+
 import styled from 'styled-components';
+import { compareBoxData } from '../../recoil/recoilStore';
 
 const ListCardComp = ({ arrState, list }) => {
   const navigate = useNavigate();
@@ -27,21 +31,7 @@ const ListCardComp = ({ arrState, list }) => {
   //서치페이지로 이동. 임시로 자동으로 추가되게 구현
   const goToSearch = (id) => {
     //페이지 이동
-    // navigate("/search")
-
-    let addedArr = isArr.map((list) =>
-      list.name === 'null' && list.id === id
-        ? {
-            id: Date.now(),
-            image:
-              'https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
-            name: '게보린정(수출명:돌로린정)1',
-            company: '삼진제약(주)',
-            classed: '일반의약품',
-          }
-        : list
-    );
-    setIsArr(addedArr);
+    navigate('/search');
   };
 
   return (
@@ -80,20 +70,7 @@ const CompareBox = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   //임시 배열
-  const [isArr, setIsArr] = useState([
-    {
-      id: 1,
-      image:
-        'https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
-      name: '게보린정(수출명:돌로린정)',
-      company: '삼진제약(주)',
-      classed: '일반의약품',
-    },
-    {
-      id: 2,
-      name: 'null',
-    },
-  ]);
+  const [isArr, setIsArr] = useRecoilState(compareBoxData);
 
   //onclick시 토글
   const boxToggle = () => {
@@ -250,6 +227,7 @@ const ListCard = styled.div`
   padding: 48px 24px;
   display: flex;
   align-items: center;
+  cursor: pointer;
   ${({ isFill }) =>
     isFill
       ? null
