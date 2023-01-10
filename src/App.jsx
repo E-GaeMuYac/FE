@@ -5,11 +5,12 @@ import ComparePage from './pages/Compare';
 import Login from './pages/Login';
 import Search from './pages/Search';
 import Detail from './pages/Detail';
+import User from './pages/User';
+import Signup from './pages/Signup';
 
 // 컴포넌트
 import Layout from './components/layout/Layout';
 import Header from './components/layout/Header';
-import Signup from './pages/Signup';
 import CompareBox from './components/common/CompareBox';
 
 function App() {
@@ -68,6 +69,14 @@ function App() {
           element={
             <Layout>
               <Detail />
+            </Layout>
+          }
+        />
+        <Route
+          path='/mypage'
+          element={
+            <Layout>
+              <User />
             </Layout>
           }
         />
