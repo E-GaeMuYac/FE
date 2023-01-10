@@ -6,6 +6,7 @@ import { userApi } from '../apis/apiInstance';
 
 const User = () => {
   const [likesArr, setLikesArr] = useState([]);
+  const [isClicked, setIsClicked] = useState(false);
 
   const mockArr = [
     {
@@ -33,6 +34,14 @@ const User = () => {
     }
   };
 
+  const changeNickname = () => {
+    setIsClicked(true);
+  };
+
+  const changesDone = () => {
+    setIsClicked(false);
+  };
+
   return (
     <Wrapper>
       <MyPageHeader>
@@ -42,27 +51,45 @@ const User = () => {
       <MyPageWrap>
         <ProfileImg>
           <UserImage>
-            <button>
+            <label htmlFor='file-input'>
               <IoMdSettings
                 style={{
                   position: 'absolute',
-                  top: 5,
-                  right: 4,
+                  top: 4,
+                  right: 3,
                   color: 'white',
                 }}
-                size='28'
+                size='30'
               />
-            </button>
+            </label>
+            <input
+              id='file-input'
+              type='file'
+              style={{
+                display: 'none',
+                visibility: 'hidden',
+                left: 480,
+                top: 350,
+              }}
+            />
           </UserImage>
-          <button>변경완료</button>
+          <button type='button'>변경완료</button>
         </ProfileImg>
         <NicknameBox>
-          <Nickname>
-            OOO님
-            <button>
-              <FaPen />
-            </button>
-          </Nickname>
+          {!isClicked ? (
+            <Nickname>
+              OOO님
+              <button onClick={changeNickname}>
+                <FaPen />
+              </button>
+            </Nickname>
+          ) : (
+            <NicknameInput>
+              <input />
+              <button onClick={changesDone}>변경완룡</button>
+            </NicknameInput>
+          )}
+
           <ProfileMsg>필너츠를 이용해주셔서 감사합니다.</ProfileMsg>
         </NicknameBox>
         <IllustBox>
@@ -174,12 +201,12 @@ const UserImage = styled.div`
   background-size: cover;
   background-position: center;
 
-  button {
+  label {
     width: 38px;
     height: 38px;
     border-radius: 50%;
     position: absolute;
-    top: 325px;
+    top: 338px;
     left: 495px;
     background-color: #868686;
     cursor: pointer;
@@ -210,6 +237,33 @@ const Nickname = styled.span`
   }
 `;
 
+const NicknameInput = styled.div`
+  height: 42px;
+  display: flex;
+  align-items: flex-end;
+
+  input {
+    width: 220px;
+    height: 35px;
+    border: none;
+    border-radius: 30px;
+    text-indent: 10px;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  button {
+    margin-left: 8px;
+    width: 100px;
+    height: 30px;
+    border: none;
+    border-radius: 50px;
+    background-color: #d0d0d0;
+    cursor: pointer;
+  }
+`;
 const ProfileMsg = styled.div`
   width: 250px;
   height: 72px;
