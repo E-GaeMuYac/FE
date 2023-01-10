@@ -66,7 +66,7 @@ const Search = () => {
       setIsActiveDeleteBtn(false);
     }
   }, [inputValue]);
-
+  // -----------------------------------------------------------------------------
   //서치 훅 호출
   const [refetch, data] = useGetSearchQuery(searchKindsCode, searchedWord);
 
@@ -92,7 +92,7 @@ const Search = () => {
       setSearhArr(data.data);
     }
   }, [data]);
-
+  // -----------------------------------------------------------------------------
   return (
     <Wrap>
       <SearchBarWrap
