@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IoMdSettings } from 'react-icons/io';
 import { FaPen } from 'react-icons/fa';
+import { userApi } from '../apis/apiInstance';
 
 const User = () => {
+  const [likesArr, setLikesArr] = useState([]);
+
   const mockArr = [
     {
       medicineId: 1,
@@ -15,6 +18,20 @@ const User = () => {
         'https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
     },
   ];
+
+  useEffect(() => {
+    LikesList();
+  }, []);
+
+  const LikesList = async () => {
+    try {
+      const res = await userApi.get('api/products/dibs');
+      console.log(res);
+      setLikesArr(res.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <Wrapper>
