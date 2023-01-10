@@ -28,4 +28,3 @@ userApi.interceptors.response.use(function (config) {
 
   return config;
 });
-//인터셉터는 사용하는 api에 따라 작성하면 될것 같습니다.
