@@ -4,12 +4,12 @@ export const compareBoxData = atom({
   key: 'compareBoxData',
   default: [
     {
-      id: 1,
-      name: 'null',
+      medicineId: 1,
+      itemName: 'null',
     },
     {
-      id: 2,
-      name: 'null',
+      medicineId: 2,
+      itemName: 'null',
     },
   ],
 });

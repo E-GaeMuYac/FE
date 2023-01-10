@@ -13,7 +13,7 @@ const ListCardComp = ({ arrState, list }) => {
   const [isFill, setIsFill] = useState(false);
 
   useEffect(() => {
-    if (list.name !== 'null') {
+    if (list.itemName !== 'null') {
       setIsFill(true);
     } else {
       setIsFill(false);
@@ -23,13 +23,15 @@ const ListCardComp = ({ arrState, list }) => {
   //상품 삭제
   const deleteList = (id) => {
     let deletedArr = isArr.map((list) =>
-      list.id === id ? { ...list, name: 'null' } : list
+      list.medicineId === id
+        ? { medicineId: Date.now(), itemName: 'null' }
+        : list
     );
     setIsArr(deletedArr);
   };
 
-  //서치페이지로 이동. 임시로 자동으로 추가되게 구현
-  const goToSearch = (id) => {
+  //서치페이지로 이동
+  const goToSearch = () => {
     //페이지 이동
     navigate('/search');
   };
@@ -37,24 +39,24 @@ const ListCardComp = ({ arrState, list }) => {
   return (
     <>
       {isFill ? (
-        <ListCard isFill={isFill}>
+        <ListCard isFill={isFill} image={list.itemImage}>
           <div className='cardImg'></div>
           <div className='cardContent'>
-            <div className='listName'>{list.name}</div>
-            <div className='listSubContent'>{list.company}</div>
-            <div className='listSubContent'>{list.classed}</div>
+            <div className='listName'>{list.itemName}</div>
+            <div className='listSubContent'>{list.entpName}</div>
+            <div className='listSubContent'>{list.etcOtcCode}</div>
           </div>
           <div
             className='cardDeleteImg'
             onClick={() => {
-              deleteList(list.id);
+              deleteList(list.medicineId);
             }}></div>
         </ListCard>
       ) : (
         <ListCard
           isFill={isFill}
           onClick={() => {
-            goToSearch(list.id);
+            goToSearch();
           }}>
           <div className='addListImg'></div>
           <div className='addComment'>비교하고 싶은 약품을 담아주세요</div>
@@ -69,17 +71,30 @@ const CompareBox = () => {
   // 토글 여부 state
   const [isOpen, setIsOpen] = useState(false);
 
-  //임시 배열
+  // compareBox 배열
   const [isArr, setIsArr] = useRecoilState(compareBoxData);
+  // compareBox null 갯수
+  const [isArrLength, setIsArrLength] = useState(0);
 
-  //onclick시 토글
+  //itemNAme이 null이 아닌 것을 세어 length 표현
+  useEffect(() => {
+    let count = 0;
+    for (let i = 0; i < isArr.length; i++) {
+      if (isArr[i].itemName !== 'null') {
+        count++;
+      }
+    }
+    setIsArrLength(count);
+  }, [isArr]);
+
+  // onclick시 토글
   const boxToggle = () => {
     setIsOpen(!isOpen);
   };
 
   // 비교하기 페이지로 이동
   const goToCompare = () => {
-    if (isOpen) {
+    if (isOpen && isArrLength === 2) {
       navigate('/compare?tab=성분 순위');
 
       //이동 후 state 초기화
@@ -89,16 +104,19 @@ const CompareBox = () => {
 
   // 배열 초기화 버튼
   const listReset = () => {
-    setIsArr([]);
+    const allDeletedArr = isArr.map((list) =>
+      list.itemName !== 'null' ? { ...list, itemName: 'null' } : list
+    );
+    setIsArr(allDeletedArr);
   };
 
   return (
     <Wrap isOpen={isOpen}>
       <div className='wrap'>
-        <BoxTop isOpen={isOpen}>
+        <BoxTop isOpen={isOpen} isArrLength={isArrLength}>
           <div className='boxCommentWrap'>
             <div className='boxComment'>약품 비교함에 담기</div>
-            <div className='boxNum'>{isArr.length}/2</div>
+            <div className='boxNum'>{isArrLength}/2</div>
           </div>
           <div className='boxButtonWrap'>
             <div className='boxButtonReset' onClick={listReset}>
@@ -112,7 +130,7 @@ const CompareBox = () => {
         <BoxContent>
           {isArr.map((list) => (
             <ListCardComp
-              key={list.id}
+              key={list.medicineId}
               list={list}
               arrState={[isArr, setIsArr]}
             />
@@ -162,12 +180,12 @@ const Wrap = styled.div`
   .toggleBtnImg {
     width: 32px;
     height: 32px;
-    background-image: ${({ isOpen }) =>
-      isOpen
-        ? "Url('/assets/image/arrow_down.png')"
-        : "Url('/assets/image/arrow_up.png')"};
+    background-image: url('/assets/image/arrow_up.png');
+    ${({ isOpen }) =>
+      isOpen ? `transform: rotate(180deg);` : `transform: rotate(0deg);`};
     background-size: cover;
     background-position: center;
+    transition: transform 0.3s;
   }
 `;
 const BoxTop = styled.div`
@@ -203,11 +221,13 @@ const BoxTop = styled.div`
   .goToCompareBtn {
     width: 170px;
     height: 40px;
-    background-color: ${({ isOpen }) => (isOpen ? '#242424' : '#B7B7B7')};
+    background-color: ${({ isOpen, isArrLength }) =>
+      isOpen && isArrLength === 2 ? '#242424' : '#B7B7B7'};
     border-radius: 38px;
     border: none;
     color: white;
-    cursor: ${({ isOpen }) => (isOpen ? 'pointer' : 'auto')};
+    cursor: ${({ isOpen, isArrLength }) =>
+      isOpen && isArrLength === 2 ? 'pointer' : 'auto'};
     font-weight: bold;
   }
 `;
@@ -235,8 +255,11 @@ const ListCard = styled.div`
   .cardImg {
     width: 160px;
     height: 100%;
-    background-image: url('https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4');
-    background-size: 125%;
+    background-image: ${({ image }) =>
+      image
+        ? `url(${image})`
+        : `url('https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4')`};
+    background-size: contain;
     background-position: center;
     margin-right: 24px;
   }

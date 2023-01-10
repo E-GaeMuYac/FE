@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
 import { useGetSearchQuery } from '../query/searchQuery';
 
+import { useRecoilState } from 'recoil';
+import { compareBoxData } from '../recoil/recoilStore';
+
 const Search = () => {
+  const navigate = useNavigate();
   const [searhArr, setSearhArr] = useState([]);
 
   //약 검색 종류 데이터 모음
@@ -93,6 +98,29 @@ const Search = () => {
     }
   }, [data]);
   // -----------------------------------------------------------------------------
+
+  const [compareBoxArr, setCompareBoxArr] = useRecoilState(compareBoxData);
+
+  const goToDetail = (id) => {
+    navigate(`/detail/${id}`);
+  };
+
+  const likeIt = (id) => {
+    console.log(`like it this ${id}`);
+  };
+
+  const putInToCompareBox = (list) => {
+    for (let i = 0; i < compareBoxArr.length; i++) {
+      if (compareBoxArr[i].itemName === 'null') {
+        let newArr = [...compareBoxArr];
+        newArr[i] = list;
+        setCompareBoxArr(newArr);
+        break;
+      }
+    }
+  };
+
+  // -----------------------------------------------------------------------------
   return (
     <Wrap>
       <SearchBarWrap
@@ -168,19 +196,34 @@ const Search = () => {
           <ul className='searchList'>
             {searhArr.map((list) => (
               <SearchListWrap key={list.medicineId} image={list.itemImage}>
-                <div className='listImg'></div>
-                <div className='listName'>{list.itemName}</div>
-                <div className='listSubTextWrap'>
-                  <div className='listSubText'>{list.etcOtcCode}</div>
-                  <hr />
-                  <div className='listSubText'>{list.entpName}</div>
-                </div>
-                <div className='listTag'>{list.productType}</div>
+                <li
+                  onClick={() => {
+                    goToDetail(list.medicineId);
+                  }}>
+                  <div className='listImg'></div>
+                  <div className='listName'>{list.itemName}</div>
+                  <div className='listSubTextWrap'>
+                    <div className='listSubText'>{list.etcOtcCode}</div>
+                    <hr />
+                    <div className='listSubText'>{list.entpName}</div>
+                  </div>
+                  <div className='listTag'>{list.productType}</div>
+                </li>
                 <div className='btnWrap'>
                   <div className='btnLike'>
-                    <div className='btnLikeImg'></div>
+                    <div
+                      className='btnLikeImg'
+                      onClick={() => {
+                        likeIt(list.medicineId);
+                      }}></div>
                   </div>
-                  <div className='btnInBox'>보관함 담기</div>
+                  <div
+                    className='btnInBox'
+                    onClick={() => {
+                      putInToCompareBox(list);
+                    }}>
+                    보관함 담기
+                  </div>
                 </div>
               </SearchListWrap>
             ))}
@@ -369,15 +412,19 @@ const SearchResultWrap = styled.div`
     margin-bottom: 218px;
   }
 `;
-const SearchListWrap = styled.li`
-  padding: 30px 34px;
-  width: 256px;
-  height: 298px;
-  border: 1px solid #d0d0d0;
-  border-radius: 25px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+const SearchListWrap = styled.div`
+  position: relative;
+  li {
+    padding: 30px 34px;
+    width: 256px;
+    height: 300px;
+    border: 1px solid #d0d0d0;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+  }
   .listImg {
     width: 100%;
     height: 110px;
@@ -436,6 +483,9 @@ const SearchListWrap = styled.li`
     margin-bottom: 18px;
   }
   .btnWrap {
+    position: absolute;
+    left: 34px;
+    bottom: 30px;
     display: flex;
     align-items: center;
     gap: 14px;
