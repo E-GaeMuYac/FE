@@ -3,10 +3,13 @@ import styled from 'styled-components';
 import { IoMdSettings } from 'react-icons/io';
 import { FaPen } from 'react-icons/fa';
 import { userApi } from '../apis/apiInstance';
+import { useNavigate } from 'react-router-dom';
 
 const User = () => {
+  const navigate = useNavigate();
   const [likesArr, setLikesArr] = useState([]);
   const [isClicked, setIsClicked] = useState(false);
+  const [userInfo, setUserInfo] = useState([]);
 
   const mockArr = [
     {
@@ -21,16 +24,36 @@ const User = () => {
   ];
 
   useEffect(() => {
+    GetProfile();
     LikesList();
   }, []);
+
+  const GetProfile = async () => {
+    try {
+      const res = await userApi.get('api/users/find');
+      console.log('프로필정보', res);
+      setUserInfo({
+        nickname: res.data.user.nickname,
+        loginCount: res.data.user.loginCount,
+        imageUrl: res.data.user.imageUrl,
+      });
+      console.log(userInfo);
+    } catch (e) {
+      console.log(e);
+      if (e.response.status === 401) {
+        alert('로그인 정보가 필요합니다.');
+        navigate('/login');
+      }
+    }
+  };
 
   const LikesList = async () => {
     try {
       const res = await userApi.get('api/products/dibs');
-      console.log(res);
+      console.log('찜리스트', res);
       setLikesArr(res.data);
     } catch (e) {
-      console.log(e);
+      console.log('망', e);
     }
   };
 
@@ -50,7 +73,7 @@ const User = () => {
       </MyPageHeader>
       <MyPageWrap>
         <ProfileImg>
-          <UserImage>
+          <UserImage image={userInfo.imageUrl}>
             <label htmlFor='file-input'>
               <IoMdSettings
                 style={{
@@ -78,7 +101,7 @@ const User = () => {
         <NicknameBox>
           {!isClicked ? (
             <Nickname>
-              OOO님
+              {userInfo ? `${userInfo.nickname}님` : 'OOO님'}
               <button onClick={changeNickname}>
                 <FaPen />
               </button>
@@ -197,7 +220,10 @@ const UserImage = styled.div`
   width: 170px;
   height: 170px;
   border-radius: 50%;
-  background-image: url('https://mblogthumb-phinf.pstatic.net/MjAxODAzMTFfMTkw/MDAxNTIwNzE1NzE3NzA2.fnxmFYSU71Rdn_WXjEq1SmWXlltr0tMEY4ADB7iVqbkg.qk63bfvJvQPNzxdMEQnVH6n4cROAM4zXy8UR5ZybKKUg.PNG.osy2201/15.png?type=w800');
+  background-image: ${({ image }) =>
+    image
+      ? `url(${image})`
+      : `url('https://mblogthumb-phinf.pstatic.net/MjAxODAzMTFfMTkw/MDAxNTIwNzE1NzE3NzA2.fnxmFYSU71Rdn_WXjEq1SmWXlltr0tMEY4ADB7iVqbkg.qk63bfvJvQPNzxdMEQnVH6n4cROAM4zXy8UR5ZybKKUg.PNG.osy2201/15.png?type=w800')`};
   background-size: cover;
   background-position: center;
 
