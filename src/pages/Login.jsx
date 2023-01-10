@@ -15,22 +15,11 @@ const Login = () => {
     window.location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId_n}&state=test&redirect_uri=${redirectUri_n}`;
   };
 
-  // const { naver } = window;
-  // const naverLogin = new naver.LoginWithNaverId({
-  //   clientId: process.env.REACT_APP_N_CLIENT_ID,
-  //   callbackUrl: process.env.REACT_APP_N_REDIRECT_URI,
-  //   isPopup: false,
-  //   loginButton: {
-  //     color: 'green',
-  //     type: 3,
-  //     height: 50,
-  //   },
-  // });
-  // console.log(process.env.REACT_APP_N_REDIRECT_URI);
-
-  // useEffect(() => {
-  //   naverLogin.init();
-  // });
+  const googleHandler = () => {
+    const redirectUri_g = process.env.REACT_APP_G_REDIRECT_URI;
+    const clientId_g = process.env.REACT_APP_G_CLIENT_ID;
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?response_type=token&redirect_uri=${redirectUri_g}&client_id=${clientId_g}&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
+  };
 
   return (
     <div>
@@ -58,7 +47,9 @@ const Login = () => {
               <SocialBtn type='button' onClick={naverHandler}>
                 NAVER로 로그인
               </SocialBtn>
-              <SocialBtn>GOOGLE로 로그인</SocialBtn>
+              <SocialBtn type='button' onClick={googleHandler}>
+                GOOGLE로 로그인
+              </SocialBtn>
             </SocialLogin>
           </LoginWrapper>
         </Wrapper>
