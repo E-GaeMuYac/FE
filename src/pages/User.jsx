@@ -79,7 +79,7 @@ const User = () => {
                 style={{
                   position: 'absolute',
                   top: 4,
-                  right: 3,
+                  right: 4,
                   color: 'white',
                 }}
                 size='30'
@@ -176,6 +176,7 @@ const MyPageHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   span {
     margin-left: 20px;
     font-size: 32px;
@@ -206,6 +207,7 @@ const ProfileImg = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
   button {
     width: 128px;
     height: 38px;
@@ -226,14 +228,15 @@ const UserImage = styled.div`
       : `url('https://mblogthumb-phinf.pstatic.net/MjAxODAzMTFfMTkw/MDAxNTIwNzE1NzE3NzA2.fnxmFYSU71Rdn_WXjEq1SmWXlltr0tMEY4ADB7iVqbkg.qk63bfvJvQPNzxdMEQnVH6n4cROAM4zXy8UR5ZybKKUg.PNG.osy2201/15.png?type=w800')`};
   background-size: cover;
   background-position: center;
+  position: relative;
 
   label {
     width: 38px;
     height: 38px;
     border-radius: 50%;
     position: absolute;
-    top: 338px;
-    left: 495px;
+    top: 117px;
+    left: 128px;
     background-color: #868686;
     cursor: pointer;
   }
@@ -279,7 +282,6 @@ const NicknameInput = styled.div`
       outline: none;
     }
   }
-
   button {
     margin-left: 8px;
     width: 100px;
@@ -290,6 +292,7 @@ const NicknameInput = styled.div`
     cursor: pointer;
   }
 `;
+
 const ProfileMsg = styled.div`
   width: 250px;
   height: 72px;
@@ -313,6 +316,7 @@ const LikelistHeader = styled.div`
   height: 100px;
   display: flex;
   align-items: center;
+
   span {
     margin-left: 20px;
     font-size: 32px;
@@ -411,10 +415,10 @@ const LikeBtnBg = styled.div`
   width: 38px;
   height: 100%;
   background-color: #d9d9d9;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 
 const LikeBtnLg = styled.div`
