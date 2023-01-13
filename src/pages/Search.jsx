@@ -8,20 +8,8 @@ import { useGetSearchQuery } from '../query/searchQuery';
 import { useRecoilState } from 'recoil';
 import { compareBoxData } from '../recoil/recoilStore';
 
-const LikeItBtn = ({ id }) => {
-  const likeIt = (id) => {
-    console.log(`like this ${id}`);
-  };
-
-  return (
-    <LikeItBtnWrap
-      onClick={() => {
-        likeIt(id);
-      }}>
-      <div className='btnLikeImg'></div>
-    </LikeItBtnWrap>
-  );
-};
+//component
+import LikeItBtn from '../components/common/LikeItBtn';
 
 const Search = () => {
   const navigate = useNavigate();
@@ -510,23 +498,6 @@ const SearchListWrap = styled.div`
     line-height: 20px;
     font-weight: bold;
     cursor: pointer;
-  }
-`;
-const LikeItBtnWrap = styled.div`
-  width: 38px;
-  height: 100%;
-  border-radius: 8px;
-  box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .btnLikeImg {
-    width: 26px;
-    height: 26px;
-    background-image: url('/assets/image/icon_heart1.png');
-    background-size: cover;
-    background-position: center;
   }
 `;
 
