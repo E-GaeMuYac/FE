@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { userApi } from '../../apis/apiInstance';
@@ -47,12 +47,12 @@ const Header = (props) => {
   return (
     <HeaderWrapper>
       {/* 이미지로 교체 예정 */}
-      <LogoBox>Logo</LogoBox>
+      <LogoBox to='/'>Logo</LogoBox>
       <CategoryBox>
-        <StyledLink>ABOUT</StyledLink>
+        <StyledLink to='/'>ABOUT</StyledLink>
         <StyledLink to='/search'>검색하기</StyledLink>
         <StyledLink to='/compare'>비교하기</StyledLink>
-        <StyledLink>이벤트</StyledLink>
+        <StyledLink to='/event'>이벤트</StyledLink>
       </CategoryBox>
       {!isToken ? (
         <SignBox>
@@ -80,12 +80,14 @@ const HeaderWrapper = styled.div`
   border-bottom: 1px solid #d0d0d0;
 `;
 
-const LogoBox = styled.div`
+const LogoBox = styled(Link)`
   width: 20%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
+  color: black;
   font-size: 40px;
   font-weight: 700;
 `;
