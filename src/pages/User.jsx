@@ -4,12 +4,17 @@ import { IoMdSettings } from 'react-icons/io';
 import { FaPen } from 'react-icons/fa';
 import { userApi } from '../apis/apiInstance';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const User = () => {
   const navigate = useNavigate();
   const [likesArr, setLikesArr] = useState([]);
-  const [isClicked, setIsClicked] = useState(false);
+  const [isTextClicked, setIsTextClicked] = useState(false);
+  const [isFileClicked, setIsFileClicked] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
+  const [prevImg, setPrevImg] = useState('');
+  const [newImg, setNewImg] = useState();
+  const [newNickname, setNewNickname] = useState(userInfo.nickname);
 
   const mockArr = [
     {
@@ -31,15 +36,12 @@ const User = () => {
   const GetProfile = async () => {
     try {
       const res = await userApi.get('api/users/find');
-      console.log('프로필정보', res);
       setUserInfo({
         nickname: res.data.user.nickname,
         loginCount: res.data.user.loginCount,
         imageUrl: res.data.user.imageUrl,
       });
-      console.log(userInfo);
     } catch (e) {
-      console.log(e);
       if (e.response.status === 401) {
         alert('로그인 정보가 필요합니다.');
         navigate('/login');
@@ -58,11 +60,68 @@ const User = () => {
   };
 
   const changeNickname = () => {
-    setIsClicked(true);
+    setIsTextClicked(true);
   };
 
   const changesDone = () => {
-    setIsClicked(false);
+    modifyNickname({ nickname: newNickname });
+  };
+
+  const modifyNickname = async (payload) => {
+    try {
+      const res = await userApi.put('api/users/update/nickname', payload);
+      setIsTextClicked(false);
+      window.location.reload();
+      alert(res.data.message);
+    } catch (e) {
+      alert('정보 수정에 실패하였습니다.');
+    }
+  };
+
+  const imageInput = (e) => {
+    e.preventDefault();
+    const file = e.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setPrevImg(reader.result);
+      };
+      setNewImg(file);
+    }
+    setIsFileClicked(true);
+  };
+
+  const nickInput = (e) => {
+    setNewNickname(e.target.value);
+  };
+
+  //서버에서 presigned url 받아옴
+  const modifyImage = async () => {
+    try {
+      console.log(newImg.name);
+      const res = await userApi.put('/api/users/update/image', {
+        filename: newImg.name,
+      });
+      console.log(res.data);
+      const presignedUrl = res.data.presignedUrl;
+      setIsFileClicked(false);
+      S3Upload(presignedUrl);
+    } catch (error) {}
+  };
+  //presigned url로 이미지 보내기
+  const S3Upload = async (presignedUrl) => {
+    try {
+      await axios.put(presignedUrl, newImg);
+      alert('이미지 수정이 완료되었습니다.');
+    } catch (e) {
+      alert(e);
+    }
+  };
+
+  const cancelChange = () => {
+    setIsTextClicked(false);
   };
 
   return (
@@ -73,7 +132,7 @@ const User = () => {
       </MyPageHeader>
       <MyPageWrap>
         <ProfileImg>
-          <UserImage image={userInfo.imageUrl}>
+          <UserImage userImg={userInfo.imageUrl} prevImg={prevImg}>
             <label htmlFor='file-input'>
               <IoMdSettings
                 style={{
@@ -85,31 +144,31 @@ const User = () => {
                 size='30'
               />
             </label>
-            <input
-              id='file-input'
-              type='file'
-              style={{
-                display: 'none',
-                visibility: 'hidden',
-                left: 480,
-                top: 350,
-              }}
-            />
+            <input id='file-input' type='file' onChange={imageInput} />
           </UserImage>
-          <button type='button'>변경완료</button>
+          <button type='button' onClick={modifyImage} disabled={!isFileClicked}>
+            변경완료
+          </button>
         </ProfileImg>
         <NicknameBox>
-          {!isClicked ? (
+          {!isTextClicked ? (
             <Nickname>
-              {userInfo ? `${userInfo.nickname}님` : 'OOO님'}
+              {!userInfo || userInfo.nickname === undefined
+                ? 'OOO님'
+                : `${userInfo.nickname}님`}
               <button onClick={changeNickname}>
                 <FaPen />
               </button>
             </Nickname>
           ) : (
             <NicknameInput>
-              <input />
-              <button onClick={changesDone}>변경완룡</button>
+              <input
+                type='text'
+                defaultValue={userInfo.nickname}
+                onChange={nickInput}
+              />
+              <button onClick={changesDone}>변경완료</button>
+              <button onClick={cancelChange}>취소</button>
             </NicknameInput>
           )}
 
@@ -215,6 +274,7 @@ const ProfileImg = styled.div`
     border: none;
     border-radius: 50px;
     background-color: #d0d0d0;
+    cursor: pointer;
   }
 `;
 
@@ -222,9 +282,11 @@ const UserImage = styled.div`
   width: 170px;
   height: 170px;
   border-radius: 50%;
-  background-image: ${({ image }) =>
-    image
-      ? `url(${image})`
+  background-image: ${(props) =>
+    props.prevImg
+      ? `url(${props.prevImg})`
+      : props.userImg
+      ? `url(${props.userImg})`
       : `url('https://mblogthumb-phinf.pstatic.net/MjAxODAzMTFfMTkw/MDAxNTIwNzE1NzE3NzA2.fnxmFYSU71Rdn_WXjEq1SmWXlltr0tMEY4ADB7iVqbkg.qk63bfvJvQPNzxdMEQnVH6n4cROAM4zXy8UR5ZybKKUg.PNG.osy2201/15.png?type=w800')`};
   background-size: cover;
   background-position: center;
@@ -239,6 +301,9 @@ const UserImage = styled.div`
     left: 128px;
     background-color: #868686;
     cursor: pointer;
+  }
+  input {
+    display: none;
   }
 `;
 
