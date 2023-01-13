@@ -1,22 +1,70 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { userApi } from '../../apis/apiInstance';
 
-const Header = () => {
+const Header = (props) => {
+  const navigate = useNavigate();
+
+  const isToken = props.istoken;
+  const setIsToken = props.setistoken;
+
+  const userImage = props.userimage;
+  const setUserImage = props.setuserimage;
+
+  useEffect(() => {
+    loginCheck();
+  }, []);
+
+  const loginCheck = () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (refreshToken) {
+      GetProfile();
+      setIsToken(true);
+    }
+  };
+
+  const GetProfile = async () => {
+    try {
+      const res = await userApi.get('api/users/find');
+      setUserImage(res.data.user.imageUrl);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const logoutHandler = async () => {
+    try {
+      const res = await userApi.put('api/users/logout');
+      alert(res.data.message);
+      localStorage.clear();
+      setIsToken(false);
+      navigate('/login');
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <HeaderWrapper>
       {/* 이미지로 교체 예정 */}
-      <LogoBox>LOGO</LogoBox>
+      <LogoBox>Logo</LogoBox>
       <CategoryBox>
-        <StyledLink>카테고리1</StyledLink>
-        <StyledLink>카테고리2</StyledLink>
-        <StyledLink>카테고리3</StyledLink>
-        <StyledLink>카테고리4</StyledLink>
+        <StyledLink>ABOUT</StyledLink>
+        <StyledLink to='/search'>검색하기</StyledLink>
+        <StyledLink to='/compare'>비교하기</StyledLink>
+        <StyledLink>이벤트</StyledLink>
       </CategoryBox>
-      <SignBox>
-        <LoginBtn>로그인</LoginBtn>
-        <SignupBtn>회원가입</SignupBtn>
-      </SignBox>
+      {!isToken ? (
+        <SignBox>
+          <LoginBtn to='/login'>로그인</LoginBtn>
+          <SignupBtn to='/signup'>회원가입</SignupBtn>
+        </SignBox>
+      ) : (
+        <SignBox>
+          <MypageBtn to='/mypage' props={userImage} />
+          <LogoutBtn onClick={logoutHandler}>로그아웃</LogoutBtn>
+        </SignBox>
+      )}
     </HeaderWrapper>
   );
 };
@@ -29,7 +77,7 @@ const HeaderWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   position: relative;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #d0d0d0;
 `;
 
 const LogoBox = styled.div`
@@ -43,47 +91,87 @@ const LogoBox = styled.div`
 `;
 
 const CategoryBox = styled.div`
-  width: 60%;
+  width: 55%;
   height: 100%;
   display: flex;
   justify-content: center;
-  gap: 80px;
+  gap: 70px;
   align-items: center;
-  font-size: 23px;
+  font-size: 20px;
   font-weight: 600;
 `;
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: black;
+  color: #868686;
 `;
 
 const SignBox = styled.div`
-  width: 20%;
+  width: 25%;
   height: 100%;
   display: flex;
   justify-content: center;
-  gap: 40px;
+  gap: 30px;
   align-items: center;
 `;
 
-const LoginBtn = styled.button`
-  background-color: white;
+const LoginBtn = styled(Link)`
+  background-color: #13bd7e;
   width: 100px;
-  height: 35px;
+  height: 39px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
   font-size: 16px;
   font-weight: 900;
-  border: 1px solid black;
+  color: white;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
 `;
 
-const SignupBtn = styled.button`
-  background-color: black;
-  color: white;
+const SignupBtn = styled(Link)`
+  background-color: #e4ffea;
   width: 100px;
-  height: 35px;
+  height: 39px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
   font-size: 16px;
   font-weight: 900;
+  color: #13bd7e;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+`;
+
+const MypageBtn = styled(Link)`
+  background-color: pink;
+  background-image: ${({ props }) => `url(${props})`};
+  background-size: cover;
+  background-position: center;
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+`;
+
+const LogoutBtn = styled.button`
+  background-color: #13bd7e;
+  width: 100px;
+  height: 39px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 900;
+  color: white;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
 `;
 export default Header;

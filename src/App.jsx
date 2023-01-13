@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 //page
@@ -12,10 +13,20 @@ import Signup from './pages/Signup';
 import Layout from './components/layout/Layout';
 import Header from './components/layout/Header';
 import CompareBox from './components/common/CompareBox';
+// import Spinner from './components/common/Spinner';
 
 function App() {
+  const [isToken, setIsToken] = useState('');
+  const [userImage, setUserImage] = useState('');
+
   return (
     <BrowserRouter>
+      <Header
+        istoken={isToken}
+        setistoken={setIsToken}
+        userimage={userImage}
+        setuserimage={setUserImage}
+      />
       <Routes>
         <Route
           exact
@@ -23,6 +34,7 @@ function App() {
           element={
             <Layout>
               <Search />
+              <CompareBox />
             </Layout>
           }
         />
@@ -32,35 +44,23 @@ function App() {
           element={
             <Layout>
               <ComparePage />
+              <CompareBox />
             </Layout>
           }
         />
         <Route
           exact
           path='/login'
-          element={
-            <>
-              <Header />
-              <Login />
-            </>
-          }
+          element={<Login setistoken={setIsToken} />}
         />
-        <Route
-          exact
-          path='/signup'
-          element={
-            <>
-              <Header />
-              <Signup />
-            </>
-          }
-        />
+        <Route exact path='/signup' element={<Signup />} />
         <Route
           exact
           path='/compare'
           element={
             <Layout>
               <ComparePage />
+              <CompareBox />
             </Layout>
           }
         />
@@ -69,6 +69,7 @@ function App() {
           element={
             <Layout>
               <Detail />
+              <CompareBox />
             </Layout>
           }
         />
@@ -76,12 +77,13 @@ function App() {
           path='/mypage'
           element={
             <Layout>
-              <User />
+              <User setuserimage={setUserImage} istoken={isToken} />
+              <CompareBox />
             </Layout>
           }
         />
+        {/* <Route path='/spinner' element={<Spinner />} /> */}
       </Routes>
-      <CompareBox />
     </BrowserRouter>
   );
 }

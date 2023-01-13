@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { api } from '../apis/apiInstance';
 import { useCookies } from 'react-cookie';
 
-const Login = () => {
+const Login = (props) => {
+  const setIsToken = props.setistoken;
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(['rememberEmail']);
 
@@ -55,11 +56,12 @@ const Login = () => {
       const refreshtoken = res.headers.refreshtoken;
       localStorage.setItem('accessToken', accesstoken);
       localStorage.setItem('refreshToken', refreshtoken);
-
       alert(res.data.msg);
+      setIsToken(true);
       navigate('/');
     } catch (e) {
-      alert(e.response.data.errorMessage);
+      console.log(e);
+      alert('로그인에 실패하였습니다.');
     }
   };
 

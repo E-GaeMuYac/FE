@@ -6,15 +6,18 @@ import { userApi } from '../apis/apiInstance';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const User = () => {
+const User = (props) => {
   const navigate = useNavigate();
   const [likesArr, setLikesArr] = useState([]);
   const [isTextClicked, setIsTextClicked] = useState(false);
   const [isFileClicked, setIsFileClicked] = useState(false);
-  const [userInfo, setUserInfo] = useState([]);
+  const [nickname, setNickname] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [loginCount, setLoginCount] = useState('');
   const [prevImg, setPrevImg] = useState('');
   const [newImg, setNewImg] = useState();
-  const [newNickname, setNewNickname] = useState(userInfo.nickname);
+  const [newNickname, setNewNickname] = useState(nickname);
+  const SetUserImage = props.setuserimage;
 
   const mockArr = [
     {
@@ -36,26 +39,23 @@ const User = () => {
   const GetProfile = async () => {
     try {
       const res = await userApi.get('api/users/find');
-      setUserInfo({
-        nickname: res.data.user.nickname,
-        loginCount: res.data.user.loginCount,
-        imageUrl: res.data.user.imageUrl,
-      });
+      console.log(res);
+      setNickname(res.data.user.nickname);
+      setLoginCount(res.data.user.loginCount);
+      setImageUrl(res.data.user.imageUrl);
     } catch (e) {
-      if (e.response.status === 401) {
-        alert('로그인 정보가 필요합니다.');
-        navigate('/login');
-      }
+      console.log(e);
+      alert('로그인 정보가 필요합니다.');
+      navigate('/login');
     }
   };
 
   const LikesList = async () => {
     try {
       const res = await userApi.get('api/products/dibs');
-      console.log('찜리스트', res);
       setLikesArr(res.data);
     } catch (e) {
-      console.log('망', e);
+      console.log(e);
     }
   };
 
@@ -71,9 +71,10 @@ const User = () => {
     try {
       const res = await userApi.put('api/users/update/nickname', payload);
       setIsTextClicked(false);
-      window.location.reload();
+      setNickname(payload.nickname);
       alert(res.data.message);
     } catch (e) {
+      console.log(e);
       alert('정보 수정에 실패하였습니다.');
     }
   };
@@ -100,21 +101,22 @@ const User = () => {
   //서버에서 presigned url 받아옴
   const modifyImage = async () => {
     try {
-      console.log(newImg.name);
       const res = await userApi.put('/api/users/update/image', {
         filename: newImg.name,
       });
-      console.log(res.data);
       const presignedUrl = res.data.presignedUrl;
       setIsFileClicked(false);
       S3Upload(presignedUrl);
-    } catch (error) {}
+    } catch (e) {
+      console.log(e);
+    }
   };
   //presigned url로 이미지 보내기
   const S3Upload = async (presignedUrl) => {
     try {
       await axios.put(presignedUrl, newImg);
       alert('이미지 수정이 완료되었습니다.');
+      SetUserImage(prevImg);
     } catch (e) {
       alert(e);
     }
@@ -132,7 +134,7 @@ const User = () => {
       </MyPageHeader>
       <MyPageWrap>
         <ProfileImg>
-          <UserImage userImg={userInfo.imageUrl} prevImg={prevImg}>
+          <UserImage userImg={imageUrl} prevImg={prevImg}>
             <label htmlFor='file-input'>
               <IoMdSettings
                 style={{
@@ -153,20 +155,14 @@ const User = () => {
         <NicknameBox>
           {!isTextClicked ? (
             <Nickname>
-              {!userInfo || userInfo.nickname === undefined
-                ? 'OOO님'
-                : `${userInfo.nickname}님`}
+              {nickname ? `${nickname}님` : 'OOO님'}
               <button onClick={changeNickname}>
                 <FaPen />
               </button>
             </Nickname>
           ) : (
             <NicknameInput>
-              <input
-                type='text'
-                defaultValue={userInfo.nickname}
-                onChange={nickInput}
-              />
+              <input type='text' defaultValue={nickname} onChange={nickInput} />
               <button onClick={changesDone}>변경완료</button>
               <button onClick={cancelChange}>취소</button>
             </NicknameInput>
@@ -255,6 +251,7 @@ const MyPageHeader = styled.div`
 const MyPageWrap = styled.div`
   width: 100%;
   height: 225px;
+  margin-top: 20px;
   display: flex;
   align-items: center;
   gap: 30px;
