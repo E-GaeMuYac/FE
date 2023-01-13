@@ -8,6 +8,21 @@ import { useGetSearchQuery } from '../query/searchQuery';
 import { useRecoilState } from 'recoil';
 import { compareBoxData } from '../recoil/recoilStore';
 
+const LikeItBtn = ({ id }) => {
+  const likeIt = (id) => {
+    console.log(`like this ${id}`);
+  };
+
+  return (
+    <LikeItBtnWrap
+      onClick={() => {
+        likeIt(id);
+      }}>
+      <div className='btnLikeImg'></div>
+    </LikeItBtnWrap>
+  );
+};
+
 const Search = () => {
   const navigate = useNavigate();
   const [searhArr, setSearhArr] = useState([]);
@@ -103,10 +118,6 @@ const Search = () => {
 
   const goToDetail = (id) => {
     navigate(`/detail/${id}`);
-  };
-
-  const likeIt = (id) => {
-    console.log(`like it this ${id}`);
   };
 
   const putInToCompareBox = (list) => {
@@ -210,13 +221,7 @@ const Search = () => {
                   <div className='listTag'>{list.productType}</div>
                 </li>
                 <div className='btnWrap'>
-                  <div className='btnLike'>
-                    <div
-                      className='btnLikeImg'
-                      onClick={() => {
-                        likeIt(list.medicineId);
-                      }}></div>
-                  </div>
+                  <LikeItBtn id={list.medicineId} />
                   <div
                     className='btnInBox'
                     onClick={() => {
@@ -418,12 +423,12 @@ const SearchListWrap = styled.div`
     padding: 30px 34px;
     width: 256px;
     height: 300px;
-    border: 1px solid #d0d0d0;
     border-radius: 25px;
     display: flex;
     align-items: center;
     flex-direction: column;
     cursor: pointer;
+    box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.25);
   }
   .listImg {
     width: 100%;
@@ -432,7 +437,8 @@ const SearchListWrap = styled.div`
       image
         ? `url(${image})`
         : `url('https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4')`};
-    background-size: contain;
+    background-size: cover;
+    border-radius: 8px;
     background-position: center;
     margin-bottom: 24px;
     background-repeat: no-repeat;
@@ -457,7 +463,6 @@ const SearchListWrap = styled.div`
     font-size: 15px;
     line-height: 22px;
     color: #868686;
-    font-weight: bold;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -476,7 +481,8 @@ const SearchListWrap = styled.div`
   .listTag {
     padding: 10px;
     border-radius: 5px;
-    background-color: #ebebeb;
+    background-color: #e4ffea;
+    color: #13bd7e;
     font-size: 14px;
     font-weight: bold;
     line-height: 15px;
@@ -491,26 +497,11 @@ const SearchListWrap = styled.div`
     gap: 14px;
     height: 38px;
   }
-  .btnLike {
-    width: 38px;
-    height: 100%;
-    background-color: #d9d9d9;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .btnLikeImg {
-    width: 26px;
-    height: 26px;
-    background-image: url('/assets/image/icon_heart1.png');
-    background-size: cover;
-    background-position: center;
-  }
   .btnInBox {
     width: 214px;
     height: 100%;
-    background-color: #868686;
+    background-color: #13bd7e;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -519,6 +510,23 @@ const SearchListWrap = styled.div`
     line-height: 20px;
     font-weight: bold;
     cursor: pointer;
+  }
+`;
+const LikeItBtnWrap = styled.div`
+  width: 38px;
+  height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .btnLikeImg {
+    width: 26px;
+    height: 26px;
+    background-image: url('/assets/image/icon_heart1.png');
+    background-size: cover;
+    background-position: center;
   }
 `;
 
