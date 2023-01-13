@@ -17,10 +17,16 @@ import CompareBox from './components/common/CompareBox';
 
 function App() {
   const [isToken, setIsToken] = useState('');
+  const [userImage, setUserImage] = useState('');
 
   return (
     <BrowserRouter>
-      <Header istoken={isToken} setistoken={setIsToken} />
+      <Header
+        istoken={isToken}
+        setistoken={setIsToken}
+        userimage={userImage}
+        setuserimage={setUserImage}
+      />
       <Routes>
         <Route
           exact
@@ -71,7 +77,7 @@ function App() {
           path='/mypage'
           element={
             <Layout>
-              <User />
+              <User setuserimage={setUserImage} istoken={isToken} />
               <CompareBox />
             </Layout>
           }

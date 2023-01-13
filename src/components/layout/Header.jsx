@@ -5,10 +5,12 @@ import { userApi } from '../../apis/apiInstance';
 
 const Header = (props) => {
   const navigate = useNavigate();
-  const [userImage, setUserImage] = useState('');
 
   const isToken = props.istoken;
   const setIsToken = props.setistoken;
+
+  const userImage = props.userimage;
+  const setUserImage = props.setuserimage;
 
   useEffect(() => {
     loginCheck();
