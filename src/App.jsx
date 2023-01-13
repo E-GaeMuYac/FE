@@ -12,10 +12,12 @@ import Signup from './pages/Signup';
 import Layout from './components/layout/Layout';
 import Header from './components/layout/Header';
 import CompareBox from './components/common/CompareBox';
+// import Spinner from './components/common/Spinner';
 
 function App() {
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route
           exact
@@ -23,6 +25,7 @@ function App() {
           element={
             <Layout>
               <Search />
+              <CompareBox />
             </Layout>
           }
         />
@@ -32,35 +35,19 @@ function App() {
           element={
             <Layout>
               <ComparePage />
+              <CompareBox />
             </Layout>
           }
         />
-        <Route
-          exact
-          path='/login'
-          element={
-            <>
-              <Header />
-              <Login />
-            </>
-          }
-        />
-        <Route
-          exact
-          path='/signup'
-          element={
-            <>
-              <Header />
-              <Signup />
-            </>
-          }
-        />
+        <Route exact path='/login' element={<Login />} />
+        <Route exact path='/signup' element={<Signup />} />
         <Route
           exact
           path='/compare'
           element={
             <Layout>
               <ComparePage />
+              <CompareBox />
             </Layout>
           }
         />
@@ -69,6 +56,7 @@ function App() {
           element={
             <Layout>
               <Detail />
+              <CompareBox />
             </Layout>
           }
         />
@@ -77,11 +65,12 @@ function App() {
           element={
             <Layout>
               <User />
+              <CompareBox />
             </Layout>
           }
         />
+        {/* <Route path='/spinner' element={<Spinner />} /> */}
       </Routes>
-      <CompareBox />
     </BrowserRouter>
   );
 }
