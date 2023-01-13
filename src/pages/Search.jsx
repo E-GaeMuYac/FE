@@ -11,8 +11,13 @@ import { compareBoxData } from '../recoil/recoilStore';
 //component
 import LikeItBtn from '../components/common/LikeItBtn';
 
-const Pagenation = ({ nowPageNum }) => {
+const Pagenation = ({ nowPageNum, setNowPageNum }) => {
   const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  const pageNumChange = (num) => {
+    setNowPageNum(num);
+  };
+
   return (
     <PagenationWrap nowPageNum={nowPageNum}>
       <div className='pagenationArrow left'></div>
@@ -20,9 +25,20 @@ const Pagenation = ({ nowPageNum }) => {
       <ul className='pagenationNumWrap'>
         {numArr.map((list) =>
           list === nowPageNum ? (
-            <li className='Active'>{list}</li>
+            <li
+              className='Active'
+              onClick={() => {
+                pageNumChange(list);
+              }}>
+              {list}
+            </li>
           ) : (
-            <li>{list}</li>
+            <li
+              onClick={() => {
+                pageNumChange(list);
+              }}>
+              {list}
+            </li>
           )
         )}
       </ul>
@@ -242,7 +258,7 @@ const Search = () => {
               </SearchListWrap>
             ))}
           </ul>
-          <Pagenation nowPageNum={nowPageNum} />
+          <Pagenation nowPageNum={nowPageNum} setNowPageNum={setNowPageNum} />
         </SearchResultWrap>
       ) : null}
     </Wrap>
@@ -534,12 +550,14 @@ const PagenationWrap = styled.div`
     margin: 0;
   }
   .pagenationNumWrap li {
-    width: 35px;
-    height: 35px;
+    width: 33px;
+    height: 33px;
     background-color: #e7e7e7;
+    border: 1px solid #e7e7e7;
     border-radius: 8px;
     font-size: 18px;
     color: #868686;
+
     display: flex;
     align-items: center;
     justify-content: center;
