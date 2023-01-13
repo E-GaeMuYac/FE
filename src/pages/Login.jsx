@@ -99,9 +99,18 @@ const Login = (props) => {
               <FindAccount>아이디 / 비밀번호 찾기</FindAccount>
             </ManageAccount>
             <SocialLogin>
-              <SocialBtn>카카오로 로그인</SocialBtn>
-              <SocialBtn>NAVER로 로그인</SocialBtn>
-              <SocialBtn>GOOGLE로 로그인</SocialBtn>
+              <KakaoBtn>
+                <div />
+                카카오로 로그인
+              </KakaoBtn>
+              <NaverBtn>
+                <div />
+                네이버로 로그인
+              </NaverBtn>
+              <GoogleBtn>
+                <div />
+                Google로 로그인
+              </GoogleBtn>
             </SocialLogin>
           </LoginWrapper>
         </Wrapper>
@@ -124,7 +133,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   background-color: white;
-  border: 1px solid black;
+  box-shadow: 2px 2px 32px #bdbcbc;
   border-radius: 40px;
 `;
 
@@ -177,7 +186,7 @@ const SubmitBtn = styled.button`
   width: 100%;
   height: 70px;
   margin-top: 30px;
-  background-color: #b7b7b7;
+  background-color: #13bd7e;
   color: white;
   font-size: 24px;
   font-weight: 600;
@@ -243,13 +252,72 @@ const SocialLogin = styled.div`
   flex-direction: column;
 `;
 
-const SocialBtn = styled.button`
+const KakaoBtn = styled.button`
   width: 100%;
   height: 44px;
+  position: relative;
   margin-top: 10px;
   border: none;
   border-radius: 50px;
-  background-color: #e7e7e7;
+  background-color: #fee500;
   cursor: pointer;
+
+  div {
+    background-image: url('/assets/image/카카오로고.png');
+    background-size: cover;
+    background-position: center;
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    border-radius: 50%;
+    top: 10px;
+    left: 12px;
+  }
+`;
+
+const NaverBtn = styled.button`
+  width: 100%;
+  height: 44px;
+  position: relative;
+  margin-top: 10px;
+  border: none;
+  border-radius: 50px;
+  background-color: #03c75a;
+  cursor: pointer;
+
+  div {
+    background-image: url('/assets/image/네이버로고.png');
+    background-size: cover;
+    background-position: center;
+    width: 34px;
+    height: 34px;
+    position: absolute;
+    border-radius: 50%;
+    top: 3px;
+    left: 7px;
+  }
+`;
+
+const GoogleBtn = styled.button`
+  width: 100%;
+  height: 44px;
+  position: relative;
+  margin-top: 10px;
+  border: none;
+  border-radius: 50px;
+  background-color: #4285f4;
+  cursor: pointer;
+
+  div {
+    background-image: url('/assets/image/구글로고.png');
+    background-size: center;
+    background-position: center;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    border-radius: 50%;
+    top: 5px;
+    left: 9px;
+  }
 `;
 export default Login;
