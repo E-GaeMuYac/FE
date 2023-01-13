@@ -11,6 +11,25 @@ import { compareBoxData } from '../recoil/recoilStore';
 //component
 import LikeItBtn from '../components/common/LikeItBtn';
 
+const Pagenation = ({ nowPageNum }) => {
+  const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  return (
+    <PagenationWrap nowPageNum={nowPageNum}>
+      <div className='pagenationArrow left'></div>
+      <div className='pagenationArrow right'></div>
+      <ul className='pagenationNumWrap'>
+        {numArr.map((list) =>
+          list === nowPageNum ? (
+            <li className='Active'>{list}</li>
+          ) : (
+            <li>{list}</li>
+          )
+        )}
+      </ul>
+    </PagenationWrap>
+  );
+};
+
 const Search = () => {
   const navigate = useNavigate();
   const [searhArr, setSearhArr] = useState([]);
@@ -120,6 +139,8 @@ const Search = () => {
   };
 
   // -----------------------------------------------------------------------------
+  const [nowPageNum, setNowPageNum] = useState(1);
+  // -----------------------------------------------------------------------------
   return (
     <Wrap>
       <SearchBarWrap
@@ -221,6 +242,7 @@ const Search = () => {
               </SearchListWrap>
             ))}
           </ul>
+          <Pagenation nowPageNum={nowPageNum} />
         </SearchResultWrap>
       ) : null}
     </Wrap>
@@ -375,7 +397,7 @@ const LatestSearchWrap = styled.div`
   }
 `;
 const SearchResultWrap = styled.div`
-  margin-top: 118px;
+  margin: 118px 0 218px;
   .searchTop {
     margin-bottom: 30px;
     font-size: 20px;
@@ -402,7 +424,6 @@ const SearchResultWrap = styled.div`
     list-style: none;
     padding: 0;
     margin: 0;
-    margin-bottom: 218px;
   }
 `;
 const SearchListWrap = styled.div`
@@ -498,6 +519,56 @@ const SearchListWrap = styled.div`
     line-height: 20px;
     font-weight: bold;
     cursor: pointer;
+  }
+`;
+const PagenationWrap = styled.div`
+  margin: 53px auto;
+  position: relative;
+  .pagenationNumWrap {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    justify-content: center;
+    gap: 29px;
+    padding: 0;
+    margin: 0;
+  }
+  .pagenationNumWrap li {
+    width: 35px;
+    height: 35px;
+    background-color: #e7e7e7;
+    border-radius: 8px;
+    font-size: 18px;
+    color: #868686;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .pagenationNumWrap li.Active {
+    background-color: white;
+    border: 1px solid #13bd7e;
+    color: #13bd7e;
+  }
+  .pagenationArrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 26px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+  }
+  .pagenationArrow.left {
+    left: 350px;
+    background-image: url('/assets/image/icon_page_arrow_left.png');
+  }
+  .pagenationArrow.right {
+    right: 350px;
+    background-image: url('/assets/image/icon_page_arrow_right.png');
   }
 `;
 
