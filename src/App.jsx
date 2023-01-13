@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 //page
@@ -15,9 +16,11 @@ import CompareBox from './components/common/CompareBox';
 // import Spinner from './components/common/Spinner';
 
 function App() {
+  const [isToken, setIsToken] = useState('');
+
   return (
     <BrowserRouter>
-      <Header />
+      <Header istoken={isToken} setistoken={setIsToken} />
       <Routes>
         <Route
           exact
@@ -39,7 +42,11 @@ function App() {
             </Layout>
           }
         />
-        <Route exact path='/login' element={<Login />} />
+        <Route
+          exact
+          path='/login'
+          element={<Login setistoken={setIsToken} />}
+        />
         <Route exact path='/signup' element={<Signup />} />
         <Route
           exact

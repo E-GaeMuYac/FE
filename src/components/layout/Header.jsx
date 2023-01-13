@@ -1,21 +1,24 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { userApi } from '../../apis/apiInstance';
 
-const Header = () => {
-  const [isToken, setIsToken] = useState(false);
+const Header = (props) => {
+  const navigate = useNavigate();
   const [userImage, setUserImage] = useState('');
 
-  useLayoutEffect(() => {
+  const isToken = props.istoken;
+  const setIsToken = props.setistoken;
+
+  useEffect(() => {
     loginCheck();
-  });
+  }, []);
 
   const loginCheck = () => {
     const refreshToken = localStorage.getItem('refreshToken');
     if (refreshToken) {
-      setIsToken(true);
       GetProfile();
+      setIsToken(true);
     }
   };
 
@@ -24,7 +27,19 @@ const Header = () => {
       const res = await userApi.get('api/users/find');
       setUserImage(res.data.user.imageUrl);
     } catch (e) {
-      alert(e);
+      console.log(e);
+    }
+  };
+
+  const logoutHandler = async () => {
+    try {
+      const res = await userApi.put('api/users/logout');
+      alert(res.data.message);
+      localStorage.clear();
+      setIsToken(false);
+      navigate('/login');
+    } catch (e) {
+      console.log(e);
     }
   };
   return (
@@ -44,8 +59,8 @@ const Header = () => {
         </SignBox>
       ) : (
         <SignBox>
-          <MypageBtn to='/mypage' userImage={userImage} />
-          <LogoutBtn>로그아웃</LogoutBtn>
+          <MypageBtn to='/mypage' props={userImage} />
+          <LogoutBtn onClick={logoutHandler}>로그아웃</LogoutBtn>
         </SignBox>
       )}
     </HeaderWrapper>
@@ -98,10 +113,14 @@ const SignBox = styled.div`
   align-items: center;
 `;
 
-const LoginBtn = styled.button`
+const LoginBtn = styled(Link)`
   background-color: #13bd7e;
   width: 100px;
   height: 39px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
   font-size: 16px;
   font-weight: 900;
   color: white;
@@ -110,10 +129,14 @@ const LoginBtn = styled.button`
   cursor: pointer;
 `;
 
-const SignupBtn = styled.button`
+const SignupBtn = styled(Link)`
   background-color: #e4ffea;
   width: 100px;
   height: 39px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
   font-size: 16px;
   font-weight: 900;
   color: #13bd7e;
@@ -124,7 +147,7 @@ const SignupBtn = styled.button`
 
 const MypageBtn = styled(Link)`
   background-color: pink;
-  background-image: ${({ userImage }) => `url(${userImage})`};
+  background-image: ${({ props }) => `url(${props})`};
   background-size: cover;
   background-position: center;
   width: 50px;
@@ -134,7 +157,7 @@ const MypageBtn = styled(Link)`
   cursor: pointer;
 `;
 
-const LogoutBtn = styled(Link)`
+const LogoutBtn = styled.button`
   background-color: #13bd7e;
   width: 100px;
   height: 39px;
