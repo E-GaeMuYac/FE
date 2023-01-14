@@ -11,36 +11,91 @@ import { compareBoxData } from '../recoil/recoilStore';
 //component
 import LikeItBtn from '../components/common/LikeItBtn';
 
-const Pagenation = ({ nowPageNum, setNowPageNum }) => {
-  const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
+  const [numArr, setNumArr] = useState([]);
+  const [numArrPage, setNumArrPage] = useState([]);
+  const [pageNum, setPageNum] = useState(0);
 
+  //서치 갯수에 따라 numArr 배열 생성
+  useEffect(() => {
+    let newArr = [];
+    let count = 1;
+    newArr.push(count);
+    for (let i = 0; i < searchLength; i++) {
+      if ((i + 1) % 20 === 0) {
+        count += 1;
+        newArr.push(count);
+      }
+    }
+    setNumArr(newArr);
+  }, [searchLength]);
+
+  // 페이지 넘버 변경
   const pageNumChange = (num) => {
+    window.scrollTo(0, 500);
     setNowPageNum(num);
+  };
+
+  //numArr의 길이에 따라 배열 쪼개기
+  useEffect(() => {
+    if (numArr) {
+      let newPage = [];
+
+      for (let i = 0; i < numArr.length; i += 10) {
+        let pageProp = numArr.slice(i, i + 10);
+
+        newPage.push(pageProp);
+      }
+      setNumArrPage(newPage);
+    }
+  }, [numArr]);
+
+  //다음 배열 페이지
+  const nextNumPage = () => {
+    setPageNum(pageNum + 1);
+  };
+
+  //이전 배열 페이지
+  const beforeNumPage = () => {
+    setPageNum(pageNum - 1);
   };
 
   return (
     <PagenationWrap nowPageNum={nowPageNum}>
-      <div className='pagenationArrow left'></div>
-      <div className='pagenationArrow right'></div>
+      {numArr.length > 10 ? (
+        <>
+          {pageNum > 0 ? (
+            <div className='pagenationArrow left' onClick={beforeNumPage}></div>
+          ) : null}
+          {pageNum < numArrPage.length - 1 ? (
+            <div className='pagenationArrow right' onClick={nextNumPage}></div>
+          ) : null}
+        </>
+      ) : null}
+
       <ul className='pagenationNumWrap'>
-        {numArr.map((list) =>
-          list === nowPageNum ? (
-            <li
-              className='Active'
-              onClick={() => {
-                pageNumChange(list);
-              }}>
-              {list}
-            </li>
-          ) : (
-            <li
-              onClick={() => {
-                pageNumChange(list);
-              }}>
-              {list}
-            </li>
-          )
-        )}
+        {numArrPage[pageNum]
+          ? numArrPage[pageNum].map((list) =>
+              list === nowPageNum ? (
+                <li
+                  className='Active'
+                  key={list}
+                  onClick={() => {
+                    pageNumChange(list);
+                  }}>
+                  {list}
+                </li>
+              ) : (
+                <li
+                  onClick={() => {
+                    pageNumChange(list);
+                  }}
+                  key={list}>
+                  {list}
+                </li>
+              )
+            )
+          : null}
       </ul>
     </PagenationWrap>
   );
@@ -65,6 +120,10 @@ const Search = () => {
   const [searchedWord, setSearchedWord] = useState('');
 
   const [isActiveDeleteBtn, setIsActiveDeleteBtn] = useState(false);
+
+  const [nowPageNum, setNowPageNum] = useState(1);
+
+  const [searchLength, setSearchLength] = useState(0);
 
   const searchSortRemove = () => {
     setIsOpenSearchSort(false);
@@ -111,7 +170,12 @@ const Search = () => {
   }, [inputValue]);
   // -----------------------------------------------------------------------------
   //서치 훅 호출
-  const [refetch, data] = useGetSearchQuery(searchKindsCode, searchedWord);
+  const [refetch, data] = useGetSearchQuery(
+    searchKindsCode,
+    searchedWord,
+    nowPageNum,
+    20
+  );
 
   //서치 시작
   const doingSearch = () => {
@@ -122,19 +186,20 @@ const Search = () => {
     deleteSearchValue();
   };
 
-  // searchedWord가 변경될 때만 refetch
+  // searchedWord가 변경될 때, 페이지가 바뀔 때 refetch
   useEffect(() => {
     if (searchedWord) {
       refetch();
     }
-  }, [searchedWord]);
+  }, [searchedWord, nowPageNum]);
 
   // data가 undefined가 아닐 때 state 변경
   useEffect(() => {
     if (data) {
-      setSearhArr(data.data);
+      setSearhArr(data.data.data);
+      setSearchLength(data.data.searchLength);
     }
-  }, [data]);
+  }, [data, nowPageNum]);
   // -----------------------------------------------------------------------------
 
   const [compareBoxArr, setCompareBoxArr] = useRecoilState(compareBoxData);
@@ -155,7 +220,7 @@ const Search = () => {
   };
 
   // -----------------------------------------------------------------------------
-  const [nowPageNum, setNowPageNum] = useState(1);
+
   // -----------------------------------------------------------------------------
   return (
     <Wrap>
@@ -225,7 +290,9 @@ const Search = () => {
           <div className='searchTop'>
             <div className='searchTitleWrap'>
               <div className='searchText'>'{searchedWord}'</div>
-              <div className='searchListNum'>검색 결과 {searhArr.length}개</div>
+              <div className='searchListNum'>
+                검색 결과 {searchLength.toLocaleString('ko-KR')}개
+              </div>
             </div>
             <div className='searchSort'>추천순</div>
           </div>
@@ -258,7 +325,11 @@ const Search = () => {
               </SearchListWrap>
             ))}
           </ul>
-          <Pagenation nowPageNum={nowPageNum} setNowPageNum={setNowPageNum} />
+          <Pagenation
+            nowPageNum={nowPageNum}
+            setNowPageNum={setNowPageNum}
+            searchLength={searchLength}
+          />
         </SearchResultWrap>
       ) : null}
     </Wrap>
@@ -464,7 +535,7 @@ const SearchListWrap = styled.div`
         : `url('https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4')`};
     background-size: cover;
     border-radius: 8px;
-    background-position: center;
+    background-position: 50% 20%;
     margin-bottom: 24px;
     background-repeat: no-repeat;
   }
