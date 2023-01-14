@@ -70,14 +70,16 @@ const Header = (props) => {
 };
 
 const HeaderWrapper = styled.div`
+  background-color: white;
   width: 100%;
   height: 80px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  position: relative;
+  position: fixed;
   border-bottom: 1px solid #d0d0d0;
+  z-index: 9999;
 `;
 
 const LogoBox = styled(Link)`

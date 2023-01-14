@@ -8,6 +8,7 @@ import Search from './pages/Search';
 import Detail from './pages/Detail';
 import User from './pages/User';
 import Signup from './pages/Signup';
+import Main from './pages/main/Main';
 
 // 컴포넌트
 import Layout from './components/layout/Layout';
@@ -54,16 +55,7 @@ function App() {
           element={<Login setistoken={setIsToken} />}
         />
         <Route exact path='/signup' element={<Signup />} />
-        <Route
-          exact
-          path='/compare'
-          element={
-            <Layout>
-              <ComparePage />
-              <CompareBox />
-            </Layout>
-          }
-        />
+        <Route exact path='/' element={<Main />} />
         <Route
           path='/detail/:id'
           element={
