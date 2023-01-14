@@ -1,4 +1,4 @@
-# 이게뭐약 실전 프로젝트
+# 필넛츠 실전 프로젝트
 
 ## 프로젝트 개요
 
@@ -20,12 +20,33 @@
 
 ## 주제 선정 이유
 
+## 트러블 슈팅
+### react query 적용 중 데이터를 useQuery를 통해 가져올 때, 처음 랜더링 될 때는 undefined가 뜨고 다시 리랜더링이 되면 정상적으로 불러오는 문제
+useQuery 안의 onSuccess에서 데이터를 로그로 찍으면 undefined가 되고 리랜더링하면 데이터가 잘 뜨는데,
+밖에서 실행하면 리랜더링이 여러 번 일어나면서 마지막은 정상적으로 찍히고 있었다.
+그래서 useEffect를 사용하여 그 data가 undefined가 아닐 경우에만 배열에 담았더니 정상적으로 작동하였다.
+
+
+
 ## 페이지
+Medecine.jsx => 박수빈
+
+Compare.jsx => 이재정
+
+Login.jsx => 김수정
+
+Signup.jsx => 김수정
 
 
 
 ## 공통 컴포넌트
-Header.jsx
+Header.jsx => 김수정
+
+Layout.jsx => 김수정
+
+TabBar.jsx => 이재정
+
+CompareBox.jsx => 이재정
 
 
 ## 와이어프레임
