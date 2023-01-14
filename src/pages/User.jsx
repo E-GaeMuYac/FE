@@ -124,6 +124,11 @@ const User = () => {
     setIsTextClicked(false);
   };
 
+  const cancelImgChange = () => {
+    setIsFileClicked(false);
+    setPrevImg(imageUrl);
+  };
+
   return (
     <Wrapper>
       <MyPageHeader>
@@ -146,9 +151,16 @@ const User = () => {
             </label>
             <input id='file-input' type='file' onChange={imageInput} />
           </UserImage>
-          <button type='button' onClick={modifyImage} disabled={!isFileClicked}>
-            변경완료
-          </button>
+          {isFileClicked ? (
+            <ModifyBtnBox>
+              <CancelBtn type='button' onClick={cancelImgChange}>
+                취소
+              </CancelBtn>
+              <FinishBtn type='button' onClick={modifyImage}>
+                변경완료
+              </FinishBtn>
+            </ModifyBtnBox>
+          ) : null}
         </ProfileImg>
         <NicknameBox>
           {!isTextClicked ? (
@@ -266,16 +278,6 @@ const ProfileImg = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  button {
-    width: 128px;
-    height: 38px;
-    margin-top: 16px;
-    border: none;
-    border-radius: 50px;
-    background-color: #d0d0d0;
-    cursor: pointer;
-  }
 `;
 
 const UserImage = styled.div`
@@ -305,6 +307,35 @@ const UserImage = styled.div`
   input {
     display: none;
   }
+`;
+
+const ModifyBtnBox = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const CancelBtn = styled.button`
+  width: 84px;
+  height: 34px;
+  margin-top: 16px;
+  border: none;
+  border-radius: 50px;
+  background-color: #d0d0d0;
+  color: #242424;
+  font-weight: 700;
+  cursor: pointer;
+`;
+
+const FinishBtn = styled.button`
+  width: 84px;
+  height: 34px;
+  margin-top: 16px;
+  border: none;
+  border-radius: 50px;
+  background-color: #242424;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
 `;
 
 const NicknameBox = styled.div`
