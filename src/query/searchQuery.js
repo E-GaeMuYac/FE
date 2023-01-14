@@ -28,6 +28,5 @@ export const useGetSearchQuery = (type, value, page, pageSize) => {
       console.error('Error');
     },
   });
-
-  return [refetch, data];
+  return { refetch, data };
 };

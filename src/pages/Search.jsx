@@ -11,7 +11,7 @@ import { compareBoxData } from '../recoil/recoilStore';
 //component
 import LikeItBtn from '../components/common/LikeItBtn';
 
-const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
+const Pagenation = ({ refetch, nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
   const [numArrPage, setNumArrPage] = useState([]);
   const [pageNum, setPageNum] = useState(0);
@@ -30,10 +30,11 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
     setNumArr(newArr);
   }, [searchLength]);
 
-  // 페이지 넘버 변경
+  // 페이지 넘버 변경. 스크롤 업 이벤트 생성
   const pageNumChange = (num) => {
     window.scrollTo(0, 500);
     setNowPageNum(num);
+    refetch();
   };
 
   //numArr의 길이에 따라 배열 쪼개기
@@ -106,11 +107,7 @@ const Search = () => {
   const [searhArr, setSearhArr] = useState([]);
 
   //약 검색 종류 데이터 모음
-  const [searchSortList, setSearchSortList] = useState([
-    '약 이름',
-    '약 효능',
-    '약 분류',
-  ]);
+  const [searchSortList, setSearchSortList] = useState(['약 이름', '약 분류']);
   const [searchKinds, setSearchKinds] = useState('약 이름');
   const [searchKindsCode, setSearchKindsCode] = useState('itemName');
   const [isOpenSearchSort, setIsOpenSearchSort] = useState(false);
@@ -142,15 +139,6 @@ const Search = () => {
     setSearchKinds(name);
     searchSortRemove();
   };
-  useEffect(() => {
-    if (searchKinds === '약 이름') {
-      setSearchKindsCode('itemName');
-    } else if (searchKinds === '약 효능') {
-      setSearchKindsCode('eeDocData');
-    } else if (searchKinds === '약 분류') {
-      setSearchKindsCode('productType');
-    }
-  }, [searchKinds]);
 
   // input에 글을 적을 때마다 실시간으로 저장
   const changeInputValue = ({ target: { value } }) => {
@@ -170,7 +158,7 @@ const Search = () => {
   }, [inputValue]);
   // -----------------------------------------------------------------------------
   //서치 훅 호출
-  const [refetch, data] = useGetSearchQuery(
+  const { refetch, data } = useGetSearchQuery(
     searchKindsCode,
     searchedWord,
     nowPageNum,
@@ -182,16 +170,21 @@ const Search = () => {
     if (inputValue.trim()) {
       // 결과 창 단어 교체
       setSearchedWord(inputValue);
+      setNowPageNum(1);
+      if (searchKinds === '약 이름') {
+        setSearchKindsCode('itemName');
+      } else if (searchKinds === '약 분류') {
+        setSearchKindsCode('productType');
+      }
     }
-    deleteSearchValue();
   };
 
-  // searchedWord가 변경될 때, 페이지가 바뀔 때 refetch
+  //함수 실행할 때마다 refetch
   useEffect(() => {
     if (searchedWord) {
       refetch();
     }
-  }, [searchedWord, nowPageNum]);
+  }, [doingSearch]);
 
   // data가 undefined가 아닐 때 state 변경
   useEffect(() => {
@@ -199,7 +192,7 @@ const Search = () => {
       setSearhArr(data.data.data);
       setSearchLength(data.data.searchLength);
     }
-  }, [data, nowPageNum]);
+  }, [data]);
   // -----------------------------------------------------------------------------
 
   const [compareBoxArr, setCompareBoxArr] = useRecoilState(compareBoxData);
@@ -218,8 +211,6 @@ const Search = () => {
       }
     }
   };
-
-  // -----------------------------------------------------------------------------
 
   // -----------------------------------------------------------------------------
   return (
@@ -277,13 +268,13 @@ const Search = () => {
         <div className='searchBtn' onClick={doingSearch}></div>
       </SearchBarWrap>
       <LatestSearchWrap>
-        <div className='title'>최근검색어</div>
+        {/* <div className='title'>최근검색어</div>
         <ul>
           <li>게보린</li>
           <li>게보린</li>
           <li>게보린</li>
         </ul>
-        <div className='allDelete'>전체삭제</div>
+        <div className='allDelete'>전체삭제</div> */}
       </LatestSearchWrap>
       {searchedWord ? (
         <SearchResultWrap>
@@ -294,7 +285,7 @@ const Search = () => {
                 검색 결과 {searchLength.toLocaleString('ko-KR')}개
               </div>
             </div>
-            <div className='searchSort'>추천순</div>
+            <div className='searchSort'>찜한순</div>
           </div>
           <ul className='searchList'>
             {searhArr.map((list) => (
@@ -329,6 +320,7 @@ const Search = () => {
             nowPageNum={nowPageNum}
             setNowPageNum={setNowPageNum}
             searchLength={searchLength}
+            refetch={refetch}
           />
         </SearchResultWrap>
       ) : null}
