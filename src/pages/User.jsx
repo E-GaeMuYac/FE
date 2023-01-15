@@ -12,7 +12,7 @@ const User = (props) => {
   const [isTextClicked, setIsTextClicked] = useState(false);
   const [isFileClicked, setIsFileClicked] = useState(false);
   const [nickname, setNickname] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState('/assets/image/기본이미지.png');
   const [loginCount, setLoginCount] = useState('');
   const [prevImg, setPrevImg] = useState('');
   const [newImg, setNewImg] = useState();
@@ -182,7 +182,7 @@ const User = (props) => {
 
           <ProfileMsg>필너츠를 이용해주셔서 감사합니다.</ProfileMsg>
         </NicknameBox>
-        <IllustBox>
+        <IllustBox onClick={() => navigate('/event')}>
           일러스트가 들어갈 예정/박스 클릭 시 이벤트 페이지로 이동
         </IllustBox>
         <IllustBox>일러스트가 들어갈 예정/마우스 오버 시 메세지 팝업</IllustBox>
