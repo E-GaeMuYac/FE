@@ -12,7 +12,7 @@ const User = (props) => {
   const [isTextClicked, setIsTextClicked] = useState(false);
   const [isFileClicked, setIsFileClicked] = useState(false);
   const [nickname, setNickname] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState('/assets/image/기본이미지.png');
   const [loginCount, setLoginCount] = useState('');
   const [prevImg, setPrevImg] = useState('');
   const [newImg, setNewImg] = useState();
