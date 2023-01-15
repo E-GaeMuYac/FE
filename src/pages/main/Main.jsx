@@ -5,7 +5,8 @@ import SecondSection from './SecondSection';
 import ThirdSection from './ThirdSection';
 import FourthSection from './FourthSection';
 import FifthSection from './FifthSection';
-
+import SixthSection from './SixthSection';
+import SeventhSection from './SeventhSection';
 const Main = () => {
   const [scrollPoint, setScrollPoint] = useState(0);
 
@@ -25,6 +26,8 @@ const Main = () => {
       <ThirdSection scrollpoint={scrollPoint} />
       <FourthSection scrollpoint={scrollPoint} />
       <FifthSection scrollpoint={scrollPoint} />
+      <SixthSection scrollpoint={scrollPoint} />
+      <SeventhSection scrollpoint={scrollPoint} />
     </Wrapper>
   );
 };

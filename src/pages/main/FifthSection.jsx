@@ -38,7 +38,7 @@ const Flex = styled.div`
 `;
 
 const Wrapper = styled.div`
-  background-color: skyblue;
+  background-color: white;
   width: 1920px;
   height: 1447px;
   position: relative;
@@ -127,7 +127,7 @@ const Tab = styled.div`
   top: 1127px;
   left: 90px;
   opacity: 0;
-  animation: ${slide} 1s 2s ease-in forwards;
+  animation: ${slide} 1s 1.5s ease-in forwards;
 `;
 
 const DottedLine1 = styled.div`
@@ -139,7 +139,7 @@ const DottedLine1 = styled.div`
   top: 895px;
   left: 700px;
   opacity: 0;
-  animation: ${fadein} 1s 3s ease-in forwards;
+  animation: ${fadein} 1s 2.5s ease-in forwards;
 `;
 
 const DottedLine2 = styled.div`
@@ -151,6 +151,6 @@ const DottedLine2 = styled.div`
   top: 895px;
   left: 1200px;
   opacity: 0;
-  animation: ${fadein} 1s 3s ease-in forwards;
+  animation: ${fadein} 1s 2.5s ease-in forwards;
 `;
 export default FifthSection;
