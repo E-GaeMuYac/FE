@@ -52,7 +52,7 @@ const Header = (props) => {
         <CategoryBox>
           <StyledLink to='/'>ABOUT</StyledLink>
           <StyledLink to='/search'>검색하기</StyledLink>
-          <StyledLink to='/compare'>비교하기</StyledLink>
+          <StyledLink to='/compare?tab=성분 그래프'>비교하기</StyledLink>
           <StyledLink to='/event'>이벤트</StyledLink>
         </CategoryBox>
         {!isToken ? (

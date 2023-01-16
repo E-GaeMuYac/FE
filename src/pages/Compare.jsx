@@ -18,6 +18,7 @@ import { compareBoxData } from '../recoil/recoilStore';
 
 import { useGetVersusQuery } from '../query/versusQuery';
 import LikeItBtn from '../components/common/LikeItBtn';
+import Layout from '../components/layout/Layout';
 
 const VersusContent = ({ medicineInfo, query }) => {
   // ------------------------------------------------------------
@@ -49,7 +50,6 @@ const ComparePage = () => {
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
   }).tab;
-
   const [versusList, setVersusList] = useState([]);
 
   const compareBoxArr = useRecoilValue(compareBoxData);
@@ -57,7 +57,16 @@ const ComparePage = () => {
   const comparePillIdA = compareBoxArr[0].medicineId;
   const comparePillIdB = compareBoxArr[1].medicineId;
 
-  const { data } = useGetVersusQuery(comparePillIdA, comparePillIdB);
+  const { refetch, isLoading, data } = useGetVersusQuery(
+    comparePillIdA,
+    comparePillIdB
+  );
+
+  useEffect(() => {
+    if (comparePillIdA !== 1 && comparePillIdB !== 2) {
+      refetch();
+    }
+  }, [comparePillIdA, comparePillIdB]);
 
   useEffect(() => {
     if (data) {
@@ -74,7 +83,7 @@ const ComparePage = () => {
   useLayoutEffect(() => {
     //그래프 초기화
     graphData = [];
-    if (versusList.length === 2 && query === '성분 순위') {
+    if (versusList.length === 2 && query === '성분 그래프') {
       // 첫 번째 약의 정보를 우선 받아오기
       for (let i = 0; i < versusList[0].materialName.length; i++) {
         const newMedicineData = {
@@ -126,7 +135,7 @@ const ComparePage = () => {
 
   // 그래프 작업
   useLayoutEffect(() => {
-    if (versusList.length === 2 && query === '성분 순위') {
+    if (versusList.length === 2 && query === '성분 그래프') {
       const root = am5.Root.new('chartdiv');
 
       const chart = root.container.children.push(
@@ -356,7 +365,7 @@ const ComparePage = () => {
   return (
     <Wrap>
       {versusList.length === 2 ? (
-        <>
+        <Layout>
           <MainWrap>
             <div className='title'>선택한 약품 비교하기</div>
             <div className='versus'>
@@ -413,7 +422,7 @@ const ComparePage = () => {
           </MainWrap>
           <TabBar location={location} query={query} />
           <SubWrap>
-            {query === '성분 순위' ? (
+            {query === '성분 그래프' ? (
               <div className='content'>
                 <div className='graphWrap'>
                   <div id='chartdiv'></div>
@@ -504,8 +513,16 @@ const ComparePage = () => {
               </div>
             )}
           </SubWrap>
-        </>
-      ) : null}
+        </Layout>
+      ) : (
+        <NothingInBoxWrap>
+          <Layout>
+            <div className='title'>약국 비교함에 약을 담아 비교해보세요!</div>
+            <div className='explainImage1'></div>
+            <div className='explainImage2'></div>
+          </Layout>
+        </NothingInBoxWrap>
+      )}
     </Wrap>
   );
 };
@@ -770,6 +787,34 @@ const SubWrap = styled.div`
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+  }
+`;
+const NothingInBoxWrap = styled.div`
+  width: 100%;
+  height: 1000px;
+  background-color: #f9faff;
+  .title {
+    font-size: 40px;
+    line-height: 58px;
+    font-weight: bold;
+    color: #242424;
+    text-align: center;
+    margin-bottom: 58px;
+  }
+  .explainImage1 {
+    width: 100%;
+    height: 213px;
+    background-image: url('/assets/image/explainCompare1.png');
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 55px;
+  }
+  .explainImage2 {
+    width: 100%;
+    height: 429.21px;
+    background-image: url('/assets/image/explainCompare2.png');
+    background-size: cover;
+    background-position: center;
   }
 `;
 

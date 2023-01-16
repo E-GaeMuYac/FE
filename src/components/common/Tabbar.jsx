@@ -35,7 +35,7 @@ const TabBar = ({ location, query }) => {
   useEffect(() => {
     if (location === '/compare') {
       setTabList([
-        '성분 순위',
+        '성분 그래프',
         '효능 효과',
         '용법 용량',
         '첨가물',
