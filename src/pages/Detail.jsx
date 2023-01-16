@@ -2,13 +2,11 @@ import React, { useLayoutEffect, useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router';
 import qs from 'qs';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router';
+import { useRecoilState } from 'recoil';
+import { compareBoxData } from '../recoil/recoilStore';
 
 import { useGetDetailQuery } from '../query/detailQuery';
-
-// import defaultImg from '../assets/img/pill_image.png';
-// import star1Img from '../assets/img/Star1.png';
-// import star2Img from '../assets/img/Star2.png';
-// import { ReactComponent as Pick } from '../assets/img/pick.svg';
 
 // 그래프 라이브러리
 import * as am5 from '@amcharts/amcharts5';
@@ -134,15 +132,22 @@ const BottomContents = ({ medicineInfo, query }) => {
       case '주의사항':
         setContentDesc(medicineInfo.nbDocData);
         break;
+      case '유통기한':
+        setContentDesc(medicineInfo.validTerm);
+        break;
       default: //기본값 생략
     }
   }, [query]);
   return (
     <div>
       {query === '효능 효과' ? (
-        <div>{medicineInfo.eeDocData}</div>
+        <ScrollBar>
+          <div className='scroll-area'>{medicineInfo.eeDocData}</div>
+        </ScrollBar>
       ) : (
-        <>{ContentDesc}</>
+        <ScrollBar>
+          <div className='scroll-area'>{ContentDesc}</div>
+        </ScrollBar>
       )}
     </div>
   );
@@ -151,6 +156,7 @@ const BottomContents = ({ medicineInfo, query }) => {
 const Detail = () => {
   const param = useParams();
   const [objGraph, setObjGraph] = useState({});
+  const [compareBox, setCompareBox] = useState();
   const location = useLocation().pathname;
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
@@ -197,6 +203,9 @@ const Detail = () => {
           // X: am5.percent(600),
           centerX: am5.percent(-22),
           y: am5.percent(-4),
+          legendValueText: '{category}',
+          legendLabelText: `[bold {fill}]{value.formatNumber('#.#')}mg`,
+          // tooltipText: "{name} {valuePercent.formatNumber('#.#')}%",
         })
       );
 
@@ -216,6 +225,7 @@ const Detail = () => {
       series.ticks.template.setAll({
         stroke: am5.color(0xffffff),
         strokeWidth: 2,
+        strokeOpacity: 0,
       });
 
       // label.set("text", "[#888]{categoryX}[/]: [bold]{valueY}[/]");
@@ -223,7 +233,11 @@ const Detail = () => {
       series.labels.template.setAll({});
 
       // 그래프 마우스 오버 시 툴팁
-      series.slices.template.set('tooltipText', '{category}: {value}mg');
+      series.slices.template.set(
+        'tooltipText',
+        `{category} : {valuePercentTotal.formatNumber('0.00')}%`
+      );
+      // tooltipText: "{name} {valueTotalPercent.formatNumber('#.#')}%",
 
       const tooltip = am5.Tooltip.new(root, {});
       tooltip.label.setAll({
@@ -284,8 +298,10 @@ const Detail = () => {
           // centerY: am5.percent(50),
           // y: am5.percent(50),
           // height: am5.percent(500),
+
           position: 'absolute',
-          width: 340,
+          oversizedBehavior: 'wrap',
+          width: 380,
           height: 290,
           x: am5.percent(3),
           y: am5.percent(8),
@@ -297,19 +313,32 @@ const Detail = () => {
       );
 
       legend.markerRectangles.template.setAll({
-        cornerRadiusTL: 10,
-        cornerRadiusTR: 10,
-        cornerRadiusBL: 10,
-        cornerRadiusBR: 10,
-        // padding: 1,
+        cornerRadiusTL: 20,
+        cornerRadiusTR: 20,
+        cornerRadiusBL: 20,
+        cornerRadiusBR: 20,
+        width: 30,
+        height: 30,
       });
 
       legend.labels.template.setAll({
-        maxWidth: 220,
-        minWidth: 220,
-        marginRight: 10,
+        maxWidth: 77,
+        minWidth: 77,
+        marginLeft: 28,
+        fontSize: 18,
+        lineHeight: 1.8,
+        width: 30,
+        height: 30,
         //centerY: 0, // if we want labels to be top-aligned
         oversizedBehavior: 'wrap',
+      });
+
+      legend.valueLabels.template.setAll({
+        maxWidth: 200,
+        minWidth: 200,
+        fontSize: 18,
+        lineHeight: 2,
+        oversizedBehavior: 'truncate',
       });
 
       legend.data.setAll(series.dataItems);
@@ -357,6 +386,20 @@ const Detail = () => {
   // }, [data]);
 
   // useLayoutEffect(() => {}, [arr, query]);
+
+  const [compareBoxArr, setCompareBoxArr] = useRecoilState(compareBoxData);
+
+  const putInToCompareBox = (list) => {
+    for (let i = 0; i < compareBoxArr.length; i++) {
+      if (compareBoxArr[i].itemName === 'null') {
+        let newArr = [...compareBoxArr];
+        newArr[i] = list;
+        setCompareBoxArr(newArr);
+        break;
+      }
+    }
+  };
+
   return (
     <>
       <TopSection>
@@ -371,15 +414,42 @@ const Detail = () => {
               </Categorize>
             </div>
             <div className='labelWrap'>
-              <RightLabel>{medicineItem?.entpName}</RightLabel>
-              <LeftLabel>{medicineItem?.etcOtcCode}</LeftLabel>
+              <TopLabel>{medicineItem?.entpName}</TopLabel>
+              <BottomLabel>
+                {medicineItem?.etcOtcCode}
+                <div className='etcOtcCodeDesc'>
+                  {medicineItem?.etcOtcCode === '전문의약품' ? (
+                    <span className='tooltipText'>
+                      의사 또는 치과의사의 지시와 감독에 따라 사용되어야 하는
+                      의약품으로, 의사의 처방전에 의해서만 구입하여 사용할 수
+                      있다.
+                    </span>
+                  ) : (
+                    <span className='tooltipText'>
+                      처방전 없이 약국에서 구입할 수 있는 의약품으로, 포장
+                      용기에 기재된 설명대로 올바르게 복용한다면 비교적 안전하게
+                      사용할 수 있다.
+                    </span>
+                  )}
+                </div>
+              </BottomLabel>
             </div>
             <div className='boxWrap'>
               <Picked>
-                {/* <Pick /> */}
                 <div className='pickedImg'></div>
               </Picked>
-              <CompareBox>비교함 담기</CompareBox>
+              {medicineItem?.medicineId === compareBoxArr[0].medicineId ||
+              medicineItem?.medicineId === compareBoxArr[1].medicineId ? (
+                <div className='compareBox'>비교함 담기</div>
+              ) : (
+                <div
+                  className='compareBox active'
+                  onClick={() => {
+                    putInToCompareBox(objGraph);
+                  }}>
+                  비교함 담기
+                </div>
+              )}
             </div>
           </WrapContents>
         </CardBox>
@@ -544,6 +614,53 @@ const WrapContents = styled.div`
     /* justify-content: space-between; */
     /* margin-top: 20px; */
   }
+  .etcOtcCodeDesc {
+    width: 20px;
+    height: 20px;
+    background-image: url('/assets/image/의약품목설명아이콘.png');
+    background-size: cover;
+    background-position: center;
+    margin-left: 5px;
+    display: inline-block;
+    :hover .tooltipText {
+      display: block;
+    }
+    .tooltipText {
+      border-radius: 8px;
+      box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
+      display: none;
+      position: absolute;
+      max-width: 300px;
+      padding: 18px;
+      /* border: 1px solid; */
+      font-size: 15px;
+      line-height: 21px;
+      color: #5a5a5a;
+      background-color: #ffffff;
+      opacity: 1;
+      z-index: 2;
+    }
+  }
+  .compareBox {
+    width: 276px;
+    height: 50px;
+    background-color: #cccccc;
+    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin-top: 18px; */
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 20px;
+    cursor: pointer;
+  }
+  .compareBox.active {
+    background-color: #3366ff;
+    cursor: pointer;
+  }
 `;
 
 // const Image = styled.img`
@@ -558,9 +675,7 @@ const Image = styled.div`
   height: 85px;
   border-radius: 8px;
   background-image: ${({ imgUrl }) =>
-    imgUrl
-      ? `url(${imgUrl})`
-      : `url('https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4')`};
+    imgUrl ? `url(${imgUrl})` : `url('/assets/image/default_img.png')`};
   /* ${({ imgUrl }) => `url(${imgUrl})`}; */
   background-size: 120%;
   background-position: center;
@@ -579,25 +694,28 @@ const Name = styled.div`
   /* display: flex; */
 `;
 
-const LeftLabel = styled.div`
+const TopLabel = styled.div`
   height: 24px;
   font-size: 16px;
   font-weight: 700;
   line-height: 24px;
   color: #868686;
-  margin-top: 10px;
   /* border-right: 2px solid #d9d9d9; */
   /* padding-right: 7px; */
+  margin-bottom: 10px;
 `;
 
-const RightLabel = styled.div`
+const BottomLabel = styled.div`
   height: 24px;
   font-size: 16px;
   font-weight: 700;
   line-height: 24px;
   color: #868686;
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
   /* padding-left: 7px; */
+  margin-top: 10px;
 `;
 
 const Categorize = styled.div`
@@ -610,8 +728,8 @@ const Categorize = styled.div`
     padding: 0 12px;
     min-width: 140px;
     height: 40px;
-    background: #e4ffea;
-    color: #13bd7e;
+    background: #ebf0ff;
+    color: #3366ff;
     font-size: 16px;
     justify-content: center;
     align-items: center;
@@ -627,34 +745,6 @@ const Categorize = styled.div`
   margin-top: 10px;
   /* position: absolute;
   bottom: 0; */
-`;
-
-const ReviewWrap = styled.div`
-  display: flex;
-  margin: auto;
-  justify-content: center;
-`;
-
-const Star = styled.div`
-  color: #868686;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 20px;
-  display: flex;
-  align-items: center;
-  margin-top: 16px;
-  gap: 5px;
-  margin-right: 4px;
-`;
-
-const Review = styled.div`
-  color: #868686;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 20px;
-  display: flex;
-  align-items: center;
-  margin-top: 16px;
 `;
 
 const Picked = styled.div`
@@ -678,23 +768,6 @@ const Picked = styled.div`
   }
 `;
 
-const CompareBox = styled.div`
-  width: 276px;
-  height: 50px;
-  background-color: #13bd7e;
-  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
-  color: #ffffff;
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* margin-top: 18px; */
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 20px;
-  cursor: pointer;
-`;
-
 const GraphLabel = styled.div`
   color: #868686;
   display: flex;
@@ -703,6 +776,29 @@ const GraphLabel = styled.div`
   font-size: 30px;
   font-weight: 700;
   line-height: 43px;
+`;
+
+const ScrollBar = styled.div`
+  font-size: 20px;
+  line-height: 33px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 260px;
+  .scroll-area {
+    padding: 0 12px 0 0;
+  }
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+  }
 `;
 
 export default Detail;

@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { api } from '../apis/apiInstance';
 import { postSignup } from '../query/signupQuery';
-// import { useGetVerifyEmailQuery } from '../query/signupQuery';
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
   // 기본 input 상태값
@@ -36,7 +36,7 @@ const Signup = () => {
 
   // 이메일, 휴대폰번호 인증코드
   const [responseEmailCode, setResponseEmailCode] = useState();
-  const [responsePhoneCode, setResponsePhoneCode] = useState(false);
+  const [responsePhoneCode, setResponsePhoneCode] = useState();
   const [errorEmailCode, setErrorEmailCode] = useState();
 
   // 유효성 검사 통과 시 인증버튼 라벨 변경
@@ -114,14 +114,15 @@ const Signup = () => {
     setEmail(emailCurrent);
 
     if (!emailRegExp.test(emailCurrent)) {
-      setEmailMessage('올바른 형식의 이메일을 입력해주세요.');
+      setEmailMessage('올바른 형식의 이메일을 입력해 주세요.');
       setIsEmail(false);
       // setEmailBtnColor('#8bc790');
       // setEmailCodeBtnLabel('인증번호 전송');
       setEmailCodeBtn(false);
     } else {
-      setEmailMessage(' ');
-      setIsEmail(true);
+      setEmailMessage('이메일 중복 확인이 필요합니다.');
+      setEmailCodeBtnLabel('중복확인');
+      setIsEmail(false);
       setEmailCodeBtn(true);
       // setEmailBtnColor('#4fc759');
     }
@@ -218,7 +219,7 @@ const Signup = () => {
     setEmailCode(emailCodeCurrent);
 
     if (!emailCodeRegExp.test(emailCodeCurrent)) {
-      setEmailCodeConfirmMessage('인증번호 숫자 6자리를 입력해주세요.');
+      setEmailCodeConfirmMessage('인증번호 숫자 6자리를 입력해 주세요.');
       setIsEmailCode(false);
       setEmailCodeConfirmBtn(false);
       // setEmailCodeBtnColor('#8bc790');
@@ -243,7 +244,7 @@ const Signup = () => {
       setEmailCodeBtnLabel('중복확인');
       setEmailMessage('');
     } else {
-      setEmailCodeConfirmMessage('인증 번호가 틀렸습니다. 다시 입력해주세요.');
+      setEmailCodeConfirmMessage('인증번호가 틀렸습니다. 다시 입력해 주세요.');
     }
   };
 
@@ -259,7 +260,7 @@ const Signup = () => {
     setPhoneNumber(Num2);
 
     if (!phoneNumberRegExp.test(Num2)) {
-      setPhoneNumberMessage('올바른 형식의 휴대폰 번호를 입력해주세요.');
+      setPhoneNumberMessage('올바른 형식의 휴대폰 번호를 입력해 주세요.');
       setIsPhoneNumber(false);
       // setEmailBtnColor('#8bc790');
       setPhoneCodebtnLabel('인증번호 전송');
@@ -283,7 +284,7 @@ const Signup = () => {
         } //config
       );
       console.log('인증번호 전송 성공', data);
-      setResponsePhoneCode(data.data.body.code);
+      setResponsePhoneCode(data.data.code);
     } catch (error) {
       return error;
     }
@@ -309,7 +310,7 @@ const Signup = () => {
     setPhoneCode(PhoneCodeCurrent);
 
     if (!PhoneCodeRegExp.test(PhoneCodeCurrent)) {
-      setPhoneCodeConfirmMessage('인증번호 6자리를 입력해주세요.');
+      setPhoneCodeConfirmMessage('인증번호 6자리를 입력해 주세요.');
       setIsPhoneCode(false);
       setPhoneCodeConfirmBtn(false);
       // setEmailCodeBtnColor('#8bc790');
@@ -331,9 +332,13 @@ const Signup = () => {
       setReadOnlyPhoneCode(readOnlyPhoneCode);
       setPhoneCodeBtn(false);
       setPhoneCodebtnLabel('인증번호 전송');
+      console.log(phoneCode);
+      console.log(responsePhoneCode);
     } else {
-      setPhoneCodeConfirmMessage('인증 번호가 틀렸습니다. 다시 입력해주세요.');
+      setPhoneCodeConfirmMessage('인증번호가 틀렸습니다. 다시 입력해 주세요.');
       setIsPhoneCode(false);
+      console.log(phoneCode);
+      console.log(responsePhoneCode);
     }
   };
 
@@ -347,7 +352,7 @@ const Signup = () => {
       if (!passwordRegex.test(passwordCurrent)) {
         // 비밀번호 정규식 불일치
         setPasswordMessage(
-          '8~15자 영문 대소문자, 숫자 조합의 비밀번호를 입력해주세요.'
+          '8~15자 영문 대소문자, 숫자 조합의 비밀번호를 입력해 주세요.'
         );
         if (passwordCurrent !== passwordConfirm) {
           // 비밀번호 정규식 불일치 & confirm 비밀번호와 불일치
@@ -357,7 +362,7 @@ const Signup = () => {
         } else {
           // 비밀번호 정규식 불일치 & confirm 비밀번호와 일치
           setPasswordMessage(
-            '8~15자 영문 대소문자, 숫자 조합의 비밀번호를 입력해주세요.'
+            '8~15자 영문 대소문자, 숫자 조합의 비밀번호를 입력해 주세요.'
           );
           setIsPassword(false);
           setIsPasswordConfirm(false);
@@ -366,13 +371,13 @@ const Signup = () => {
         // 비밀번호 정규식 일치
         if (passwordCurrent !== passwordConfirm) {
           // 비밀번호 정규식 일치 & confirm 비밀번호와 불일치
-          setPasswordMessage('안전한 비밀번호 입니다.');
+          setPasswordMessage('안전한 비밀번호입니다.');
           setIsPassword(true);
           setPasswordConfirmMessage('비밀번호가 일치하지 않습니다.');
           setIsPasswordConfirm(false);
         } else {
           // 비밀번호 정규식 일치 & confirm 비밀번호와 일치
-          setPasswordMessage('안전한 비밀번호 입니다.');
+          setPasswordMessage('안전한 비밀번호입니다.');
           setPasswordConfirmMessage('비밀번호가 일치합니다.');
           setIsPasswordConfirm(true);
           setIsPassword(true);
@@ -409,7 +414,7 @@ const Signup = () => {
     setNickname(nicknameCurrent);
 
     if (!nicknameRegExp.test(nicknameCurrent)) {
-      setNicknameMessage('1-20자의 닉네임을 입력해주세요.');
+      setNicknameMessage('1-20자의 닉네임을 입력해 주세요.');
       setIsNickname(false);
       // setEmailBtnColor('#8bc790');
       // setEmailCodebtn('인증번호 전송');
@@ -432,18 +437,18 @@ const Signup = () => {
       passwordConfirm === '' ||
       nickname === ''
     ) {
-      alert('빈칸을 입력해주세요!');
+      alert('빈칸을 입력해 주세요!');
     } else if (
       !isEmail ||
       !isPhoneNumber ||
       !isPassword ||
       !isPasswordConfirm
     ) {
-      alert('조건에 맞게 입력해주세요!');
+      alert('조건에 맞게 입력해 주세요!');
     } else if (!isEmailCode) {
-      alert('이메일을 인증해주세요!');
+      alert('이메일을 인증해 주세요!');
     } else if (!isPhoneCode) {
-      alert('휴대폰을 인증해주세요!');
+      alert('휴대폰을 인증해 주세요!');
     } else {
       postSignup({
         email: email,
@@ -581,6 +586,7 @@ const Signup = () => {
                 readOnly={readOnlyPhoneCode}
                 maxLength={13}
                 placeholder='휴대폰 번호'
+                autoComplete='one-time-code'
               />
               <label htmlFor='floatingInput'>휴대폰 번호</label>
             </div>
@@ -615,6 +621,7 @@ const Signup = () => {
                 readOnly={readOnlyPhoneCode}
                 maxLength={6}
                 placeholder='휴대폰 인증번호'
+                autoComplete='one-time-code'
               />
               <label htmlFor='floatingInput'>휴대폰 인증번호</label>
             </div>
@@ -652,8 +659,11 @@ const Signup = () => {
               minLength={8}
               maxLength={15}
               placeholder='비밀번호'
+              autoComplete='new-password'
             />
-            <label htmlFor='floatingPassword'>비밀번호</label>
+            <label htmlFor='floatingPassword' autoComplete='new-password'>
+              비밀번호
+            </label>
           </div>
 
           {/* 비밀번호 입력 유효성 검사 문구 */}
@@ -677,8 +687,11 @@ const Signup = () => {
               minLength={8}
               maxLength={15}
               placeholder='비밀번호 확인'
+              autoComplete='new-password'
             />
-            <label htmlFor='floatingPassword'>비밀번호 확인</label>
+            <label htmlFor='floatingPassword' autoComplete='new-password'>
+              비밀번호 확인
+            </label>
           </div>
 
           {/* 비밀번호 확인 유효성 검사 문구 */}
@@ -719,24 +732,13 @@ const Signup = () => {
             )}
           </FormBox>
           <NavBtnWrapper>
-            <NavBtn>뒤로</NavBtn>
-            <NavBtn
+            <NavBackBtn to='/'>뒤로</NavBackBtn>
+            <NavSubmitBtn
               type='submit'
               onClick={onSubmitHandler}
-              // disabled={
-              //   !(
-              //     isEmail &&
-              //     isEmailCode &&
-              //     isPassword &&
-              //     isPasswordConfirm &&
-              //     isPhoneNumber &&
-              //     isPhoneCode &&
-              //     isNickname
-              //   )
-              // }
-            >
-              다음
-            </NavBtn>
+              style={{ backgroundColor: '#3366FF', color: '#ffffff' }}>
+              가입하기
+            </NavSubmitBtn>
           </NavBtnWrapper>
         </SignupWrapper>
       </Wrapper>
@@ -891,7 +893,7 @@ const ButtonSt = styled.button`
   :active {
     box-shadow: 0px 0px 0 rgb(0, 0, 0, 0.3);
     /* background-color: #4d9e54 !important; */
-    background-color: #4d9e54 !important;
+    background-color: #bebebe !important;
   }
 `;
 
@@ -903,7 +905,21 @@ const NavBtnWrapper = styled.div`
   justify-content: space-between;
 `;
 
-const NavBtn = styled.button`
+const NavBackBtn = styled(Link)`
+  width: 228px;
+  height: 44px;
+  border: none;
+  border-radius: 50px;
+  background-color: #e7e7e7;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+`;
+
+const NavSubmitBtn = styled.button`
   width: 228px;
   height: 44px;
   border: none;
