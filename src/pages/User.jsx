@@ -14,7 +14,7 @@ const User = (props) => {
   const [isTextClicked, setIsTextClicked] = useState(false);
   const [isFileClicked, setIsFileClicked] = useState(false);
   const [nickname, setNickname] = useState('');
-  const [imageUrl, setImageUrl] = useState('/assets/image/기본이미지.png');
+  const [imageUrl, setImageUrl] = useState('');
   const [loginCount, setLoginCount] = useState('');
   const [prevImg, setPrevImg] = useState('');
   const [newImg, setNewImg] = useState();
@@ -122,6 +122,16 @@ const User = (props) => {
     }
   };
 
+  const defaultImgHandler = async () => {
+    try {
+      const res = await userApi.put('/api/users/update/image');
+      console.log(res);
+      window.location.reload('/mypage');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const cancelChange = () => {
     setIsTextClicked(false);
   };
@@ -174,7 +184,11 @@ const User = (props) => {
                 변경완료
               </FinishBtn>
             </ModifyBtnBox>
-          ) : null}
+          ) : (
+            <DefaultImgBtn type='button' onClick={defaultImgHandler}>
+              기본이미지로 변경
+            </DefaultImgBtn>
+          )}
         </ProfileImg>
         <NicknameBox>
           {!isTextClicked ? (
@@ -281,7 +295,7 @@ const UserImage = styled.div`
       ? `url(${props.prevImg})`
       : props.userImg
       ? `url(${props.userImg})`
-      : `url('https://mblogthumb-phinf.pstatic.net/MjAxODAzMTFfMTkw/MDAxNTIwNzE1NzE3NzA2.fnxmFYSU71Rdn_WXjEq1SmWXlltr0tMEY4ADB7iVqbkg.qk63bfvJvQPNzxdMEQnVH6n4cROAM4zXy8UR5ZybKKUg.PNG.osy2201/15.png?type=w800')`};
+      : null};
   background-size: cover;
   background-position: center;
   position: relative;
@@ -326,6 +340,18 @@ const FinishBtn = styled.button`
   border-radius: 50px;
   background-color: #242424;
   color: white;
+  font-weight: 700;
+  cursor: pointer;
+`;
+
+const DefaultImgBtn = styled.button`
+  width: 140px;
+  height: 34px;
+  margin-top: 16px;
+  border: none;
+  border-radius: 50px;
+  background-color: #d0d0d0;
+  color: #242424;
   font-weight: 700;
   cursor: pointer;
 `;
@@ -494,12 +520,6 @@ const Box = styled.div`
     pointer-events: none;
   }
 `;
-
-// const MessageBox = styled.div``;
-
-// const MessagePopup = styled.div`
-//   /* display: none; */
-// `;
 
 const LikelistHeader = styled.div`
   margin-top: 60px;
