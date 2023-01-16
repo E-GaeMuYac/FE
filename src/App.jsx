@@ -43,10 +43,10 @@ function App() {
           exact
           path='/compare'
           element={
-            <Layout>
+            <>
               <ComparePage />
               <CompareBox />
-            </Layout>
+            </>
           }
         />
         <Route
