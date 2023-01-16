@@ -5,7 +5,6 @@ import { FaPen } from 'react-icons/fa';
 import { api, userApi } from '../apis/apiInstance';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { async } from 'q';
 
 const User = (props) => {
   const navigate = useNavigate();
