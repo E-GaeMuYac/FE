@@ -58,7 +58,9 @@ const ProductList = ({ list }) => {
     </SearchListWrap>
   );
 };
+
 export default ProductList;
+
 const SearchListWrap = styled.div`
   position: relative;
   li {

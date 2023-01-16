@@ -1,24 +1,20 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { userApi } from '../../apis/apiInstance';
+import { usePutLikeMutation } from '../../query/likeQuery';
 
 const LikeItBtn = ({ id }) => {
   const [heartActive, setHeartBtn] = useState(false);
 
+  const LikeMutate = usePutLikeMutation(id);
+
   //찜하기 실행 함수
   const likeIt = async (id) => {
-    const data = await userApi.put(
-      `${process.env.REACT_APP_API_ENDPOINT}/api/products/${id}/dibs`
-    );
-    console.log(data);
-
-    if (heartActive) {
-      console.log(`don't like this ${id}`);
+    if (localStorage.getItem('refreshToken')) {
+      LikeMutate.mutate(id);
+      setHeartBtn(!heartActive);
     } else {
-      console.log(`like this ${id}`);
+      alert('로그인이 필요한 기능입니다.');
     }
-
-    setHeartBtn(!heartActive);
   };
 
   return (
