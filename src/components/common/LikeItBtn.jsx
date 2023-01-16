@@ -1,11 +1,17 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { userApi } from '../../apis/apiInstance';
 
 const LikeItBtn = ({ id }) => {
   const [heartActive, setHeartBtn] = useState(false);
 
   //찜하기 실행 함수
-  const likeIt = (id) => {
+  const likeIt = async (id) => {
+    const data = await userApi.put(
+      `${process.env.REACT_APP_API_ENDPOINT}/api/products/${id}/dibs`
+    );
+    console.log(data);
+
     if (heartActive) {
       console.log(`don't like this ${id}`);
     } else {
