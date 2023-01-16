@@ -24,7 +24,7 @@ const ListCardComp = ({ arrState, list }) => {
   const deleteList = (id) => {
     let deletedArr = isArr.map((list) =>
       list.medicineId === id
-        ? { medicineId: Date.now(), itemName: 'null' }
+        ? { medicineId: isArr.indexOf(list) + 1, itemName: 'null' }
         : list
     );
     setIsArr(deletedArr);
@@ -95,7 +95,7 @@ const CompareBox = () => {
   // 비교하기 페이지로 이동
   const goToCompare = () => {
     if (isOpen && isArrLength === 2) {
-      navigate('/compare?tab=성분 순위');
+      navigate('/compare?tab=성분그래프');
 
       //이동 후 state 초기화
       setIsOpen(false);
@@ -105,7 +105,9 @@ const CompareBox = () => {
   // 배열 초기화 버튼
   const listReset = () => {
     const allDeletedArr = isArr.map((list) =>
-      list.itemName !== 'null' ? { ...list, itemName: 'null' } : list
+      list.itemName !== 'null'
+        ? { medicineId: isArr.indexOf(list) + 1, itemName: 'null' }
+        : list
     );
     setIsArr(allDeletedArr);
   };

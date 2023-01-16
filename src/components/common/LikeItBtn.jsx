@@ -30,7 +30,7 @@ export default LikeItBtn;
 
 const LikeItBtnWrap = styled.div`
   width: 38px;
-  height: 100%;
+  height: 38px;
   border-radius: 8px;
   box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.2);
   cursor: pointer;

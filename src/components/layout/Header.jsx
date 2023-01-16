@@ -45,39 +45,48 @@ const Header = (props) => {
     }
   };
   return (
-    <HeaderWrapper>
-      {/* 이미지로 교체 예정 */}
-      <LogoBox to='/'>Logo</LogoBox>
-      <CategoryBox>
-        <StyledLink to='/'>ABOUT</StyledLink>
-        <StyledLink to='/search'>검색하기</StyledLink>
-        <StyledLink to='/compare'>비교하기</StyledLink>
-        <StyledLink to='/event'>이벤트</StyledLink>
-      </CategoryBox>
-      {!isToken ? (
-        <SignBox>
-          <LoginBtn to='/login'>로그인</LoginBtn>
-          <SignupBtn to='/signup'>회원가입</SignupBtn>
-        </SignBox>
-      ) : (
-        <SignBox>
-          <MypageBtn to='/mypage' props={userImage} />
-          <LogoutBtn onClick={logoutHandler}>로그아웃</LogoutBtn>
-        </SignBox>
-      )}
-    </HeaderWrapper>
+    <Wrap>
+      <HeaderWrapper>
+        {/* 이미지로 교체 예정 */}
+        <LogoBox to='/'>Logo</LogoBox>
+        <CategoryBox>
+          <StyledLink to='/'>ABOUT</StyledLink>
+          <StyledLink to='/search'>검색하기</StyledLink>
+          <StyledLink to='/compare?tab=성분그래프'>비교하기</StyledLink>
+          <StyledLink to='/event'>이벤트</StyledLink>
+        </CategoryBox>
+        {!isToken ? (
+          <SignBox>
+            <LoginBtn to='/login'>로그인</LoginBtn>
+            <SignupBtn to='/signup'>회원가입</SignupBtn>
+          </SignBox>
+        ) : (
+          <SignBox>
+            <MypageBtn to='/mypage' props={userImage} />
+            <LogoutBtn onClick={logoutHandler}>로그아웃</LogoutBtn>
+          </SignBox>
+        )}
+      </HeaderWrapper>
+    </Wrap>
   );
 };
 
+const Wrap = styled.div`
+  width: 100%;
+  height: 80px;
+`;
+
 const HeaderWrapper = styled.div`
+  background-color: white;
   width: 100%;
   height: 80px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  position: relative;
+  position: fixed;
   border-bottom: 1px solid #d0d0d0;
+  z-index: 9999;
 `;
 
 const LogoBox = styled(Link)`

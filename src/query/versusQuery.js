@@ -9,18 +9,16 @@ const getVersusData = async (params) => {
 };
 
 export const useGetVersusQuery = (pillA, pillB) => {
-  const { isLoading, data } = useQuery({
+  const { refetch, isLoading, data } = useQuery({
     // query 키
     queryKey: ['getVersusData', pillA, pillB],
     // query 함수
     queryFn: (params) => getVersusData(params),
+
+    enabled: false,
     // 자동 리랜더링 삭제
     refetchOnWindowFocus: false,
-    //에러 확인
-    onError: () => {
-      console.error('Error');
-    },
   });
 
-  return { data };
+  return { refetch, isLoading, data };
 };
