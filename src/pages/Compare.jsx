@@ -751,7 +751,7 @@ const SubWrap = styled.div`
     height: 1000px;
   }
   .versusContentMaterialWrap {
-    min-width: 400px;
+    width: 400px;
     height: 400px;
     padding: 30px 40px;
     background-color: white;
