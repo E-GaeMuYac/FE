@@ -45,6 +45,25 @@ const VersusContent = ({ medicineInfo, query }) => {
   return <div className='versusContentWrap'>{versusContentDesc}</div>;
 };
 
+const VersusCard = ({ info }) => {
+  return (
+    <VersusCardWrap image={info.itemImage}>
+      <div className='cardImg'></div>
+      <div className='cardName'>{info.itemName}</div>
+      <div className='cardContentDescWrap'>
+        <div className='cardContentDesc'>{info.entpName}</div>
+        <hr />
+        <div className='cardContentDesc'>{info.etcOtcCode}</div>
+      </div>
+      <div className='cardContentTag'>{info.productType}</div>
+      <div className='cardBtnWrap'>
+        <LikeItBtn id={info.medicineId} />
+        <button className='goToDetailBtn'>이 약품만 보러가기</button>
+      </div>
+    </VersusCardWrap>
+  );
+};
+
 const ComparePage = () => {
   const location = useLocation().pathname;
   const query = qs.parse(window.location.search, {
@@ -369,55 +388,9 @@ const ComparePage = () => {
           <MainWrap>
             <div className='title'>선택한 약품 비교하기</div>
             <div className='versus'>
-              <div className='card' key={versusList[0].itemName}>
-                <div
-                  className='cardImg'
-                  style={{
-                    backgroundImage: `url(${versusList[0].itemImage})`,
-                  }}></div>
-                <div className='cardName'>{versusList[0].itemName}</div>
-                <div className='cardContentDescWrap'>
-                  <div className='cardContentDesc'>
-                    {versusList[0].entpName}
-                  </div>
-                  <hr />
-                  <div className='cardContentDesc'>
-                    {versusList[0].etcOtcCode}
-                  </div>
-                </div>
-                <div className='cardContentTag'>
-                  {versusList[0].productType}
-                </div>
-                <div className='cardBtnWrap'>
-                  <LikeItBtn />
-                  <button className='goToDetailBtn'>이 약품만 보러가기</button>
-                </div>
-              </div>
+              <VersusCard info={versusList[0]} />
               <div className='versusImage'></div>
-              <div className='card' key={versusList[1].itemName}>
-                <div
-                  className='cardImg'
-                  style={{
-                    backgroundImage: `url(${versusList[1].itemImage})`,
-                  }}></div>
-                <div className='cardName'>{versusList[1].itemName}</div>
-                <div className='cardContentDescWrap'>
-                  <div className='cardContentDesc'>
-                    {versusList[1].entpName}
-                  </div>
-                  <hr />
-                  <div className='cardContentDesc'>
-                    {versusList[1].etcOtcCode}
-                  </div>
-                </div>
-                <div className='cardContentTag'>
-                  {versusList[1].productType}
-                </div>
-                <div className='cardBtnWrap'>
-                  <LikeItBtn />
-                  <button className='goToDetailBtn'>이 약품만 보러가기</button>
-                </div>
-              </div>
+              <VersusCard info={versusList[1]} />
             </div>
           </MainWrap>
           <TabBar location={location} query={query} />
@@ -547,17 +520,26 @@ const MainWrap = styled.div`
     justify-content: space-around;
     align-items: center;
   }
-  .card {
-    width: 324px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid #d0d0d0;
-    border-radius: 25px;
+  .versusImage {
+    width: 238px;
+    height: 161px;
+    background-image: url('/assets/image/versusImg.png');
+    background-size: cover;
+    background-position: center;
   }
+`;
+const VersusCardWrap = styled.div`
+  width: 324px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #d0d0d0;
+  border-radius: 25px;
   .cardImg {
     width: 256px;
     height: 110px;
+    background-image: ${({ image }) =>
+      image ? `url(${image})` : `url('/assets/image/PillDefaultImg.png')`};
     background-size: cover;
     background-position: 50% 20%;
     border-radius: 8px;
@@ -585,10 +567,10 @@ const MainWrap = styled.div`
     color: #868686;
   }
   .cardContentDescWrap hr {
-    width: 1px;
-    height: 100%;
+    width: 2px;
+    height: 18px;
     border: none;
-    background-color: #d9d9d9;
+    background-color: #888888;
     margin: 0 8px;
   }
   .cardContentTag {
@@ -634,13 +616,6 @@ const MainWrap = styled.div`
     font-size: 14px;
     line-height: 20px;
     cursor: pointer;
-  }
-  .versusImage {
-    width: 238px;
-    height: 161px;
-    background-image: url('https://s3-alpha-sig.figma.com/img/ca3f/3f59/97edd1b2c30b69069f65277ee52de0ff?Expires=1674432000&Signature=kKSxnvILyqKhoS150QFzZsnW6D6o86qh6wbXhHMWF8TITuPB3EotjcZsOKiOj3wdwD8j9P8InfpC1ILBJ~vWO8Z9~WKkr07JuOezT3IV6oXwoSgI-MdbSqrghPi64rAwn5aU2qMthEiSavHkJytnZA0om6AaKd3prBNZsstReV7Dlx4jh9jmpW5j3jZlnWzQq08uKglVyGUFAR8wnhcanUss0H6-ItutEI14LalFWG2rOs4Shn330TC6uY7NPtusj6LQHOSDlEo61i7uCyQdpYD3w1Pp8TtH~cQZepoAOB2EKziIe51p64xUUfN8z0SIYiR6pOshEyBKHl9UTRUulA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4');
-    background-size: cover;
-    background-position: center;
   }
 `;
 const SubWrap = styled.div`
@@ -727,7 +702,7 @@ const SubWrap = styled.div`
   }
   .graphName {
     display: inline-block;
-    background-color: #cbcbcb;
+    background-color: #ebf0ff;
     padding: 6px 10px;
     white-space: normal;
     word-break: break-all;
