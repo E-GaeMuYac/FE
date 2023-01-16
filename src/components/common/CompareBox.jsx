@@ -243,7 +243,7 @@ const BoxContent = styled.div`
 const ListCard = styled.div`
   position: relative;
   width: 90%;
-  height: 88px;
+  height: 186px;
   border: 1px solid #d0d0d0;
   border-radius: 20px;
   padding: 48px 24px;

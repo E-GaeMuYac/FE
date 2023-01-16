@@ -509,8 +509,8 @@ const SearchListWrap = styled.div`
   position: relative;
   li {
     padding: 30px 34px;
-    width: 256px;
-    height: 300px;
+    width: 324px;
+    height: 360px;
     border-radius: 25px;
     display: flex;
     align-items: center;
