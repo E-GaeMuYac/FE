@@ -86,7 +86,7 @@ const TabName = styled.li`
 
   ${({ isActive }) =>
     isActive
-      ? `  &::after {
+      ? `&::after {
     content: '';
     width: 100px;
     height: 3px;
