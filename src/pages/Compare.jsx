@@ -92,7 +92,6 @@ const ComparePage = () => {
       setVersusList([data.data.compareA, data.data.compareB]);
     }
   }, [data]);
-
   //   --------------------------------------------------------------
   // 그래프
 
@@ -291,9 +290,9 @@ const ComparePage = () => {
       });
 
       // 범례 이벤트 생성
-      // legend.events.on('pointerover', (e) => {
-      //   console.log(e);
-      // });
+      legend.events.on('pointerover', (e) => {
+        console.log(e);
+      });
 
       // 시리즈 데이터 집어넣기
       legend.data.setAll(series.dataItems);
@@ -335,9 +334,9 @@ const ComparePage = () => {
       });
 
       // 범례 이벤트 생성
-      // legend2.events.on('pointerover', (e) => {
-      //   console.log('hi');
-      // });
+      legend2.events.on('pointerover', (e) => {
+        console.log(e);
+      });
 
       //마커 크기 변경
       legend2.markers.template.setAll({

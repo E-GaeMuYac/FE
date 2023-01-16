@@ -5,6 +5,7 @@ import { FaPen } from 'react-icons/fa';
 import { api, userApi } from '../apis/apiInstance';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useGetLikeQuery } from '../query/likeQuery';
 
 const User = (props) => {
   const navigate = useNavigate();
@@ -20,18 +21,6 @@ const User = (props) => {
   const [serviceMsg, setServiceMsg] = useState('');
   const SetUserImage = props.setuserimage;
 
-  const mockArr = [
-    {
-      medicineId: 1,
-      itemName: '한미아스피린장용정100밀리그램',
-      entpName: '한미약품(주)',
-      etcOtcCode: '일반의약품',
-      productType: '해열.진통.소염제',
-      itemImage:
-        'https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
-    },
-  ];
-
   useEffect(() => {
     GetProfile();
     LikesList();
@@ -41,7 +30,6 @@ const User = (props) => {
   const GetProfile = async () => {
     try {
       const res = await userApi.get('api/users/find');
-      console.log(res);
       setNickname(res.data.user.nickname);
       setLoginCount(res.data.user.loginCount);
       setImageUrl(res.data.user.imageUrl);
@@ -142,6 +130,18 @@ const User = (props) => {
     setPrevImg(imageUrl);
   };
 
+  // ---------------------------------------------------------------------------
+  const [likeList, setLikeList] = useState([]);
+
+  const { data } = useGetLikeQuery();
+
+  useEffect(() => {
+    if (data) {
+      setLikeList(data.data);
+    }
+  }, [data]);
+  // ---------------------------------------------------------------------------
+
   return (
     <Wrapper>
       <MyPageHeader>
@@ -215,11 +215,11 @@ const User = (props) => {
         </Box>
       </MyPageWrap>
       <LikelistHeader>
-        <span>찜한 의약품 목록 ({mockArr.length}개)</span>
+        <span>찜한 의약품 목록 ({likeList.length}개)</span>
       </LikelistHeader>
       <LikeList>
         {/* 임시 */}
-        {mockArr.map((list) => (
+        {likeList.map((list) => (
           <LikeCard key={list.medicineId}>
             <CardImg image={list.itemImage}></CardImg>
             <CardName>{list.itemName}</CardName>
@@ -237,24 +237,6 @@ const User = (props) => {
             </ButtonWrap>
           </LikeCard>
         ))}
-        {/* 임시 */}
-
-        <LikeCard>
-          <CardImg></CardImg>
-          <CardName>게보린</CardName>
-          <CardDesc>
-            <div>일반의약품</div>
-            <hr />
-            <div>삼..어쩌구</div>
-          </CardDesc>
-          <CardTag>진통제</CardTag>
-          <ButtonWrap>
-            <LikeBtnBg>
-              <LikeBtnLg />
-            </LikeBtnBg>
-            <HoldBtn>이 약만 보러가기</HoldBtn>
-          </ButtonWrap>
-        </LikeCard>
       </LikeList>
     </Wrapper>
   );
