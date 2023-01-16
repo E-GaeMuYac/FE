@@ -193,13 +193,15 @@ const User = (props) => {
 
           <ProfileMsg>필너츠를 이용해주셔서 감사합니다.</ProfileMsg>
         </NicknameBox>
-        <EventBox to='/event'>
-          <h1>EVENT</h1>
-          <div>
-            간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
-          </div>
-          <div className='image' />
-        </EventBox>
+        <Box>
+          <EventBox to='/event'>
+            <h1>EVENT</h1>
+            <div>
+              간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
+            </div>
+            <div className='image' />
+          </EventBox>
+        </Box>
         <Box>
           <div className='messageBox'>
             <h1>건강꿀팁</h1>
@@ -427,7 +429,7 @@ const EventBox = styled(Link)`
   border-radius: 24px;
   text-decoration: none;
   color: #0da27a;
-  position: relative;
+  position: absolute;
   cursor: pointer;
 
   h1 {
