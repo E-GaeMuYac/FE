@@ -627,7 +627,7 @@ const SubWrap = styled.div`
     padding: 40px 70px;
     white-space: pre-wrap;
     word-break: break-all;
-    min-height: 450px;
+    min-height: 530px;
     font-size: 24px;
     line-height: 40px;
   }
@@ -704,8 +704,8 @@ const SubWrap = styled.div`
     height: 1000px;
   }
   .versusContentMaterialWrap {
-    width: 320px;
-    height: 340px;
+    min-width: 400px;
+    height: 400px;
     padding: 30px 40px;
     background-color: white;
     border-radius: 25px;
