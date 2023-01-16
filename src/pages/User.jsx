@@ -233,7 +233,7 @@ const User = (props) => {
               <LikeBtnBg>
                 <LikeBtnLg />
               </LikeBtnBg>
-              <HoldBtn>이 약만 보러가기</HoldBtn>
+              <HoldBtn>비교함 담기</HoldBtn>
             </ButtonWrap>
           </LikeCard>
         ))}
@@ -541,8 +541,8 @@ const LikeList = styled.ul`
 
 const LikeCard = styled.li`
   padding: 30px 34px;
-  width: 256px;
-  height: 298px;
+  width: 324px;
+  height: 360px;
   border-radius: 25px;
   box-shadow: 0px -2px 24px #c2c1c1;
   display: flex;

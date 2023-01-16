@@ -10,6 +10,7 @@ import { compareBoxData } from '../recoil/recoilStore';
 
 //component
 import LikeItBtn from '../components/common/LikeItBtn';
+import ProductList from '../components/common/productList';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
@@ -193,25 +194,6 @@ const Search = () => {
     }
   }, [data]);
   // -----------------------------------------------------------------------------
-
-  const [compareBoxArr, setCompareBoxArr] = useRecoilState(compareBoxData);
-
-  const goToDetail = (id) => {
-    navigate(`/detail/${id}?tab=효능 효과`);
-  };
-
-  const putInToCompareBox = (list) => {
-    for (let i = 0; i < compareBoxArr.length; i++) {
-      if (compareBoxArr[i].itemName === 'null') {
-        let newArr = [...compareBoxArr];
-        newArr[i] = list;
-        setCompareBoxArr(newArr);
-        break;
-      }
-    }
-  };
-
-  // -----------------------------------------------------------------------------
   return (
     <Wrap>
       <SearchBarWrap
@@ -288,38 +270,11 @@ const Search = () => {
           </div>
           <ul className='searchList'>
             {searhArr.map((list) => (
-              <SearchListWrap key={list.medicineId} image={list.itemImage}>
-                <li
-                  onClick={() => {
-                    goToDetail(list.medicineId);
-                  }}>
-                  <div className='listImg'></div>
-                  <div className='listName'>{list.itemName}</div>
-                  <div className='listSubTextWrap'>
-                    <div className='listSubText' style={{ textAlign: 'right' }}>
-                      {list.etcOtcCode}
-                    </div>
-                    <hr />
-                    <div className='listSubText'>{list.entpName}</div>
-                  </div>
-                  <div className='listTag'>{list.productType}</div>
-                </li>
-                <div className='btnWrap'>
-                  <LikeItBtn id={list.medicineId} />
-                  {list.medicineId === compareBoxArr[0].medicineId ||
-                  list.medicineId === compareBoxArr[1].medicineId ? (
-                    <div className='btnInBox'>비교함 담기</div>
-                  ) : (
-                    <div
-                      className='btnInBox Active'
-                      onClick={() => {
-                        putInToCompareBox(list);
-                      }}>
-                      비교함 담기
-                    </div>
-                  )}
-                </div>
-              </SearchListWrap>
+              <ProductList
+                key={list.medicineId}
+                image={list.itemImage}
+                list={list}
+              />
             ))}
           </ul>
           <Pagenation
