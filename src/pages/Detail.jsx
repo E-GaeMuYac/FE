@@ -2,7 +2,6 @@ import React, { useLayoutEffect, useState, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router';
 import qs from 'qs';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router';
 import { useRecoilState } from 'recoil';
 import { compareBoxData } from '../recoil/recoilStore';
 
@@ -16,108 +15,6 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 // 컴포넌트
 import TabBar from '../components/common/Tabbar';
 
-const GraphTop3 = ({ medicineInfo, objGraph }) => {
-  const [totalWeight, setTotalWeight] = useState(0);
-
-  // 전체 무게 초기화
-  let addedNumber = 0;
-
-  // top1
-  const [topNumberNum, setTopNumberNum] = useState(0);
-  const [topNumberName, setTopNumberName] = useState('');
-
-  let topNumberNumData = 0;
-  let topNumberNameData = '';
-
-  // top2
-  const [topNO2Num, setTopNO2Num] = useState(0);
-  const [topNO2Name, setTopNO2Name] = useState('');
-
-  let topNO2NumData = 0;
-  let topNO2NameData = '';
-
-  // top3
-  const [top3NumberNum, setTop3NumberNum] = useState(0);
-  const [top3NumberName, setTop3NumberName] = useState('');
-
-  let top3NumberNumData = 0;
-  let top3NumberNameData = '';
-
-  useEffect(() => {
-    if (objGraph) {
-      for (let i = 0; i < medicineInfo.materialName?.length; i++) {
-        addedNumber += Number(medicineInfo.materialName[i].분량);
-      }
-      // top1
-      for (let i = 0; i < medicineInfo.materialName?.length; i++) {
-        if (Number(medicineInfo.materialName[i].분량) > topNumberNumData) {
-          topNumberNumData = Number(medicineInfo.materialName[i].분량);
-          topNumberNameData = medicineInfo.materialName[i].material;
-        }
-      }
-      // top2
-      for (let i = 0; i < medicineInfo.materialName?.length; i++) {
-        if (
-          Number(medicineInfo.materialName[i].분량) > topNO2NumData &&
-          Number(medicineInfo.materialName[i].분량) < topNumberNumData
-        ) {
-          topNO2NumData = Number(medicineInfo.materialName[i].분량);
-          topNO2NameData = medicineInfo.materialName[i].material;
-        }
-      }
-
-      // top3
-      for (let i = 0; i < medicineInfo.materialName?.length; i++) {
-        if (
-          Number(medicineInfo.materialName[i].분량) > top3NumberNumData &&
-          Number(medicineInfo.materialName[i].분량) < topNO2NumData
-        ) {
-          top3NumberNumData = Number(medicineInfo.materialName[i].분량);
-          top3NumberNameData = medicineInfo.materialName[i].material;
-        }
-      }
-      //총 무게
-      setTotalWeight(addedNumber);
-
-      //top1
-      setTopNumberNum(topNumberNumData);
-      setTopNumberName(topNumberNameData);
-
-      //top2
-      setTopNO2Num(topNO2NumData);
-      setTopNO2Name(topNO2NameData);
-
-      //top3
-      setTop3NumberNum(top3NumberNumData);
-      setTop3NumberName(top3NumberNameData);
-    }
-  }, [objGraph]);
-  return (
-    <div className='graphTop3'>
-      <div className='graphTop3Content'>
-        <div className='graphTop3Material'>
-          <div className='materialPercent'>
-            {Math.round((topNumberNum / totalWeight) * 100)}%
-          </div>
-          <div className='materialName'>{topNumberName}</div>
-        </div>
-        <div className='graphTop3Material'>
-          <div className='materialPercent'>
-            {Math.round((topNO2Num / totalWeight) * 100)}%
-          </div>
-          <div className='materialName'>{topNO2Name}</div>
-        </div>
-        <div className='graphTop3Material'>
-          <div className='materialPercent'>
-            {Math.round((top3NumberNum / totalWeight) * 100)}%
-          </div>
-          <div className='materialName'>{top3NumberName}</div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const BottomContents = ({ medicineInfo, query }) => {
   const [ContentDesc, setContentDesc] = useState('');
 
@@ -129,11 +26,11 @@ const BottomContents = ({ medicineInfo, query }) => {
       case '첨가물':
         setContentDesc(medicineInfo.ingrName);
         break;
-      case '주의사항':
-        setContentDesc(medicineInfo.nbDocData);
-        break;
       case '유통기한':
         setContentDesc(medicineInfo.validTerm);
+        break;
+      case '주의사항':
+        setContentDesc(medicineInfo.nbDocData);
         break;
       default: //기본값 생략
     }
@@ -196,30 +93,18 @@ const Detail = () => {
         am5percent.PieSeries.new(root, {
           valueField: '분량',
           categoryField: 'material',
-          // stroke: am5.color(0xffffff),
-          // strokeWidth: 2,
-          // strokeOpacity: 0,
-          // position: 'absolute',
-          // X: am5.percent(600),
           centerX: am5.percent(-22),
           y: am5.percent(-4),
           legendValueText: '{category}',
           legendLabelText: `[bold {fill}]{value.formatNumber('#.#')}mg`,
-          // tooltipText: "{name} {valuePercent.formatNumber('#.#')}%",
         })
       );
 
       //labels
       series.labels.template.setAll({
-        // text: `{category}`,
-        // textType: 'circular',
-        // inside: true,
-        // radius: 10,
         maxWidth: 0,
-        // inside: true,
         oversizedBehavior: 'wrap',
         textAlign: 'left',
-        // wordBreak: 'keepAll',
       });
 
       series.ticks.template.setAll({
@@ -228,8 +113,6 @@ const Detail = () => {
         strokeOpacity: 0,
       });
 
-      // label.set("text", "[#888]{categoryX}[/]: [bold]{valueY}[/]");
-
       series.labels.template.setAll({});
 
       // 그래프 마우스 오버 시 툴팁
@@ -237,7 +120,6 @@ const Detail = () => {
         'tooltipText',
         `{category} : {valuePercentTotal.formatNumber('0.00')}%`
       );
-      // tooltipText: "{name} {valueTotalPercent.formatNumber('#.#')}%",
 
       const tooltip = am5.Tooltip.new(root, {});
       tooltip.label.setAll({
@@ -247,58 +129,8 @@ const Detail = () => {
 
       series.data.setAll(medicine);
 
-      // Create legend
-      // const legend = chart.children.push(
-      //   am5.Legend.new(root, {
-      //     centerX: am5.percent(50),
-      //     x: am5.percent(50),
-      //     marginTop: 15,
-      //     marginBottom: 15,
-      //   })
-      // );
-
-      // let legendRoot = am5.Root.new('legenddiv');
-
-      // let legend = legendRoot.container.children.push(
-      //   am5.Legend.new(legendRoot, {
-      //     // width: am5.percent(100),
-      //     // centerX: am5.percent(50),
-      //     // x: am5.percent(50),
-      //     position: 'absolute',
-      //     width: 400,
-      //     height: 300,
-
-      //     layout: legendRoot.verticalLayout,
-      //   }),
-      // );
-
-      // let legend = legendRoot.container.children.push(
-      //   am5.Legend.new(legendRoot, {
-      //     // width: am5.percent(100),
-      //     // centerX: am5.percent(50),
-      //     // x: am5.percent(50),
-      //     position: 'absolute',
-      //     width: 400,
-      //     height: 300,
-      //     // verticalScrollbar: am5.Scrollbar.new(legendRoot, {
-      //     //   orientation: 'vertical',
-      //     // }),
-      //     layout: legendRoot.verticalLayout,
-      //   })
-      // );
-
-      // legend.data.setAll(series.dataItems);
-
-      // legend.data.setAll(series.dataItems);
-
       const legend = chart.children.push(
         am5.Legend.new(root, {
-          // x: am5.percent(80),
-          // centerX: am5.percent(50),
-          // centerY: am5.percent(50),
-          // y: am5.percent(50),
-          // height: am5.percent(500),
-
           position: 'absolute',
           oversizedBehavior: 'wrap',
           width: 380,
@@ -355,37 +187,15 @@ const Detail = () => {
   const medicineId = param.id;
   const data = useGetDetailQuery(medicineId);
 
-  console.log(data);
+  // console.log(data);
 
   useEffect(() => {
     if (data) {
       setObjGraph(data.data.product);
-      console.log(data.data.product);
+      // console.log(data.data.product);
     }
-    console.log(objGraph);
+    // console.log(objGraph);
   }, [data]);
-
-  console.log(medicineItem);
-  console.log(objGraph);
-  console.log(objGraph.medicineId);
-  console.log(medicineId);
-
-  // const medicineItem = arr.product;
-  // // searchedWord가 변경될 때만 refetch
-  // useEffect(() => {
-  //   if (searchedWord) {
-  //     refetch();
-  //   }
-  // }, [searchedWord]);
-
-  // // data가 undefined가 아닐 때 state 변경
-  // useEffect(() => {
-  //   if (data) {
-  //     setSearhArr(data.data);
-  //   }
-  // }, [data]);
-
-  // useLayoutEffect(() => {}, [arr, query]);
 
   const [compareBoxArr, setCompareBoxArr] = useRecoilState(compareBoxData);
 
@@ -400,12 +210,21 @@ const Detail = () => {
     }
   };
 
+  //주요 성분 총량
+  const medicineTotalAmount = (arr) => {
+    let amount = 0;
+    for (let i = 0; i < arr.materialName.length; i++) {
+      amount += Number(arr.materialName[i].분량);
+    }
+
+    return amount;
+  };
+
   return (
     <>
       <TopSection>
         <CardBox>
           <WrapContents>
-            {/* <Image src={defaultImg} alt='' /> */}
             <Image imgUrl={medicineItem?.itemImage} />
             <div style={{ marginRight: '20px' }}>
               <Name>{medicineItem?.itemName}</Name>
@@ -442,13 +261,13 @@ const Detail = () => {
               medicineItem?.medicineId === compareBoxArr[1].medicineId ? (
                 <div className='compareBox'>비교함 담기</div>
               ) : (
-                <div
+                <button
                   className='compareBox active'
                   onClick={() => {
                     putInToCompareBox(objGraph);
                   }}>
                   비교함 담기
-                </div>
+                </button>
               )}
             </div>
           </WrapContents>
@@ -477,14 +296,31 @@ const Detail = () => {
           </MiddleCardBox>
           <RightCardBox>
             <GraphLabel>주요 유효성분</GraphLabel>
-            <GraphTop3 medicineInfo={medicineItem} objGraph={objGraph} />
+            <GraphTop3>
+              {medicineItem?.materialName?.map((list) =>
+                medicineItem?.materialName?.indexOf(list) < 3 ? (
+                  <div className='graphTop3List' key={list.material}>
+                    <div className='versusContentMaterialPercent'>
+                      {Math.round(
+                        (Number(list.분량) /
+                          medicineTotalAmount(medicineItem)) *
+                          100
+                      )}
+                      %
+                    </div>
+                    <div className='versusContentMaterialName'>
+                      {list.material}
+                    </div>
+                  </div>
+                ) : null
+              )}
+            </GraphTop3>
           </RightCardBox>
         </div>
       </TopSection>
       <div style={{ marginBottom: '128px' }}>
         <TabBar location={location} query={query} />
         <BottomSection>
-          {/* <div id='legenddiv' /> */}
           <BottomContents medicineInfo={medicineItem} query={query} />
         </BottomSection>
       </div>
@@ -494,7 +330,6 @@ const Detail = () => {
 
 const TopSection = styled.div`
   width: 1380px;
-  /* display: flex; */
   margin-bottom: 58px;
 `;
 
@@ -505,7 +340,6 @@ const BottomSection = styled.div`
   background-color: #ebebeb;
   display: flex;
   padding: 34px 30px;
-
   #legenddiv {
     display: flex;
     margin: auto;
@@ -518,7 +352,6 @@ const BottomSection = styled.div`
 
 const CardBox = styled.div`
   width: 100%;
-  /* height: 130px; */
   margin: auto;
   border-radius: 25px;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
@@ -527,14 +360,11 @@ const CardBox = styled.div`
 const MiddleCardBox = styled.div`
   width: 950px;
   height: 485px;
-  /* float: left; */
   border-radius: 25px;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
   position: relative;
   padding: 40px;
   #chartdiv {
-    /* position: absolute; */
-    /* left: 0; */
     display: flex;
     margin: auto;
     padding-top: 10px;
@@ -547,14 +377,11 @@ const MiddleCardBox = styled.div`
 const RightCardBox = styled.div`
   width: 380px;
   height: 485px;
-  /* margin: auto; */
   padding: 40px;
   border-radius: 25px;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
   .graphTop3 {
     width: 330px;
-    /* margin-top: 76px; */
-    /* display: flex; */
     align-items: center;
     justify-content: center;
     gap: 50px;
@@ -585,34 +412,47 @@ const RightCardBox = styled.div`
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
+  .graphTop3List {
+    width: 100%;
+    height: 18%;
+    display: flex;
+    align-items: center;
+    margin-top: 30px;
+  }
+  .versusContentMaterialPercent {
+    width: 80px;
+    font-size: 28px;
+    line-height: 41px;
+    font-weight: bold;
+    display: flex;
+  }
+  .versusContentMaterialName {
+    width: 221px;
+    font-size: 20px;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
 `;
 
 const WrapContents = styled.div`
-  /* width: 340px; */
   padding: 21px 30px;
-  /* height: 405px; */
   margin: auto;
   align-items: center;
-  /* justify-content: center; */
   margin-top: 40px;
   display: flex;
   position: relative;
   .labelWrap {
-    /* width: 100%; */
-    /* margin: auto; */
     justify-content: center;
-    /* align-items: center; */
-    /* margin-top: 22px; */
     text-align: left;
   }
   .boxWrap {
     display: flex;
     position: absolute;
     right: 30px;
-    /* float: right; */
-    /* justify-content: right; */
-    /* justify-content: space-between; */
-    /* margin-top: 20px; */
   }
   .etcOtcCodeDesc {
     width: 20px;
@@ -632,7 +472,6 @@ const WrapContents = styled.div`
       position: absolute;
       max-width: 300px;
       padding: 18px;
-      /* border: 1px solid; */
       font-size: 15px;
       line-height: 21px;
       color: #5a5a5a;
@@ -651,7 +490,6 @@ const WrapContents = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    /* margin-top: 18px; */
     font-size: 18px;
     font-weight: 700;
     line-height: 20px;
@@ -660,15 +498,19 @@ const WrapContents = styled.div`
   .compareBox.active {
     background-color: #3366ff;
     cursor: pointer;
+    border: 0;
+    :active {
+      background-color: #1a50f3;
+    }
   }
 `;
 
-// const Image = styled.img`
-//   width: 340px;
-//   height: 140px;
-//   margin: auto;
-//   display: flex;
-// `;
+const GraphTop3 = styled.div`
+  width: 100%;
+  height: 300px;
+  margin-top: 77px;
+  margin-left: 10px;
+`;
 
 const Image = styled.div`
   width: 160px;
@@ -676,9 +518,8 @@ const Image = styled.div`
   border-radius: 8px;
   background-image: ${({ imgUrl }) =>
     imgUrl ? `url(${imgUrl})` : `url('/assets/image/default_img.png')`};
-  /* ${({ imgUrl }) => `url(${imgUrl})`}; */
-  background-size: 120%;
-  background-position: center;
+  background-size: cover;
+  background-position: 50% -50%;
   margin-right: 30px;
 `;
 
@@ -689,9 +530,7 @@ const Name = styled.div`
   font-size: 24px;
   font-weight: 700;
   line-height: 35px;
-  /* margin-top: 18px; */
   justify-content: center;
-  /* display: flex; */
 `;
 
 const TopLabel = styled.div`
@@ -700,8 +539,6 @@ const TopLabel = styled.div`
   font-weight: 700;
   line-height: 24px;
   color: #868686;
-  /* border-right: 2px solid #d9d9d9; */
-  /* padding-right: 7px; */
   margin-bottom: 10px;
 `;
 
@@ -714,17 +551,11 @@ const BottomLabel = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* padding-left: 7px; */
   margin-top: 10px;
 `;
 
 const Categorize = styled.div`
-  /* min-width: 140px;
-  max-width: 300px; */
-  /* padding: 0 10px; */
-  /* align-items: center; */
   div {
-    /* text-align: center; */
     padding: 0 12px;
     min-width: 140px;
     height: 40px;
@@ -738,23 +569,16 @@ const Categorize = styled.div`
     border-radius: 8px;
     display: flex;
   }
-
   display: flex;
-  /* margin: auto; */
-
   margin-top: 10px;
-  /* position: absolute;
-  bottom: 0; */
 `;
 
 const Picked = styled.div`
   width: 50px;
   height: 50px;
-  /* background-color: #d9d9d9; */
   display: flex;
   align-items: center;
   justify-content: center;
-  /* margin-top: 18px; */
   margin-right: 24px;
   border-radius: 8px;
   box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
@@ -772,20 +596,20 @@ const GraphLabel = styled.div`
   color: #868686;
   display: flex;
   justify-content: center;
-  /* margin-top: 30px; */
   font-size: 30px;
   font-weight: 700;
   line-height: 43px;
 `;
 
 const ScrollBar = styled.div`
+  white-space: pre-wrap;
   font-size: 20px;
   line-height: 33px;
   overflow-x: hidden;
   overflow-y: auto;
-  height: 260px;
+  height: 258px;
   .scroll-area {
-    padding: 0 12px 0 0;
+    padding: 2px 12px 0 18px;
   }
   ::-webkit-scrollbar {
     width: 12px;

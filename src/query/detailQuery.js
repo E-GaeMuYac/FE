@@ -5,7 +5,6 @@ import { useQuery } from 'react-query';
 // api 호출 함수
 const getDetailData = async (params) => {
   const data = await api.get(`/api/products/${params.queryKey[1]}`);
-  console.log(data);
   return data;
 };
 

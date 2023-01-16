@@ -160,8 +160,8 @@ const Signup = () => {
           headers: header,
         } //config
       );
-      console.log('인증번호 전송 성공', data);
-      console.log('인증번호', data.data.body.code);
+      // console.log('인증번호 전송 성공', data);
+      // console.log('인증번호', data.data.body.code);
       setResponseEmailCode(data.data.body.code);
     } catch (error) {
       return error;
@@ -283,7 +283,7 @@ const Signup = () => {
           headers: header,
         } //config
       );
-      console.log('인증번호 전송 성공', data);
+      // console.log('인증번호 전송 성공', data);
       setResponsePhoneCode(data.data.code);
     } catch (error) {
       return error;
@@ -332,13 +332,9 @@ const Signup = () => {
       setReadOnlyPhoneCode(readOnlyPhoneCode);
       setPhoneCodeBtn(false);
       setPhoneCodebtnLabel('인증번호 전송');
-      console.log(phoneCode);
-      console.log(responsePhoneCode);
     } else {
       setPhoneCodeConfirmMessage('인증번호가 틀렸습니다. 다시 입력해 주세요.');
       setIsPhoneCode(false);
-      console.log(phoneCode);
-      console.log(responsePhoneCode);
     }
   };
 
