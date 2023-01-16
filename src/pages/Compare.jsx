@@ -83,7 +83,7 @@ const ComparePage = () => {
   useLayoutEffect(() => {
     //그래프 초기화
     graphData = [];
-    if (versusList.length === 2 && query === '성분 그래프') {
+    if (versusList.length === 2 && query === '성분그래프') {
       // 첫 번째 약의 정보를 우선 받아오기
       for (let i = 0; i < versusList[0].materialName.length; i++) {
         const newMedicineData = {
@@ -135,7 +135,7 @@ const ComparePage = () => {
 
   // 그래프 작업
   useLayoutEffect(() => {
-    if (versusList.length === 2 && query === '성분 그래프') {
+    if (versusList.length === 2 && query === '성분그래프') {
       const root = am5.Root.new('chartdiv');
 
       const chart = root.container.children.push(
@@ -422,7 +422,7 @@ const ComparePage = () => {
           </MainWrap>
           <TabBar location={location} query={query} />
           <SubWrap>
-            {query === '성분 그래프' ? (
+            {query === '성분그래프' ? (
               <div className='content'>
                 <div className='graphWrap'>
                   <div id='chartdiv'></div>
@@ -730,6 +730,7 @@ const SubWrap = styled.div`
     background-color: #cbcbcb;
     padding: 6px 10px;
     white-space: normal;
+    word-break: break-all;
     border-radius: 10px;
     color: #242424;
     font-size: 15px;
