@@ -198,7 +198,7 @@ const Search = () => {
   const [compareBoxArr, setCompareBoxArr] = useRecoilState(compareBoxData);
 
   const goToDetail = (id) => {
-    navigate(`/detail/${id}`);
+    navigate(`/detail/${id}?tab=효능 효과`);
   };
 
   const putInToCompareBox = (list) => {
