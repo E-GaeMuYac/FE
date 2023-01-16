@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IoMdSettings } from 'react-icons/io';
 import { FaPen } from 'react-icons/fa';
-import { userApi } from '../apis/apiInstance';
-import { useNavigate } from 'react-router-dom';
+import { api, userApi } from '../apis/apiInstance';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const User = (props) => {
@@ -17,6 +17,7 @@ const User = (props) => {
   const [prevImg, setPrevImg] = useState('');
   const [newImg, setNewImg] = useState();
   const [newNickname, setNewNickname] = useState(nickname);
+  const [serviceMsg, setServiceMsg] = useState('');
   const SetUserImage = props.setuserimage;
 
   const mockArr = [
@@ -34,6 +35,7 @@ const User = (props) => {
   useEffect(() => {
     GetProfile();
     LikesList();
+    UserMessage();
   }, []);
 
   const GetProfile = async () => {
@@ -54,6 +56,15 @@ const User = (props) => {
     try {
       const res = await userApi.get('api/products/dibs');
       setLikesArr(res.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const UserMessage = async () => {
+    try {
+      const res = await api.get('api/posts');
+      setServiceMsg(res.data.post);
     } catch (e) {
       console.log(e);
     }
@@ -182,10 +193,26 @@ const User = (props) => {
 
           <ProfileMsg>필너츠를 이용해주셔서 감사합니다.</ProfileMsg>
         </NicknameBox>
-        <IllustBox onClick={() => navigate('/event')}>
-          일러스트가 들어갈 예정/박스 클릭 시 이벤트 페이지로 이동
-        </IllustBox>
-        <IllustBox>일러스트가 들어갈 예정/마우스 오버 시 메세지 팝업</IllustBox>
+        <Box>
+          <EventBox to='/event'>
+            <h1>EVENT</h1>
+            <div>
+              간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
+            </div>
+            <div className='image' />
+          </EventBox>
+        </Box>
+        <Box>
+          <div className='messageBox'>
+            <h1>건강꿀팁</h1>
+            <div className='image' />
+            <span>마우스를 가져다대보세요</span>
+          </div>
+          <div className='messagePopup'>
+            <h2>건강꿀팁</h2>
+            <span>{serviceMsg}</span>
+          </div>
+        </Box>
       </MyPageWrap>
       <LikelistHeader>
         <span>찜한 의약품 목록 ({mockArr.length}개)</span>
@@ -395,13 +422,116 @@ const ProfileMsg = styled.div`
   color: #868686;
 `;
 
-const IllustBox = styled.div`
-  background-color: #ebebeb;
+const EventBox = styled(Link)`
+  background-color: #cefbd8;
   width: 324px;
   height: 225px;
   border-radius: 24px;
+  text-decoration: none;
+  color: #0da27a;
+  position: absolute;
   cursor: pointer;
+
+  h1 {
+    position: absolute;
+    margin: 0;
+    top: 20px;
+    left: 110px;
+  }
+  div {
+    position: absolute;
+    font-size: 18px;
+    font-weight: bold;
+    top: 100px;
+    left: 20px;
+    line-height: 30px;
+  }
+  span {
+    color: #ff8365;
+    font-weight: 900;
+  }
+  .image {
+    width: 87px;
+    height: 127px;
+    background-image: url('/assets/image/설문아이콘.png');
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    top: 60px;
+    left: 210px;
+  }
 `;
+
+const Box = styled.div`
+  width: 324px;
+  height: 225px;
+  position: relative;
+
+  .messageBox {
+    position: absolute;
+    background-color: #d6e4ff;
+    width: 324px;
+    height: 225px;
+    border-radius: 24px;
+    color: #2649d8;
+    cursor: pointer;
+    &:hover {
+      filter: blur(10px);
+    }
+
+    h1 {
+      position: absolute;
+      margin: 0;
+      top: 20px;
+      left: 95px;
+    }
+    .image {
+      width: 135px;
+      height: 84px;
+      background-image: url('/assets/image/꿀팁아이콘.png');
+      background-size: cover;
+      background-position: center;
+      position: absolute;
+      top: 75px;
+      left: 95px;
+    }
+    span {
+      position: absolute;
+      bottom: 30px;
+      left: 70px;
+    }
+  }
+
+  .messagePopup {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 324px;
+    height: 225px;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    align-items: center;
+    color: white;
+    border-radius: 24px;
+    position: absolute;
+    top: 0;
+    span {
+      width: 500px;
+      word-break: keep-all;
+    }
+  }
+
+  .messageBox:hover + .messagePopup {
+    display: block;
+    pointer-events: none;
+  }
+`;
+
+// const MessageBox = styled.div``;
+
+// const MessagePopup = styled.div`
+//   /* display: none; */
+// `;
 
 const LikelistHeader = styled.div`
   margin-top: 60px;
