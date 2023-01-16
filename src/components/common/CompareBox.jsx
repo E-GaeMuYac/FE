@@ -95,7 +95,7 @@ const CompareBox = () => {
   // 비교하기 페이지로 이동
   const goToCompare = () => {
     if (isOpen && isArrLength === 2) {
-      navigate('/compare?tab=성분 그래프');
+      navigate('/compare?tab=성분그래프');
 
       //이동 후 state 초기화
       setIsOpen(false);
