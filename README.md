@@ -50,7 +50,7 @@ CompareBox.jsx => 이재정
 
 LikeItBtn.jsx => 이재정
 
-ProductList.jsx => 
+ProductList.jsx => 이재정
 
 
 ## 와이어프레임
