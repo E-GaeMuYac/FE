@@ -1,18 +1,20 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import { usePutLikeMutation } from '../../query/likeQuery';
 
 const LikeItBtn = ({ id }) => {
   const [heartActive, setHeartBtn] = useState(false);
 
-  //찜하기 실행 함수
-  const likeIt = (id) => {
-    if (heartActive) {
-      console.log(`don't like this ${id}`);
-    } else {
-      console.log(`like this ${id}`);
-    }
+  const LikeMutate = usePutLikeMutation(id);
 
-    setHeartBtn(!heartActive);
+  //찜하기 실행 함수
+  const likeIt = async (id) => {
+    if (localStorage.getItem('refreshToken')) {
+      LikeMutate.mutate(id);
+      setHeartBtn(!heartActive);
+    } else {
+      alert('로그인이 필요한 기능입니다.');
+    }
   };
 
   return (
@@ -30,7 +32,7 @@ export default LikeItBtn;
 
 const LikeItBtnWrap = styled.div`
   width: 38px;
-  height: 100%;
+  height: 38px;
   border-radius: 8px;
   box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.2);
   cursor: pointer;

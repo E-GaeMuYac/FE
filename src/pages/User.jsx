@@ -5,7 +5,8 @@ import { FaPen } from 'react-icons/fa';
 import { api, userApi } from '../apis/apiInstance';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { async } from 'q';
+import { useGetLikeQuery } from '../query/likeQuery';
+import ProductList from '../components/common/productList';
 
 const User = (props) => {
   const navigate = useNavigate();
@@ -21,18 +22,6 @@ const User = (props) => {
   const [serviceMsg, setServiceMsg] = useState('');
   const SetUserImage = props.setuserimage;
 
-  const mockArr = [
-    {
-      medicineId: 1,
-      itemName: '한미아스피린장용정100밀리그램',
-      entpName: '한미약품(주)',
-      etcOtcCode: '일반의약품',
-      productType: '해열.진통.소염제',
-      itemImage:
-        'https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4',
-    },
-  ];
-
   useEffect(() => {
     GetProfile();
     LikesList();
@@ -42,7 +31,6 @@ const User = (props) => {
   const GetProfile = async () => {
     try {
       const res = await userApi.get('api/users/find');
-      console.log(res);
       setNickname(res.data.user.nickname);
       setLoginCount(res.data.user.loginCount);
       setImageUrl(res.data.user.imageUrl);
@@ -153,6 +141,18 @@ const User = (props) => {
     setPrevImg(imageUrl);
   };
 
+  // ---------------------------------------------------------------------------
+  const [likeList, setLikeList] = useState([]);
+
+  const { data } = useGetLikeQuery();
+
+  useEffect(() => {
+    if (data) {
+      setLikeList(data.data);
+    }
+  }, [data]);
+  // ---------------------------------------------------------------------------
+
   return (
     <Wrapper>
       <MyPageHeader>
@@ -230,46 +230,13 @@ const User = (props) => {
         </Box>
       </MyPageWrap>
       <LikelistHeader>
-        <span>찜한 의약품 목록 ({mockArr.length}개)</span>
+        <span>찜한 의약품 목록 ({likeList.length}개)</span>
       </LikelistHeader>
       <LikeList>
         {/* 임시 */}
-        {mockArr.map((list) => (
-          <LikeCard key={list.medicineId}>
-            <CardImg image={list.itemImage}></CardImg>
-            <CardName>{list.itemName}</CardName>
-            <CardDesc>
-              <div>{list.etcOtcCode}</div>
-              <hr />
-              <div>{list.entpName}</div>
-            </CardDesc>
-            <CardTag>{list.productType}</CardTag>
-            <ButtonWrap>
-              <LikeBtnBg>
-                <LikeBtnLg />
-              </LikeBtnBg>
-              <HoldBtn>이 약만 보러가기</HoldBtn>
-            </ButtonWrap>
-          </LikeCard>
+        {likeList.map((list) => (
+          <ProductList key={list.medicineId} list={list} />
         ))}
-        {/* 임시 */}
-
-        <LikeCard>
-          <CardImg></CardImg>
-          <CardName>게보린</CardName>
-          <CardDesc>
-            <div>일반의약품</div>
-            <hr />
-            <div>삼..어쩌구</div>
-          </CardDesc>
-          <CardTag>진통제</CardTag>
-          <ButtonWrap>
-            <LikeBtnBg>
-              <LikeBtnLg />
-            </LikeBtnBg>
-            <HoldBtn>이 약만 보러가기</HoldBtn>
-          </ButtonWrap>
-        </LikeCard>
       </LikeList>
     </Wrapper>
   );
@@ -576,115 +543,6 @@ const LikeList = styled.ul`
   padding: 0;
   margin: 0;
   margin-bottom: 218px;
-`;
-
-const LikeCard = styled.li`
-  padding: 30px 34px;
-  width: 256px;
-  height: 298px;
-  border-radius: 25px;
-  box-shadow: 0px -2px 24px #c2c1c1;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-`;
-
-const CardImg = styled.div`
-  width: 100%;
-  height: 110px;
-  background-image: ${({ image }) =>
-    image
-      ? `url(${image})`
-      : `url('data:image/png;base64,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')`};
-  background-size: contain;
-  background-position: center;
-  margin-bottom: 24px;
-  background-repeat: no-repeat;
-`;
-
-const CardName = styled.div`
-  margin-bottom: 22px;
-  width: 100%;
-  height: 29px;
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const CardDesc = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 18px;
-  margin-bottom: 14px;
-
-  div {
-    width: 125px;
-    height: 22px;
-    text-align: center;
-    font-size: 15px;
-    font-weight: bold;
-    color: #868686;
-  }
-  hr {
-    width: 2px;
-    height: 100%;
-    border: none;
-    background-color: #d9d9d9;
-    margin: 0 8px;
-  }
-`;
-
-const CardTag = styled.div`
-  line-height: 15px;
-  margin-bottom: 18px;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #ebebeb;
-  font-size: 14px;
-  font-weight: bold;
-`;
-
-const ButtonWrap = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  height: 38px;
-`;
-
-const LikeBtnBg = styled.div`
-  width: 38px;
-  height: 100%;
-  background-color: #d9d9d9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-`;
-
-const LikeBtnLg = styled.div`
-  width: 26px;
-  height: 26px;
-  background-image: url('/assets/image/icon_heart1.png');
-  background-size: cover;
-  background-position: center;
-`;
-
-const HoldBtn = styled.button`
-  width: 214px;
-  height: 100%;
-  background-color: #868686;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
 `;
 
 export default User;

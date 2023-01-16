@@ -48,6 +48,10 @@ TabBar.jsx => 이재정
 
 CompareBox.jsx => 이재정
 
+LikeItBtn.jsx => 이재정
+
+ProductList.jsx => 이재정
+
 
 ## 와이어프레임
 https://www.figma.com/file/2uItYSVY549Y4EV5rv1TFF/%EC%9D%B4%EA%B2%8C%EB%AD%90%EC%95%BD?node-id=0%3A1&t=hJEqdD2693aKcVG3-0

@@ -10,8 +10,9 @@ import { compareBoxData } from '../recoil/recoilStore';
 
 //component
 import LikeItBtn from '../components/common/LikeItBtn';
+import ProductList from '../components/common/productList';
 
-const Pagenation = ({ refetch, nowPageNum, setNowPageNum, searchLength }) => {
+const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
   const [numArrPage, setNumArrPage] = useState([]);
   const [pageNum, setPageNum] = useState(0);
@@ -32,9 +33,8 @@ const Pagenation = ({ refetch, nowPageNum, setNowPageNum, searchLength }) => {
 
   // 페이지 넘버 변경. 스크롤 업 이벤트 생성
   const pageNumChange = (num) => {
-    window.scrollTo(0, 500);
     setNowPageNum(num);
-    refetch();
+    window.scrollTo(0, 300);
   };
 
   //numArr의 길이에 따라 배열 쪼개기
@@ -179,12 +179,12 @@ const Search = () => {
     }
   };
 
-  //함수 실행할 때마다 refetch
+  //searchedWord,nowPageNum 변경 시 refetch
   useEffect(() => {
     if (searchedWord) {
       refetch();
     }
-  }, [doingSearch]);
+  }, [searchedWord, nowPageNum]);
 
   // data가 undefined가 아닐 때 state 변경
   useEffect(() => {
@@ -193,25 +193,6 @@ const Search = () => {
       setSearchLength(data.data.searchLength);
     }
   }, [data]);
-  // -----------------------------------------------------------------------------
-
-  const [compareBoxArr, setCompareBoxArr] = useRecoilState(compareBoxData);
-
-  const goToDetail = (id) => {
-    navigate(`/detail/${id}`);
-  };
-
-  const putInToCompareBox = (list) => {
-    for (let i = 0; i < compareBoxArr.length; i++) {
-      if (compareBoxArr[i].itemName === 'null') {
-        let newArr = [...compareBoxArr];
-        newArr[i] = list;
-        setCompareBoxArr(newArr);
-        break;
-      }
-    }
-  };
-
   // -----------------------------------------------------------------------------
   return (
     <Wrap>
@@ -289,38 +270,17 @@ const Search = () => {
           </div>
           <ul className='searchList'>
             {searhArr.map((list) => (
-              <SearchListWrap key={list.medicineId} image={list.itemImage}>
-                <li
-                  onClick={() => {
-                    goToDetail(list.medicineId);
-                  }}>
-                  <div className='listImg'></div>
-                  <div className='listName'>{list.itemName}</div>
-                  <div className='listSubTextWrap'>
-                    <div className='listSubText'>{list.etcOtcCode}</div>
-                    <hr />
-                    <div className='listSubText'>{list.entpName}</div>
-                  </div>
-                  <div className='listTag'>{list.productType}</div>
-                </li>
-                <div className='btnWrap'>
-                  <LikeItBtn id={list.medicineId} />
-                  <div
-                    className='btnInBox'
-                    onClick={() => {
-                      putInToCompareBox(list);
-                    }}>
-                    보관함 담기
-                  </div>
-                </div>
-              </SearchListWrap>
+              <ProductList
+                key={list.medicineId}
+                image={list.itemImage}
+                list={list}
+              />
             ))}
           </ul>
           <Pagenation
             nowPageNum={nowPageNum}
             setNowPageNum={setNowPageNum}
             searchLength={searchLength}
-            refetch={refetch}
           />
         </SearchResultWrap>
       ) : null}
@@ -369,11 +329,11 @@ const SearchBarWrap = styled.div`
   .searchSortList {
     display: ${({ isOpenSearchSort }) => (isOpenSearchSort ? 'flex' : 'none')};
     position: absolute;
-    left: -2px;
+    left: -3px;
     top: -2px;
-    width: 121px;
+    width: 150px;
     list-style: none;
-    padding: 15px;
+    padding: 12px;
     margin: 0;
     flex-direction: column;
     gap: 14px;
@@ -499,7 +459,7 @@ const SearchResultWrap = styled.div`
   .searchList {
     display: flex;
     flex-wrap: wrap;
-    gap: 25px;
+    gap: 28px;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -509,8 +469,8 @@ const SearchListWrap = styled.div`
   position: relative;
   li {
     padding: 30px 34px;
-    width: 256px;
-    height: 300px;
+    width: 324px;
+    height: 360px;
     border-radius: 25px;
     display: flex;
     align-items: center;
@@ -522,9 +482,7 @@ const SearchListWrap = styled.div`
     width: 100%;
     height: 110px;
     background-image: ${({ image }) =>
-      image
-        ? `url(${image})`
-        : `url('https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4')`};
+      image ? `url(${image})` : `url('/assets/image/PillDefaultImg.png')`};
     background-size: cover;
     border-radius: 8px;
     background-position: 50% 20%;
@@ -540,14 +498,13 @@ const SearchListWrap = styled.div`
   }
   .listSubTextWrap hr {
     width: 2px;
-    height: 100%;
+    height: 18px;
     border: none;
-    background-color: #d9d9d9;
+    background-color: #888888;
     margin: 0 8px;
   }
   .listSubText {
     width: 126px;
-    text-align: center;
     font-size: 15px;
     line-height: 22px;
     color: #868686;
@@ -567,10 +524,14 @@ const SearchListWrap = styled.div`
     text-overflow: ellipsis;
   }
   .listTag {
+    max-width: 256px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     padding: 10px;
     border-radius: 5px;
-    background-color: #e4ffea;
-    color: #13bd7e;
+    background-color: #ebf0ff;
+    color: #3366ff;
     font-size: 14px;
     font-weight: bold;
     line-height: 15px;
@@ -586,9 +547,9 @@ const SearchListWrap = styled.div`
     height: 38px;
   }
   .btnInBox {
-    width: 214px;
+    width: 205px;
     height: 100%;
-    background-color: #13bd7e;
+    background-color: #cccccc;
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -597,6 +558,9 @@ const SearchListWrap = styled.div`
     font-size: 14px;
     line-height: 20px;
     font-weight: bold;
+  }
+  .btnInBox.Active {
+    background-color: #3366ff;
     cursor: pointer;
   }
 `;
@@ -629,8 +593,8 @@ const PagenationWrap = styled.div`
   }
   .pagenationNumWrap li.Active {
     background-color: white;
-    border: 1px solid #13bd7e;
-    color: #13bd7e;
+    border: 1px solid #3366ff;
+    color: #242424;
   }
   .pagenationArrow {
     position: absolute;
