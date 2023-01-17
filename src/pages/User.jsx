@@ -20,6 +20,8 @@ const User = (props) => {
   const [newImg, setNewImg] = useState();
   const [newNickname, setNewNickname] = useState(nickname);
   const [serviceMsg, setServiceMsg] = useState('');
+  const [delPassword, setDelPassword] = useState('');
+  const [isShow, setIsShow] = useState(false);
   const SetUserImage = props.setuserimage;
 
   useEffect(() => {
@@ -141,6 +143,17 @@ const User = (props) => {
     setPrevImg(imageUrl);
   };
 
+  const deleteAccount = async (password) => {
+    try {
+      const res = await userApi.delete('/api/users/delete', {
+        password,
+      });
+      console.log(res);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   // ---------------------------------------------------------------------------
   const [likeList, setLikeList] = useState([]);
 
@@ -155,9 +168,41 @@ const User = (props) => {
 
   return (
     <Wrapper>
+      {isShow && (
+        <PopUp>
+          <Content>
+            <div className='triangle'></div>
+            <div className='inputWrap'>
+              <span>비밀번호 입력</span>
+              <input
+                type='password'
+                onChange={(e) => {
+                  setDelPassword(e.target.value);
+                }}
+              />
+            </div>
+            <div className='btnWrap'>
+              <button onClick={() => deleteAccount(delPassword)}>
+                회원탈퇴
+              </button>
+              <button
+                onClick={() => {
+                  setIsShow(false);
+                }}>
+                취소
+              </button>
+            </div>
+          </Content>
+        </PopUp>
+      )}
       <MyPageHeader>
         <span>마이페이지</span>
-        <button>회원탈퇴</button>
+        <button
+          onClick={() => {
+            setIsShow(true);
+          }}>
+          회원탈퇴
+        </button>
       </MyPageHeader>
       <MyPageWrap>
         <ProfileImg>
@@ -269,6 +314,65 @@ const MyPageHeader = styled.div`
   }
 `;
 
+const PopUp = styled.div`
+  position: absolute;
+  top: 220px;
+  right: 510px;
+  z-index: 2;
+`;
+
+const Content = styled.div`
+  width: 300px;
+  height: 200px;
+  box-shadow: 0px 0px 6px 0px #00000040;
+  background-color: #ffff;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .triangle {
+    width: 30px;
+    background-color: #ffff;
+    height: 30px;
+    border-radius: 4px;
+    box-shadow: -2px 2px rgb(178 178 178 / 0.3);
+    transform: rotate(135deg);
+    position: absolute;
+    bottom: 184px;
+    z-index: 2;
+  }
+  .inputWrap {
+    display: flex;
+    flex-direction: column;
+    width: 230px;
+    margin: 30px 10px 10px 10px;
+  }
+  span {
+    margin: 10px;
+  }
+  input {
+    background-color: #a3a3a3;
+    border: none;
+    border-radius: 50px;
+    width: 230px;
+    height: 40px;
+    outline: none;
+    text-indent: 10px;
+  }
+  .btnWrap {
+    width: 190px;
+    height: 30px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  button {
+    border: none;
+    border-radius: 50px;
+    width: 90px;
+  }
+`;
+
 const MyPageWrap = styled.div`
   width: 100%;
   height: 225px;
@@ -353,6 +457,7 @@ const DefaultImgBtn = styled.button`
   background-color: #d0d0d0;
   color: #242424;
   font-weight: 700;
+  font-size: 12px;
   cursor: pointer;
 `;
 
