@@ -153,11 +153,11 @@ const User = (props) => {
   const sortLoginType = () => {
     if (loginType !== 'Local') {
       deleteAccount();
-      alert('회원탈퇴가 완료되었습니다.');
       setIsToken(false);
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('nickname');
+      alert('회원탈퇴가 완료되었습니다.');
       navigate('/');
     } else {
       setIsShow(true);
@@ -174,6 +174,10 @@ const User = (props) => {
       });
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      localStorage.removeItem('nickname');
+      setIsToken(false);
+      alert('회원탈퇴가 완료되었습니다.');
+      navigate('/');
     } catch (e) {
       console.log(e);
     }
