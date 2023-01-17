@@ -48,7 +48,7 @@ const Header = (props) => {
     <Wrap>
       <HeaderWrapper>
         {/* 이미지로 교체 예정 */}
-        <LogoBox to='/'>Logo</LogoBox>
+        <LogoBox to='/' />
         <CategoryBox>
           <StyledLink to='/'>ABOUT</StyledLink>
           <StyledLink to='/search'>검색하기</StyledLink>
@@ -62,7 +62,9 @@ const Header = (props) => {
           </SignBox>
         ) : (
           <SignBox>
-            <MypageBtn to='/mypage' props={userImage} />
+            <BackgroundMypageBtn to='/mypage'>
+              <MypageBtn props={userImage} />
+            </BackgroundMypageBtn>
             <LogoutBtn onClick={logoutHandler}>로그아웃</LogoutBtn>
           </SignBox>
         )}
@@ -78,20 +80,23 @@ const Wrap = styled.div`
 
 const HeaderWrapper = styled.div`
   background-color: white;
-  width: 100%;
+  width: 1380px;
+  margin: 0 auto;
   height: 80px;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  position: relative;
+  /* flex-direction: row;
+  
+  justify-content: center;
   position: fixed;
   border-bottom: 1px solid #d0d0d0;
-  z-index: 9999;
+  z-index: 9999; */
 `;
 
 const LogoBox = styled(Link)`
-  width: 20%;
-  height: 100%;
+  width: 198px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,17 +104,21 @@ const LogoBox = styled(Link)`
   color: black;
   font-size: 40px;
   font-weight: 700;
+  background-image: url('/assets/image/Logo.png');
+  background-size: cover;
+  background-position: center;
+  margin-right: 292.5px;
 `;
 
 const CategoryBox = styled.div`
-  width: 55%;
+  /* width: 55%; */
   height: 100%;
   display: flex;
   justify-content: center;
-  gap: 70px;
+  gap: 50px;
   align-items: center;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 700;
 `;
 
 const StyledLink = styled(Link)`
@@ -118,16 +127,18 @@ const StyledLink = styled(Link)`
 `;
 
 const SignBox = styled.div`
-  width: 25%;
+  /* width: 25%; */
   height: 100%;
   display: flex;
-  justify-content: center;
-  gap: 30px;
+  /* justify-content: right; */
+  gap: 18px;
   align-items: center;
+  position: absolute;
+  right: 0;
 `;
 
 const LoginBtn = styled(Link)`
-  background-color: #13bd7e;
+  background-color: #3366ff;
   width: 100px;
   height: 39px;
   display: flex;
@@ -136,14 +147,14 @@ const LoginBtn = styled(Link)`
   text-decoration: none;
   font-size: 16px;
   font-weight: 900;
-  color: white;
+  color: white !important;
   border: none;
   border-radius: 8px;
   cursor: pointer;
 `;
 
 const SignupBtn = styled(Link)`
-  background-color: #e4ffea;
+  background-color: #ebf0ff;
   width: 100px;
   height: 39px;
   display: flex;
@@ -152,26 +163,35 @@ const SignupBtn = styled(Link)`
   text-decoration: none;
   font-size: 16px;
   font-weight: 900;
-  color: #13bd7e;
+  color: #3366ff !important;
   border: none;
   border-radius: 8px;
   cursor: pointer;
 `;
+const BackgroundMypageBtn = styled(Link)`
+  width: 50px;
+  height: 50px;
+  background-color: #f6f7fa;
+  border-radius: 50%;
+  /* z-index: 1; */
+`;
 
-const MypageBtn = styled(Link)`
+const MypageBtn = styled.div`
   background-color: pink;
   background-image: ${({ props }) => `url(${props})`};
   background-size: cover;
   background-position: center;
-  width: 50px;
-  height: 50px;
+  margin: 4.5px 4.5px;
+  width: 41px;
+  height: 41px;
   border: none;
   border-radius: 50%;
   cursor: pointer;
+  /* z-index: 2; */
 `;
 
 const LogoutBtn = styled.button`
-  background-color: #13bd7e;
+  background-color: #3366ff;
   width: 100px;
   height: 39px;
   display: flex;
@@ -179,7 +199,7 @@ const LogoutBtn = styled.button`
   align-items: center;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 700;
   color: white;
   border: none;
   border-radius: 8px;

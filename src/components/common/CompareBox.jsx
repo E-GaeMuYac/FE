@@ -138,8 +138,10 @@ const CompareBox = () => {
             />
           ))}
         </BoxContent>
-        <div className='toggleBtnWrap' onClick={boxToggle}>
-          <div className='toggleBtnImg'></div>
+        <div className='back'>
+          <div className='toggleBtnWrap' onClick={boxToggle}>
+            <div className='toggleBtnImg'></div>
+          </div>
         </div>
       </div>
     </Wrap>
@@ -149,7 +151,7 @@ const CompareBox = () => {
 const Wrap = styled.div`
   position: fixed;
   left: 0;
-  bottom: ${({ isOpen }) => (isOpen ? 0 : '-240px')};
+  bottom: ${({ isOpen }) => (isOpen ? 0 : '-222px')};
   transition: bottom 0.3s;
   width: 100%;
   z-index: 1000;
@@ -165,20 +167,36 @@ const Wrap = styled.div`
   .boxComment {
     margin-right: 14px;
   }
-  .toggleBtnWrap {
+  .back {
     position: absolute;
     left: 50%;
     top: -20px;
     transform: translateX(-50%);
     width: 68px;
+    height: 20px;
+    background-color: #ffffff;
+    box-shadow: 0px -10px 30px 1px rgba(0, 0, 0, 0.094);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+  }
+  .toggleBtnWrap {
+    position: absolute;
+    left: 50%;
+    top: 5px;
+    transform: translateX(-50%);
+    width: 68px;
     height: 40px;
     background-color: #ffffff;
     border-radius: 10px;
-    box-shadow: 0 -10px 30px 1px rgba(0, 0, 0, 0.094);
+    /* box-shadow: 0 -10px 30px 1px rgba(0, 0, 0, 0.094); */
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 3;
   }
   .toggleBtnImg {
     width: 32px;
@@ -189,6 +207,7 @@ const Wrap = styled.div`
     background-size: cover;
     background-position: center;
     transition: transform 0.3s;
+    margin-bottom: 10px;
   }
 `;
 const BoxTop = styled.div`
@@ -197,6 +216,7 @@ const BoxTop = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 2;
   .boxCommentWrap {
     font-size: 20px;
     line-height: 28px;
@@ -235,7 +255,7 @@ const BoxTop = styled.div`
   }
 `;
 const BoxContent = styled.div`
-  height: 240px;
+  height: 222px;
   width: 100%;
   display: flex;
   gap: 50px;
