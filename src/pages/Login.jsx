@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { api } from '../apis/apiInstance';
+import { api, userApi } from '../apis/apiInstance';
 import { useCookies } from 'react-cookie';
 
 const Login = (props) => {
   const setIsToken = props.setistoken;
+  const setUserImage = props.setuserimage;
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(['rememberEmail']);
 
@@ -58,11 +59,36 @@ const Login = (props) => {
       localStorage.setItem('refreshToken', refreshtoken);
       alert(res.data.msg);
       setIsToken(true);
+      GetProfile();
       navigate('/');
     } catch (e) {
       console.log(e);
       alert('로그인에 실패하였습니다.');
     }
+  };
+
+  const GetProfile = async () => {
+    try {
+      const res = await userApi.get('api/users/find');
+      setUserImage(res.data.user.imageUrl);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const kakaoHandler = () => {
+    window.location.href =
+      process.env.REACT_APP_API_ENDPOINT + '/api/users/login/kakao';
+  };
+
+  const naverHandler = () => {
+    window.location.href =
+      process.env.REACT_APP_API_ENDPOINT + '/api/users/login/naver';
+  };
+
+  const googleHandler = () => {
+    window.location.href =
+      process.env.REACT_APP_API_ENDPOINT + '/api/users/login/google';
   };
 
   return (
@@ -99,15 +125,15 @@ const Login = (props) => {
               <FindAccount>아이디 / 비밀번호 찾기</FindAccount>
             </ManageAccount>
             <SocialLogin>
-              <KakaoBtn>
+              <KakaoBtn type='button' onClick={kakaoHandler}>
                 <div />
                 카카오로 로그인
               </KakaoBtn>
-              <NaverBtn>
+              <NaverBtn type='button' onClick={naverHandler}>
                 <div />
                 네이버로 로그인
               </NaverBtn>
-              <GoogleBtn>
+              <GoogleBtn type='button' onClick={googleHandler}>
                 <div />
                 Google로 로그인
               </GoogleBtn>
