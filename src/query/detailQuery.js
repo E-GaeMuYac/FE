@@ -24,18 +24,18 @@ export const useGetDetailQuery = (medicineId) => {
     // 자동 리랜더링 삭제
     // refetchOnWindowFocus: false,
   });
-  if (isFetching) {
-    console.log('fetching...');
-  }
-  if (isLoading) {
-    console.log('loading...');
-  }
-  if (isError) {
-    console.log('error', error);
-  }
-  if (isSuccess) {
-    console.log('success', data);
-  }
+  // if (isFetching) {
+  //   console.log('fetching...');
+  // }
+  // if (isLoading) {
+  //   console.log('loading...');
+  // }
+  // if (isError) {
+  //   console.log('error', error);
+  // }
+  // if (isSuccess) {
+  //   console.log('success', data);
+  // }
 
   return data;
 };

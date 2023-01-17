@@ -22,7 +22,6 @@ const ProductList = ({ list }) => {
       }
     }
   };
-
   return (
     <SearchListWrap key={list.medicineId} image={list.itemImage}>
       <li
@@ -41,7 +40,7 @@ const ProductList = ({ list }) => {
         <div className='listTag'>{list.productType}</div>
       </li>
       <div className='btnWrap'>
-        <LikeItBtn id={list.medicineId} />
+        <LikeItBtn id={list.medicineId} dibs={list.dibs} />
         {list.medicineId === compareBoxArr[0].medicineId ||
         list.medicineId === compareBoxArr[1].medicineId ? (
           <div className='btnInBox'>비교함 담기</div>

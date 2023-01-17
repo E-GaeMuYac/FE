@@ -45,10 +45,6 @@ const VersusContent = ({ medicineInfo, query }) => {
   return <div className='versusContentWrap'>{versusContentDesc}</div>;
 };
 
-const MaterialExplain = () => {
-  return;
-};
-
 const VersusCard = ({ info }) => {
   const navigate = useNavigate();
   const gotoDetail = (id) => {
@@ -65,7 +61,7 @@ const VersusCard = ({ info }) => {
       </div>
       <div className='cardContentTag'>{info.productType}</div>
       <div className='cardBtnWrap'>
-        <LikeItBtn id={info.medicineId} />
+        <LikeItBtn id={info.medicineId} dibs={info.dibs} />
         <button
           className='goToDetailBtn'
           onClick={() => {
@@ -112,7 +108,8 @@ const ComparePage = () => {
   let graphData = [];
   const [grapDataArr, setGrapDataArr] = useState([]);
 
-  const [materialExplainActive, setMaterialExplainActive] = useState(false);
+  const [materialAExplainActive, setMaterialAExplainActive] = useState(false);
+  const [materialBExplainActive, setMaterialBExplainActive] = useState(false);
   const [materialExplainY, setMaterialExplainY] = useState(0);
   const [materialExplainName, setMaterialExplainName] = useState('');
   const [materialExplainDesc, setMaterialExplainDesc] = useState('');
@@ -305,7 +302,7 @@ const ComparePage = () => {
       });
 
       legend.itemContainers.template.events.on('pointerover', (e) => {
-        setMaterialExplainActive(true);
+        setMaterialAExplainActive(true);
         setMaterialExplainName(
           e.target.dataItem.dataContext.dataContext.material
         );
@@ -314,7 +311,7 @@ const ComparePage = () => {
         //e.target._privateSettings.y 축 좌표
       });
       legend.itemContainers.template.events.on('pointerout', (e) => {
-        setMaterialExplainActive(false);
+        setMaterialAExplainActive(false);
       });
 
       //마커 동그랗게 변경
@@ -352,7 +349,7 @@ const ComparePage = () => {
         oversizedBehavior: 'truncate',
       });
       legend2.itemContainers.template.events.on('pointerover', (e) => {
-        setMaterialExplainActive(true);
+        setMaterialBExplainActive(true);
         setMaterialExplainName(
           e.target.dataItem.dataContext.dataContext.material
         );
@@ -361,7 +358,7 @@ const ComparePage = () => {
         //e.target._privateSettings.y 축 좌표
       });
       legend2.itemContainers.template.events.on('pointerout', (e) => {
-        setMaterialExplainActive(false);
+        setMaterialBExplainActive(false);
       });
       //마커 크기 변경
       legend.markers.template.setAll({
@@ -471,7 +468,7 @@ const ComparePage = () => {
                       <div className='legendBox'>
                         <MatrialExplainWrap
                           BoxY={materialExplainY}
-                          Active={materialExplainActive}>
+                          Active={materialAExplainActive}>
                           <div className='title'>{materialExplainName}</div>
                           <div className='desc'>{materialExplainDesc}</div>
                         </MatrialExplainWrap>
@@ -511,7 +508,7 @@ const ComparePage = () => {
                       <div className='legendBox'>
                         <MatrialExplainWrap
                           BoxY={materialExplainY}
-                          Active={materialExplainActive}>
+                          Active={materialBExplainActive}>
                           <div className='title'>{materialExplainName}</div>
                           <div className='desc'>{materialExplainDesc}</div>
                         </MatrialExplainWrap>
@@ -862,13 +859,13 @@ const NothingInBoxWrap = styled.div`
 `;
 const MatrialExplainWrap = styled.div`
   display: ${({ Active }) => (Active ? 'block' : 'none')};
-  width: 230px;
+  width: 280px;
   background-color: rgba(0, 0, 0, 0.54);
   padding: 10px;
   border-radius: 24px;
   line-height: 34px;
   position: absolute;
-  left: 40px;
+  left: 0px;
   z-index: 1;
   color: white;
   top: ${({ BoxY }) => `${BoxY - 15}px`};
