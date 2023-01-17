@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import qs from 'qs';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useLayoutEffect, useState } from 'react';
 
 //component
@@ -45,7 +45,15 @@ const VersusContent = ({ medicineInfo, query }) => {
   return <div className='versusContentWrap'>{versusContentDesc}</div>;
 };
 
+const MaterialExplain = () => {
+  return;
+};
+
 const VersusCard = ({ info }) => {
+  const navigate = useNavigate();
+  const gotoDetail = (id) => {
+    navigate(`/detail/${id}?tab=효능 효과`);
+  };
   return (
     <VersusCardWrap image={info.itemImage}>
       <div className='cardImg'></div>
@@ -58,7 +66,13 @@ const VersusCard = ({ info }) => {
       <div className='cardContentTag'>{info.productType}</div>
       <div className='cardBtnWrap'>
         <LikeItBtn id={info.medicineId} />
-        <button className='goToDetailBtn'>이 약품만 보러가기</button>
+        <button
+          className='goToDetailBtn'
+          onClick={() => {
+            gotoDetail(info.medicineId);
+          }}>
+          이 약품만 보러가기
+        </button>
       </div>
     </VersusCardWrap>
   );
@@ -96,6 +110,12 @@ const ComparePage = () => {
   // 그래프
 
   let graphData = [];
+  const [grapDataArr, setGrapDataArr] = useState([]);
+
+  const [materialExplainActive, setMaterialExplainActive] = useState(false);
+  const [materialExplainY, setMaterialExplainY] = useState(0);
+  const [materialExplainName, setMaterialExplainName] = useState('');
+  const [materialExplainDesc, setMaterialExplainDesc] = useState('');
 
   //그래프에 들어갈 배열 생성
   useLayoutEffect(() => {
@@ -106,6 +126,7 @@ const ComparePage = () => {
       for (let i = 0; i < versusList[0].materialName.length; i++) {
         const newMedicineData = {
           material: versusList[0].materialName[i].material,
+          explain: versusList[0].materialName[i].설명,
         };
         graphData.push(newMedicineData);
       }
@@ -113,6 +134,7 @@ const ComparePage = () => {
       for (let i = 0; i < versusList[1].materialName.length; i++) {
         const newMedicineData = {
           material: versusList[1].materialName[i].material,
+          explain: versusList[1].materialName[i].설명,
         };
         graphData.push(newMedicineData);
       }
@@ -148,6 +170,7 @@ const ComparePage = () => {
           }
         }
       }
+      setGrapDataArr(graphData);
     }
   }, [versusList, query]);
 
@@ -281,6 +304,19 @@ const ComparePage = () => {
         oversizedBehavior: 'truncate',
       });
 
+      legend.itemContainers.template.events.on('pointerover', (e) => {
+        setMaterialExplainActive(true);
+        setMaterialExplainName(
+          e.target.dataItem.dataContext.dataContext.material
+        );
+        setMaterialExplainY(e.target._privateSettings.y);
+        //e.target.dataItem.dataContext.dataContext.material = 성분 이름 추출
+        //e.target._privateSettings.y 축 좌표
+      });
+      legend.itemContainers.template.events.on('pointerout', (e) => {
+        setMaterialExplainActive(false);
+      });
+
       //마커 동그랗게 변경
       legend.markerRectangles.template.setAll({
         cornerRadiusTL: 10,
@@ -290,9 +326,6 @@ const ComparePage = () => {
       });
 
       // 범례 이벤트 생성
-      legend.events.on('pointerover', (e) => {
-        console.log(e);
-      });
 
       // 시리즈 데이터 집어넣기
       legend.data.setAll(series.dataItems);
@@ -318,6 +351,18 @@ const ComparePage = () => {
         // truncate : 말줄임, none: 겹침, wrap: 줄바꿈, fit: 딱맞게 폰트사이즈 조절
         oversizedBehavior: 'truncate',
       });
+      legend2.itemContainers.template.events.on('pointerover', (e) => {
+        setMaterialExplainActive(true);
+        setMaterialExplainName(
+          e.target.dataItem.dataContext.dataContext.material
+        );
+        setMaterialExplainY(e.target._privateSettings.y);
+        //e.target.dataItem.dataContext.dataContext.material = 성분 이름 추출
+        //e.target._privateSettings.y 축 좌표
+      });
+      legend2.itemContainers.template.events.on('pointerout', (e) => {
+        setMaterialExplainActive(false);
+      });
       //마커 크기 변경
       legend.markers.template.setAll({
         width: 30,
@@ -331,11 +376,6 @@ const ComparePage = () => {
         cornerRadiusTR: 30,
         cornerRadiusBL: 30,
         cornerRadiusBR: 30,
-      });
-
-      // 범례 이벤트 생성
-      legend2.events.on('pointerover', (e) => {
-        console.log(e);
       });
 
       //마커 크기 변경
@@ -367,6 +407,21 @@ const ComparePage = () => {
       };
     }
   }, [versusList, query]);
+
+  //성분 설명 작업
+  useEffect(() => {
+    if (versusList.length === 2 && query === '성분그래프') {
+      for (let i = 0; i < grapDataArr.length; i++) {
+        if (materialExplainName === grapDataArr[i].material) {
+          if (grapDataArr[i].explain) {
+            setMaterialExplainDesc(grapDataArr[i].explain);
+          } else if (!grapDataArr[i].explain) {
+            setMaterialExplainDesc('정보가 없습니다');
+          }
+        }
+      }
+    }
+  }, [materialExplainName, versusList, query]);
 
   //   --------------------------------------------------------------
 
@@ -414,6 +469,12 @@ const ComparePage = () => {
                     <div className='legendWrap'>
                       <div className='legendTitle'>유효성분 함량</div>
                       <div className='legendBox'>
+                        <MatrialExplainWrap
+                          BoxY={materialExplainY}
+                          Active={materialExplainActive}>
+                          <div className='title'>{materialExplainName}</div>
+                          <div className='desc'>{materialExplainDesc}</div>
+                        </MatrialExplainWrap>
                         <div id='legenddiv'></div>
                       </div>
                     </div>
@@ -448,6 +509,12 @@ const ComparePage = () => {
                     <div className='legendWrap'>
                       <div className='legendTitle'>유효성분 함량</div>
                       <div className='legendBox'>
+                        <MatrialExplainWrap
+                          BoxY={materialExplainY}
+                          Active={materialExplainActive}>
+                          <div className='title'>{materialExplainName}</div>
+                          <div className='desc'>{materialExplainDesc}</div>
+                        </MatrialExplainWrap>
                         <div id='legenddiv2'></div>
                       </div>
                     </div>
@@ -667,6 +734,7 @@ const SubWrap = styled.div`
     width: 300px;
     height: 400px;
     overflow-y: scroll;
+    position: relative;
   }
   .legendBox::-webkit-scrollbar {
     width: 18px;
@@ -790,6 +858,28 @@ const NothingInBoxWrap = styled.div`
     background-image: url('/assets/image/explainCompare2.png');
     background-size: cover;
     background-position: center;
+  }
+`;
+const MatrialExplainWrap = styled.div`
+  display: ${({ Active }) => (Active ? 'block' : 'none')};
+  width: 230px;
+  background-color: rgba(0, 0, 0, 0.54);
+  padding: 10px;
+  border-radius: 24px;
+  line-height: 34px;
+  position: absolute;
+  left: 40px;
+  z-index: 1;
+  color: white;
+  top: ${({ BoxY }) => `${BoxY - 15}px`};
+  text-align: center;
+  backdrop-filter: blur(5px);
+  .title {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+  .desc {
+    font-size: 15px;
   }
 `;
 
