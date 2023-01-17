@@ -14,6 +14,8 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 
 // 컴포넌트
 import TabBar from '../components/common/Tabbar';
+import LikeItBtn from '../components/common/LikeItBtn';
+import { LikeItBtnWrap } from '../components/common/LikeItBtn';
 
 const BottomContents = ({ medicineInfo, query }) => {
   const [ContentDesc, setContentDesc] = useState('');
@@ -36,7 +38,7 @@ const BottomContents = ({ medicineInfo, query }) => {
     }
   }, [query]);
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       {query === '효능 효과' ? (
         <ScrollBar>
           <div className='scroll-area'>{medicineInfo.eeDocData}</div>
@@ -255,7 +257,8 @@ const Detail = () => {
             </div>
             <div className='boxWrap'>
               <Picked>
-                <div className='pickedImg'></div>
+                {/* <div className='pickedImg'></div> */}
+                <LikeItBtn />
               </Picked>
               {medicineItem?.medicineId === compareBoxArr[0].medicineId ||
               medicineItem?.medicineId === compareBoxArr[1].medicineId ? (
@@ -318,7 +321,7 @@ const Detail = () => {
           </RightCardBox>
         </div>
       </TopSection>
-      <div style={{ marginBottom: '128px' }}>
+      <div style={{ marginBottom: '170px' }}>
         <TabBar location={location} query={query} />
         <BottomSection>
           <BottomContents medicineInfo={medicineItem} query={query} />
@@ -580,15 +583,13 @@ const Picked = styled.div`
   align-items: center;
   justify-content: center;
   margin-right: 24px;
-  border-radius: 8px;
-  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
-  .pickedImg {
-    width: 34px;
-    height: 34px;
-    background-image: url('/assets/image/icon_heart1.png');
-    background-size: cover;
-    background-position: center;
-    cursor: pointer;
+  div {
+    width: 48px;
+    height: 48px;
+    .btnLikeImg {
+      width: 28.5px;
+      height: 25.33px;
+    }
   }
 `;
 
@@ -602,6 +603,7 @@ const GraphLabel = styled.div`
 `;
 
 const ScrollBar = styled.div`
+  width: 100%;
   white-space: pre-wrap;
   font-size: 20px;
   line-height: 33px;
