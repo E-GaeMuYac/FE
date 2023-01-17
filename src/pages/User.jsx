@@ -150,23 +150,21 @@ const User = (props) => {
     setPrevImg(imageUrl);
   };
 
-  const sortLoginType = () => {
-    if (loginType !== 'Local') {
-      deleteAccount();
-      setIsToken(false);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('nickname');
-      alert('회원탈퇴가 완료되었습니다.');
-      navigate('/');
-    } else {
-      setIsShow(true);
+  const sortLoginType = async () => {
+    try {
+      if (loginType !== 'Local') {
+        await deleteAccount();
+      } else {
+        setIsShow(true);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const deleteAccount = async (password) => {
     try {
-      await userApi.delete('/api/users/delete', {
+      const res = await userApi.delete('/api/users/delete', {
         data: {
           password,
         },
