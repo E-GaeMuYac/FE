@@ -152,6 +152,7 @@ const Wrap = styled.div`
   bottom: ${({ isOpen }) => (isOpen ? 0 : '-240px')};
   transition: bottom 0.3s;
   width: 100%;
+  z-index: 1000;
   background-color: white;
   box-shadow: 0 0 24px 1px rgba(0, 0, 0, 0.2);
   .wrap {
