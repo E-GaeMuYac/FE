@@ -59,7 +59,14 @@ const VersusCard = ({ info }) => {
         <hr />
         <div className='cardContentDesc'>{info.etcOtcCode}</div>
       </div>
-      <div className='cardContentTag'>{info.productType}</div>
+      <div className='cardContentTagWrap'>
+        {info.productType.map((tag) => (
+          <div key={tag} className='cardContentTag'>
+            {tag}
+          </div>
+        ))}
+      </div>
+
       <div className='cardBtnWrap'>
         <LikeItBtn id={info.medicineId} dibs={info.dibs} />
         <button
@@ -462,11 +469,15 @@ const ComparePage = () => {
                   <div className='graphNameWrap'>
                     <div className='graphNameBox'>
                       <div className='graphName' style={{ float: 'right' }}>
-                        {versusList[0].itemName}
+                        <div>성분명 : {versusList[0].itemName}</div>
+                        <div>총량 : {versusList[0].totalAmount}</div>
                       </div>
                     </div>
                     <div className='graphNameBox'>
-                      <div className='graphName'>{versusList[1].itemName}</div>
+                      <div className='graphName'>
+                        <div>성분명 : {versusList[1].itemName}</div>
+                        <div>총량 : {versusList[1].totalAmount}</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -644,6 +655,12 @@ const VersusCardWrap = styled.div`
     border: none;
     background-color: #888888;
     margin: 0 8px;
+  }
+  .cardContentTagWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
   }
   .cardContentTag {
     padding: 5px 7px;

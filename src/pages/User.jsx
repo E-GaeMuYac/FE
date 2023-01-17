@@ -288,7 +288,7 @@ const User = (props) => {
       <LikeList>
         {/* 임시 */}
         {likeList.map((list) => (
-          <ProductList key={list.medicineId} list={list} />
+          <ProductList key={list.medicineId} list={{ ...list, dibs: true }} />
         ))}
       </LikeList>
     </Wrapper>
