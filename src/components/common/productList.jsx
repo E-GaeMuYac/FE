@@ -37,7 +37,13 @@ const ProductList = ({ list }) => {
           <hr />
           <div className='listSubText'>{list.entpName}</div>
         </div>
-        <div className='listTag'>{list.productType}</div>
+        <div className='listTagWrap'>
+          {list.productType.map((tag) => (
+            <div key={tag} className='listTag'>
+              {tag}
+            </div>
+          ))}
+        </div>
       </li>
       <div className='btnWrap'>
         <LikeItBtn id={list.medicineId} dibs={list.dibs} />
@@ -118,19 +124,25 @@ const SearchListWrap = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .listTagWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 35px;
+  }
   .listTag {
     max-width: 256px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 10px;
+    padding: 8px;
     border-radius: 5px;
     background-color: #ebf0ff;
     color: #3366ff;
     font-size: 14px;
     font-weight: bold;
     line-height: 15px;
-    margin-bottom: 18px;
   }
   .btnWrap {
     position: absolute;
