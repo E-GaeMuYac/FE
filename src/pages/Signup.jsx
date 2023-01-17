@@ -742,10 +742,11 @@ const Signup = () => {
 const BackGround = styled.div`
   /* min-height: 95vh; */
   padding: 60px 0;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ebebeb;
+  background-color: #ebf0ff;
 `;
 
 const Wrapper = styled.div`
@@ -756,6 +757,7 @@ const Wrapper = styled.div`
   justify-content: center;
   background-color: white;
   border-radius: 40px;
+  box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.15);
 `;
 
 const SignupWrapper = styled.div`
@@ -766,12 +768,13 @@ const SignupWrapper = styled.div`
   align-items: flex-end;
   input {
     border-bottom: 1px solid #919191;
-    :active {
+    :focus {
       outline: none;
       box-shadow: none;
-      border-color: #919191;
+      border-bottom: 1px solid #919191;
     }
   }
+
   .successs {
     input {
       margin-top: 10px;
@@ -906,7 +909,7 @@ const NavBackBtn = styled(Link)`
   background-color: #e7e7e7;
   cursor: pointer;
   text-decoration: none;
-  color: black;
+  color: black !important;
   justify-content: center;
   align-items: center;
   display: flex;
