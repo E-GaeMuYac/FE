@@ -97,7 +97,7 @@ const Login = (props) => {
       <BackGround>
         <Wrapper>
           <LoginWrapper>
-            <LogoWrapper>LOGO 서비스 네임</LogoWrapper>
+            <LogoWrapper />
             <FormWrapper>
               <Input
                 type='email'
@@ -122,7 +122,7 @@ const Login = (props) => {
               </SaveId>
             </FormWrapper>
             <ManageAccount>
-              <SignUp>회원가입</SignUp>
+              <SignUp to='/signup'>회원가입</SignUp>
               <FindAccount>아이디 / 비밀번호 찾기</FindAccount>
             </ManageAccount>
             <SocialLogin>
@@ -151,7 +151,7 @@ const BackGround = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ebebeb;
+  background-color: #ebf0ff;
 `;
 const Wrapper = styled.div`
   width: 800px;
@@ -166,22 +166,17 @@ const Wrapper = styled.div`
 
 const LoginWrapper = styled.div`
   width: 480px;
-  height: 700px;
+  height: 680px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 const LogoWrapper = styled.div`
-  width: 413px;
-  height: 95px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #d9d9d9;
-  font-size: 35px;
-  font-weight: 700;
+  background-image: url('/assets/image/pillnutsLogo.png');
+  background-size: cover;
+  width: 343px;
+  height: 70px;
 `;
 
 const FormWrapper = styled.form`
@@ -202,7 +197,7 @@ const Input = styled.input`
   color: transparent;
   ::placeholder {
     color: #919191;
-    font-size: 20px;
+    font-size: 18px;
   }
   &:focus {
     outline: none;
@@ -213,7 +208,7 @@ const SubmitBtn = styled.button`
   width: 100%;
   height: 70px;
   margin-top: 30px;
-  background-color: #13bd7e;
+  background-color: #3366ff;
   color: white;
   font-size: 24px;
   font-weight: 600;
@@ -287,6 +282,7 @@ const KakaoBtn = styled.button`
   border: none;
   border-radius: 50px;
   background-color: #fee500;
+  color: #242424;
   cursor: pointer;
 
   div {
@@ -310,6 +306,7 @@ const NaverBtn = styled.button`
   border: none;
   border-radius: 50px;
   background-color: #03c75a;
+  color: #242424;
   cursor: pointer;
 
   div {
@@ -333,6 +330,7 @@ const GoogleBtn = styled.button`
   border: none;
   border-radius: 50px;
   background-color: #4285f4;
+  color: #242424;
   cursor: pointer;
 
   div {
