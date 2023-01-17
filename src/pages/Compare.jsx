@@ -79,12 +79,21 @@ const ComparePage = () => {
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
   }).tab;
+  const navigate = useNavigate();
+
   const [versusList, setVersusList] = useState([]);
 
   const compareBoxArr = useRecoilValue(compareBoxData);
 
   const comparePillIdA = compareBoxArr[0].medicineId;
   const comparePillIdB = compareBoxArr[1].medicineId;
+
+  useEffect(() => {
+    if (!localStorage.getItem('refreshToken')) {
+      alert('로그인 시 이용 가능합니다.');
+      navigate('/');
+    }
+  }, []);
 
   const { refetch, isLoading, data } = useGetVersusQuery(
     comparePillIdA,
