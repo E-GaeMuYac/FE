@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { api } from '../apis/apiInstance';
+import { api, userApi } from '../apis/apiInstance';
 import { useCookies } from 'react-cookie';
 
 const Login = (props) => {
   const setIsToken = props.setistoken;
+  const setUserImage = props.setuserimage;
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(['rememberEmail']);
 
@@ -58,6 +59,7 @@ const Login = (props) => {
       localStorage.setItem('refreshToken', refreshtoken);
       alert(res.data.msg);
       setIsToken(true);
+      GetProfile();
       navigate('/');
     } catch (e) {
       console.log(e);
@@ -65,22 +67,28 @@ const Login = (props) => {
     }
   };
 
+  const GetProfile = async () => {
+    try {
+      const res = await userApi.get('api/users/find');
+      setUserImage(res.data.user.imageUrl);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const kakaoHandler = () => {
-    const redirectUri = process.env.REACT_APP_REDIRECT_URI;
-    const clientId = process.env.REACT_APP_CLIENT_ID;
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
+    window.location.href =
+      process.env.REACT_APP_API_ENDPOINT + '/api/users/login/kakao';
   };
 
   const naverHandler = () => {
-    const redirectUri_n = process.env.REACT_APP_N_REDIRECT_URI;
-    const clientId_n = process.env.REACT_APP_N_CLIENT_ID;
-    window.location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId_n}&state=test&redirect_uri=${redirectUri_n}`;
+    window.location.href =
+      process.env.REACT_APP_API_ENDPOINT + '/api/users/login/naver';
   };
 
   const googleHandler = () => {
-    const redirectUri_g = process.env.REACT_APP_G_REDIRECT_URI;
-    const clientId_g = process.env.REACT_APP_G_CLIENT_ID;
-    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?response_type=token&redirect_uri=${redirectUri_g}&client_id=${clientId_g}&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
+    window.location.href =
+      process.env.REACT_APP_API_ENDPOINT + '/api/users/login/google';
   };
 
   return (

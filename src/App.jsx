@@ -8,6 +8,7 @@ import Search from './pages/Search';
 import Detail from './pages/Detail';
 import User from './pages/User';
 import Signup from './pages/Signup';
+import SocialLogin from './pages/SocialLogin';
 import Main from './pages/main/Main';
 
 // 컴포넌트
@@ -15,9 +16,6 @@ import Layout from './components/layout/Layout';
 import Header from './components/layout/Header';
 import CompareBox from './components/common/CompareBox';
 // import Spinner from './components/common/Spinner';
-import KakaoRedirect from './components/socialLogin/KakaoRedirect';
-import NaverRedirect from './components/socialLogin/NaverRedirect';
-import GoogleRedirect from './components/socialLogin/GoogleRedirect';
 
 function App() {
   const [isToken, setIsToken] = useState('');
@@ -32,6 +30,13 @@ function App() {
         setuserimage={setUserImage}
       />
       <Routes>
+        <Route
+          exact
+          path='/login/loading'
+          element={
+            <SocialLogin setistoken={setIsToken} setuserimage={setUserImage} />
+          }
+        />
         <Route
           exact
           path='/search'
@@ -60,6 +65,16 @@ function App() {
         <Route exact path='/signup' element={<Signup />} />
         <Route exact path='/' element={<Main />} />
         <Route
+          exact
+          path='/compare'
+          element={
+            <Layout>
+              <ComparePage />
+              <CompareBox />
+            </Layout>
+          }
+        />
+        <Route
           path='/detail/:id'
           element={
             <Layout>
@@ -82,9 +97,6 @@ function App() {
           }
         />
         {/* <Route path='/spinner' element={<Spinner />} /> */}
-        <Route exact path='/kakaologin' element={<KakaoRedirect />} />
-        <Route exact path='/naverlogin' element={<NaverRedirect />} />
-        <Route exact path='/googlelogin' element={<GoogleRedirect />} />
       </Routes>
     </BrowserRouter>
   );
