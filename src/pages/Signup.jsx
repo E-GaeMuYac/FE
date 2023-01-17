@@ -89,18 +89,18 @@ const Signup = () => {
         refetchOnWindowFocus: false,
       }
     );
-    if (isFetching) {
-      console.log('fetching...');
-    }
-    if (isLoading) {
-      console.log('loading...');
-    }
-    if (isError) {
-      console.log('error', error);
-    }
-    if (isSuccess) {
-      console.log('success', data);
-    }
+    // if (isFetching) {
+    //   console.log('fetching...');
+    // }
+    // if (isLoading) {
+    //   console.log('loading...');
+    // }
+    // if (isError) {
+    //   console.log('error', error);
+    // }
+    // if (isSuccess) {
+    //   console.log('success', data);
+    // }
     return data;
   };
 
@@ -729,10 +729,7 @@ const Signup = () => {
           </FormBox>
           <NavBtnWrapper>
             <NavBackBtn to='/'>뒤로</NavBackBtn>
-            <NavSubmitBtn
-              type='submit'
-              onClick={onSubmitHandler}
-              style={{ backgroundColor: '#3366FF', color: '#ffffff' }}>
+            <NavSubmitBtn type='submit' onClick={onSubmitHandler}>
               가입하기
             </NavSubmitBtn>
           </NavBtnWrapper>
@@ -922,5 +919,11 @@ const NavSubmitBtn = styled.button`
   border-radius: 50px;
   background-color: #e7e7e7;
   cursor: pointer;
+  background-color: #3366ff;
+  color: #ffffff;
+  :active {
+    background-color: #1d51ee;
+    color: #ffffff;
+  }
 `;
 export default Signup;

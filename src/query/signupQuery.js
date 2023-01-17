@@ -12,7 +12,7 @@ export const postSignup = async (payload) => {
       return data;
     }
   } catch (error) {
-    console.log(error.config.data);
+    // console.log(error.config.data);
     return error;
   }
 };

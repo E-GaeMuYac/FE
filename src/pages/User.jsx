@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IoMdSettings } from 'react-icons/io';
-import { FaPen } from 'react-icons/fa';
+// import { FaPen } from 'react-icons/fa';
 import { api, userApi } from '../apis/apiInstance';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -195,55 +195,59 @@ const User = (props) => {
 
   return (
     <Wrapper>
-      {isShow && (
-        <PopUp>
-          <Content>
-            <div className='triangle'></div>
-            <div className='inputWrap'>
-              <span>비밀번호 입력</span>
-              <input
-                type='password'
-                onChange={(e) => {
-                  setDelPassword(e.target.value);
-                }}
-              />
-            </div>
-            <div className='btnWrap'>
-              <button onClick={() => deleteAccount(delPassword)}>
-                회원탈퇴
-              </button>
-              <button
-                onClick={() => {
-                  setIsShow(false);
-                }}>
-                취소
-              </button>
-            </div>
-          </Content>
-        </PopUp>
-      )}
       <MyPageHeader>
         <span>마이페이지</span>
-        <button onClick={sortLoginType}>
-          <p>회원탈퇴</p>
-        </button>
+        <div className='deleteAccount'>
+          <button onClick={sortLoginType}>
+            회원탈퇴
+          </button>
+          {isShow && (
+            <PopUp>
+              <Content>
+                <div className='triangle'></div>
+                <div className='inputWrap'>
+                  <span>비밀번호 입력</span>
+                  <input
+                    type='password'
+                    onChange={(e) => {
+                      setDelPassword(e.target.value);
+                    }}
+                  />
+                </div>
+                <div className='btnWrap'>
+                  <button onClick={() => deleteAccount(delPassword)}>
+                    회원탈퇴
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsShow(false);
+                    }}>
+                    취소
+                  </button>
+                </div>
+              </Content>
+            </PopUp>
+          )}
+        </div>
       </MyPageHeader>
       <MyPageWrap>
         <ProfileImg>
-          <UserImage userImg={imageUrl} prevImg={prevImg}>
-            <label htmlFor='file-input'>
-              <IoMdSettings
-                style={{
-                  position: 'absolute',
-                  top: 4,
-                  right: 4,
-                  color: 'white',
-                }}
-                size='30'
-              />
-            </label>
-            <input id='file-input' type='file' onChange={imageInput} />
-          </UserImage>
+          <BackgroundUserImage>
+            <UserImage userImg={imageUrl} prevImg={prevImg}>
+              <label htmlFor='file-input'>
+                <IoMdSettings
+                  style={{
+                    position: 'absolute',
+                    top: 4,
+                    right: 4,
+                    color: 'white',
+                  }}
+                  size='30'
+                />
+              </label>
+              <input id='file-input' type='file' onChange={imageInput} />
+            </UserImage>
+          </BackgroundUserImage>
           {isFileClicked ? (
             <ModifyBtnBox>
               <CancelBtn type='button' onClick={cancelImgChange}>
@@ -261,12 +265,12 @@ const User = (props) => {
         </ProfileImg>
         <NicknameBox>
           {!isTextClicked ? (
-            <Nickname>
-              {nickname ? `${nickname}님` : 'OOO님'}
-              <button onClick={changeNickname}>
-                <FaPen />
-              </button>
-            </Nickname>
+            <div style={{ display: 'flex' }}>
+              <Nickname>{nickname ? `${nickname}님` : 'OOO님'}</Nickname>
+              <div className='wrapNickname'>
+                <button className='editNickname' onClick={changeNickname} />
+              </div>
+            </div>
           ) : (
             <NicknameInput>
               <input type='text' defaultValue={nickname} onChange={nickInput} />
@@ -274,13 +278,12 @@ const User = (props) => {
               <button onClick={cancelChange}>취소</button>
             </NicknameInput>
           )}
-
           <ProfileMsg>필너츠를 이용해주셔서 감사합니다.</ProfileMsg>
         </NicknameBox>
         <Box>
           <EventBox to='/event'>
             <h1>EVENT</h1>
-            <div>
+            <div style={{ fontSize: '18px' }}>
               간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
             </div>
             <div className='image' />
@@ -294,7 +297,7 @@ const User = (props) => {
           </div>
           <div className='messagePopup'>
             <h2>건강꿀팁</h2>
-            <span>{serviceMsg}</span>
+            <div>{serviceMsg}</div>
           </div>
         </Box>
       </MyPageWrap>
@@ -317,37 +320,77 @@ const Wrapper = styled.div`
 
 const MyPageHeader = styled.div`
   width: 100%;
-  height: 80px;
+  margin-bottom: 53px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   span {
-    margin-left: 20px;
     font-size: 32px;
     font-weight: 700;
   }
   button {
-    margin-right: 20px;
     width: 100px;
     height: 30px;
     border: none;
     border-radius: 50px;
     background-color: #d0d0d0;
     color: #868686;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .deleteAccount {
+    position: relative;
+    .inputWrap {
+      display: flex;
+      flex-direction: column;
+      width: 230px;
+      margin: 25px 10px 10px 10px;
+    }
+    span {
+      font-size: 18px;
+      margin: auto;
+    }
+    input {
+      background-color: #a3a3a3;
+      border: none;
+      border-radius: 50px;
+      width: 230px;
+      height: 40px;
+      outline: none;
+      text-indent: 10px;
+      margin-top: 15px;
+      margin-bottom: 3px;
+      padding: 0 10px;
+    }
+    .btnWrap {
+      width: 190px;
+      height: 30px;
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    button {
+      border: none;
+      border-radius: 50px;
+      width: 90px;
+    }
   }
 `;
 
 const PopUp = styled.div`
   position: absolute;
-  top: 220px;
-  right: 510px;
+  left: -116%;
+  top: 51px;
   z-index: 2;
+  /* top: 220px;
+  right: 510px;
+  z-index: 2; */
 `;
 
 const Content = styled.div`
   width: 300px;
-  height: 200px;
+  height: 185px;
   box-shadow: 0px 0px 6px 0px #00000040;
   background-color: #ffff;
   border-radius: 10px;
@@ -362,48 +405,24 @@ const Content = styled.div`
     box-shadow: -2px 2px rgb(178 178 178 / 0.3);
     transform: rotate(135deg);
     position: absolute;
-    bottom: 184px;
+    bottom: 169px;
     z-index: 2;
-  }
-  .inputWrap {
-    display: flex;
-    flex-direction: column;
-    width: 230px;
-    margin: 30px 10px 10px 10px;
-  }
-  span {
-    margin: 10px;
-  }
-  input {
-    background-color: #a3a3a3;
-    border: none;
-    border-radius: 50px;
-    width: 230px;
-    height: 40px;
-    outline: none;
-    text-indent: 10px;
-  }
-  .btnWrap {
-    width: 190px;
-    height: 30px;
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
-  }
-  button {
-    border: none;
-    border-radius: 50px;
-    width: 90px;
   }
 `;
 
 const MyPageWrap = styled.div`
   width: 100%;
   height: 225px;
-  margin-top: 20px;
   display: flex;
   align-items: center;
   gap: 30px;
+`;
+
+const BackgroundUserImage = styled.div`
+  width: 180px;
+  height: 180px;
+  border-radius: 150px;
+  background-color: #f6f7fa; ;
 `;
 
 const ProfileImg = styled.div`
@@ -415,8 +434,9 @@ const ProfileImg = styled.div`
 `;
 
 const UserImage = styled.div`
-  width: 170px;
-  height: 170px;
+  margin: 15px 15px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   background-image: ${(props) =>
     props.prevImg
@@ -433,8 +453,8 @@ const UserImage = styled.div`
     height: 38px;
     border-radius: 50%;
     position: absolute;
-    top: 117px;
-    left: 128px;
+    top: 110px;
+    left: 120px;
     background-color: #868686;
     cursor: pointer;
   }
@@ -473,7 +493,7 @@ const FinishBtn = styled.button`
 `;
 
 const DefaultImgBtn = styled.button`
-  width: 140px;
+  width: 150px;
   height: 34px;
   margin-top: 16px;
   border: none;
@@ -481,32 +501,50 @@ const DefaultImgBtn = styled.button`
   background-color: #d0d0d0;
   color: #242424;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 14px;
   cursor: pointer;
 `;
 
 const NicknameBox = styled.div`
-  background-color: #ebebeb;
+  background-color: #f6f7fa;
   width: 466px;
   height: 225px;
   box-sizing: border-box;
-  padding: 30px 40px;
+  padding: 37px 40px;
   border-radius: 24px;
-`;
-
-const Nickname = styled.span`
-  height: 42px;
-  font-size: 36px;
-  font-weight: 700;
-
+  .wrapNickname {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   button {
-    width: 25px;
-    height: 25px;
+    width: 38px;
+    height: 38px;
     border: none;
     border-radius: 50%;
     background-color: transparent;
     cursor: pointer;
   }
+  .editNickname {
+    width: 38px;
+    height: 38px;
+    background-image: url('/assets/image/닉네임수정아이콘.png');
+    background-size: cover;
+    background-position: center;
+  }
+`;
+
+const Nickname = styled.div`
+  height: 42px;
+  font-size: 36px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  float: left;
+  margin-right: 8px;
 `;
 
 const NicknameInput = styled.div`
@@ -539,7 +577,7 @@ const NicknameInput = styled.div`
 const ProfileMsg = styled.div`
   width: 250px;
   height: 72px;
-  margin-top: 50px;
+  margin-top: 38px;
   font-size: 24px;
   font-weight: 700;
   color: #868686;
@@ -551,22 +589,22 @@ const EventBox = styled(Link)`
   height: 225px;
   border-radius: 24px;
   text-decoration: none;
-  color: #0da27a;
+  color: #0da27a !important;
   position: absolute;
   cursor: pointer;
 
   h1 {
-    position: absolute;
-    margin: 0;
-    top: 20px;
-    left: 110px;
+    text-align: center;
+    padding-top: 20px;
+    font-size: 28px;
+    font-weight: 700;
   }
   div {
     position: absolute;
     font-size: 18px;
     font-weight: bold;
-    top: 100px;
-    left: 20px;
+    top: 105px;
+    left: 25px;
     line-height: 30px;
   }
   span {
@@ -580,8 +618,8 @@ const EventBox = styled(Link)`
     background-size: cover;
     background-position: center;
     position: absolute;
-    top: 60px;
-    left: 210px;
+    top: 70px;
+    left: 213px;
   }
 `;
 
@@ -591,7 +629,6 @@ const Box = styled.div`
   position: relative;
 
   .messageBox {
-    position: absolute;
     background-color: #d6e4ff;
     width: 324px;
     height: 225px;
@@ -603,10 +640,11 @@ const Box = styled.div`
     }
 
     h1 {
-      position: absolute;
-      margin: 0;
-      top: 20px;
-      left: 95px;
+      text-align: center;
+      padding-top: 20px;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 20px;
     }
     .image {
       width: 135px;
@@ -614,33 +652,50 @@ const Box = styled.div`
       background-image: url('/assets/image/꿀팁아이콘.png');
       background-size: cover;
       background-position: center;
-      position: absolute;
-      top: 75px;
-      left: 95px;
+      justify-content: center;
+      align-items: center;
+      margin: auto;
     }
     span {
-      position: absolute;
-      bottom: 30px;
-      left: 70px;
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px;
+      color: #102492;
+      font-weight: 700;
     }
   }
 
   .messagePopup {
     display: none;
-    background-color: rgba(0, 0, 0, 0.5);
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    background: rgba(255, 255, 255, 0.43);
+    /* backdrop-filter: blur(14px); */
     width: 324px;
     height: 225px;
     padding: 20px;
+    overflow: hidden;
     box-sizing: border-box;
     text-align: center;
     align-items: center;
-    color: white;
+    color: black;
+    /* color: white; */
     border-radius: 24px;
     position: absolute;
     top: 0;
-    span {
-      width: 500px;
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    div {
+      width: 100%;
+      height: 125px;
       word-break: keep-all;
+      display: flex;
+      align-items: center;
+      text-align: center;
     }
   }
 
@@ -651,14 +706,13 @@ const Box = styled.div`
 `;
 
 const LikelistHeader = styled.div`
-  margin-top: 60px;
+  margin-top: 100px;
   width: 100%;
   height: 100px;
   display: flex;
   align-items: center;
 
   span {
-    margin-left: 20px;
     font-size: 32px;
     font-weight: 700;
   }

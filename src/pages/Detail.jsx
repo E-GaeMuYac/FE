@@ -14,6 +14,7 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 
 // 컴포넌트
 import TabBar from '../components/common/Tabbar';
+import LikeItBtn from '../components/common/LikeItBtn';
 
 const BottomContents = ({ medicineInfo, query }) => {
   const [ContentDesc, setContentDesc] = useState('');
@@ -34,9 +35,9 @@ const BottomContents = ({ medicineInfo, query }) => {
         break;
       default: //기본값 생략
     }
-  }, [query]);
+  }, [query, medicineInfo]);
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       {query === '효능 효과' ? (
         <ScrollBar>
           <div className='scroll-area'>{medicineInfo.eeDocData}</div>
@@ -52,14 +53,38 @@ const BottomContents = ({ medicineInfo, query }) => {
 
 const Detail = () => {
   const param = useParams();
+  let graphData = [];
   const [objGraph, setObjGraph] = useState({});
-  const [compareBox, setCompareBox] = useState();
+  const [grapDataArr, setGrapDataArr] = useState([]);
+  const [materialExplainActive, setMaterialExplainActive] = useState(false);
+  const [materialExplainY, setMaterialExplainY] = useState(0);
+  const [materialExplainName, setMaterialExplainName] = useState('');
+  const [materialExplainDesc, setMaterialExplainDesc] = useState('');
   const location = useLocation().pathname;
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
   }).tab;
 
   const medicineItem = objGraph;
+
+  //그래프에 들어갈 배열 생성
+  useLayoutEffect(() => {
+    if (objGraph) {
+      //그래프 초기화
+      graphData = [];
+
+      // 첫 번째 약의 정보를 우선 받아오기
+      for (let i = 0; i < objGraph?.materialName?.length; i++) {
+        const newMedicineData = {
+          material: objGraph?.materialName[i]?.material,
+          explain: objGraph?.materialName[i]?.설명,
+        };
+        graphData.push(newMedicineData);
+      }
+      // console.log(graphData);
+      setGrapDataArr(graphData);
+    }
+  }, [objGraph, query]);
 
   // 그래프
   const medicine = [];
@@ -93,7 +118,7 @@ const Detail = () => {
         am5percent.PieSeries.new(root, {
           valueField: '분량',
           categoryField: 'material',
-          centerX: am5.percent(-22),
+          centerX: am5.percent(-20),
           y: am5.percent(-4),
           legendValueText: '{category}',
           legendLabelText: `[bold {fill}]{value.formatNumber('#.#')}mg`,
@@ -134,9 +159,9 @@ const Detail = () => {
           position: 'absolute',
           oversizedBehavior: 'wrap',
           width: 380,
-          height: 290,
+          height: 280,
           x: am5.percent(3),
-          y: am5.percent(8),
+          y: am5.percent(9),
           layout: root.verticalLayout,
           verticalScrollbar: am5.Scrollbar.new(root, {
             orientation: 'vertical',
@@ -154,8 +179,9 @@ const Detail = () => {
       });
 
       legend.labels.template.setAll({
-        maxWidth: 77,
+        maxWidth: 80,
         minWidth: 77,
+        marginRight: 10,
         marginLeft: 28,
         fontSize: 18,
         lineHeight: 1.8,
@@ -171,6 +197,19 @@ const Detail = () => {
         fontSize: 18,
         lineHeight: 2,
         oversizedBehavior: 'truncate',
+      });
+
+      legend.itemContainers.template.events.on('pointerover', (e) => {
+        setMaterialExplainActive(true);
+        setMaterialExplainName(
+          e.target.dataItem.dataContext.dataContext.material
+        );
+        setMaterialExplainY(e.target._privateSettings.y);
+        //e.target.dataItem.dataContext.dataContext.material = 성분 이름 추출
+        //e.target._privateSettings.y 축 좌표
+      });
+      legend.itemContainers.template.events.on('pointerout', (e) => {
+        setMaterialExplainActive(false);
       });
 
       legend.data.setAll(series.dataItems);
@@ -220,6 +259,19 @@ const Detail = () => {
     return amount;
   };
 
+  //성분 설명 작업
+  useEffect(() => {
+    for (let i = 0; i < grapDataArr.length; i++) {
+      if (materialExplainName === grapDataArr[i].material) {
+        if (grapDataArr[i].explain) {
+          setMaterialExplainDesc(grapDataArr[i].explain);
+        } else {
+          setMaterialExplainDesc('정보가 없습니다');
+        }
+      }
+    }
+  }, [materialExplainName, objGraph]);
+
   return (
     <>
       <TopSection>
@@ -229,7 +281,9 @@ const Detail = () => {
             <div style={{ marginRight: '20px' }}>
               <Name>{medicineItem?.itemName}</Name>
               <Categorize>
-                <div>{medicineItem?.productType}</div>
+                {medicineItem?.productType?.map((list) => {
+                  return <div key={list}>{list}</div>;
+                })}
               </Categorize>
             </div>
             <div className='labelWrap'>
@@ -255,7 +309,10 @@ const Detail = () => {
             </div>
             <div className='boxWrap'>
               <Picked>
-                <div className='pickedImg'></div>
+                <LikeItBtn
+                  id={medicineItem?.medicineId}
+                  dibs={medicineItem?.dibs}
+                />
               </Picked>
               {medicineItem?.medicineId === compareBoxArr[0].medicineId ||
               medicineItem?.medicineId === compareBoxArr[1].medicineId ? (
@@ -279,18 +336,32 @@ const Detail = () => {
             justifyContent: 'space-between',
           }}>
           <MiddleCardBox>
+            <div style={{ display: 'flex' }}>
+              {/* <GraphLabel
+              style={{ position: 'absolute', top: '50px', left: '150px' }}> */}
+              <GraphLabel style={{ marginLeft: '120px' }}>
+                유효성분 함량
+              </GraphLabel>
+              {/* <GraphLabel
+              style={{ position: 'absolute', top: '50px', right: '170px' }}> */}
+              <GraphLabel style={{ marginLeft: '275px' }}>
+                성분 그래프
+              </GraphLabel>
+            </div>
+            <TotalAmount>총 함량 : {medicineItem?.totalAmount}</TotalAmount>
             <div
+              className='legendBox'
               style={{
                 display: 'flex',
                 position: 'relative',
                 marginBottom: '55px',
               }}>
-              <GraphLabel style={{ position: 'absolute', left: '90px' }}>
-                유효성분 함량
-              </GraphLabel>
-              <GraphLabel style={{ position: 'absolute', right: '170px' }}>
-                성분 그래프
-              </GraphLabel>
+              <MatrialExplainWrap
+                BoxY={materialExplainY}
+                Active={materialExplainActive}>
+                <div className='title'>{materialExplainName}</div>
+                <div className='desc'>{materialExplainDesc}</div>
+              </MatrialExplainWrap>
             </div>
             <div id='chartdiv' />
           </MiddleCardBox>
@@ -318,7 +389,7 @@ const Detail = () => {
           </RightCardBox>
         </div>
       </TopSection>
-      <div style={{ marginBottom: '128px' }}>
+      <div style={{ marginBottom: '170px' }}>
         <TabBar location={location} query={query} />
         <BottomSection>
           <BottomContents medicineInfo={medicineItem} query={query} />
@@ -371,7 +442,25 @@ const MiddleCardBox = styled.div`
     width: 100%;
     height: 380px;
     font-size: 12px;
+    position: absolute;
+    top: 90px;
   }
+  .legendBox {
+    /* background-color: aliceblue; */
+    position: absolute;
+    /* top: 381px; */
+    top: 5px;
+    left: 15px;
+    width: 365px;
+    height: 300px;
+    /* overflow-y: scroll;
+    position: relative; */
+  }
+`;
+
+const TotalAmount = styled.div`
+  margin-top: 20px;
+  margin-left: 35px;
 `;
 
 const RightCardBox = styled.div`
@@ -425,9 +514,10 @@ const RightCardBox = styled.div`
     line-height: 41px;
     font-weight: bold;
     display: flex;
+    margin-right: 5px;
   }
   .versusContentMaterialName {
-    width: 221px;
+    width: 200px;
     font-size: 20px;
     white-space: normal;
     overflow: hidden;
@@ -435,6 +525,7 @@ const RightCardBox = styled.div`
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    margin-top: 3px;
   }
 `;
 
@@ -467,17 +558,22 @@ const WrapContents = styled.div`
     }
     .tooltipText {
       border-radius: 8px;
+      /* box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2); */
+      background-color: rgba(0, 0, 0, 0.54);
       box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
       display: none;
       position: absolute;
-      max-width: 300px;
-      padding: 18px;
+      max-width: 310px;
+      padding: 13px;
       font-size: 15px;
       line-height: 21px;
-      color: #5a5a5a;
-      background-color: #ffffff;
+      /* color: #868686; */
+      color: #ffffff;
+      /* background-color: #ffffff; */
       opacity: 1;
       z-index: 2;
+      font-weight: 400;
+      font-size: 14px;
     }
   }
   .compareBox {
@@ -540,6 +636,7 @@ const TopLabel = styled.div`
   line-height: 24px;
   color: #868686;
   margin-bottom: 10px;
+  text-align: left;
 `;
 
 const BottomLabel = styled.div`
@@ -550,15 +647,16 @@ const BottomLabel = styled.div`
   color: #868686;
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   margin-top: 10px;
+  text-align: left;
 `;
 
 const Categorize = styled.div`
   div {
-    padding: 0 12px;
-    min-width: 140px;
-    height: 40px;
+    padding: 0 5px;
+    min-width: 69px;
+    height: 35px;
     background: #ebf0ff;
     color: #3366ff;
     font-size: 16px;
@@ -571,6 +669,7 @@ const Categorize = styled.div`
   }
   display: flex;
   margin-top: 10px;
+  gap: 8px;
 `;
 
 const Picked = styled.div`
@@ -580,15 +679,13 @@ const Picked = styled.div`
   align-items: center;
   justify-content: center;
   margin-right: 24px;
-  border-radius: 8px;
-  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
-  .pickedImg {
-    width: 34px;
-    height: 34px;
-    background-image: url('/assets/image/icon_heart1.png');
-    background-size: cover;
-    background-position: center;
-    cursor: pointer;
+  div {
+    width: 48px;
+    height: 48px;
+    .btnLikeImg {
+      width: 28.5px;
+      height: 25.33px;
+    }
   }
 `;
 
@@ -602,6 +699,7 @@ const GraphLabel = styled.div`
 `;
 
 const ScrollBar = styled.div`
+  width: 100%;
   white-space: pre-wrap;
   font-size: 20px;
   line-height: 33px;
@@ -622,6 +720,35 @@ const ScrollBar = styled.div`
   ::-webkit-scrollbar-thumb {
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 5px;
+  }
+`;
+
+const MatrialExplainWrap = styled.div`
+  display: ${({ Active }) => (Active ? 'block' : 'none')};
+  width: 370px;
+  min-height: 293px;
+  /* height: 200px; */
+  /* background-color: rgba(255, 255, 255, 0.9); */
+  background-color: rgba(0, 0, 0, 0.54);
+  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
+  padding: 15px 30px 20px 30px;
+  border-radius: 15px;
+  line-height: 34px;
+  position: absolute;
+  left: 15px;
+  z-index: 1;
+  color: white;
+  /* color: black; */
+  /* top:200px */
+  /* top: ${({ BoxY }) => `${BoxY + 200}px`}; */
+  text-align: center;
+  backdrop-filter: blur(5px);
+  .title {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+  .desc {
+    font-size: 15px;
   }
 `;
 
