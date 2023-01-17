@@ -60,7 +60,9 @@ function App() {
         <Route
           exact
           path='/login'
-          element={<Login setistoken={setIsToken} />}
+          element={
+            <Login setistoken={setIsToken} setuserimage={setUserImage} />
+          }
         />
         <Route exact path='/signup' element={<Signup />} />
         <Route exact path='/' element={<Main />} />

@@ -22,7 +22,8 @@ const User = (props) => {
   const [serviceMsg, setServiceMsg] = useState('');
   const [delPassword, setDelPassword] = useState('');
   const [isShow, setIsShow] = useState(false);
-  const SetUserImage = props.setuserimage;
+  const [loginType, setLoginType] = useState('');
+  const setUserImage = props.setuserimage;
   const setIsToken = props.setistoken;
 
   useEffect(() => {
@@ -37,12 +38,14 @@ const User = (props) => {
       setNickname(res.data.user.nickname);
       setLoginCount(res.data.user.loginCount);
       setImageUrl(res.data.user.imageUrl);
+      setLoginType(res.data.user.loginType);
     } catch (e) {
       console.log(e);
       alert('로그인 정보가 필요합니다.');
       setIsToken(false);
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      localStorage.removeItem('nickname');
       navigate('/login');
     }
   };
@@ -122,7 +125,7 @@ const User = (props) => {
     try {
       await axios.put(presignedUrl, newImg);
       alert('이미지 수정이 완료되었습니다.');
-      SetUserImage(prevImg);
+      setUserImage(prevImg);
     } catch (e) {
       alert(e);
     }
@@ -147,6 +150,20 @@ const User = (props) => {
     setPrevImg(imageUrl);
   };
 
+  const sortLoginType = () => {
+    if (loginType !== 'Local') {
+      deleteAccount();
+      setIsToken(false);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('nickname');
+      alert('회원탈퇴가 완료되었습니다.');
+      navigate('/');
+    } else {
+      setIsShow(true);
+    }
+  };
+
   const deleteAccount = async (password) => {
     try {
       await userApi.delete('/api/users/delete', {
@@ -157,6 +174,10 @@ const User = (props) => {
       });
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
+      localStorage.removeItem('nickname');
+      setIsToken(false);
+      alert('회원탈퇴가 완료되었습니다.');
+      navigate('/');
     } catch (e) {
       console.log(e);
     }
@@ -205,11 +226,8 @@ const User = (props) => {
       )}
       <MyPageHeader>
         <span>마이페이지</span>
-        <button
-          onClick={() => {
-            setIsShow(true);
-          }}>
-          회원탈퇴
+        <button onClick={sortLoginType}>
+          <p>회원탈퇴</p>
         </button>
       </MyPageHeader>
       <MyPageWrap>

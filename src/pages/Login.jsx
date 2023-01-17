@@ -7,6 +7,7 @@ import { useCookies } from 'react-cookie';
 const Login = (props) => {
   const setIsToken = props.setistoken;
   const setUserImage = props.setuserimage;
+
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(['rememberEmail']);
 
@@ -53,12 +54,12 @@ const Login = (props) => {
         email,
         password,
       });
+      setIsToken(true);
       const accesstoken = res.headers.accesstoken;
       const refreshtoken = res.headers.refreshtoken;
       localStorage.setItem('accessToken', accesstoken);
       localStorage.setItem('refreshToken', refreshtoken);
       alert(res.data.msg);
-      setIsToken(true);
       GetProfile();
       navigate('/');
     } catch (e) {
