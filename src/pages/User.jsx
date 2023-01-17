@@ -23,6 +23,7 @@ const User = (props) => {
   const [delPassword, setDelPassword] = useState('');
   const [isShow, setIsShow] = useState(false);
   const SetUserImage = props.setuserimage;
+  const setIsToken = props.setistoken;
 
   useEffect(() => {
     GetProfile();
@@ -39,6 +40,9 @@ const User = (props) => {
     } catch (e) {
       console.log(e);
       alert('로그인 정보가 필요합니다.');
+      setIsToken(false);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
       navigate('/login');
     }
   };
@@ -145,10 +149,14 @@ const User = (props) => {
 
   const deleteAccount = async (password) => {
     try {
-      const res = await userApi.delete('/api/users/delete', {
-        password,
+      await userApi.delete('/api/users/delete', {
+        data: {
+          password,
+        },
+        withCredentials: true,
       });
-      console.log(res);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     } catch (e) {
       console.log(e);
     }

@@ -69,7 +69,11 @@ function App() {
           path='/mypage'
           element={
             <Layout>
-              <User setuserimage={setUserImage} istoken={isToken} />
+              <User
+                setuserimage={setUserImage}
+                setistoken={setIsToken}
+                istoken={isToken}
+              />
               <CompareBox />
             </Layout>
           }
