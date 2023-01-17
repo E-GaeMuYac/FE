@@ -1,8 +1,8 @@
 import { useQuery } from 'react-query';
-import { api } from '../apis/apiInstance';
+import { userApi } from '../apis/apiInstance';
 
 const getVersusData = async (params) => {
-  const data = await api.get(
+  const data = await userApi.get(
     `/api/products/compare?compareA=${params.queryKey[1]}&compareB=${params.queryKey[2]}`
   );
   return data;
