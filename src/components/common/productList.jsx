@@ -37,13 +37,14 @@ const ProductList = ({ list }) => {
           <hr />
           <div className='listSubText'>{list.entpName}</div>
         </div>
-        <div className='listTagWrap'>
+        {/* <div className='listTagWrap'>
           {list.productType.map((tag) => (
             <div key={tag} className='listTag'>
               {tag}
             </div>
           ))}
-        </div>
+        </div> */}
+        <div className='listTag'>{list.productType}</div>
       </li>
       <div className='btnWrap'>
         <LikeItBtn id={list.medicineId} dibs={list.dibs} />
