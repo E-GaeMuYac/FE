@@ -1,10 +1,10 @@
-import { api } from '../apis/apiInstance';
+import { userApi } from '../apis/apiInstance';
 
 import { useQuery } from 'react-query';
 
 // api 호출 함수
 const getSearchData = async (params) => {
-  const data = await api.get(
+  const data = await userApi.get(
     `/api/products/medicines?type=${params.queryKey[1]}&value=${params.queryKey[2]}&page=${params.queryKey[3]}&pageSize=${params.queryKey[4]}`
   );
   return data;

@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { usePutLikeMutation } from '../../query/likeQuery';
 
-const LikeItBtn = ({ id }) => {
+const LikeItBtn = ({ id, dibs }) => {
   const [heartActive, setHeartBtn] = useState(false);
 
   const LikeMutate = usePutLikeMutation(id);
@@ -16,6 +16,10 @@ const LikeItBtn = ({ id }) => {
       alert('로그인이 필요한 기능입니다.');
     }
   };
+
+  useEffect(() => {
+    setHeartBtn(dibs);
+  }, [dibs]);
 
   return (
     <LikeItBtnWrap
