@@ -245,8 +245,10 @@ const Search = () => {
               className='deleteSearchInputValueBtn'
               onClick={deleteSearchValue}></div>
           </div>
+          <div className='searchBtnWrap' onClick={doingSearch}>
+            <div className='searchBtn'></div>
+          </div>
         </div>
-        <div className='searchBtn' onClick={doingSearch}></div>
       </SearchBarWrap>
       <LatestSearchWrap>
         {/* <div className='title'>최근검색어</div>
@@ -259,6 +261,10 @@ const Search = () => {
       </LatestSearchWrap>
       {searchedWord ? (
         <SearchResultWrap>
+          <div className='ExplainWrap'>
+            <div className='LikeBtnImgBox'></div>
+            <span>찜이 많은 순</span>으로 검색데이터가 제공됩니다.
+          </div>
           <div className='searchTop'>
             <div className='searchTitleWrap'>
               <div className='searchText'>'{searchedWord}'</div>
@@ -301,8 +307,8 @@ const SearchBarWrap = styled.div`
     max-width: 860px;
     width: 60%;
     max-width: 860px;
-    border: 1px solid #e7e7e7;
-    background-color: #e7e7e7;
+    border: 1px solid #f6f7fa;
+    background-color: #f6f7fa;
     border: none;
     border-radius: 60px;
     display: flex;
@@ -310,7 +316,7 @@ const SearchBarWrap = styled.div`
   .searchSortWrap {
     border-radius: 32px;
     background-color: white;
-    border: 2px solid #e7e7e7;
+    border: 2px solid #f6f7fa;
     width: 150px;
     height: 62px;
     margin-right: 10px;
@@ -339,7 +345,7 @@ const SearchBarWrap = styled.div`
     gap: 14px;
     background-color: white;
     border-radius: 33px;
-    border: 2px solid #e7e7e7;
+    border: 2px solid #f6f7fa;
   }
   .searchSortList li {
     display: flex;
@@ -358,7 +364,7 @@ const SearchBarWrap = styled.div`
     background-position: center;
   }
   .searchinput {
-    width: 600px;
+    width: 475px;
     font-size: 20px;
     font-weight: bold;
     line-height: 100%;
@@ -367,7 +373,7 @@ const SearchBarWrap = styled.div`
     border: none;
   }
   .searchinput::placeholder {
-    color: #868686;
+    color: #b7b7b7;
   }
   .deleteSearchInputValue {
     flex-grow: 1;
@@ -386,13 +392,22 @@ const SearchBarWrap = styled.div`
     background-position: center;
     cursor: pointer;
   }
+  .searchBtnWrap {
+    width: 125px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 210px;
+    cursor: pointer;
+    background: linear-gradient(to left, #3366ff, #6690ff);
+  }
   .searchBtn {
-    width: 42px;
-    height: 42px;
-    background-image: url('/assets/image/icon_search.png');
+    width: 37px;
+    height: 37px;
+    background-image: url('/assets/image/icon_search2.png');
     background-size: cover;
     background-position: center;
-    cursor: pointer;
   }
 `;
 const LatestSearchWrap = styled.div`
@@ -436,7 +451,30 @@ const LatestSearchWrap = styled.div`
   }
 `;
 const SearchResultWrap = styled.div`
-  margin: 118px 0 218px;
+  margin-bottom: 218px;
+  .ExplainWrap {
+    width: 676px;
+    height: 66px;
+    font-size: 30px;
+    background-color: #ebf0ff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px auto 37px;
+  }
+  .LikeBtnImgBox {
+    width: 50px;
+    height: 50px;
+    background-image: url('/assets/image/likeBtnImg.png');
+    background-size: cover;
+    background-position: center;
+    margin-right: 9px;
+  }
+  .ExplainWrap span {
+    color: #3366ff;
+    font-weight: bold;
+  }
   .searchTop {
     margin-bottom: 30px;
     font-size: 20px;
