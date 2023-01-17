@@ -59,7 +59,14 @@ const VersusCard = ({ info }) => {
         <hr />
         <div className='cardContentDesc'>{info.etcOtcCode}</div>
       </div>
-      <div className='cardContentTag'>{info.productType}</div>
+      <div className='cardContentTagWrap'>
+        {info.productType.map((tag) => (
+          <div key={tag} className='cardContentTag'>
+            {tag}
+          </div>
+        ))}
+      </div>
+
       <div className='cardBtnWrap'>
         <LikeItBtn id={info.medicineId} dibs={info.dibs} />
         <button
@@ -79,12 +86,21 @@ const ComparePage = () => {
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
   }).tab;
+  const navigate = useNavigate();
+
   const [versusList, setVersusList] = useState([]);
 
   const compareBoxArr = useRecoilValue(compareBoxData);
 
   const comparePillIdA = compareBoxArr[0].medicineId;
   const comparePillIdB = compareBoxArr[1].medicineId;
+
+  useEffect(() => {
+    if (!localStorage.getItem('refreshToken')) {
+      alert('로그인 시 이용 가능합니다.');
+      navigate('/');
+    }
+  }, []);
 
   const { refetch, isLoading, data } = useGetVersusQuery(
     comparePillIdA,
@@ -453,25 +469,32 @@ const ComparePage = () => {
                   <div className='graphNameWrap'>
                     <div className='graphNameBox'>
                       <div className='graphName' style={{ float: 'right' }}>
-                        {versusList[0].itemName}
+                        <div>성분명 : {versusList[0].itemName}</div>
+                        <div>총량 : {versusList[0].totalAmount}</div>
                       </div>
                     </div>
                     <div className='graphNameBox'>
-                      <div className='graphName'>{versusList[1].itemName}</div>
+                      <div className='graphName'>
+                        <div>성분명 : {versusList[1].itemName}</div>
+                        <div>총량 : {versusList[1].totalAmount}</div>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div className='versusContentWrap'>
                   <div className='versusContentGraph'>
                     <div className='legendWrap'>
+                      <MatrialExplainWrap
+                        BoxY={materialExplainY}
+                        Active={materialAExplainActive}>
+                        <div className='title'>
+                          <span>성분명</span>
+                          {materialExplainName}
+                        </div>
+                        <div className='desc'>{materialExplainDesc}</div>
+                      </MatrialExplainWrap>
                       <div className='legendTitle'>유효성분 함량</div>
                       <div className='legendBox'>
-                        <MatrialExplainWrap
-                          BoxY={materialExplainY}
-                          Active={materialAExplainActive}>
-                          <div className='title'>{materialExplainName}</div>
-                          <div className='desc'>{materialExplainDesc}</div>
-                        </MatrialExplainWrap>
                         <div id='legenddiv'></div>
                       </div>
                     </div>
@@ -509,7 +532,10 @@ const ComparePage = () => {
                         <MatrialExplainWrap
                           BoxY={materialExplainY}
                           Active={materialBExplainActive}>
-                          <div className='title'>{materialExplainName}</div>
+                          <div className='title'>
+                            <span>성분명</span>
+                            {materialExplainName}
+                          </div>
                           <div className='desc'>{materialExplainDesc}</div>
                         </MatrialExplainWrap>
                         <div id='legenddiv2'></div>
@@ -635,6 +661,12 @@ const VersusCardWrap = styled.div`
     border: none;
     background-color: #888888;
     margin: 0 8px;
+  }
+  .cardContentTagWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
   }
   .cardContentTag {
     padding: 5px 7px;
@@ -859,24 +891,36 @@ const NothingInBoxWrap = styled.div`
 `;
 const MatrialExplainWrap = styled.div`
   display: ${({ Active }) => (Active ? 'block' : 'none')};
-  width: 280px;
+  width: 315px;
   background-color: rgba(0, 0, 0, 0.54);
-  padding: 10px;
+  padding: 15px;
   border-radius: 24px;
   line-height: 34px;
   position: absolute;
-  left: 0px;
+  left: 60px;
   z-index: 1;
   color: white;
-  top: ${({ BoxY }) => `${BoxY - 15}px`};
-  text-align: center;
+  /* top: ${({ BoxY }) => `${BoxY - 15}px`}; */
+  top: 20px;
+
   backdrop-filter: blur(5px);
   .title {
     font-size: 18px;
     margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    color: #87a5ff;
+    font-weight: bold;
+  }
+  .title span {
+    font-size: 15px;
+    margin-right: 6px;
+    line-height: 34px;
+    color: white;
   }
   .desc {
     font-size: 15px;
+    text-align: center;
   }
 `;
 

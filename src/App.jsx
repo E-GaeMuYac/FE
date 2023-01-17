@@ -8,6 +8,7 @@ import Search from './pages/Search';
 import Detail from './pages/Detail';
 import User from './pages/User';
 import Signup from './pages/Signup';
+import SocialLogin from './pages/SocialLogin';
 import Main from './pages/main/Main';
 
 // 컴포넌트
@@ -31,6 +32,13 @@ function App() {
       <Routes>
         <Route
           exact
+          path='/login/loading'
+          element={
+            <SocialLogin setistoken={setIsToken} setuserimage={setUserImage} />
+          }
+        />
+        <Route
+          exact
           path='/search'
           element={
             <Layout>
@@ -52,10 +60,22 @@ function App() {
         <Route
           exact
           path='/login'
-          element={<Login setistoken={setIsToken} />}
+          element={
+            <Login setistoken={setIsToken} setuserimage={setUserImage} />
+          }
         />
         <Route exact path='/signup' element={<Signup />} />
         <Route exact path='/' element={<Main />} />
+        <Route
+          exact
+          path='/compare'
+          element={
+            <Layout>
+              <ComparePage />
+              <CompareBox />
+            </Layout>
+          }
+        />
         <Route
           path='/detail/:id'
           element={

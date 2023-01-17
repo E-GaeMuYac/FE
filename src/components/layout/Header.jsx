@@ -18,7 +18,8 @@ const Header = (props) => {
 
   const loginCheck = () => {
     const refreshToken = localStorage.getItem('refreshToken');
-    if (refreshToken) {
+    const accessToken = localStorage.getItem('accessToken');
+    if (refreshToken || accessToken) {
       GetProfile();
       setIsToken(true);
     }
