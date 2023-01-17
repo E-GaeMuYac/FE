@@ -484,14 +484,17 @@ const ComparePage = () => {
                 <div className='versusContentWrap'>
                   <div className='versusContentGraph'>
                     <div className='legendWrap'>
+                      <MatrialExplainWrap
+                        BoxY={materialExplainY}
+                        Active={materialAExplainActive}>
+                        <div className='title'>
+                          <span>성분명</span>
+                          {materialExplainName}
+                        </div>
+                        <div className='desc'>{materialExplainDesc}</div>
+                      </MatrialExplainWrap>
                       <div className='legendTitle'>유효성분 함량</div>
                       <div className='legendBox'>
-                        <MatrialExplainWrap
-                          BoxY={materialExplainY}
-                          Active={materialAExplainActive}>
-                          <div className='title'>{materialExplainName}</div>
-                          <div className='desc'>{materialExplainDesc}</div>
-                        </MatrialExplainWrap>
                         <div id='legenddiv'></div>
                       </div>
                     </div>
@@ -529,7 +532,10 @@ const ComparePage = () => {
                         <MatrialExplainWrap
                           BoxY={materialExplainY}
                           Active={materialBExplainActive}>
-                          <div className='title'>{materialExplainName}</div>
+                          <div className='title'>
+                            <span>성분명</span>
+                            {materialExplainName}
+                          </div>
                           <div className='desc'>{materialExplainDesc}</div>
                         </MatrialExplainWrap>
                         <div id='legenddiv2'></div>
@@ -885,24 +891,36 @@ const NothingInBoxWrap = styled.div`
 `;
 const MatrialExplainWrap = styled.div`
   display: ${({ Active }) => (Active ? 'block' : 'none')};
-  width: 280px;
+  width: 315px;
   background-color: rgba(0, 0, 0, 0.54);
-  padding: 10px;
+  padding: 15px;
   border-radius: 24px;
   line-height: 34px;
   position: absolute;
-  left: 0px;
+  left: 60px;
   z-index: 1;
   color: white;
-  top: ${({ BoxY }) => `${BoxY - 15}px`};
-  text-align: center;
+  /* top: ${({ BoxY }) => `${BoxY - 15}px`}; */
+  top: 20px;
+
   backdrop-filter: blur(5px);
   .title {
     font-size: 18px;
     margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    color: #87a5ff;
+    font-weight: bold;
+  }
+  .title span {
+    font-size: 15px;
+    margin-right: 6px;
+    line-height: 34px;
+    color: white;
   }
   .desc {
     font-size: 15px;
+    text-align: center;
   }
 `;
 
