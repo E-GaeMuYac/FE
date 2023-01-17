@@ -24,7 +24,7 @@ const ListCardComp = ({ arrState, list }) => {
   const deleteList = (id) => {
     let deletedArr = isArr.map((list) =>
       list.medicineId === id
-        ? { medicineId: Date.now(), itemName: 'null' }
+        ? { medicineId: isArr.indexOf(list) + 1, itemName: 'null' }
         : list
     );
     setIsArr(deletedArr);
@@ -95,7 +95,7 @@ const CompareBox = () => {
   // 비교하기 페이지로 이동
   const goToCompare = () => {
     if (isOpen && isArrLength === 2) {
-      navigate('/compare?tab=성분 순위');
+      navigate('/compare?tab=성분그래프');
 
       //이동 후 state 초기화
       setIsOpen(false);
@@ -105,7 +105,9 @@ const CompareBox = () => {
   // 배열 초기화 버튼
   const listReset = () => {
     const allDeletedArr = isArr.map((list) =>
-      list.itemName !== 'null' ? { ...list, itemName: 'null' } : list
+      list.itemName !== 'null'
+        ? { medicineId: isArr.indexOf(list) + 1, itemName: 'null' }
+        : list
     );
     setIsArr(allDeletedArr);
   };
@@ -150,6 +152,7 @@ const Wrap = styled.div`
   bottom: ${({ isOpen }) => (isOpen ? 0 : '-240px')};
   transition: bottom 0.3s;
   width: 100%;
+  z-index: 1000;
   background-color: white;
   box-shadow: 0 0 24px 1px rgba(0, 0, 0, 0.2);
   .wrap {
@@ -236,12 +239,11 @@ const BoxContent = styled.div`
   width: 100%;
   display: flex;
   gap: 50px;
-  align-items: center;
 `;
 const ListCard = styled.div`
   position: relative;
   width: 90%;
-  height: 88px;
+  height: 186px;
   border: 1px solid #d0d0d0;
   border-radius: 20px;
   padding: 48px 24px;
@@ -256,9 +258,7 @@ const ListCard = styled.div`
     width: 160px;
     height: 100%;
     background-image: ${({ image }) =>
-      image
-        ? `url(${image})`
-        : `url('https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4')`};
+      image ? `url(${image})` : `url('/assets/image/PillDefaultImg.png')`};
     background-size: contain;
     background-position: center;
     margin-right: 24px;

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import qs from 'qs';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useLayoutEffect, useState } from 'react';
 
 //component
@@ -17,6 +17,8 @@ import { useRecoilValue } from 'recoil';
 import { compareBoxData } from '../recoil/recoilStore';
 
 import { useGetVersusQuery } from '../query/versusQuery';
+import LikeItBtn from '../components/common/LikeItBtn';
+import Layout from '../components/layout/Layout';
 
 const VersusContent = ({ medicineInfo, query }) => {
   // ------------------------------------------------------------
@@ -43,11 +45,41 @@ const VersusContent = ({ medicineInfo, query }) => {
   return <div className='versusContentWrap'>{versusContentDesc}</div>;
 };
 
+const VersusCard = ({ info }) => {
+  const navigate = useNavigate();
+  const gotoDetail = (id) => {
+    navigate(`/detail/${id}?tab=효능 효과`);
+  };
+  return (
+    <VersusCardWrap image={info.itemImage}>
+      <div className='cardImg'></div>
+      <div className='cardName'>{info.itemName}</div>
+      <div className='cardContentDescWrap'>
+        <div className='cardContentDesc'>{info.entpName}</div>
+        <hr />
+        <div className='cardContentDesc'>{info.etcOtcCode}</div>
+      </div>
+      <div className='cardContentTag'>{info.productType}</div>
+      <div className='cardBtnWrap'>
+        <LikeItBtn id={info.medicineId} dibs={info.dibs} />
+        <button
+          className='goToDetailBtn'
+          onClick={() => {
+            gotoDetail(info.medicineId);
+          }}>
+          이 약품만 보러가기
+        </button>
+      </div>
+    </VersusCardWrap>
+  );
+};
+
 const ComparePage = () => {
   const location = useLocation().pathname;
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
   }).tab;
+  const navigate = useNavigate();
 
   const [versusList, setVersusList] = useState([]);
 
@@ -56,28 +88,51 @@ const ComparePage = () => {
   const comparePillIdA = compareBoxArr[0].medicineId;
   const comparePillIdB = compareBoxArr[1].medicineId;
 
-  const { data } = useGetVersusQuery(comparePillIdA, comparePillIdB);
+  useEffect(() => {
+    if (!localStorage.getItem('refreshToken')) {
+      alert('로그인 시 이용 가능합니다.');
+      navigate('/');
+    }
+  }, []);
+
+  const { refetch, isLoading, data } = useGetVersusQuery(
+    comparePillIdA,
+    comparePillIdB
+  );
+
+  useEffect(() => {
+    if (comparePillIdA !== 1 && comparePillIdB !== 2) {
+      refetch();
+    }
+  }, [comparePillIdA, comparePillIdB]);
 
   useEffect(() => {
     if (data) {
       setVersusList([data.data.compareA, data.data.compareB]);
     }
   }, [data]);
-
   //   --------------------------------------------------------------
   // 그래프
 
   let graphData = [];
+  const [grapDataArr, setGrapDataArr] = useState([]);
+
+  const [materialAExplainActive, setMaterialAExplainActive] = useState(false);
+  const [materialBExplainActive, setMaterialBExplainActive] = useState(false);
+  const [materialExplainY, setMaterialExplainY] = useState(0);
+  const [materialExplainName, setMaterialExplainName] = useState('');
+  const [materialExplainDesc, setMaterialExplainDesc] = useState('');
 
   //그래프에 들어갈 배열 생성
   useLayoutEffect(() => {
     //그래프 초기화
     graphData = [];
-    if (versusList.length === 2 && query === '성분 순위') {
+    if (versusList.length === 2 && query === '성분그래프') {
       // 첫 번째 약의 정보를 우선 받아오기
       for (let i = 0; i < versusList[0].materialName.length; i++) {
         const newMedicineData = {
           material: versusList[0].materialName[i].material,
+          explain: versusList[0].materialName[i].설명,
         };
         graphData.push(newMedicineData);
       }
@@ -85,6 +140,7 @@ const ComparePage = () => {
       for (let i = 0; i < versusList[1].materialName.length; i++) {
         const newMedicineData = {
           material: versusList[1].materialName[i].material,
+          explain: versusList[1].materialName[i].설명,
         };
         graphData.push(newMedicineData);
       }
@@ -120,12 +176,13 @@ const ComparePage = () => {
           }
         }
       }
+      setGrapDataArr(graphData);
     }
   }, [versusList, query]);
 
   // 그래프 작업
   useLayoutEffect(() => {
-    if (versusList.length === 2 && query === '성분 순위') {
+    if (versusList.length === 2 && query === '성분그래프') {
       const root = am5.Root.new('chartdiv');
 
       const chart = root.container.children.push(
@@ -168,11 +225,15 @@ const ComparePage = () => {
       series
         .get('colors')
         .set('colors', [
-          am5.color(0x095256),
-          am5.color(0x087f8c),
-          am5.color(0x5aaa95),
-          am5.color(0x86a873),
-          am5.color(0xbb9f06),
+          am5.color(0x091a7a),
+          am5.color(0x102693),
+          am5.color(0x1939b7),
+          am5.color(0x254edb),
+          am5.color(0x3366ff),
+          am5.color(0x6690ff),
+          am5.color(0x84a9ff),
+          am5.color(0xadc8ff),
+          am5.color(0xd6e4ff),
         ]);
       series.data.setAll(graphData);
 
@@ -205,11 +266,15 @@ const ComparePage = () => {
       series2
         .get('colors')
         .set('colors', [
-          am5.color(0x095256),
-          am5.color(0x087f8c),
-          am5.color(0x5aaa95),
-          am5.color(0x86a873),
-          am5.color(0xbb9f06),
+          am5.color(0x091a7a),
+          am5.color(0x102693),
+          am5.color(0x1939b7),
+          am5.color(0x254edb),
+          am5.color(0x3366ff),
+          am5.color(0x6690ff),
+          am5.color(0x84a9ff),
+          am5.color(0xadc8ff),
+          am5.color(0xd6e4ff),
         ]);
       series2.data.setAll(graphData);
 
@@ -245,6 +310,19 @@ const ComparePage = () => {
         oversizedBehavior: 'truncate',
       });
 
+      legend.itemContainers.template.events.on('pointerover', (e) => {
+        setMaterialAExplainActive(true);
+        setMaterialExplainName(
+          e.target.dataItem.dataContext.dataContext.material
+        );
+        setMaterialExplainY(e.target._privateSettings.y);
+        //e.target.dataItem.dataContext.dataContext.material = 성분 이름 추출
+        //e.target._privateSettings.y 축 좌표
+      });
+      legend.itemContainers.template.events.on('pointerout', (e) => {
+        setMaterialAExplainActive(false);
+      });
+
       //마커 동그랗게 변경
       legend.markerRectangles.template.setAll({
         cornerRadiusTL: 10,
@@ -254,9 +332,6 @@ const ComparePage = () => {
       });
 
       // 범례 이벤트 생성
-      // legend.events.on('pointerover', (e) => {
-      //   console.log(e);
-      // });
 
       // 시리즈 데이터 집어넣기
       legend.data.setAll(series.dataItems);
@@ -282,6 +357,18 @@ const ComparePage = () => {
         // truncate : 말줄임, none: 겹침, wrap: 줄바꿈, fit: 딱맞게 폰트사이즈 조절
         oversizedBehavior: 'truncate',
       });
+      legend2.itemContainers.template.events.on('pointerover', (e) => {
+        setMaterialBExplainActive(true);
+        setMaterialExplainName(
+          e.target.dataItem.dataContext.dataContext.material
+        );
+        setMaterialExplainY(e.target._privateSettings.y);
+        //e.target.dataItem.dataContext.dataContext.material = 성분 이름 추출
+        //e.target._privateSettings.y 축 좌표
+      });
+      legend2.itemContainers.template.events.on('pointerout', (e) => {
+        setMaterialBExplainActive(false);
+      });
       //마커 크기 변경
       legend.markers.template.setAll({
         width: 30,
@@ -296,11 +383,6 @@ const ComparePage = () => {
         cornerRadiusBL: 30,
         cornerRadiusBR: 30,
       });
-
-      // 범례 이벤트 생성
-      // legend2.events.on('pointerover', (e) => {
-      //   console.log('hi');
-      // });
 
       //마커 크기 변경
       legend2.markers.template.setAll({
@@ -332,6 +414,21 @@ const ComparePage = () => {
     }
   }, [versusList, query]);
 
+  //성분 설명 작업
+  useEffect(() => {
+    if (versusList.length === 2 && query === '성분그래프') {
+      for (let i = 0; i < grapDataArr.length; i++) {
+        if (materialExplainName === grapDataArr[i].material) {
+          if (grapDataArr[i].explain) {
+            setMaterialExplainDesc(grapDataArr[i].explain);
+          } else if (!grapDataArr[i].explain) {
+            setMaterialExplainDesc('정보가 없습니다');
+          }
+        }
+      }
+    }
+  }, [materialExplainName, versusList, query]);
+
   //   --------------------------------------------------------------
 
   //주요 성분 총량
@@ -347,144 +444,110 @@ const ComparePage = () => {
   return (
     <Wrap>
       {versusList.length === 2 ? (
-        <>
+        <Layout>
           <MainWrap>
             <div className='title'>선택한 약품 비교하기</div>
             <div className='versus'>
-              <div className='card' key={versusList[0].itemName}>
-                <div
-                  className='cardImg'
-                  style={{
-                    backgroundImage: `url(${versusList[0].itemImage})`,
-                  }}></div>
-                <div className='cardName'>{versusList[0].itemName}</div>
-                <div className='cardContentDescWrap'>
-                  <div className='cardContentDesc'>
-                    {versusList[0].entpName}
-                  </div>
-                  <hr />
-                  <div className='cardContentDesc'>
-                    {versusList[0].etcOtcCode}
-                  </div>
-                </div>
-                <div className='cardContentTag'>
-                  {versusList[0].productType}
-                </div>
-                <div className='cardBtnWrap'>
-                  <button className='likeBtn'>
-                    <div className='likeBtnImg'></div>
-                  </button>
-                  <button className='goToDetailBtn'>이 약품만 보러가기</button>
-                </div>
-              </div>
-
-              <div className='card' key={versusList[1].itemName}>
-                <div
-                  className='cardImg'
-                  style={{
-                    backgroundImage: `url(${versusList[1].itemImage})`,
-                  }}></div>
-                <div className='cardName'>{versusList[1].itemName}</div>
-                <div className='cardContentDescWrap'>
-                  <div className='cardContentDesc'>
-                    {versusList[1].entpName}
-                  </div>
-                  <hr />
-                  <div className='cardContentDesc'>
-                    {versusList[1].etcOtcCode}
-                  </div>
-                </div>
-                <div className='cardContentTag'>
-                  {versusList[1].productType}
-                </div>
-                <div className='cardBtnWrap'>
-                  <button className='likeBtn'>
-                    <div className='likeBtnImg'></div>
-                  </button>
-                  <button className='goToDetailBtn'>이 약품만 보러가기</button>
-                </div>
-              </div>
+              <VersusCard info={versusList[0]} />
+              <div className='versusImage'></div>
+              <VersusCard info={versusList[1]} />
             </div>
           </MainWrap>
           <TabBar location={location} query={query} />
           <SubWrap>
-            {query === '성분 순위' ? (
+            {query === '성분그래프' ? (
               <div className='content'>
+                <div className='graphWrap'>
+                  <div id='chartdiv'></div>
+                  <div className='graphNameWrap'>
+                    <div className='graphNameBox'>
+                      <div className='graphName' style={{ float: 'right' }}>
+                        {versusList[0].itemName}
+                      </div>
+                    </div>
+                    <div className='graphNameBox'>
+                      <div className='graphName'>{versusList[1].itemName}</div>
+                    </div>
+                  </div>
+                </div>
                 <div className='versusContentWrap'>
                   <div className='versusContentGraph'>
                     <div className='legendWrap'>
                       <div className='legendTitle'>유효성분 함량</div>
                       <div className='legendBox'>
+                        <MatrialExplainWrap
+                          BoxY={materialExplainY}
+                          Active={materialAExplainActive}>
+                          <div className='title'>{materialExplainName}</div>
+                          <div className='desc'>{materialExplainDesc}</div>
+                        </MatrialExplainWrap>
                         <div id='legenddiv'></div>
                       </div>
                     </div>
-                    <div className='graphWrap'>
-                      <div id='chartdiv'></div>
-                      <div className='graphNameWrap'>
-                        <div className='graphNameBox'>
-                          <div className='graphName' style={{ float: 'right' }}>
-                            {versusList[0].itemName}
-                          </div>
-                        </div>
-                        <div className='graphNameBox'>
-                          <div className='graphName'>
-                            {versusList[1].itemName}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  </div>
+                  <div className='versusContentMaterialWrap'>
+                    <div className='legendTitle'>주요 유효성분</div>
+                    <ul>
+                      {versusList[0].materialName.map((list) =>
+                        versusList[0].materialName.indexOf(list) < 3 ? (
+                          <li key={list.material}>
+                            <div className='versusContentMaterialPercent'>
+                              {Math.round(
+                                (Number(list.분량) /
+                                  medicineTotalAmount(versusList[0])) *
+                                  100
+                              )}
+                              %
+                            </div>
+                            <div className='versusContentMaterialName'>
+                              {list.material}
+                            </div>
+                          </li>
+                        ) : null
+                      )}
+                    </ul>
+                  </div>
+                </div>
+                <div className='versusContentWrap'>
+                  <div
+                    className='versusContentGraph'
+                    style={{ float: 'right' }}>
                     <div className='legendWrap'>
                       <div className='legendTitle'>유효성분 함량</div>
                       <div className='legendBox'>
+                        <MatrialExplainWrap
+                          BoxY={materialExplainY}
+                          Active={materialBExplainActive}>
+                          <div className='title'>{materialExplainName}</div>
+                          <div className='desc'>{materialExplainDesc}</div>
+                        </MatrialExplainWrap>
                         <div id='legenddiv2'></div>
                       </div>
                     </div>
                   </div>
-                  <div className='versusContentGraph'>
-                    <div className='versusContentMaterialWrap'>
-                      <div className='legendTitle'>주요 유효성분</div>
-                      <ul>
-                        {versusList[0].materialName.map((list) =>
-                          versusList[0].materialName.indexOf(list) < 3 ? (
-                            <li>
-                              <div className='versusContentMaterialPercent'>
-                                {Math.round(
-                                  (Number(list.분량) /
-                                    medicineTotalAmount(versusList[0])) *
-                                    100
-                                )}
-                                %
-                              </div>
-                              <div className='versusContentMaterialName'>
-                                {list.material}
-                              </div>
-                            </li>
-                          ) : null
-                        )}
-                      </ul>
-                    </div>
-                    <div className='versusContentMaterialWrap'>
-                      <div className='legendTitle'>주요 유효성분</div>
-                      <ul>
-                        {versusList[1].materialName.map((list) =>
-                          versusList[1].materialName.indexOf(list) < 3 ? (
-                            <li>
-                              <div className='versusContentMaterialPercent'>
-                                {Math.round(
-                                  (Number(list.분량) /
-                                    medicineTotalAmount(versusList[1])) *
-                                    100
-                                )}
-                                %
-                              </div>
-                              <div className='versusContentMaterialName'>
-                                {list.material}
-                              </div>
-                            </li>
-                          ) : null
-                        )}
-                      </ul>
-                    </div>
+                  <div
+                    className='versusContentMaterialWrap'
+                    style={{ float: 'right' }}>
+                    <div className='legendTitle'>주요 유효성분</div>
+                    <ul>
+                      {versusList[1].materialName.map((list) =>
+                        versusList[1].materialName.indexOf(list) < 3 ? (
+                          <li key={list.material}>
+                            <div className='versusContentMaterialPercent'>
+                              {Math.round(
+                                (Number(list.분량) /
+                                  medicineTotalAmount(versusList[1])) *
+                                  100
+                              )}
+                              %
+                            </div>
+                            <div className='versusContentMaterialName'>
+                              {list.material}
+                            </div>
+                          </li>
+                        ) : null
+                      )}
+                    </ul>
                   </div>
                 </div>
               </div>
@@ -495,8 +558,16 @@ const ComparePage = () => {
               </div>
             )}
           </SubWrap>
-        </>
-      ) : null}
+        </Layout>
+      ) : (
+        <NothingInBoxWrap>
+          <Layout>
+            <div className='title'>약국 비교함에 약을 담아 비교해보세요!</div>
+            <div className='explainImage1'></div>
+            <div className='explainImage2'></div>
+          </Layout>
+        </NothingInBoxWrap>
+      )}
     </Wrap>
   );
 };
@@ -518,23 +589,32 @@ const MainWrap = styled.div`
   .versus {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
-    gap: 500px;
   }
-  .card {
-    width: 324px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid #d0d0d0;
-    border-radius: 25px;
+  .versusImage {
+    width: 238px;
+    height: 161px;
+    background-image: url('/assets/image/versusImg.png');
+    background-size: cover;
+    background-position: center;
   }
+`;
+const VersusCardWrap = styled.div`
+  width: 324px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #d0d0d0;
+  border-radius: 25px;
   .cardImg {
     width: 256px;
     height: 110px;
+    background-image: ${({ image }) =>
+      image ? `url(${image})` : `url('/assets/image/PillDefaultImg.png')`};
     background-size: cover;
-    background-position: center;
+    background-position: 50% 20%;
+    border-radius: 8px;
     background-repeat: no-repeat;
     margin: 30px 0 24px;
   }
@@ -559,16 +639,16 @@ const MainWrap = styled.div`
     color: #868686;
   }
   .cardContentDescWrap hr {
-    width: 1px;
-    height: 100%;
+    width: 2px;
+    height: 18px;
     border: none;
-    background-color: #d9d9d9;
+    background-color: #888888;
     margin: 0 8px;
   }
   .cardContentTag {
     padding: 5px 7px;
-    background-color: #e4ffea;
-    color: #13bd7e;
+    background-color: #ebf0ff;
+    color: #3366ff;
     border-radius: 5px;
     font-weight: bold;
     margin-bottom: 18px;
@@ -601,7 +681,7 @@ const MainWrap = styled.div`
   .goToDetailBtn {
     width: 214px;
     height: 38px;
-    background-color: #13bd7e;
+    background-color: #3366ff;
     border-radius: 8px;
     color: #ffffff;
     border: none;
@@ -619,15 +699,16 @@ const SubWrap = styled.div`
     align-items: center;
     gap: 20px;
     margin-bottom: 50px;
+    position: relative;
   }
   .versusContentWrap {
     width: 100%;
-    background-color: #ebebeb;
+    background-color: #f6f7fa;
     border-radius: 25px;
     padding: 40px 70px;
     white-space: pre-wrap;
     word-break: break-all;
-    min-height: 450px;
+    min-height: 530px;
     font-size: 24px;
     line-height: 40px;
   }
@@ -649,7 +730,7 @@ const SubWrap = styled.div`
     color: #242424;
   }
   .legendTitle {
-    color: #868686;
+    color: #242424;
     font-size: 30px;
     font-weight: bold;
     text-align: center;
@@ -659,6 +740,7 @@ const SubWrap = styled.div`
     width: 300px;
     height: 400px;
     overflow-y: scroll;
+    position: relative;
   }
   .legendBox::-webkit-scrollbar {
     width: 18px;
@@ -671,7 +753,19 @@ const SubWrap = styled.div`
     background-color: white;
     border-radius: 5px;
   }
+  .graphWrap {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+  }
   .graphNameWrap {
+    width: 430px;
     display: flex;
     gap: 81px;
     justify-content: center;
@@ -681,9 +775,10 @@ const SubWrap = styled.div`
   }
   .graphName {
     display: inline-block;
-    background-color: #cbcbcb;
+    background-color: #ebf0ff;
     padding: 6px 10px;
     white-space: normal;
+    word-break: break-all;
     border-radius: 10px;
     color: #242424;
     font-size: 15px;
@@ -704,8 +799,8 @@ const SubWrap = styled.div`
     height: 1000px;
   }
   .versusContentMaterialWrap {
-    width: 320px;
-    height: 340px;
+    width: 400px;
+    height: 400px;
     padding: 30px 40px;
     background-color: white;
     border-radius: 25px;
@@ -741,6 +836,56 @@ const SubWrap = styled.div`
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+  }
+`;
+const NothingInBoxWrap = styled.div`
+  width: 100%;
+  height: 1000px;
+  background-color: #f9faff;
+  .title {
+    font-size: 40px;
+    line-height: 58px;
+    font-weight: bold;
+    color: #242424;
+    text-align: center;
+    margin-bottom: 58px;
+  }
+  .explainImage1 {
+    width: 100%;
+    height: 213px;
+    background-image: url('/assets/image/explainCompare1.png');
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 55px;
+  }
+  .explainImage2 {
+    width: 100%;
+    height: 429.21px;
+    background-image: url('/assets/image/explainCompare2.png');
+    background-size: cover;
+    background-position: center;
+  }
+`;
+const MatrialExplainWrap = styled.div`
+  display: ${({ Active }) => (Active ? 'block' : 'none')};
+  width: 280px;
+  background-color: rgba(0, 0, 0, 0.54);
+  padding: 10px;
+  border-radius: 24px;
+  line-height: 34px;
+  position: absolute;
+  left: 0px;
+  z-index: 1;
+  color: white;
+  top: ${({ BoxY }) => `${BoxY - 15}px`};
+  text-align: center;
+  backdrop-filter: blur(5px);
+  .title {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+  .desc {
+    font-size: 15px;
   }
 `;
 

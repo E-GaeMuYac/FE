@@ -10,37 +10,93 @@ import { compareBoxData } from '../recoil/recoilStore';
 
 //component
 import LikeItBtn from '../components/common/LikeItBtn';
+import ProductList from '../components/common/productList';
 
-const Pagenation = ({ nowPageNum, setNowPageNum }) => {
-  const numArr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
+  const [numArr, setNumArr] = useState([]);
+  const [numArrPage, setNumArrPage] = useState([]);
+  const [pageNum, setPageNum] = useState(0);
 
+  //서치 갯수에 따라 numArr 배열 생성
+  useEffect(() => {
+    let newArr = [];
+    let count = 1;
+    newArr.push(count);
+    for (let i = 0; i < searchLength; i++) {
+      if ((i + 1) % 20 === 0) {
+        count += 1;
+        newArr.push(count);
+      }
+    }
+    setNumArr(newArr);
+  }, [searchLength]);
+
+  // 페이지 넘버 변경. 스크롤 업 이벤트 생성
   const pageNumChange = (num) => {
     setNowPageNum(num);
+    window.scrollTo(0, 300);
+  };
+
+  //numArr의 길이에 따라 배열 쪼개기
+  useEffect(() => {
+    if (numArr) {
+      let newPage = [];
+
+      for (let i = 0; i < numArr.length; i += 10) {
+        let pageProp = numArr.slice(i, i + 10);
+
+        newPage.push(pageProp);
+      }
+      setNumArrPage(newPage);
+    }
+  }, [numArr]);
+
+  //다음 배열 페이지
+  const nextNumPage = () => {
+    setPageNum(pageNum + 1);
+  };
+
+  //이전 배열 페이지
+  const beforeNumPage = () => {
+    setPageNum(pageNum - 1);
   };
 
   return (
     <PagenationWrap nowPageNum={nowPageNum}>
-      <div className='pagenationArrow left'></div>
-      <div className='pagenationArrow right'></div>
+      {numArr.length > 10 ? (
+        <>
+          {pageNum > 0 ? (
+            <div className='pagenationArrow left' onClick={beforeNumPage}></div>
+          ) : null}
+          {pageNum < numArrPage.length - 1 ? (
+            <div className='pagenationArrow right' onClick={nextNumPage}></div>
+          ) : null}
+        </>
+      ) : null}
+
       <ul className='pagenationNumWrap'>
-        {numArr.map((list) =>
-          list === nowPageNum ? (
-            <li
-              className='Active'
-              onClick={() => {
-                pageNumChange(list);
-              }}>
-              {list}
-            </li>
-          ) : (
-            <li
-              onClick={() => {
-                pageNumChange(list);
-              }}>
-              {list}
-            </li>
-          )
-        )}
+        {numArrPage[pageNum]
+          ? numArrPage[pageNum].map((list) =>
+              list === nowPageNum ? (
+                <li
+                  className='Active'
+                  key={list}
+                  onClick={() => {
+                    pageNumChange(list);
+                  }}>
+                  {list}
+                </li>
+              ) : (
+                <li
+                  onClick={() => {
+                    pageNumChange(list);
+                  }}
+                  key={list}>
+                  {list}
+                </li>
+              )
+            )
+          : null}
       </ul>
     </PagenationWrap>
   );
@@ -51,11 +107,7 @@ const Search = () => {
   const [searhArr, setSearhArr] = useState([]);
 
   //약 검색 종류 데이터 모음
-  const [searchSortList, setSearchSortList] = useState([
-    '약 이름',
-    '약 효능',
-    '약 분류',
-  ]);
+  const [searchSortList, setSearchSortList] = useState(['약 이름', '약 분류']);
   const [searchKinds, setSearchKinds] = useState('약 이름');
   const [searchKindsCode, setSearchKindsCode] = useState('itemName');
   const [isOpenSearchSort, setIsOpenSearchSort] = useState(false);
@@ -65,6 +117,10 @@ const Search = () => {
   const [searchedWord, setSearchedWord] = useState('');
 
   const [isActiveDeleteBtn, setIsActiveDeleteBtn] = useState(false);
+
+  const [nowPageNum, setNowPageNum] = useState(1);
+
+  const [searchLength, setSearchLength] = useState(0);
 
   const searchSortRemove = () => {
     setIsOpenSearchSort(false);
@@ -83,15 +139,6 @@ const Search = () => {
     setSearchKinds(name);
     searchSortRemove();
   };
-  useEffect(() => {
-    if (searchKinds === '약 이름') {
-      setSearchKindsCode('itemName');
-    } else if (searchKinds === '약 효능') {
-      setSearchKindsCode('eeDocData');
-    } else if (searchKinds === '약 분류') {
-      setSearchKindsCode('productType');
-    }
-  }, [searchKinds]);
 
   // input에 글을 적을 때마다 실시간으로 저장
   const changeInputValue = ({ target: { value } }) => {
@@ -111,51 +158,41 @@ const Search = () => {
   }, [inputValue]);
   // -----------------------------------------------------------------------------
   //서치 훅 호출
-  const [refetch, data] = useGetSearchQuery(searchKindsCode, searchedWord);
+  const { refetch, data } = useGetSearchQuery(
+    searchKindsCode,
+    searchedWord,
+    nowPageNum,
+    20
+  );
 
   //서치 시작
   const doingSearch = () => {
     if (inputValue.trim()) {
       // 결과 창 단어 교체
       setSearchedWord(inputValue);
-    }
-    deleteSearchValue();
-  };
-
-  // searchedWord가 변경될 때만 refetch
-  useEffect(() => {
-    if (searchedWord) {
-      refetch();
-    }
-  }, [searchedWord]);
-
-  // data가 undefined가 아닐 때 state 변경
-  useEffect(() => {
-    if (data) {
-      setSearhArr(data.data);
-    }
-  }, [data]);
-  // -----------------------------------------------------------------------------
-
-  const [compareBoxArr, setCompareBoxArr] = useRecoilState(compareBoxData);
-
-  const goToDetail = (id) => {
-    navigate(`/detail/${id}`);
-  };
-
-  const putInToCompareBox = (list) => {
-    for (let i = 0; i < compareBoxArr.length; i++) {
-      if (compareBoxArr[i].itemName === 'null') {
-        let newArr = [...compareBoxArr];
-        newArr[i] = list;
-        setCompareBoxArr(newArr);
-        break;
+      setNowPageNum(1);
+      if (searchKinds === '약 이름') {
+        setSearchKindsCode('itemName');
+      } else if (searchKinds === '약 분류') {
+        setSearchKindsCode('productType');
       }
     }
   };
 
-  // -----------------------------------------------------------------------------
-  const [nowPageNum, setNowPageNum] = useState(1);
+  //searchedWord,nowPageNum 변경 시 refetch
+  useEffect(() => {
+    if (searchedWord) {
+      refetch();
+    }
+  }, [searchedWord, nowPageNum]);
+
+  // data가 undefined가 아닐 때 state 변경
+  useEffect(() => {
+    if (data) {
+      setSearhArr(data.data.data);
+      setSearchLength(data.data.searchLength);
+    }
+  }, [data]);
   // -----------------------------------------------------------------------------
   return (
     <Wrap>
@@ -212,53 +249,39 @@ const Search = () => {
         <div className='searchBtn' onClick={doingSearch}></div>
       </SearchBarWrap>
       <LatestSearchWrap>
-        <div className='title'>최근검색어</div>
+        {/* <div className='title'>최근검색어</div>
         <ul>
           <li>게보린</li>
           <li>게보린</li>
           <li>게보린</li>
         </ul>
-        <div className='allDelete'>전체삭제</div>
+        <div className='allDelete'>전체삭제</div> */}
       </LatestSearchWrap>
       {searchedWord ? (
         <SearchResultWrap>
           <div className='searchTop'>
             <div className='searchTitleWrap'>
               <div className='searchText'>'{searchedWord}'</div>
-              <div className='searchListNum'>검색 결과 {searhArr.length}개</div>
+              <div className='searchListNum'>
+                검색 결과 {searchLength.toLocaleString('ko-KR')}개
+              </div>
             </div>
-            <div className='searchSort'>추천순</div>
+            <div className='searchSort'>찜한순</div>
           </div>
           <ul className='searchList'>
             {searhArr.map((list) => (
-              <SearchListWrap key={list.medicineId} image={list.itemImage}>
-                <li
-                  onClick={() => {
-                    goToDetail(list.medicineId);
-                  }}>
-                  <div className='listImg'></div>
-                  <div className='listName'>{list.itemName}</div>
-                  <div className='listSubTextWrap'>
-                    <div className='listSubText'>{list.etcOtcCode}</div>
-                    <hr />
-                    <div className='listSubText'>{list.entpName}</div>
-                  </div>
-                  <div className='listTag'>{list.productType}</div>
-                </li>
-                <div className='btnWrap'>
-                  <LikeItBtn id={list.medicineId} />
-                  <div
-                    className='btnInBox'
-                    onClick={() => {
-                      putInToCompareBox(list);
-                    }}>
-                    보관함 담기
-                  </div>
-                </div>
-              </SearchListWrap>
+              <ProductList
+                key={list.medicineId}
+                image={list.itemImage}
+                list={list}
+              />
             ))}
           </ul>
-          <Pagenation nowPageNum={nowPageNum} setNowPageNum={setNowPageNum} />
+          <Pagenation
+            nowPageNum={nowPageNum}
+            setNowPageNum={setNowPageNum}
+            searchLength={searchLength}
+          />
         </SearchResultWrap>
       ) : null}
     </Wrap>
@@ -306,11 +329,11 @@ const SearchBarWrap = styled.div`
   .searchSortList {
     display: ${({ isOpenSearchSort }) => (isOpenSearchSort ? 'flex' : 'none')};
     position: absolute;
-    left: -2px;
+    left: -3px;
     top: -2px;
-    width: 121px;
+    width: 150px;
     list-style: none;
-    padding: 15px;
+    padding: 12px;
     margin: 0;
     flex-direction: column;
     gap: 14px;
@@ -436,105 +459,10 @@ const SearchResultWrap = styled.div`
   .searchList {
     display: flex;
     flex-wrap: wrap;
-    gap: 25px;
+    gap: 28px;
     list-style: none;
     padding: 0;
     margin: 0;
-  }
-`;
-const SearchListWrap = styled.div`
-  position: relative;
-  li {
-    padding: 30px 34px;
-    width: 256px;
-    height: 300px;
-    border-radius: 25px;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    cursor: pointer;
-    box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.25);
-  }
-  .listImg {
-    width: 100%;
-    height: 110px;
-    background-image: ${({ image }) =>
-      image
-        ? `url(${image})`
-        : `url('https://s3-alpha-sig.figma.com/img/917a/ce7b/9262f5da2e74cdc931cf2bd206ad200a?Expires=1673827200&Signature=nEazUdsurlwUoj0vV8Tq-wHew19d0LJCoEcz2EPKB-xjLVp79AHdcbWgefejMlP9tpKV8S~EwOrPsPFxVXXeEzt01PSwL5hO-4yymSZtPb24keioTp0nCQYVTjYgBARSpVryPiZEq9HSX-AT0VFy3vgFpRu-5bv0Mo0I1NJwFKP1kodqHMeLLbQOkbMg7KIvqczdsBgqTL0rrKtK6hBc9dhCPQq58sGHeN7dSdbFFjtKm3Uj61IKyvC476xpocW6bkp2buhdiroQKWNL-BkxrN7y0b~Pgh8JUfX86xIDGhpDNdFPlF-mhTRwE7mc~ooM2aqbfNcWAM59xBUjvF8maA__&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4')`};
-    background-size: cover;
-    border-radius: 8px;
-    background-position: center;
-    margin-bottom: 24px;
-    background-repeat: no-repeat;
-  }
-  .listSubTextWrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 18px;
-    margin-bottom: 14px;
-  }
-  .listSubTextWrap hr {
-    width: 2px;
-    height: 100%;
-    border: none;
-    background-color: #d9d9d9;
-    margin: 0 8px;
-  }
-  .listSubText {
-    width: 126px;
-    text-align: center;
-    font-size: 15px;
-    line-height: 22px;
-    color: #868686;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .listName {
-    font-size: 20px;
-    line-height: 29px;
-    font-weight: bold;
-    margin-bottom: 22px;
-    width: 100%;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .listTag {
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #e4ffea;
-    color: #13bd7e;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 15px;
-    margin-bottom: 18px;
-  }
-  .btnWrap {
-    position: absolute;
-    left: 34px;
-    bottom: 30px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    height: 38px;
-  }
-  .btnInBox {
-    width: 214px;
-    height: 100%;
-    background-color: #13bd7e;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 14px;
-    line-height: 20px;
-    font-weight: bold;
-    cursor: pointer;
   }
 `;
 const PagenationWrap = styled.div`
@@ -566,8 +494,8 @@ const PagenationWrap = styled.div`
   }
   .pagenationNumWrap li.Active {
     background-color: white;
-    border: 1px solid #13bd7e;
-    color: #13bd7e;
+    border: 1px solid #3366ff;
+    color: #242424;
   }
   .pagenationArrow {
     position: absolute;

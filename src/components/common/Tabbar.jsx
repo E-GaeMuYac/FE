@@ -35,7 +35,7 @@ const TabBar = ({ location, query }) => {
   useEffect(() => {
     if (location === '/compare') {
       setTabList([
-        '성분 순위',
+        '성분그래프',
         '효능 효과',
         '용법 용량',
         '첨가물',
@@ -43,7 +43,7 @@ const TabBar = ({ location, query }) => {
       ]);
     }
     if (location.includes('/detail')) {
-      setTabList(['효능 효과', '용법 용량', '첨가물', '주의사항']);
+      setTabList(['효능 효과', '용법 용량', '첨가물', '유통기한', '주의사항']);
     }
   }, [location]);
 
@@ -72,16 +72,30 @@ const Wrap = styled.div`
     gap: 30px;
   }
 `;
-const TabName = styled.div`
-  /* width: 100px; */
+const TabName = styled.li`
+  width: 100px;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   font-size: 20px;
-  color: ${({ isActive }) => (isActive ? '#242424' : '#868686')};
+  color: ${({ isActive }) => (isActive ? '#3366FF' : '#868686')};
   font-weight: bold;
+  position: relative;
+
+  ${({ isActive }) =>
+    isActive
+      ? `&::after {
+    content: '';
+    width: 100px;
+    height: 3px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: #3366ff;
+  }`
+      : null}
 `;
 
 export default TabBar;
