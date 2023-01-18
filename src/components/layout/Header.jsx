@@ -48,27 +48,29 @@ const Header = (props) => {
   return (
     <Wrap>
       <HeaderWrapper>
-        {/* 이미지로 교체 예정 */}
-        <LogoBox to='/' />
-        <CategoryBox>
-          <StyledLink to='/'>ABOUT</StyledLink>
-          <StyledLink to='/search'>검색하기</StyledLink>
-          <StyledLink to='/compare?tab=성분그래프'>비교하기</StyledLink>
-          <StyledLink to='/event'>이벤트</StyledLink>
-        </CategoryBox>
-        {!isToken ? (
-          <SignBox>
-            <LoginBtn to='/login'>로그인</LoginBtn>
-            <SignupBtn to='/signup'>회원가입</SignupBtn>
-          </SignBox>
-        ) : (
-          <SignBox>
-            <BackgroundMypageBtn to='/mypage'>
-              <MypageBtn props={userImage} />
-            </BackgroundMypageBtn>
-            <LogoutBtn onClick={logoutHandler}>로그아웃</LogoutBtn>
-          </SignBox>
-        )}
+        <HeaderBox>
+          {/* 이미지로 교체 예정 */}
+          <LogoBox to='/' />
+          <CategoryBox>
+            <StyledLink to='/'>ABOUT</StyledLink>
+            <StyledLink to='/search'>검색하기</StyledLink>
+            <StyledLink to='/compare?tab=성분그래프'>비교하기</StyledLink>
+            <StyledLink to='/event'>이벤트</StyledLink>
+          </CategoryBox>
+          {!isToken ? (
+            <SignBox>
+              <LoginBtn to='/login'>로그인</LoginBtn>
+              <SignupBtn to='/signup'>회원가입</SignupBtn>
+            </SignBox>
+          ) : (
+            <SignBox>
+              <BackgroundMypageBtn to='/mypage'>
+                <MypageBtn props={userImage} />
+              </BackgroundMypageBtn>
+              <LogoutBtn onClick={logoutHandler}>로그아웃</LogoutBtn>
+            </SignBox>
+          )}
+        </HeaderBox>
       </HeaderWrapper>
     </Wrap>
   );
@@ -81,21 +83,32 @@ const Wrap = styled.div`
 
 const HeaderWrapper = styled.div`
   background-color: white;
-  width: 1380px;
+  width: 100%;
   margin: 0 auto;
   height: 80px;
   display: flex;
   align-items: center;
-  position: relative;
-  /* flex-direction: row;
-  
-  justify-content: center;
   position: fixed;
+  justify-content: center;
   border-bottom: 1px solid #d0d0d0;
-  z-index: 9999; */
+  z-index: 9999;
+`;
+
+const HeaderBox = styled.div`
+  width: 1380px;
+  height: 80px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 700;
 `;
 
 const LogoBox = styled(Link)`
+  position: absolute;
+  left: 0;
   width: 198px;
   height: 40px;
   display: flex;

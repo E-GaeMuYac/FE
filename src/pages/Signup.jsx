@@ -740,7 +740,7 @@ const Signup = () => {
 };
 
 const BackGround = styled.div`
-  /* min-height: 95vh; */
+  min-height: 95vh;
   padding: 60px 0;
   height: 100%;
   display: flex;
