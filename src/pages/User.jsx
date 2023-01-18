@@ -277,8 +277,12 @@ const User = (props) => {
                   defaultValue={nickname}
                   onChange={nickInput}
                 />
-                <button onClick={changesDone}>변경완료</button>
-                <button onClick={cancelChange}>취소</button>
+                <button className='o' onClick={changesDone}>
+                  O
+                </button>
+                <button className='x' onClick={cancelChange}>
+                  X
+                </button>
               </NicknameInput>
             )}
             <ProfileMsg>
@@ -570,6 +574,7 @@ const NicknameInput = styled.div`
   height: 42px;
   display: flex;
   align-items: flex-end;
+  position: relative;
 
   input {
     width: 220px;
@@ -583,13 +588,23 @@ const NicknameInput = styled.div`
     }
   }
   button {
-    margin-left: 8px;
-    width: 100px;
-    height: 30px;
+    padding: 0;
+    width: 25px;
+    height: 25px;
     border: none;
     border-radius: 50px;
     background-color: #d0d0d0;
     cursor: pointer;
+  }
+  .x {
+    position: absolute;
+    top: 11px;
+    right: 15px;
+  }
+  .o {
+    position: absolute;
+    top: 11px;
+    right: 43px;
   }
 `;
 
@@ -606,7 +621,7 @@ const CalenderWrap = styled.div`
   width: 40%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   .calendar {
     background-image: url('/assets/image/캘린더.png');
     background-size: cover;
