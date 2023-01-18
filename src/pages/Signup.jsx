@@ -56,7 +56,7 @@ const Signup = () => {
   const [emailBtnColor, setEmailBtnColor] = useState('#8bc790');
   const [emailCodeBtnColor, setEmailCodeBtnColor] = useState('#8bc790');
 
-  // 이메일 중복확인
+  // 이메일 중복확인 api 호출 함수
   const getVerifyEmail = async (params) => {
     try {
       const data = await api.get(
@@ -73,7 +73,7 @@ const Signup = () => {
 
   // query hooks
 
-  // 이메일 중복확인
+  // 이메일 중복확인 query hook
   const useGetVerifyEmailQuery = (email) => {
     const { isSuccess, isError, isLoading, isFetching, data, error } = useQuery(
       {
@@ -128,28 +128,7 @@ const Signup = () => {
     }
   };
 
-  // 이메일 중복검사
-
-  // const onBlurEmail = (e) => {
-  //   const a = e.target.value;
-  //   setEmail(a);
-  //   console.log(data);
-  //   console.log(data?.status);
-  //   if (data?.status === 200) {
-  //     setEmailMessage('사용 가능한 이메일입니다.');
-  //     setIsEmail(true);
-  //     setEmailCodeBtn(true);
-  //   } else if (errorEmailCode === 412) {
-  //     setEmailMessage('이미 존재하는 이메일입니다. 다시 시도해 주세요.');
-  //     setIsEmail(false);
-  //     setEmailCodeBtn(false);
-  //   } else {
-  //     setEmailMessage('올바른 형식의 이메일을 입력해주세요.');
-  //     setIsEmail(false);
-  //     setEmailCodeBtn(false);
-  //   }
-  // };
-
+  // 이메일 인증번호 전송 api 호출 함수
   const postSendEmailCode = async (payload) => {
     const header = { 'x-api-key': process.env.REACT_APP_EMAIL_X_API_KEY };
     try {
@@ -187,18 +166,6 @@ const Signup = () => {
         setIsEmail(false);
         setEmailCodeBtn(false);
       }
-      // } else if (isEmail) {
-      //   setEmailCodeBtnLabel('인증번호 전송');
-      //   alert('인증번호가 전송되었습니다. 이메일을 확인해 주세요.');
-      //   postSendEmailCode({ email: email });
-      // }
-      // else {
-
-      // }
-
-      // setReadOnlyEmailCode(false);
-      // setEmailCode('');
-      // setEmailCodeBtnLabel('인증번호 재전송');
     }
     if (
       emailCodeBtnLabel === '인증번호 전송' ||
