@@ -52,6 +52,7 @@ const Signup = () => {
   // 인증완료 시 input 비활성화
   const [readOnlyEmailCode, setReadOnlyEmailCode] = useState(false);
   const [readOnlyPhoneCode, setReadOnlyPhoneCode] = useState(false);
+  const [readOnlyPhoneNumber, setReadOnlyPhoneNumber] = useState(false);
 
   const [emailBtnColor, setEmailBtnColor] = useState('#8bc790');
   const [emailCodeBtnColor, setEmailCodeBtnColor] = useState('#8bc790');
@@ -192,7 +193,7 @@ const Signup = () => {
       // setEmailCodeBtnColor('#8bc790');
       setEmailCode(emailCodeCurrent);
     } else {
-      // setEmailCodeConfirmMessage('');
+      setEmailCodeConfirmMessage('');
       setIsEmailCode(true);
       setEmailCodeConfirmBtn(true);
       // setEmailCodeBtnColor('#4fc759');
@@ -212,6 +213,13 @@ const Signup = () => {
       setEmailMessage('');
     } else {
       setEmailCodeConfirmMessage('인증번호가 틀렸습니다. 다시 입력해 주세요.');
+      setIsEmailCode(false);
+    }
+    if (!responseEmailCode) {
+      setEmailCodeConfirmMessage(
+        '전송된 인증번호가 없습니다. 인증번호를 전송해주세요.'
+      );
+      setIsEmailCode(false);
     }
   };
 
@@ -296,11 +304,17 @@ const Signup = () => {
       alert('휴대폰 인증이 완료되었습니다.');
       setPhoneCodeConfirmMessage('인증 완료!');
       setPhoneCodeConfirmBtn(false);
-      setReadOnlyPhoneCode(readOnlyPhoneCode);
+      setReadOnlyPhoneCode(!readOnlyPhoneCode);
       setPhoneCodeBtn(false);
       setPhoneCodebtnLabel('인증번호 전송');
     } else {
       setPhoneCodeConfirmMessage('인증번호가 틀렸습니다. 다시 입력해 주세요.');
+      setIsPhoneCode(false);
+    }
+    if (!responsePhoneCode) {
+      setPhoneCodeConfirmMessage(
+        '전송된 인증번호가 없습니다. 인증번호를 전송해주세요.'
+      );
       setIsPhoneCode(false);
     }
   };
