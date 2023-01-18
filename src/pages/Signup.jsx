@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { api } from '../apis/apiInstance';
 import { postSignup } from '../query/signupQuery';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   // 기본 input 상태값
@@ -423,6 +423,8 @@ const Signup = () => {
   };
 
   // 회원가입 폼 Submit
+  const navigate = useNavigate();
+
   const onSubmitHandler = (e) => {
     const regExp = /[^0-9/]/g;
     const strPhoneNumber = phoneNumber.replace(regExp, '');
@@ -453,30 +455,9 @@ const Signup = () => {
         nickname: nickname,
         phoneNumber: strPhoneNumber,
       });
+      navigate('/login');
+      alert('회원가입 완료!\npillnuts에 오신 것을 환영합니다 :)');
     }
-
-    // else if (!isUsableId) {
-    //     alert('중복확인을 먼저 해주세요!');
-    // } else {
-    //     dispatch(__signUp({ id: id, password: password, navigate }));
-    // }
-
-    // try {
-    //   await axios
-    //     .post(REGISTER_USERS_URL, {
-    //       username: name,
-    //       password: password,
-    //       email: email,
-    //     })
-    //     .then((res) => {
-    //       console.log('response:', res)
-    //       if (res.status === 200) {
-    //         router.push('/sign_up/profile_start')
-    //       }
-    //     })
-    // } catch (err) {
-    //   console.error(err)
-    // }
   };
 
   return (
