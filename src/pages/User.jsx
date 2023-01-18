@@ -164,7 +164,7 @@ const User = (props) => {
 
   const deleteAccount = async (password) => {
     try {
-      const res = await userApi.delete('/api/users/delete', {
+      await userApi.delete('/api/users/delete', {
         data: {
           password,
         },
@@ -198,9 +198,7 @@ const User = (props) => {
       <MyPageHeader>
         <span>마이페이지</span>
         <div className='deleteAccount'>
-          <button onClick={sortLoginType}>
-            회원탈퇴
-          </button>
+          <button onClick={sortLoginType}>회원탈퇴</button>
           {isShow && (
             <PopUp>
               <Content>
@@ -263,23 +261,43 @@ const User = (props) => {
             </DefaultImgBtn>
           )}
         </ProfileImg>
-        <NicknameBox>
-          {!isTextClicked ? (
-            <div style={{ display: 'flex' }}>
-              <Nickname>{nickname ? `${nickname}님` : 'OOO님'}</Nickname>
-              <div className='wrapNickname'>
-                <button className='editNickname' onClick={changeNickname} />
+        <ProfileWrap>
+          <NicknameBox>
+            {!isTextClicked ? (
+              <div style={{ display: 'flex' }}>
+                <Nickname>{nickname ? `${nickname}님` : 'OOO님'}</Nickname>
+                <div className='wrapNickname'>
+                  <button className='editNickname' onClick={changeNickname} />
+                </div>
               </div>
+            ) : (
+              <NicknameInput>
+                <input
+                  type='text'
+                  defaultValue={nickname}
+                  onChange={nickInput}
+                />
+                <button className='o' onClick={changesDone}>
+                  O
+                </button>
+                <button className='x' onClick={cancelChange}>
+                  X
+                </button>
+              </NicknameInput>
+            )}
+            <ProfileMsg>
+              필너츠에 오신 것을
+              <br />
+              환영합니다!
+            </ProfileMsg>
+          </NicknameBox>
+          <CalenderWrap>
+            <div className='calendar'>
+              <span>출석일수</span>
+              <h1>{`${loginCount}일`}</h1>
             </div>
-          ) : (
-            <NicknameInput>
-              <input type='text' defaultValue={nickname} onChange={nickInput} />
-              <button onClick={changesDone}>변경완료</button>
-              <button onClick={cancelChange}>취소</button>
-            </NicknameInput>
-          )}
-          <ProfileMsg>필너츠를 이용해주셔서 감사합니다.</ProfileMsg>
-        </NicknameBox>
+          </CalenderWrap>
+        </ProfileWrap>
         <Box>
           <EventBox to='/event'>
             <h1>EVENT</h1>
@@ -505,13 +523,18 @@ const DefaultImgBtn = styled.button`
   cursor: pointer;
 `;
 
-const NicknameBox = styled.div`
+const ProfileWrap = styled.div`
   background-color: #f6f7fa;
   width: 466px;
   height: 225px;
+  display: flex;
   box-sizing: border-box;
   padding: 37px 40px;
   border-radius: 24px;
+`;
+
+const NicknameBox = styled.div`
+  width: 60%;
   .wrapNickname {
     width: 42px;
     height: 42px;
@@ -551,6 +574,7 @@ const NicknameInput = styled.div`
   height: 42px;
   display: flex;
   align-items: flex-end;
+  position: relative;
 
   input {
     width: 220px;
@@ -564,13 +588,23 @@ const NicknameInput = styled.div`
     }
   }
   button {
-    margin-left: 8px;
-    width: 100px;
-    height: 30px;
+    padding: 0;
+    width: 25px;
+    height: 25px;
     border: none;
     border-radius: 50px;
     background-color: #d0d0d0;
     cursor: pointer;
+  }
+  .x {
+    position: absolute;
+    top: 11px;
+    right: 15px;
+  }
+  .o {
+    position: absolute;
+    top: 11px;
+    right: 43px;
   }
 `;
 
@@ -583,6 +617,34 @@ const ProfileMsg = styled.div`
   color: #868686;
 `;
 
+const CalenderWrap = styled.div`
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  .calendar {
+    background-image: url('/assets/image/캘린더.png');
+    background-size: cover;
+    background-position: center;
+    width: 130px;
+    height: 138px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    span {
+      margin-top: 40px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #868686;
+    }
+    h1 {
+      font-size: 40px;
+      font-weight: bold;
+      /* background-color: skyblue; */
+    }
+  }
+`;
 const EventBox = styled(Link)`
   background-color: #cefbd8;
   width: 324px;
