@@ -123,7 +123,9 @@ const Login = (props) => {
             </FormWrapper>
             <ManageAccount>
               <SignUp to='/signup'>회원가입</SignUp>
-              <FindAccount>아이디 / 비밀번호 찾기</FindAccount>
+              <FindAccount to='/findaccount'>
+                아이디 / 비밀번호 찾기
+              </FindAccount>
             </ManageAccount>
             <SocialLogin>
               <KakaoBtn type='button' onClick={kakaoHandler}>
