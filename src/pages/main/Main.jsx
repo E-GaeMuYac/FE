@@ -18,7 +18,6 @@ const Main = () => {
     window.addEventListener('scroll', updateScroll);
   }, []);
 
-  console.log(scrollPoint);
   return (
     <Wrapper>
       <FirstSection scrollpoint={scrollPoint} />
