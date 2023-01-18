@@ -450,6 +450,26 @@ const ComparePage = () => {
     return amount;
   };
   //   --------------------------------------------------------------
+  const [totalAmountAAxtive, setTotalAmountAAxtive] = useState(false);
+  const [totalAmountBAxtive, setTotalAmountBAxtive] = useState(false);
+
+  const AtotalAmountMouseOver = (e) => {
+    if (e._reactName === 'onMouseOut') {
+      setTotalAmountAAxtive(false);
+    } else {
+      setTotalAmountAAxtive(true);
+    }
+  };
+  const BtotalAmountMouseOver = (e) => {
+    if (e._reactName === 'onMouseOut') {
+      setTotalAmountBAxtive(false);
+    } else {
+      setTotalAmountBAxtive(true);
+    }
+  };
+
+  //   --------------------------------------------------------------
+
   return (
     <Wrap>
       {versusList.length === 2 ? (
@@ -463,20 +483,38 @@ const ComparePage = () => {
             </div>
           </MainWrap>
           <TabBar location={location} query={query} />
-          <SubWrap>
+          <SubWrap
+            totalAmountAAxtive={totalAmountAAxtive}
+            totalAmountBAxtive={totalAmountBAxtive}>
             {query === '성분그래프' ? (
               <div className='content'>
                 <div className='graphWrap'>
                   <div id='chartdiv'></div>
                   <div className='graphNameWrap'>
                     <div className='graphNameBox'>
-                      <div className='graphName A' style={{ float: 'right' }}>
-                        <div>{versusList[0].itemName}</div>
+                      <div className='graphName'>{versusList[0].itemName}</div>
+                      <div className='totalAmountWrap A'>
+                        <div className='totalAmountTitle'>총 용량</div>
+                        <div
+                          className='totalAmountBtn'
+                          onMouseOver={AtotalAmountMouseOver}
+                          onMouseOut={AtotalAmountMouseOver}></div>
+                        <div className='totalAmountDesc'>
+                          {versusList[0].totalAmount}
+                        </div>
                       </div>
                     </div>
                     <div className='graphNameBox'>
-                      <div className='graphName B'>
-                        <div>{versusList[1].itemName}</div>
+                      <div className='graphName'>{versusList[1].itemName}</div>
+                      <div className='totalAmountWrap B'>
+                        <div className='totalAmountTitle'>총 용량</div>
+                        <div
+                          className='totalAmountBtn'
+                          onMouseOver={BtotalAmountMouseOver}
+                          onMouseOut={BtotalAmountMouseOver}></div>
+                        <div className='totalAmountDesc'>
+                          {versusList[1].totalAmount}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -495,9 +533,6 @@ const ComparePage = () => {
                       </MatrialExplainWrap>
                       <div className='legendTitle'>유효성분 함량</div>
                       <div className='legendBox'>
-                        <div className='legendTotalvalue'>
-                          {versusList[0].totalAmount}
-                        </div>
                         <div id='legenddiv'></div>
                       </div>
                     </div>
@@ -541,9 +576,6 @@ const ComparePage = () => {
                       </MatrialExplainWrap>
                       <div className='legendTitle'>유효성분 함량</div>
                       <div className='legendBox'>
-                        <div className='legendTotalvalue'>
-                          {versusList[1].totalAmount}
-                        </div>
                         <div id='legenddiv2'></div>
                       </div>
                     </div>
@@ -656,7 +688,7 @@ const VersusCardWrap = styled.div`
     margin-bottom: 14px;
   }
   .cardContentDesc {
-    width: 100%;
+    width: 120px;
     font-weight: bold;
     font-size: 15px;
     line-height: 22px;
@@ -709,7 +741,7 @@ const VersusCardWrap = styled.div`
     background-position: center;
   }
   .goToDetailBtn {
-    width: 214px;
+    width: 210px;
     height: 38px;
     background-color: #3366ff;
     border-radius: 8px;
@@ -785,9 +817,6 @@ const SubWrap = styled.div`
     background-color: white;
     border-radius: 5px;
   }
-  .legendTotalvalue {
-    font-size: 20px;
-  }
   .graphWrap {
     margin-top: 40px;
     display: flex;
@@ -806,10 +835,9 @@ const SubWrap = styled.div`
     justify-content: center;
   }
   .graphNameBox {
-    width: 100%;
+    width: 155px;
   }
   .graphName {
-    display: inline-block;
     padding: 6px 10px;
     white-space: normal;
     background-color: #c2d2ff;
@@ -819,13 +847,70 @@ const SubWrap = styled.div`
     font-size: 15px;
     line-height: 22px;
     font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
   }
-  /* .graphName.A {
-    background-color: #c2d2ff;
+  .totalAmountWrap {
+    display: flex;
+    align-items: center;
+    position: relative;
   }
-  .graphName.B {
-    background-color: #ffe39c;
-  } */
+  .totalAmountWrap.A {
+    justify-content: right;
+  }
+  .totalAmountWrap.B {
+    justify-content: left;
+  }
+  .totalAmountTitle {
+    font-size: 16px;
+    color: #868686;
+    margin-right: 5px;
+  }
+  .totalAmountBtn {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background-color: #d0d0d0;
+    cursor: pointer;
+  }
+  .totalAmountDesc {
+    position: absolute;
+    top: 35px;
+    max-width: 177px;
+    padding: 12px 10px;
+    color: white;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.65);
+    word-break: break-all;
+  }
+  .totalAmountWrap.A .totalAmountDesc {
+    display: ${({ totalAmountAAxtive }) =>
+      totalAmountAAxtive ? 'block' : 'none'};
+    right: 0px;
+  }
+  .totalAmountWrap.B .totalAmountDesc {
+    display: ${({ totalAmountBAxtive }) =>
+      totalAmountBAxtive ? 'block' : 'none'};
+
+    left: 0px;
+  }
+  .totalAmountDesc::after {
+    content: '';
+    width: 0px;
+    height: 0px;
+    border-bottom: 10px solid rgba(0, 0, 0, 0.65);
+    border-top: 10px solid transparent;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    position: absolute;
+    top: -19px;
+  }
+  .totalAmountWrap.A .totalAmountDesc::after {
+    right: 8px;
+  }
+  .totalAmountWrap.B .totalAmountDesc::after {
+    left: 65px;
+  }
   #chartdiv {
     width: 430px;
     height: 400px;
@@ -923,7 +1008,7 @@ const MatrialExplainWrap = styled.div`
 
   backdrop-filter: blur(5px);
   .title {
-    font-size: 18px;
+    font-size: 24px;
     margin-bottom: 15px;
     display: flex;
     align-items: center;
@@ -932,8 +1017,8 @@ const MatrialExplainWrap = styled.div`
     min-height: 65px;
   }
   .title span {
-    width: 51px;
-    font-size: 15px;
+    width: 90px;
+    font-size: 18px;
     margin-right: 6px;
     line-height: 34px;
     color: white;
@@ -941,7 +1026,6 @@ const MatrialExplainWrap = styled.div`
   .desc {
     font-size: 16px;
     line-height: 34px;
-    text-align: center;
   }
 `;
 
