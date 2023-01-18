@@ -15,6 +15,7 @@ import Main from './pages/main/Main';
 import Layout from './components/layout/Layout';
 import Header from './components/layout/Header';
 import CompareBox from './components/common/CompareBox';
+import FindAccount from './pages/FindAccount';
 // import Spinner from './components/common/Spinner';
 
 function App() {
@@ -65,6 +66,7 @@ function App() {
           }
         />
         <Route exact path='/signup' element={<Signup />} />
+        <Route exact path='/findaccount' element={<FindAccount />} />
         <Route exact path='/' element={<Main />} />
         <Route
           exact
