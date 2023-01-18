@@ -153,7 +153,7 @@ const FindIdBtn = styled.button`
   border: none;
   background-color: white;
   border-bottom: ${({ isClicked }) =>
-    isClicked ? '2px solid #3366FF' : '2px solid #868686'};
+    isClicked ? '4px solid #3366FF' : '2px solid #868686'};
   color: ${({ isClicked }) => (isClicked ? '#3366FF' : '#868686')};
 `;
 
@@ -165,7 +165,7 @@ const FindPwBtn = styled.button`
   border: none;
   background-color: white;
   border-bottom: ${({ isClicked }) =>
-    !isClicked ? '2px solid #3366FF' : '2px solid #868686'};
+    !isClicked ? '4px solid #3366FF' : '2px solid #868686'};
   color: ${({ isClicked }) => (!isClicked ? '#3366FF' : '#868686')};
 `;
 
