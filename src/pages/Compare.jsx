@@ -468,15 +468,13 @@ const ComparePage = () => {
                   <div id='chartdiv'></div>
                   <div className='graphNameWrap'>
                     <div className='graphNameBox'>
-                      <div className='graphName' style={{ float: 'right' }}>
-                        <div>성분명 : {versusList[0].itemName}</div>
-                        <div>총량 : {versusList[0].totalAmount}</div>
+                      <div className='graphName A' style={{ float: 'right' }}>
+                        <div>{versusList[0].itemName}</div>
                       </div>
                     </div>
                     <div className='graphNameBox'>
-                      <div className='graphName'>
-                        <div>성분명 : {versusList[1].itemName}</div>
-                        <div>총량 : {versusList[1].totalAmount}</div>
+                      <div className='graphName B'>
+                        <div>{versusList[1].itemName}</div>
                       </div>
                     </div>
                   </div>
@@ -495,6 +493,9 @@ const ComparePage = () => {
                       </MatrialExplainWrap>
                       <div className='legendTitle'>유효성분 함량</div>
                       <div className='legendBox'>
+                        <div className='legendTotalvalue'>
+                          {versusList[0].totalAmount}
+                        </div>
                         <div id='legenddiv'></div>
                       </div>
                     </div>
@@ -527,17 +528,20 @@ const ComparePage = () => {
                     className='versusContentGraph'
                     style={{ float: 'right' }}>
                     <div className='legendWrap'>
+                      <MatrialExplainWrap
+                        BoxY={materialExplainY}
+                        Active={materialBExplainActive}>
+                        <div className='title'>
+                          <span>성분명</span>
+                          {materialExplainName}
+                        </div>
+                        <div className='desc'>{materialExplainDesc}</div>
+                      </MatrialExplainWrap>
                       <div className='legendTitle'>유효성분 함량</div>
                       <div className='legendBox'>
-                        <MatrialExplainWrap
-                          BoxY={materialExplainY}
-                          Active={materialBExplainActive}>
-                          <div className='title'>
-                            <span>성분명</span>
-                            {materialExplainName}
-                          </div>
-                          <div className='desc'>{materialExplainDesc}</div>
-                        </MatrialExplainWrap>
+                        <div className='legendTotalvalue'>
+                          {versusList[1].totalAmount}
+                        </div>
                         <div id='legenddiv2'></div>
                       </div>
                     </div>
@@ -759,11 +763,13 @@ const SubWrap = styled.div`
     text-align: center;
     margin-bottom: 30px;
   }
-  .legendBox {
-    width: 300px;
-    height: 400px;
-    overflow-y: scroll;
+  .legendWrap {
     position: relative;
+  }
+  .legendBox {
+    width: 338px;
+    height: 405px;
+    overflow-y: scroll;
   }
   .legendBox::-webkit-scrollbar {
     width: 18px;
@@ -775,6 +781,9 @@ const SubWrap = styled.div`
   .legendBox::-webkit-scrollbar-track {
     background-color: white;
     border-radius: 5px;
+  }
+  .legendTotalvalue {
+    font-size: 20px;
   }
   .graphWrap {
     margin-top: 40px;
@@ -798,9 +807,9 @@ const SubWrap = styled.div`
   }
   .graphName {
     display: inline-block;
-    background-color: #ebf0ff;
     padding: 6px 10px;
     white-space: normal;
+    background-color: #c2d2ff;
     word-break: break-all;
     border-radius: 10px;
     color: #242424;
@@ -808,6 +817,12 @@ const SubWrap = styled.div`
     line-height: 22px;
     font-weight: bold;
   }
+  /* .graphName.A {
+    background-color: #c2d2ff;
+  }
+  .graphName.B {
+    background-color: #ffe39c;
+  } */
   #chartdiv {
     width: 430px;
     height: 400px;
@@ -891,17 +906,17 @@ const NothingInBoxWrap = styled.div`
 `;
 const MatrialExplainWrap = styled.div`
   display: ${({ Active }) => (Active ? 'block' : 'none')};
-  width: 315px;
+  width: 338px;
   background-color: rgba(0, 0, 0, 0.54);
-  padding: 15px;
+  padding: 29px 24px 16px;
   border-radius: 24px;
   line-height: 34px;
   position: absolute;
-  left: 60px;
+  left: 0px;
   z-index: 1;
   color: white;
   /* top: ${({ BoxY }) => `${BoxY - 15}px`}; */
-  top: 20px;
+  top: 0px;
 
   backdrop-filter: blur(5px);
   .title {
@@ -911,6 +926,7 @@ const MatrialExplainWrap = styled.div`
     align-items: center;
     color: #87a5ff;
     font-weight: bold;
+    min-height: 65px;
   }
   .title span {
     font-size: 15px;
@@ -919,7 +935,8 @@ const MatrialExplainWrap = styled.div`
     color: white;
   }
   .desc {
-    font-size: 15px;
+    font-size: 16px;
+    line-height: 34px;
     text-align: center;
   }
 `;
