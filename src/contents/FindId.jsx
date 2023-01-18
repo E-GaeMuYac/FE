@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { api } from '../apis/apiInstance';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const FindId = () => {
   // 기본 input 상태값
@@ -34,6 +34,7 @@ const FindId = () => {
   const [resMsg, setResMsg] = useState('');
   const [resImg, setResImg] = useState('');
   const [resEmail, setResEmail] = useState('');
+  const [msgState, setMsgState] = useState(false);
 
   // 휴대폰 번호 입력
   const onChangePhoneNumber = (e) => {
@@ -109,11 +110,17 @@ const FindId = () => {
       alert('휴대폰 인증이 완료되었습니다.');
       setPhoneCodeConfirmMessage('인증 완료!');
       setPhoneCodeConfirmBtn(false);
-      setReadOnlyPhoneCode(readOnlyPhoneCode);
+      setReadOnlyPhoneCode(!readOnlyPhoneCode);
       setPhoneCodeBtn(false);
       setPhoneCodebtnLabel('인증번호 전송');
     } else {
       setPhoneCodeConfirmMessage('인증번호가 틀렸습니다. 다시 입력해 주세요.');
+      setIsPhoneCode(false);
+    }
+    if (!responsePhoneCode) {
+      setPhoneCodeConfirmMessage(
+        '전송된 인증번호가 없습니다. 인증번호를 전송해주세요.'
+      );
       setIsPhoneCode(false);
     }
   };
@@ -132,17 +139,26 @@ const FindId = () => {
     } else if (!isPhoneCode) {
       alert('휴대폰을 인증해 주세요!');
     } else {
-      submitPhoneNum({
-        phoneNumber: strPhoneNumber,
-      });
-      navigate('/login');
-      alert('회원가입 완료!\npillnuts에 오신 것을 환영합니다 :)');
+      submitPhoneNum(strPhoneNumber);
     }
   };
 
   //API 호출
-  const submitPhoneNum = (phoneNumber) => {
-    console.log(phoneNumber);
+  const submitPhoneNum = async (phoneNumber) => {
+    try {
+      const res = await api.get(
+        `/api/users/find/email?phoneNumber=${phoneNumber}`
+      );
+      console.log(res);
+      setResEmail(res.data.email.email);
+      setResImg(res.data.email.imageUrl);
+      setResMsg('아이디 찾기를 완료하였습니다.');
+      setMsgState(true);
+    } catch (e) {
+      console.log(e);
+      setResMsg('해당하는 사용자가 없습니다.');
+      setMsgState(false);
+    }
   };
 
   return (
@@ -217,11 +233,13 @@ const FindId = () => {
       </FormBox>
       <ResponseBox>
         <MessageBox>
-          <span>{resMsg}아이디 찾기를 완료하였습니다.</span>
+          <span className={`message ${msgState ? 'success' : 'error'}`}>
+            {resMsg}
+          </span>
         </MessageBox>
         <EmailBox>
           <ProfileImg resImg={resImg} />
-          <span>{resEmail}test@gmail.com</span>
+          <span>{resEmail}</span>
         </EmailBox>
       </ResponseBox>
       <NavBtnWrapper>
@@ -280,7 +298,8 @@ const ButtonSt = styled.button`
 
 const ResponseBox = styled.div`
   width: 100%;
-  height: 128px;
+  height: 130px;
+  padding-top: 10px;
 `;
 
 const MessageBox = styled.div`
@@ -291,6 +310,7 @@ const MessageBox = styled.div`
   align-items: center;
   span {
     font-size: 24px;
+    font-weight: 600;
   }
 `;
 
@@ -307,17 +327,15 @@ const EmailBox = styled.div`
 `;
 
 const ProfileImg = styled.div`
-  background-color: #919191;
   background-image: ${({ resImg }) => `url(${resImg})`};
   background-size: cover;
   background-position: center;
-  margin: 4.5px 4.5px;
+  margin: 10px;
   width: 41px;
   height: 41px;
   border: none;
   border-radius: 50%;
   cursor: pointer;
-  /* z-index: 2; */
 `;
 
 const NavBtnWrapper = styled.div`
