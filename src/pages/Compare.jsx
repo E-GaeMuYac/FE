@@ -55,9 +55,11 @@ const VersusCard = ({ info }) => {
       <div className='cardImg'></div>
       <div className='cardName'>{info.itemName}</div>
       <div className='cardContentDescWrap'>
-        <div className='cardContentDesc'>{info.entpName}</div>
+        <div className='cardContentDesc' style={{ textAlign: 'right' }}>
+          {info.etcOtcCode}
+        </div>
         <hr />
-        <div className='cardContentDesc'>{info.etcOtcCode}</div>
+        <div className='cardContentDesc'>{info.entpName}</div>
       </div>
       <div className='cardContentTagWrap'>
         {info.productType.map((tag) => (
@@ -654,6 +656,7 @@ const VersusCardWrap = styled.div`
     margin-bottom: 14px;
   }
   .cardContentDesc {
+    width: 100%;
     font-weight: bold;
     font-size: 15px;
     line-height: 22px;
@@ -929,6 +932,7 @@ const MatrialExplainWrap = styled.div`
     min-height: 65px;
   }
   .title span {
+    width: 51px;
     font-size: 15px;
     margin-right: 6px;
     line-height: 34px;
