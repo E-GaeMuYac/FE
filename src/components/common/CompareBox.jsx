@@ -69,7 +69,7 @@ const ListCardComp = ({ arrState, list }) => {
 const CompareBox = () => {
   const navigate = useNavigate();
   // 토글 여부 state
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState('close');
 
   // compareBox 배열
   const [isArr, setIsArr] = useRecoilState(compareBoxData);
@@ -87,14 +87,28 @@ const CompareBox = () => {
     setIsArrLength(count);
   }, [isArr]);
 
-  // onclick시 토글
+  // onclick시 기능
   const boxToggle = () => {
-    setIsOpen(!isOpen);
+    switch (isOpen) {
+      case 'close':
+        setIsOpen('open');
+        break;
+      case 'open':
+        setIsOpen('close');
+        break;
+      case 'hide':
+        setIsOpen('close');
+        break;
+    }
+  };
+  //onclick시 버튼 삭제
+  const closeBox = () => {
+    setIsOpen('hide');
   };
 
   // 비교하기 페이지로 이동
   const goToCompare = () => {
-    if (isOpen && isArrLength === 2) {
+    if (isArrLength === 2) {
       navigate('/compare?tab=성분그래프');
 
       //이동 후 state 초기화
@@ -128,6 +142,7 @@ const CompareBox = () => {
               비교하기
             </button>
           </div>
+          <div className='deleteBoxBtn' onClick={closeBox}></div>
         </BoxTop>
         <BoxContent>
           {isArr.map((list) => (
@@ -151,7 +166,19 @@ const CompareBox = () => {
 const Wrap = styled.div`
   position: fixed;
   left: 0;
-  bottom: ${({ isOpen }) => (isOpen ? 0 : '-222px')};
+  bottom: ${({ isOpen }) => {
+    switch (isOpen) {
+      case 'open':
+        return 0;
+        break;
+      case 'close':
+        return '-222px';
+        break;
+      case 'hide':
+        return '-322px';
+        break;
+    }
+  }};
   transition: bottom 0.3s;
   width: 100%;
   z-index: 1000;
@@ -170,10 +197,10 @@ const Wrap = styled.div`
   .back {
     position: absolute;
     left: 50%;
-    top: -20px;
+    top: -35px;
     transform: translateX(-50%);
-    width: 68px;
-    height: 20px;
+    width: 72px;
+    height: 55px;
     background-color: #ffffff;
     box-shadow: 0px -10px 30px 1px rgba(0, 0, 0, 0.094);
     border-radius: 10px;
@@ -191,7 +218,6 @@ const Wrap = styled.div`
     height: 40px;
     background-color: #ffffff;
     border-radius: 10px;
-    /* box-shadow: 0 -10px 30px 1px rgba(0, 0, 0, 0.094); */
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -203,7 +229,9 @@ const Wrap = styled.div`
     height: 32px;
     background-image: url('/assets/image/arrow_up.png');
     ${({ isOpen }) =>
-      isOpen ? `transform: rotate(180deg);` : `transform: rotate(0deg);`};
+      isOpen === 'open'
+        ? `transform: rotate(180deg);`
+        : `transform: rotate(0deg);`};
     background-size: cover;
     background-position: center;
     transition: transform 0.3s;
@@ -217,6 +245,7 @@ const BoxTop = styled.div`
   align-items: center;
   justify-content: space-between;
   z-index: 2;
+  position: relative;
   .boxCommentWrap {
     font-size: 20px;
     line-height: 28px;
@@ -244,14 +273,25 @@ const BoxTop = styled.div`
   .goToCompareBtn {
     width: 170px;
     height: 40px;
-    background-color: ${({ isOpen, isArrLength }) =>
-      isOpen && isArrLength === 2 ? '#242424' : '#B7B7B7'};
+    background-color: ${({ isArrLength }) =>
+      isArrLength === 2 ? '#242424' : '#B7B7B7'};
     border-radius: 38px;
     border: none;
     color: white;
-    cursor: ${({ isOpen, isArrLength }) =>
-      isOpen && isArrLength === 2 ? 'pointer' : 'auto'};
+    cursor: ${({ isArrLength }) => (isArrLength === 2 ? 'pointer' : 'auto')};
     font-weight: bold;
+  }
+  .deleteBoxBtn {
+    width: 40px;
+    height: 40px;
+    background-image: url('/assets/image/icon_delete2.png');
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    right: -100px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
   }
 `;
 const BoxContent = styled.div`
