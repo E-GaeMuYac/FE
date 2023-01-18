@@ -126,8 +126,6 @@ const FindId = () => {
   };
 
   // 아이디 찾기 Submit
-  const navigate = useNavigate();
-
   const onSubmitHandler = (e) => {
     const regExp = /[^0-9/]/g;
     const strPhoneNumber = phoneNumber.replace(regExp, '');
@@ -238,7 +236,11 @@ const FindId = () => {
           </span>
         </MessageBox>
         <EmailBox>
-          <ProfileImg resImg={resImg} />
+          {resImg ? (
+            <BackgroundUserImage>
+              <ProfileImg resImg={resImg} />
+            </BackgroundUserImage>
+          ) : null}
           <span>{resEmail}</span>
         </EmailBox>
       </ResponseBox>
@@ -326,13 +328,23 @@ const EmailBox = styled.div`
   }
 `;
 
+const BackgroundUserImage = styled.div`
+  width: 56px;
+  height: 56px;
+  margin: 10px;
+  border-radius: 50%;
+  background-color: #f6f7fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const ProfileImg = styled.div`
   background-image: ${({ resImg }) => `url(${resImg})`};
   background-size: cover;
   background-position: center;
-  margin: 10px;
-  width: 41px;
-  height: 41px;
+  width: 46px;
+  height: 46px;
   border: none;
   border-radius: 50%;
   cursor: pointer;
