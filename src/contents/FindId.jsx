@@ -240,6 +240,7 @@ const IdWrapper = styled.div`
   flex-direction: column;
   align-items: flex-end;
   input {
+    display: block;
     border-bottom: 1px solid #919191;
     :focus {
       outline: none;
