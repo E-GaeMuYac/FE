@@ -243,7 +243,12 @@ const User = (props) => {
                   size='30'
                 />
               </label>
-              <input id='file-input' type='file' onChange={imageInput} />
+              <input
+                id='file-input'
+                type='file'
+                accept='image/*'
+                onChange={imageInput}
+              />
             </UserImage>
           </BackgroundUserImage>
           {isFileClicked ? (
