@@ -90,18 +90,21 @@ const User = (props) => {
   const imageInput = (e) => {
     e.preventDefault();
     const file = e.target.files[0];
+    const sizeLimit = 3 * 1024 * 1024;
 
-    if (file.type.includes('image')) {
+    if (file.size > sizeLimit) {
+      alert('업로드 가능한 최대 용량은 3MB입니다.');
+    } else if (!file.type.includes('image')) {
+      alert('이미지 파일만 업로드 가능합니다.');
+    } else {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         setPrevImg(reader.result);
       };
       setNewImg(file);
-    } else {
-      alert('이미지 파일만 업로드 가능합니다.');
+      setIsFileClicked(true);
     }
-    setIsFileClicked(true);
   };
 
   const nickInput = (e) => {
