@@ -322,12 +322,12 @@ const User = (props) => {
         </Box>
         <Box>
           <div className='messageBox'>
-            <h1>건강꿀팁</h1>
+            <h1>필너츠 꿀팁</h1>
             <div className='image' />
             <span>마우스를 가져다대보세요</span>
           </div>
           <div className='messagePopup'>
-            <h2>건강꿀팁</h2>
+            <h2>필너츠 꿀팁</h2>
             <div>{serviceMsg}</div>
           </div>
         </Box>
@@ -710,9 +710,6 @@ const Box = styled.div`
     border-radius: 24px;
     color: #2649d8;
     cursor: pointer;
-    &:hover {
-      filter: blur(10px);
-    }
 
     h1 {
       text-align: center;
@@ -744,9 +741,8 @@ const Box = styled.div`
 
   .messagePopup {
     display: none;
-    /* background-color: rgba(0, 0, 0, 0.5); */
     background: rgba(255, 255, 255, 0.43);
-    /* backdrop-filter: blur(14px); */
+    backdrop-filter: blur(15px);
     width: 324px;
     height: 225px;
     padding: 20px;
@@ -754,8 +750,7 @@ const Box = styled.div`
     box-sizing: border-box;
     text-align: center;
     align-items: center;
-    color: black;
-    /* color: white; */
+    color: #242424;
     border-radius: 24px;
     position: absolute;
     top: 0;
