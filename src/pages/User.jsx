@@ -163,21 +163,23 @@ const User = (props) => {
   };
 
   const deleteAccount = async (password) => {
-    try {
-      await userApi.delete('/api/users/delete', {
-        data: {
-          password,
-        },
-        withCredentials: true,
-      });
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('nickname');
-      setIsToken(false);
-      alert('회원탈퇴가 완료되었습니다.');
-      navigate('/');
-    } catch (e) {
-      console.log(e);
+    if (window.confirm('정말 탈퇴하시겠습니까?😢')) {
+      try {
+        await userApi.delete('/api/users/delete', {
+          data: {
+            password,
+          },
+          withCredentials: true,
+        });
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('nickname');
+        setIsToken(false);
+        alert('회원탈퇴가 완료되었습니다.');
+        navigate('/');
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
