@@ -758,7 +758,6 @@ const SubWrap = styled.div`
   .content {
     width: 100%;
     display: flex;
-    align-items: center;
     gap: 20px;
     margin-bottom: 50px;
     position: relative;
