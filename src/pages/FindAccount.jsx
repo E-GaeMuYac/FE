@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import FindId from '../contents/FindId';
+import FindPassword from '../contents/FindPassword';
 
 const FindAccount = () => {
   const [isClicked, setIsClicked] = useState(true);
@@ -26,7 +27,7 @@ const FindAccount = () => {
               비밀번호 찾기
             </FindPwBtn>
           </BtnWrap>
-          {isClicked ? <FindId /> : /*비밀번호 찾기 컴포넌트*/ null}
+          {isClicked ? <FindId /> : <FindPassword />}
         </SignupWrapper>
       </Wrapper>
     </BackGround>
@@ -68,8 +69,8 @@ const SignupWrapper = styled.div`
 
   .successs {
     input {
-      margin-top: 10px;
-      height: 50px;
+      /* margin-top: 10px;
+      height: 50px; */
       width: 350px;
       border: none;
       border-bottom: 1px solid #3366ff;
@@ -84,8 +85,8 @@ const SignupWrapper = styled.div`
   }
   .errorr {
     input {
-      margin-top: 10px;
-      height: 50px;
+      /* margin-top: 10px;
+      height: 50px; */
       width: 350px;
       border: none;
       border-bottom: 1px solid #919191;
