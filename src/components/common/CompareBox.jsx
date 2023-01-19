@@ -87,6 +87,14 @@ const CompareBox = () => {
     setIsArrLength(count);
   }, [isArr]);
 
+  useEffect(() => {
+    if (isArrLength > 0) {
+      setIsOpen('open');
+    } else if (isArrLength === 0) {
+      setIsOpen('close');
+    }
+  }, [isArrLength]);
+
   // onclick시 기능
   const boxToggle = () => {
     switch (isOpen) {
@@ -129,34 +137,36 @@ const CompareBox = () => {
   return (
     <Wrap isOpen={isOpen}>
       <div className='wrap'>
-        <BoxTop isOpen={isOpen} isArrLength={isArrLength}>
-          <div className='boxCommentWrap'>
-            <div className='boxComment'>약품 비교함에 담기</div>
-            <div className='boxNum'>{isArrLength}/2</div>
-          </div>
-          <div className='boxButtonWrap'>
-            <div className='boxButtonReset' onClick={listReset}>
-              <div className='boxButtonResetImg'></div>초기화
+        <div className='backLayout'></div>
+        <div className='layout'>
+          <BoxTop isOpen={isOpen} isArrLength={isArrLength}>
+            <div className='boxCommentWrap'>
+              <div className='boxComment'>약품 비교함에 담기</div>
+              <div className='boxNum'>{isArrLength}/2</div>
             </div>
-            <button className='goToCompareBtn' onClick={goToCompare}>
-              비교하기
-            </button>
-          </div>
-          <div className='deleteBoxBtn' onClick={closeBox}></div>
-        </BoxTop>
-        <BoxContent>
-          {isArr.map((list) => (
-            <ListCardComp
-              key={list.medicineId}
-              list={list}
-              arrState={[isArr, setIsArr]}
-            />
-          ))}
-        </BoxContent>
-        <div className='back'>
-          <div className='toggleBtnWrap' onClick={boxToggle}>
-            <div className='toggleBtnImg'></div>
-          </div>
+            <div className='boxButtonWrap'>
+              <div className='boxButtonReset' onClick={listReset}>
+                <div className='boxButtonResetImg'></div>초기화
+              </div>
+              <button className='goToCompareBtn' onClick={goToCompare}>
+                비교하기
+              </button>
+            </div>
+            <div className='deleteBoxBtn' onClick={closeBox}></div>
+          </BoxTop>
+          <BoxContent>
+            {isArr.map((list) => (
+              <ListCardComp
+                key={list.medicineId}
+                list={list}
+                arrState={[isArr, setIsArr]}
+              />
+            ))}
+          </BoxContent>
+        </div>
+        <div className='toggleBtnBehind'></div>
+        <div className='toggleBtnWrap' onClick={boxToggle}>
+          <div className='toggleBtnImg'></div>
         </div>
       </div>
     </Wrap>
@@ -170,31 +180,38 @@ const Wrap = styled.div`
     switch (isOpen) {
       case 'open':
         return 0;
-        break;
       case 'close':
         return '-222px';
-        break;
       case 'hide':
         return '-322px';
-        break;
     }
   }};
   transition: bottom 0.3s;
   width: 100%;
   z-index: 1000;
   background-color: white;
-  box-shadow: 0 0 24px 1px rgba(0, 0, 0, 0.2);
   .wrap {
+    position: relative;
+  }
+  .layout {
     margin: 0 auto;
     max-width: 1050px;
+    height: 100%;
+  }
+  .backLayout {
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
-    position: relative;
+    box-shadow: 0 0 24px 1px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+    background-color: white;
   }
   .boxComment {
     margin-right: 14px;
   }
-  .back {
+  .toggleBtnBehind {
     position: absolute;
     left: 50%;
     top: -35px;
@@ -202,7 +219,7 @@ const Wrap = styled.div`
     width: 72px;
     height: 55px;
     background-color: #ffffff;
-    box-shadow: 0px -10px 30px 1px rgba(0, 0, 0, 0.094);
+    box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -212,10 +229,10 @@ const Wrap = styled.div`
   .toggleBtnWrap {
     position: absolute;
     left: 50%;
-    top: 5px;
+    top: -35px;
     transform: translateX(-50%);
-    width: 68px;
-    height: 40px;
+    width: 72px;
+    height: 55px;
     background-color: #ffffff;
     border-radius: 10px;
     cursor: pointer;
@@ -299,6 +316,8 @@ const BoxContent = styled.div`
   width: 100%;
   display: flex;
   gap: 50px;
+  position: relative;
+  z-index: 2;
 `;
 const ListCard = styled.div`
   position: relative;
