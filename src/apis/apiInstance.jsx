@@ -50,6 +50,7 @@ userApi.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
+      alert('로그인이 만료되었습니다.');
       localStorage.clear();
       window.location.replace('/login');
     }
