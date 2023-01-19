@@ -27,7 +27,7 @@ const BottomContents = ({ medicineInfo, query }) => {
       case '첨가물':
         setContentDesc(medicineInfo.ingrName);
         break;
-      case '유통기한':
+      case '유효기간':
         setContentDesc(medicineInfo.validTerm);
         break;
       case '주의사항':
@@ -266,7 +266,7 @@ const Detail = () => {
         if (grapDataArr[i].explain) {
           setMaterialExplainDesc(grapDataArr[i].explain);
         } else {
-          setMaterialExplainDesc('정보가 없습니다');
+          setMaterialExplainDesc('정보가 없습니다.');
         }
       }
     }
@@ -347,23 +347,32 @@ const Detail = () => {
               <GraphLabel style={{ marginLeft: '275px' }}>
                 성분 그래프
               </GraphLabel>
+              <TotalAmountWrap>
+                총 용량
+                <TotalAmount>
+                  <span className='totalAmountIcon'>
+                    {medicineItem?.totalAmount}
+                  </span>
+                </TotalAmount>
+              </TotalAmountWrap>
             </div>
-            <TotalAmount>총 함량 : {medicineItem?.totalAmount}</TotalAmount>
             <div
               className='legendBox'
               style={{
                 display: 'flex',
                 position: 'relative',
-                marginBottom: '55px',
+                // marginBottom: '0px',
               }}>
               <MatrialExplainWrap
                 BoxY={materialExplainY}
                 Active={materialExplainActive}>
-                <div className='title'>{materialExplainName}</div>
+                <div className='title'>
+                  성분명 <span>{materialExplainName}</span>
+                </div>
                 <div className='desc'>{materialExplainDesc}</div>
               </MatrialExplainWrap>
             </div>
-            <div id='chartdiv' />
+            <div id='chartdiv'></div>
           </MiddleCardBox>
           <RightCardBox>
             <GraphLabel>주요 유효성분</GraphLabel>
@@ -444,6 +453,7 @@ const MiddleCardBox = styled.div`
     font-size: 12px;
     position: absolute;
     top: 90px;
+    /* z-index: 1; */
   }
   .legendBox {
     /* background-color: aliceblue; */
@@ -458,9 +468,63 @@ const MiddleCardBox = styled.div`
   }
 `;
 
+const TotalAmountWrap = styled.div`
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 265px;
+  right: 206px;
+  z-index: 999;
+`;
+
 const TotalAmount = styled.div`
-  margin-top: 20px;
-  margin-left: 35px;
+  width: 20px;
+  height: 20px;
+  background-image: url('/assets/image/돋보기아이콘.png');
+  background-size: cover;
+  background-position: center;
+  margin-left: 5px;
+  display: inline-block;
+  :hover .totalAmountIcon {
+    display: block;
+  }
+  .totalAmountIcon {
+    border-radius: 8px;
+    /* box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2); */
+    background-color: rgba(0, 0, 0, 0.8);
+    /* box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2); */
+    display: none;
+    position: absolute;
+    top: 32px;
+    right: -26.5px;
+    text-align: center;
+    min-width: 130px;
+    max-width: 177px;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 350;
+    /* color: #868686; */
+    color: #ffffff;
+    /* background-color: #ffffff; */
+    opacity: 1;
+    /* z-index: 9999; */
+    font-weight: 400;
+    font-size: 14px;
+    word-break: break-all;
+  }
+  .totalAmountIcon::after {
+    content: '';
+    width: 0px;
+    height: 0px;
+    border-bottom: 10px solid rgba(0, 0, 0, 0.8);
+    border-top: 10px solid transparent;
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    position: absolute;
+    right: 33.5px;
+    top: -20px;
+  }
 `;
 
 const RightCardBox = styled.div`
@@ -725,17 +789,19 @@ const ScrollBar = styled.div`
 
 const MatrialExplainWrap = styled.div`
   display: ${({ Active }) => (Active ? 'block' : 'none')};
-  width: 370px;
-  min-height: 293px;
+  width: 390px;
+  min-height: 50px;
   /* height: 200px; */
   /* background-color: rgba(255, 255, 255, 0.9); */
-  background-color: rgba(0, 0, 0, 0.54);
+  background-color: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(11.5px);
   box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
   padding: 15px 30px 20px 30px;
   border-radius: 15px;
   line-height: 34px;
   position: absolute;
-  left: 15px;
+  top: -55px;
+  left: 0px;
   z-index: 1;
   color: white;
   /* color: black; */
@@ -746,9 +812,22 @@ const MatrialExplainWrap = styled.div`
   .title {
     font-size: 18px;
     margin-bottom: 15px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 34px;
+    color: #f0f0f0;
+    span {
+      margin-left: 6px;
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 35px;
+      color: #82a1ff;
+    }
   }
   .desc {
     font-size: 15px;
+    text-align: left;
   }
 `;
 

@@ -43,7 +43,7 @@ const TabBar = ({ location, query }) => {
       ]);
     }
     if (location.includes('/detail')) {
-      setTabList(['효능 효과', '용법 용량', '첨가물', '유통기한', '주의사항']);
+      setTabList(['효능 효과', '용법 용량', '첨가물', '유효기간', '주의사항']);
     }
   }, [location]);
 
