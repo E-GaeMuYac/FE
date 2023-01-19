@@ -194,9 +194,7 @@ const Input = styled.input`
   border: none;
   border-bottom: 1px solid #919191;
   text-indent: 10px;
-  text-shadow: 0 0 0 black;
   font-size: 20px;
-  color: transparent;
   ::placeholder {
     color: #919191;
     font-size: 18px;
