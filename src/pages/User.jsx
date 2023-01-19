@@ -94,8 +94,10 @@ const User = (props) => {
 
     if (file.size > sizeLimit) {
       alert('업로드 가능한 최대 용량은 3MB입니다.');
+      e.target.value = '';
     } else if (!file.type.includes('image')) {
       alert('이미지 파일만 업로드 가능합니다.');
+      e.target.value = '';
     } else {
       const reader = new FileReader();
       reader.readAsDataURL(file);
