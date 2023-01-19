@@ -29,13 +29,19 @@ useQuery 안의 onSuccess에서 데이터를 로그로 찍으면 undefined가 �
 
 
 ## 페이지
+Main.jsx => 김수정
+
 Medecine.jsx => 박수빈
 
 Compare.jsx => 이재정
 
+Search.jsx => 이재정
+
 Login.jsx => 김수정
 
 Signup.jsx => 김수정
+
+
 
 
 

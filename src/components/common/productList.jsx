@@ -13,12 +13,18 @@ const ProductList = ({ list }) => {
   };
 
   const putInToCompareBox = (list) => {
+    let count = 0;
     for (let i = 0; i < compareBoxArr.length; i++) {
       if (compareBoxArr[i].itemName === 'null') {
         let newArr = [...compareBoxArr];
         newArr[i] = list;
         setCompareBoxArr(newArr);
         break;
+      } else {
+        count++;
+      }
+      if (count === 2) {
+        alert('비교함이 가득 찼습니다.');
       }
     }
   };
@@ -125,6 +131,7 @@ const SearchListWrap = styled.div`
     text-overflow: ellipsis;
   }
   .listTagWrap {
+    width: 256px;
     display: flex;
     align-items: center;
     justify-content: center;
