@@ -50,9 +50,9 @@ const Signup = () => {
   const [phoneCodeConfirmBtn, setPhoneCodeConfirmBtn] = useState(false);
 
   // 인증완료 시 input 비활성화
-  const [readOnlyEmailCode, setReadOnlyEmailCode] = useState(false);
-  const [readOnlyPhoneCode, setReadOnlyPhoneCode] = useState(false);
+  const [readOnlyEmailCode, setReadOnlyEmailCode] = useState(true);
   const [readOnlyPhoneNumber, setReadOnlyPhoneNumber] = useState(false);
+  const [readOnlyPhoneCode, setReadOnlyPhoneCode] = useState(true);
 
   const [emailBtnColor, setEmailBtnColor] = useState('#8bc790');
   const [emailCodeBtnColor, setEmailCodeBtnColor] = useState('#8bc790');
@@ -175,6 +175,7 @@ const Signup = () => {
       alert('인증번호가 전송되었습니다. 이메일을 확인해 주세요.');
       postSendEmailCode({ email: email });
       setEmailCodeBtnLabel('인증번호 재전송');
+      setReadOnlyEmailCode(false);
       // setEmailCode('');
       // setEmailCodeConfirmMessage('');
     }
@@ -275,6 +276,7 @@ const Signup = () => {
     setReadOnlyPhoneCode(false);
     setPhoneCode('');
     setPhoneCodebtnLabel('인증번호 재전송');
+    setReadOnlyEmailCode(true);
     postSendPhoneCode({ phoneNumber: strPhoneNumber });
   };
 
@@ -307,6 +309,7 @@ const Signup = () => {
       setReadOnlyPhoneCode(!readOnlyPhoneCode);
       setPhoneCodeBtn(false);
       setPhoneCodebtnLabel('인증번호 전송');
+      setReadOnlyPhoneNumber(!readOnlyPhoneCode);
     } else {
       setPhoneCodeConfirmMessage('인증번호가 틀렸습니다. 다시 입력해 주세요.');
       setIsPhoneCode(false);
@@ -417,17 +420,21 @@ const Signup = () => {
       nickname === ''
     ) {
       alert('빈칸을 입력해 주세요!');
+    } else if (emailMessage === '이메일 중복 확인이 필요합니다.') {
+      alert('이메일 중복 확인이 필요합니다.');
     } else if (
       !isEmail ||
       !isPhoneNumber ||
       !isPassword ||
-      !isPasswordConfirm
+      !isPasswordConfirm ||
+      !isEmailCode ||
+      !isPhoneCode
     ) {
       alert('조건에 맞게 입력해 주세요!');
-    } else if (!isEmailCode) {
+    } else if (emailCodeConfirmMessage !== '인증 완료!') {
       alert('이메일을 인증해 주세요!');
-    } else if (!isPhoneCode) {
-      alert('휴대폰을 인증해 주세요!');
+    } else if (phoneCodeConfirmMessage !== '인증 완료!') {
+      alert('휴대폰 인증번호를 확인해 주세요!');
     } else {
       postSignup({
         email: email,
@@ -541,7 +548,7 @@ const Signup = () => {
                 className='form-control'
                 value={phoneNumber}
                 onChange={onChangePhoneNumber}
-                readOnly={readOnlyPhoneCode}
+                readOnly={readOnlyPhoneNumber}
                 maxLength={13}
                 placeholder='휴대폰 번호'
                 autoComplete='one-time-code'
@@ -742,7 +749,6 @@ const SignupWrapper = styled.div`
       margin-top: 10px;
       height: 50px;
       width: 350px;
-      /* height: 50px; */
       border: none;
       border-bottom: 1px solid #3366ff;
       border-radius: 0;
@@ -759,7 +765,6 @@ const SignupWrapper = styled.div`
       margin-top: 10px;
       height: 50px;
       width: 350px;
-      /* height: 50px; */
       border: none;
       border-bottom: 1px solid #919191;
       border-radius: 0;
