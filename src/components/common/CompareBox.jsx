@@ -88,7 +88,7 @@ const CompareBox = () => {
   }, [isArr]);
 
   useEffect(() => {
-    if (isArrLength > 0) {
+    if (isArrLength === 2) {
       setIsOpen('open');
     } else if (isArrLength === 0) {
       setIsOpen('close');

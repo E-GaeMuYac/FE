@@ -1,7 +1,36 @@
-import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { userApi } from '../../apis/apiInstance';
+
+const Nav = ({ page }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [pageActive, setPageActive] = useState(false);
+
+  useEffect(() => {
+    if (page.pathName === location.pathname) {
+      setPageActive(true);
+    } else {
+      setPageActive(false);
+    }
+  }, [page, location]);
+
+  const gotoPage = () => {
+    if (page.pathName === '/compare') {
+      navigate(`${page.pathName}?tab=성분그래프`);
+    } else {
+      navigate(`${page.pathName}`);
+    }
+  };
+
+  return (
+    <StyledLink pageActive={pageActive} onClick={gotoPage}>
+      {page.pageName}
+    </StyledLink>
+  );
+};
 
 const Header = (props) => {
   const navigate = useNavigate();
@@ -45,6 +74,21 @@ const Header = (props) => {
       console.log(e);
     }
   };
+  // ---------------------------------------------------------------------
+
+  const pageArr = [
+    { pageName: 'ABOUT', pathName: '/' },
+    { pageName: '검색하기', pathName: '/search' },
+    { pageName: '비교하기', pathName: '/compare' },
+    { pageName: '이벤트', pathName: '/event' },
+  ];
+
+  const goToMypage = () => {
+    navigate('/mypage');
+  };
+
+  // ---------------------------------------------------------------------
+
   return (
     <Wrap>
       <HeaderWrapper>
@@ -52,10 +96,9 @@ const Header = (props) => {
           {/* 이미지로 교체 예정 */}
           <LogoBox to='/' />
           <CategoryBox>
-            <StyledLink to='/'>ABOUT</StyledLink>
-            <StyledLink to='/search'>검색하기</StyledLink>
-            <StyledLink to='/compare?tab=성분그래프'>비교하기</StyledLink>
-            <StyledLink to='/event'>이벤트</StyledLink>
+            {pageArr.map((page) => (
+              <Nav key={page.pageName} page={page} />
+            ))}
           </CategoryBox>
           {!isToken ? (
             <SignBox>
@@ -64,8 +107,9 @@ const Header = (props) => {
             </SignBox>
           ) : (
             <SignBox>
-              <BackgroundMypageBtn to='/mypage'>
+              <BackgroundMypageBtn onClick={goToMypage}>
                 <MypageBtn props={userImage} />
+                <div className='mypage'>마이페이지</div>
               </BackgroundMypageBtn>
               <LogoutBtn onClick={logoutHandler}>로그아웃</LogoutBtn>
             </SignBox>
@@ -135,9 +179,10 @@ const CategoryBox = styled.div`
   font-weight: 700;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled.div`
   text-decoration: none;
-  color: #868686;
+  color: ${({ pageActive }) => (pageActive ? '#242424' : '#868686')};
+  cursor: pointer;
 `;
 
 const SignBox = styled.div`
@@ -182,12 +227,17 @@ const SignupBtn = styled(Link)`
   border-radius: 8px;
   cursor: pointer;
 `;
-const BackgroundMypageBtn = styled(Link)`
-  width: 50px;
+const BackgroundMypageBtn = styled.div`
+  cursor: pointer;
   height: 50px;
   background-color: #f6f7fa;
   border-radius: 50%;
-  /* z-index: 1; */
+  display: flex;
+  align-items: center;
+  .mypage {
+    color: #868686;
+    font-size: 15px;
+  }
 `;
 
 const MypageBtn = styled.div`
