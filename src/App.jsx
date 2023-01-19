@@ -1,5 +1,10 @@
-import React, { useState } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from 'react-router-dom';
 
 //page
 import ComparePage from './pages/Compare';
@@ -23,7 +28,7 @@ function App() {
   const [userImage, setUserImage] = useState('');
 
   return (
-    <BrowserRouter>
+    <>
       <Header
         istoken={isToken}
         setistoken={setIsToken}
@@ -48,16 +53,7 @@ function App() {
             </Layout>
           }
         />
-        <Route
-          exact
-          path='/compare'
-          element={
-            <>
-              <ComparePage />
-              <CompareBox />
-            </>
-          }
-        />
+        <Route exact path='/compare' element={<ComparePage />} />
         <Route
           exact
           path='/login'
@@ -68,16 +64,6 @@ function App() {
         <Route exact path='/signup' element={<Signup />} />
         <Route exact path='/findaccount' element={<FindAccount />} />
         <Route exact path='/' element={<Main />} />
-        <Route
-          exact
-          path='/compare'
-          element={
-            <Layout>
-              <ComparePage />
-              <CompareBox />
-            </Layout>
-          }
-        />
         <Route
           path='/detail/:id'
           element={
@@ -102,7 +88,7 @@ function App() {
         />
         {/* <Route path='/spinner' element={<Spinner />} /> */}
       </Routes>
-    </BrowserRouter>
+    </>
   );
 }
 
