@@ -108,7 +108,9 @@ const Header = (props) => {
           ) : (
             <SignBox>
               <BackgroundMypageBtn onClick={goToMypage}>
-                <MypageBtn props={userImage} />
+                <div className='myinfoImg'>
+                  <MypageBtn props={userImage} />
+                </div>
                 <div className='mypage'>마이페이지</div>
               </BackgroundMypageBtn>
               <LogoutBtn onClick={logoutHandler}>로그아웃</LogoutBtn>
@@ -230,10 +232,14 @@ const SignupBtn = styled(Link)`
 const BackgroundMypageBtn = styled.div`
   cursor: pointer;
   height: 50px;
-  background-color: #f6f7fa;
-  border-radius: 50%;
   display: flex;
   align-items: center;
+  .myinfoImg {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #f6f7fa;
+  }
   .mypage {
     color: #868686;
     font-size: 15px;
@@ -241,7 +247,6 @@ const BackgroundMypageBtn = styled.div`
 `;
 
 const MypageBtn = styled.div`
-  background-color: pink;
   background-image: ${({ props }) => `url(${props})`};
   background-size: cover;
   background-position: center;
