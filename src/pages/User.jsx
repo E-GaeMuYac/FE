@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IoMdSettings } from 'react-icons/io';
-// import { FaPen } from 'react-icons/fa';
 import { api, userApi } from '../apis/apiInstance';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -92,13 +91,15 @@ const User = (props) => {
     e.preventDefault();
     const file = e.target.files[0];
 
-    if (file) {
+    if (file.type.includes('image')) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         setPrevImg(reader.result);
       };
       setNewImg(file);
+    } else {
+      alert('이미지 파일만 업로드 가능합니다.');
     }
     setIsFileClicked(true);
   };
