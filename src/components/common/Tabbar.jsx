@@ -39,7 +39,7 @@ const TabBar = ({ location, query }) => {
         '효능 효과',
         '용법 용량',
         '첨가물',
-        '보관 방법',
+        '유효기간',
       ]);
     }
     if (location.includes('/detail')) {

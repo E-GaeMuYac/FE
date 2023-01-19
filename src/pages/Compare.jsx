@@ -35,7 +35,7 @@ const VersusContent = ({ medicineInfo, query }) => {
       case '첨가물':
         setVersusContentDesc(medicineInfo.ingrName);
         break;
-      case '보관 방법':
+      case '유효기간':
         setVersusContentDesc(medicineInfo.validTerm);
         break;
     }
