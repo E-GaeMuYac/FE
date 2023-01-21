@@ -76,14 +76,14 @@ function App() {
         <Route
           path='/mypage'
           element={
-            <Layout>
+            <>
               <User
                 setuserimage={setUserImage}
                 setistoken={setIsToken}
                 istoken={isToken}
               />
               <CompareBox />
-            </Layout>
+            </>
           }
         />
         {/* <Route path='/spinner' element={<Spinner />} /> */}

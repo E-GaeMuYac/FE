@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useGetLikeQuery } from '../query/likeQuery';
 import ProductList from '../components/common/productList';
+import Layout from '../components/layout/Layout';
 
 const User = (props) => {
   const navigate = useNavigate();
@@ -184,7 +185,7 @@ const User = (props) => {
         alert('회원탈퇴가 완료되었습니다.');
         navigate('/');
       } catch (e) {
-        console.log(e);
+        alert('비밀번호를 알맞게 입력해주세요.');
       }
     }
   };
@@ -203,144 +204,166 @@ const User = (props) => {
 
   return (
     <Wrapper>
-      <MyPageHeader>
-        <span>마이페이지</span>
-        <div className='deleteAccount'>
-          <button onClick={sortLoginType}>회원탈퇴</button>
-          {isShow && (
-            <PopUp>
-              <Content>
-                <div className='triangle'></div>
-                <div className='inputWrap'>
-                  <span>비밀번호 입력</span>
-                  <input
-                    type='password'
-                    onChange={(e) => {
-                      setDelPassword(e.target.value);
-                    }}
-                  />
-                </div>
-                <div className='btnWrap'>
-                  <button onClick={() => deleteAccount(delPassword)}>
-                    회원탈퇴
-                  </button>
-                  <button
-                    onClick={() => {
-                      setIsShow(false);
-                    }}>
-                    취소
-                  </button>
-                </div>
-              </Content>
-            </PopUp>
-          )}
-        </div>
-      </MyPageHeader>
-      <MyPageWrap>
-        <ProfileImg>
-          <BackgroundUserImage>
-            <UserImage userImg={imageUrl} prevImg={prevImg}>
-              <label htmlFor='file-input'>
-                <IoMdSettings
-                  style={{
-                    position: 'absolute',
-                    top: 4,
-                    right: 4,
-                    color: 'white',
-                  }}
-                  size='30'
-                />
-              </label>
-              <input
-                id='file-input'
-                type='file'
-                accept='image/*'
-                onChange={imageInput}
-              />
-            </UserImage>
-          </BackgroundUserImage>
-          {isFileClicked ? (
-            <ModifyBtnBox>
-              <CancelBtn type='button' onClick={cancelImgChange}>
-                취소
-              </CancelBtn>
-              <FinishBtn type='button' onClick={modifyImage}>
-                변경완료
-              </FinishBtn>
-            </ModifyBtnBox>
-          ) : (
-            <DefaultImgBtn type='button' onClick={defaultImgHandler}>
-              기본이미지로 변경
-            </DefaultImgBtn>
-          )}
-        </ProfileImg>
-        <ProfileWrap>
-          <NicknameBox>
-            {!isTextClicked ? (
-              <div style={{ display: 'flex' }}>
-                <Nickname>{nickname ? `${nickname}님` : 'OOO님'}</Nickname>
-                <div className='wrapNickname'>
-                  <button className='editNickname' onClick={changeNickname} />
-                </div>
-              </div>
-            ) : (
-              <NicknameInput>
+      {isShow && (
+        <ModalBackground>
+          <Modal>
+            <Content>
+              <SignupInfo>
+                <PrimarySpan>회원 탈퇴하기</PrimarySpan>
+                <SecondarySpan>
+                  회원을 탈퇴하시려면, 본인 확인을 위해 비밀번호를 입력하세요.
+                </SecondarySpan>
+              </SignupInfo>
+              <EmailBox>
+                <EmailBoxBg>
+                  <EmailBoxImg imageUrl={imageUrl} />
+                </EmailBoxBg>
+                <span>test@naver.com</span>
+              </EmailBox>
+              <div className='form-floating form-width'>
                 <input
-                  type='text'
-                  defaultValue={nickname}
-                  onChange={nickInput}
+                  type='password'
+                  className='form-control'
+                  onChange={(e) => {
+                    setDelPassword(e.target.value);
+                  }}
+                  minLength={8}
+                  maxLength={15}
+                  placeholder='비밀번호'
                 />
-                <button className='o' onClick={changesDone}>
-                  O
+                <label>비밀번호</label>
+              </div>
+              <ModalBtnWrap>
+                <button
+                  className='cancel'
+                  onClick={() => {
+                    setIsShow(false);
+                  }}>
+                  취소하기
                 </button>
-                <button className='x' onClick={cancelChange}>
-                  X
+                <button
+                  className='proceed'
+                  onClick={() => deleteAccount(delPassword)}>
+                  탈퇴하기
                 </button>
-              </NicknameInput>
+              </ModalBtnWrap>
+            </Content>
+          </Modal>
+        </ModalBackground>
+      )}
+      <Layout>
+        <MyPageHeader>
+          <span>마이페이지</span>
+          <div className='deleteAccount'>
+            <button onClick={sortLoginType}>회원탈퇴</button>
+          </div>
+        </MyPageHeader>
+        <MyPageWrap>
+          <ProfileImg>
+            <BackgroundUserImage>
+              <UserImage userImg={imageUrl} prevImg={prevImg}>
+                <label htmlFor='file-input'>
+                  <IoMdSettings
+                    style={{
+                      position: 'absolute',
+                      top: 4,
+                      right: 4,
+                      color: 'white',
+                    }}
+                    size='30'
+                  />
+                </label>
+                <input
+                  id='file-input'
+                  type='file'
+                  accept='image/*'
+                  onChange={imageInput}
+                />
+              </UserImage>
+            </BackgroundUserImage>
+            {isFileClicked ? (
+              <ModifyBtnBox>
+                <CancelBtn type='button' onClick={cancelImgChange}>
+                  취소
+                </CancelBtn>
+                <FinishBtn type='button' onClick={modifyImage}>
+                  변경완료
+                </FinishBtn>
+              </ModifyBtnBox>
+            ) : (
+              <DefaultImgBtn type='button' onClick={defaultImgHandler}>
+                기본이미지로 변경
+              </DefaultImgBtn>
             )}
-            <ProfileMsg>
-              필너츠에 오신 것을
-              <br />
-              환영합니다!
-            </ProfileMsg>
-          </NicknameBox>
-          <CalenderWrap>
-            <div className='calendar'>
-              <span>출석일수</span>
-              <h1>{`${loginCount}일`}</h1>
+          </ProfileImg>
+          <ProfileWrap>
+            <NicknameBox>
+              {!isTextClicked ? (
+                <div style={{ display: 'flex' }}>
+                  <Nickname>{nickname ? `${nickname}님` : 'OOO님'}</Nickname>
+                  <div className='wrapNickname'>
+                    <button className='editNickname' onClick={changeNickname} />
+                  </div>
+                </div>
+              ) : (
+                <NicknameInput>
+                  <input
+                    type='text'
+                    defaultValue={nickname}
+                    onChange={nickInput}
+                  />
+                  <button className='o' onClick={changesDone}>
+                    O
+                  </button>
+                  <button className='x' onClick={cancelChange}>
+                    X
+                  </button>
+                </NicknameInput>
+              )}
+              <ProfileMsg>
+                필너츠에 오신 것을
+                <br />
+                환영합니다!
+              </ProfileMsg>
+            </NicknameBox>
+            <CalenderWrap>
+              <div className='calendar'>
+                <span>출석일수</span>
+                <h1>{`${loginCount}일`}</h1>
+              </div>
+            </CalenderWrap>
+          </ProfileWrap>
+          <Box>
+            <EventBox to='/event'>
+              <h1>EVENT</h1>
+              <div style={{ fontSize: '18px' }}>
+                간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
+              </div>
+              <div className='image' />
+            </EventBox>
+          </Box>
+          <Box>
+            <div className='messageBox'>
+              <h1>필너츠 꿀팁</h1>
+              <div className='image' />
+              <span>마우스를 가져다대보세요</span>
             </div>
-          </CalenderWrap>
-        </ProfileWrap>
-        <Box>
-          <EventBox to='/event'>
-            <h1>EVENT</h1>
-            <div style={{ fontSize: '18px' }}>
-              간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
+            <div className='messagePopup'>
+              <h2>필너츠 꿀팁</h2>
+              <div>{serviceMsg}</div>
             </div>
-            <div className='image' />
-          </EventBox>
-        </Box>
-        <Box>
-          <div className='messageBox'>
-            <h1>필너츠 꿀팁</h1>
-            <div className='image' />
-            <span>마우스를 가져다대보세요</span>
-          </div>
-          <div className='messagePopup'>
-            <h2>필너츠 꿀팁</h2>
-            <div>{serviceMsg}</div>
-          </div>
-        </Box>
-      </MyPageWrap>
-      <LikelistHeader>
-        <span>찜한 의약품 목록 ({likeList.length}개)</span>
-      </LikelistHeader>
-      <LikeList>
-        {/* 임시 */}
-        {likeList.map((list) => (
-          <ProductList key={list.medicineId} list={{ ...list, dibs: true }} />
-        ))}
-      </LikeList>
+          </Box>
+        </MyPageWrap>
+        <LikelistHeader>
+          <span>찜한 의약품 목록 ({likeList.length}개)</span>
+        </LikelistHeader>
+        <LikeList>
+          {/* 임시 */}
+          {likeList.map((list) => (
+            <ProductList key={list.medicineId} list={{ ...list, dibs: true }} />
+          ))}
+        </LikeList>
+      </Layout>
     </Wrapper>
   );
 };
@@ -365,10 +388,9 @@ const MyPageHeader = styled.div`
     height: 30px;
     border: none;
     border-radius: 50px;
-    background-color: #d0d0d0;
-    color: #868686;
+    background-color: #242424;
+    color: #f0f0f0;
     font-size: 15px;
-    font-weight: 700;
   }
   .deleteAccount {
     position: relative;
@@ -394,13 +416,6 @@ const MyPageHeader = styled.div`
       margin-bottom: 3px;
       padding: 0 10px;
     }
-    .btnWrap {
-      width: 190px;
-      height: 30px;
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-    }
     button {
       border: none;
       border-radius: 50px;
@@ -409,36 +424,133 @@ const MyPageHeader = styled.div`
   }
 `;
 
-const PopUp = styled.div`
-  position: absolute;
-  left: -116%;
-  top: 51px;
-  z-index: 2;
-  /* top: 220px;
-  right: 510px;
-  z-index: 2; */
+const ModalBackground = styled.div`
+  background: rgba(0, 0, 0, 0.8);
+  width: 100%;
+  min-height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(10px);
 `;
 
-const Content = styled.div`
-  width: 300px;
-  height: 185px;
-  box-shadow: 0px 0px 6px 0px #00000040;
+const Modal = styled.div`
   background-color: #ffff;
-  border-radius: 10px;
+  border-radius: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  .triangle {
-    width: 30px;
-    background-color: #ffff;
-    height: 30px;
-    border-radius: 4px;
-    box-shadow: -2px 2px rgb(178 178 178 / 0.3);
-    transform: rotate(135deg);
-    position: absolute;
-    bottom: 169px;
-    z-index: 2;
+  justify-content: center;
+  width: 660px;
+  height: 564px;
+  z-index: 2;
+`;
+
+const Content = styled.div`
+  width: 499px;
+  height: 483px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  .form-control {
+    width: 480px;
+    margin-bottom: 70px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #919191;
+    :focus {
+      outline: none;
+      box-shadow: none;
+      border-bottom: 1px solid #919191;
+    }
   }
+  label {
+    color: #868686;
+  }
+`;
+
+const ModalBtnWrap = styled.div`
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  .cancel {
+    width: 228px;
+    height: 44px;
+    border-radius: 50px;
+    border: none;
+    background-color: #e7e7e7;
+  }
+  .proceed {
+    width: 228px;
+    height: 44px;
+    border-radius: 50px;
+    border: none;
+    background-color: #ffb0aa;
+    color: white;
+  }
+`;
+
+const SignupInfo = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+`;
+
+const PrimarySpan = styled.span`
+  font-size: 32px;
+  font-weight: 700;
+  color: #242424;
+`;
+
+const SecondarySpan = styled.span`
+  font-size: 15px;
+  color: #868686;
+`;
+
+const EmailBox = styled.div`
+  width: 100%;
+  height: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  span {
+    font-size: 30px;
+    font-weight: bold;
+  }
+`;
+
+const EmailBoxBg = styled.div`
+  width: 56px;
+  height: 56px;
+  margin: 10px;
+  border-radius: 50%;
+  background-color: #f6f7fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const EmailBoxImg = styled.div`
+  background-image: ${({ imageUrl }) => `url(${imageUrl})`};
+  background-size: cover;
+  background-position: center;
+  width: 46px;
+  height: 46px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
 `;
 
 const MyPageWrap = styled.div`
@@ -654,7 +766,6 @@ const CalenderWrap = styled.div`
     h1 {
       font-size: 40px;
       font-weight: bold;
-      /* background-color: skyblue; */
     }
   }
 `;
