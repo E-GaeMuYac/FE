@@ -1,15 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 
 import { useGetSearchQuery } from '../query/searchQuery';
 
-import { useRecoilState } from 'recoil';
-import { compareBoxData } from '../recoil/recoilStore';
-
 //component
-import LikeItBtn from '../components/common/LikeItBtn';
 import ProductList from '../components/common/productList';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
@@ -103,7 +98,6 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
 };
 
 const Search = () => {
-  const navigate = useNavigate();
   const [searhArr, setSearhArr] = useState([]);
 
   //약 검색 종류 데이터 모음
@@ -269,7 +263,7 @@ const Search = () => {
             <div className='searchTitleWrap'>
               <div className='searchText'>'{searchedWord}'</div>
               <div className='searchListNum'>
-                검색 결과 {searchLength.toLocaleString('ko-KR')}개
+                검색 결과 {searchLength?.toLocaleString('ko-KR')}개
               </div>
             </div>
             <div className='searchSort'>찜한순</div>

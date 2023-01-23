@@ -59,7 +59,7 @@ const Header = (props) => {
       const res = await userApi.get('api/users/find');
       setUserImage(res.data.user.imageUrl);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 
