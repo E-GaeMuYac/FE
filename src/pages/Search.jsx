@@ -263,7 +263,7 @@ const Search = () => {
             <div className='searchTitleWrap'>
               <div className='searchText'>'{searchedWord}'</div>
               <div className='searchListNum'>
-                검색 결과 {searchLength?.toLocaleString('ko-KR')}개
+                검색 결과 {searchLength.toLocaleString('ko-KR')}개
               </div>
             </div>
             <div className='searchSort'>찜한순</div>

@@ -18,6 +18,12 @@ jobs:
       - name: Checkout source code.
         uses: actions/checkout@v2
 
+      - name: Create env file
+        run: |
+          echo REACT_APP_API_ENDPOINT=${{ secrets.REACT_APP_API_ENDPOINT }}
+          echo REACT_APP_EMAIL_X_API_KEY=${{ secrets.REACT_APP_EMAIL_X_API_KEY }}
+          echo REACT_APP_PHONE_X_API_KEY=${{ secrets.REACT_APP_PHONE_X_API_KEY }}
+
       - name: Install Dependencies
         run: npm install
 
