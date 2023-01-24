@@ -122,6 +122,10 @@ const ComparePage = () => {
   }, [data]);
   //   --------------------------------------------------------------
   // 그래프
+  let allergyDataArray1 = [];
+  let allergyDataArray2 = [];
+  const [allergy1, setAllergy1] = useState(false);
+  const [allergy2, setAllergy2] = useState(false);
 
   let graphData = [];
   const [grapDataArr, setGrapDataArr] = useState([]);
@@ -131,6 +135,39 @@ const ComparePage = () => {
   const [materialExplainY, setMaterialExplainY] = useState(0);
   const [materialExplainName, setMaterialExplainName] = useState('');
   const [materialExplainDesc, setMaterialExplainDesc] = useState('');
+
+  useLayoutEffect(() => {
+    if (versusList.length === 2 && query === '성분그래프') {
+      //그래프 초기화
+      allergyDataArray1 = [];
+      allergyDataArray2 = [];
+
+      // 등록한 알러지 성분 정보 받아오기
+      for (let i = 0; i < versusList[0]?.materialName?.length; i++) {
+        const allergyData = {
+          material: versusList[0]?.materialName[i]?.material,
+          allergy: versusList[0]?.materialName[i]?.allergy,
+        };
+        allergyDataArray1.push(allergyData);
+        if (versusList[0]?.materialName[i]?.allergy === true) {
+          setAllergy1(true);
+        }
+      }
+      console.log(allergyDataArray1);
+
+      for (let j = 0; j < versusList[1]?.materialName?.length; j++) {
+        const allergyData = {
+          material: versusList[1]?.materialName[j]?.material,
+          allergy: versusList[1]?.materialName[j]?.allergy,
+        };
+        allergyDataArray2.push(allergyData);
+        if (versusList[1]?.materialName[j]?.allergy === true) {
+          setAllergy2(true);
+        }
+      }
+      console.log(allergyDataArray2);
+    }
+  }, [versusList, query]);
 
   //그래프에 들어갈 배열 생성
   useLayoutEffect(() => {
@@ -189,237 +226,309 @@ const ComparePage = () => {
     }
   }, [versusList, query]);
 
+  console.log(versusList);
+
   // 그래프 작업
   useLayoutEffect(() => {
     if (versusList.length === 2 && query === '성분그래프') {
-      const root = am5.Root.new('chartdiv');
+      for (let i = 0; i < versusList[0].materialName?.length; i++) {
+        for (let j = 0; j < versusList[1].materialName?.length; j++) {
+          console.log(versusList[0].materialName[i].allergy);
+          console.log(versusList[1].materialName[j].allergy);
 
-      const chart = root.container.children.push(
-        am5percent.PieChart.new(root, {
-          layout: root.verticalLayout,
-        })
-      );
+          const root = am5.Root.new('chartdiv');
 
-      // 애니메이션 셋팅
-      root.setThemes([am5themes_Animated.new(root)]);
+          const chart = root.container.children.push(
+            am5percent.PieChart.new(root, {
+              layout: root.verticalLayout,
+            })
+          );
 
-      // 툴팁 최대 너비 지정 및 오버 시 줄바꿈
-      const tootip = am5.Tooltip.new(root, {});
-      tootip.label.setAll({
-        oversizedBehavior: 'wrap',
-        maxWidth: 200,
-        fontSize: 17,
-      });
+          // 애니메이션 셋팅
+          root.setThemes([am5themes_Animated.new(root)]);
 
-      //series1
-      const series = chart.series.push(
-        am5percent.PieSeries.new(root, {
-          name: 'Series',
-          valueField: 'medicineA',
-          categoryField: 'material',
+          // 툴팁 최대 너비 지정 및 오버 시 줄바꿈
+          const tootip = am5.Tooltip.new(root, {});
+          tootip.label.setAll({
+            oversizedBehavior: 'wrap',
+            maxWidth: 200,
+            fontSize: 17,
+          });
 
-          radius: am5.percent(90),
-          innerRadius: am5.percent(50),
-          centerX: 40,
-          startAngle: -90,
-          endAngle: -270,
+          //series1
+          const series = chart.series.push(
+            am5percent.PieSeries.new(root, {
+              name: 'Series',
+              valueField: 'medicineA',
+              categoryField: 'material',
 
-          tooltip: tootip,
+              radius: am5.percent(90),
+              innerRadius: am5.percent(50),
+              centerX: 40,
+              startAngle: -90,
+              endAngle: -270,
 
-          legendValueText: '{category}',
-          legendLabelText: '[bold {fill}]{value}mg',
-        })
-      );
-      //색상 지정
-      series
-        .get('colors')
-        .set('colors', [
-          am5.color(0x091a7a),
-          am5.color(0x102693),
-          am5.color(0x1939b7),
-          am5.color(0x254edb),
-          am5.color(0x3366ff),
-          am5.color(0x6690ff),
-          am5.color(0x84a9ff),
-          am5.color(0xadc8ff),
-          am5.color(0xd6e4ff),
-        ]);
-      series.data.setAll(graphData);
+              tooltip: tootip,
 
-      //ticks, 라벨 제거
-      series.ticks.template.setAll({
-        strokeOpacity: 0,
-      });
-      series.labels.template.set('forceHidden', true);
+              legendValueText: versusList[0].materialName[i].allergy
+                ? '[#FF392B]{category}'
+                : '{category}',
+              legendLabelText: versusList[0].materialName[i].allergy
+                ? `[bold #FF392B]{value.formatNumber('#.#')}mg`
+                : '[bold {fill}]{value}mg',
+            })
+          );
+          //색상 지정
+          series
+            .get('colors')
+            .set(
+              'colors',
+              versusList[0].materialName[i].allergy
+                ? [
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                  ]
+                : [
+                    am5.color(0x091a7a),
+                    am5.color(0x102693),
+                    am5.color(0x1939b7),
+                    am5.color(0x254edb),
+                    am5.color(0x3366ff),
+                    am5.color(0x6690ff),
+                    am5.color(0x84a9ff),
+                    am5.color(0xadc8ff),
+                    am5.color(0xd6e4ff),
+                  ]
+            );
+          series.data.setAll(graphData);
 
-      //series2
-      const series2 = chart.series.push(
-        am5percent.PieSeries.new(root, {
-          name: 'Series',
-          valueField: 'medicineB',
-          categoryField: 'material',
+          //ticks, 라벨 제거
+          series.ticks.template.setAll({
+            strokeOpacity: 0,
+          });
+          series.labels.template.set('forceHidden', true);
 
-          radius: am5.percent(90),
-          innerRadius: am5.percent(50),
-          centerX: -40,
-          startAngle: -90,
-          endAngle: 90,
-          tooltip: tootip,
+          //series2
+          const series2 = chart.series.push(
+            am5percent.PieSeries.new(root, {
+              name: 'Series',
+              valueField: 'medicineB',
+              categoryField: 'material',
 
-          legendValueText: '{category}',
-          legendLabelText: '[bold {fill}]{value}mg',
-        })
-      );
+              radius: am5.percent(90),
+              innerRadius: am5.percent(50),
+              centerX: -40,
+              startAngle: -90,
+              endAngle: 90,
+              tooltip: tootip,
 
-      //색상 지정
-      series2
-        .get('colors')
-        .set('colors', [
-          am5.color(0x091a7a),
-          am5.color(0x102693),
-          am5.color(0x1939b7),
-          am5.color(0x254edb),
-          am5.color(0x3366ff),
-          am5.color(0x6690ff),
-          am5.color(0x84a9ff),
-          am5.color(0xadc8ff),
-          am5.color(0xd6e4ff),
-        ]);
-      series2.data.setAll(graphData);
+              legendValueText: versusList[0].materialName[i].allergy
+                ? '[#FF392B]{category}'
+                : '{category}',
+              legendLabelText: versusList[0].materialName[i].allergy
+                ? `[bold #FF392B]{value.formatNumber('#.#')}mg`
+                : '[bold {fill}]{value}mg',
+            })
+          );
+          console.log(graphData);
 
-      //ticks, 라벨 제거
-      series2.ticks.template.setAll({
-        strokeOpacity: 0,
-      });
-      series2.labels.template.set('forceHidden', true);
+          //색상 지정
+          series2
+            .get('colors')
+            .set(
+              'colors',
+              versusList[1].materialName[i].allergy
+                ? [
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                    am5.color(0xff392b),
+                  ]
+                : [
+                    am5.color(0x091a7a),
+                    am5.color(0x102693),
+                    am5.color(0x1939b7),
+                    am5.color(0x254edb),
+                    am5.color(0x3366ff),
+                    am5.color(0x6690ff),
+                    am5.color(0x84a9ff),
+                    am5.color(0xadc8ff),
+                    am5.color(0xd6e4ff),
+                  ]
+            );
+          series2.data.setAll(graphData);
 
-      //legend 루트 2개 생성
-      const legendRoot = am5.Root.new('legenddiv');
-      const legendRoot2 = am5.Root.new('legenddiv2');
+          //ticks, 라벨 제거
+          series2.ticks.template.setAll({
+            strokeOpacity: 0,
+          });
+          series2.labels.template.set('forceHidden', true);
 
-      const legend = legendRoot.container.children.push(
-        am5.Legend.new(legendRoot, {
-          width: 400,
-          layout: legendRoot.verticalLayout,
-        })
-      );
-      legend.labels.template.setAll({
-        minWidth: 60,
-        maxWidth: 100,
-        marginRight: 10,
-        fontSize: 18,
-      });
-      legend.valueLabels.template.setAll({
-        minWidth: 130,
-        maxWidth: 130,
-        marginRight: 10,
-        fontSize: 18,
-        // 오버사이즈 시 처리.
-        // truncate : 말줄임, none: 겹침, wrap: 줄바꿈, fit: 딱맞게 폰트사이즈 조절
-        oversizedBehavior: 'truncate',
-      });
+          //legend 루트 2개 생성
+          const legendRoot = am5.Root.new('legenddiv');
+          const legendRoot2 = am5.Root.new('legenddiv2');
 
-      legend.itemContainers.template.events.on('pointerover', (e) => {
-        setMaterialAExplainActive(true);
-        setMaterialExplainName(
-          e.target.dataItem.dataContext.dataContext.material
-        );
-        setMaterialExplainY(e.target._privateSettings.y);
-        //e.target.dataItem.dataContext.dataContext.material = 성분 이름 추출
-        //e.target._privateSettings.y 축 좌표
-      });
-      legend.itemContainers.template.events.on('pointerout', (e) => {
-        setMaterialAExplainActive(false);
-      });
+          const legend = legendRoot.container.children.push(
+            am5.Legend.new(legendRoot, {
+              width: 400,
+              layout: legendRoot.verticalLayout,
+            })
+          );
+          legend.labels.template.setAll({
+            minWidth: 60,
+            maxWidth: 100,
+            marginRight: 10,
+            fontSize: 18,
+          });
+          legend.valueLabels.template.setAll({
+            minWidth: 130,
+            maxWidth: 130,
+            marginRight: 10,
+            fontSize: 18,
+            // 오버사이즈 시 처리.
+            // truncate : 말줄임, none: 겹침, wrap: 줄바꿈, fit: 딱맞게 폰트사이즈 조절
+            oversizedBehavior: 'truncate',
+          });
 
-      //마커 동그랗게 변경
-      legend.markerRectangles.template.setAll({
-        cornerRadiusTL: 10,
-        cornerRadiusTR: 10,
-        cornerRadiusBL: 10,
-        cornerRadiusBR: 10,
-      });
+          legend.itemContainers.template.events.on('pointerover', (e) => {
+            setMaterialAExplainActive(true);
+            setMaterialExplainName(
+              e.target.dataItem.dataContext.dataContext.material
+            );
+            setMaterialExplainY(e.target._privateSettings.y);
+            //e.target.dataItem.dataContext.dataContext.material = 성분 이름 추출
+            //e.target._privateSettings.y 축 좌표
+          });
+          legend.itemContainers.template.events.on('pointerout', (e) => {
+            setMaterialAExplainActive(false);
+          });
 
-      // 범례 이벤트 생성
+          //마커 동그랗게 변경
+          legend.markerRectangles.template.setAll({
+            cornerRadiusTL: 10,
+            cornerRadiusTR: 10,
+            cornerRadiusBL: 10,
+            cornerRadiusBR: 10,
+          });
 
-      // 시리즈 데이터 집어넣기
-      legend.data.setAll(series.dataItems);
+          // 범례 이벤트 생성
 
-      const legend2 = legendRoot2.container.children.push(
-        am5.Legend.new(legendRoot2, {
-          width: 400,
-          layout: legendRoot2.verticalLayout,
-        })
-      );
-      legend2.labels.template.setAll({
-        minWidth: 60,
-        maxWidth: 100,
-        marginRight: 10,
-        fontSize: 18,
-      });
-      legend2.valueLabels.template.setAll({
-        minWidth: 130,
-        maxWidth: 130,
-        marginRight: 10,
-        fontSize: 18,
-        // 오버사이즈 시 처리.
-        // truncate : 말줄임, none: 겹침, wrap: 줄바꿈, fit: 딱맞게 폰트사이즈 조절
-        oversizedBehavior: 'truncate',
-      });
-      legend2.itemContainers.template.events.on('pointerover', (e) => {
-        setMaterialBExplainActive(true);
-        setMaterialExplainName(
-          e.target.dataItem.dataContext.dataContext.material
-        );
-        setMaterialExplainY(e.target._privateSettings.y);
-        //e.target.dataItem.dataContext.dataContext.material = 성분 이름 추출
-        //e.target._privateSettings.y 축 좌표
-      });
-      legend2.itemContainers.template.events.on('pointerout', (e) => {
-        setMaterialBExplainActive(false);
-      });
-      //마커 크기 변경
-      legend.markers.template.setAll({
-        width: 30,
-        height: 30,
-        marginRight: 17,
-      });
+          // 시리즈 데이터 집어넣기
+          legend.data.setAll(series.dataItems);
 
-      //마커 동그랗게 변경
-      legend.markerRectangles.template.setAll({
-        cornerRadiusTL: 30,
-        cornerRadiusTR: 30,
-        cornerRadiusBL: 30,
-        cornerRadiusBR: 30,
-      });
+          const legend2 = legendRoot2.container.children.push(
+            am5.Legend.new(legendRoot2, {
+              width: 400,
+              layout: legendRoot2.verticalLayout,
+            })
+          );
+          legend2.labels.template.setAll({
+            minWidth: 60,
+            maxWidth: 100,
+            marginRight: 10,
+            fontSize: 18,
+          });
+          legend2.valueLabels.template.setAll({
+            minWidth: 130,
+            maxWidth: 130,
+            marginRight: 10,
+            fontSize: 18,
+            // 오버사이즈 시 처리.
+            // truncate : 말줄임, none: 겹침, wrap: 줄바꿈, fit: 딱맞게 폰트사이즈 조절
+            oversizedBehavior: 'truncate',
+          });
+          legend2.itemContainers.template.events.on('pointerover', (e) => {
+            setMaterialBExplainActive(true);
+            setMaterialExplainName(
+              e.target.dataItem.dataContext.dataContext.material
+            );
+            setMaterialExplainY(e.target._privateSettings.y);
+            //e.target.dataItem.dataContext.dataContext.material = 성분 이름 추출
+            //e.target._privateSettings.y 축 좌표
+          });
+          legend2.itemContainers.template.events.on('pointerout', (e) => {
+            setMaterialBExplainActive(false);
+          });
+          //마커 크기 변경
+          legend.markers.template.setAll({
+            width: 30,
+            height: 30,
+            marginRight: 17,
+          });
 
-      //마커 크기 변경
-      legend2.markers.template.setAll({
-        width: 30,
-        height: 30,
-        marginRight: 17,
-      });
+          //마커 동그랗게 변경
+          legend.markerRectangles.template.setAll({
+            cornerRadiusTL: 30,
+            cornerRadiusTR: 30,
+            cornerRadiusBL: 30,
+            cornerRadiusBR: 30,
+          });
 
-      //마커 동그랗게 변경
-      legend2.markerRectangles.template.setAll({
-        cornerRadiusTL: 30,
-        cornerRadiusTR: 30,
-        cornerRadiusBL: 30,
-        cornerRadiusBR: 30,
-      });
+          //마커 크기 변경
+          legend2.markers.template.setAll({
+            width: 30,
+            height: 30,
+            marginRight: 17,
+          });
 
-      // 시리즈2 데이터 집어넣기
-      legend2.data.setAll(series2.dataItems);
+          //마커 동그랗게 변경
+          legend2.markerRectangles.template.setAll({
+            cornerRadiusTL: 30,
+            cornerRadiusTR: 30,
+            cornerRadiusBL: 30,
+            cornerRadiusBR: 30,
+          });
 
-      // 애니메이션
-      series.appear(1000, 100);
-      series2.appear(1000, 100);
+          // 시리즈2 데이터 집어넣기
+          legend2.data.setAll(series2.dataItems);
 
-      return () => {
-        root.dispose();
-        legendRoot.dispose();
-        legendRoot2.dispose();
-      };
+          // 애니메이션
+          series.appear(1000, 100);
+          series2.appear(1000, 100);
+
+          return () => {
+            root.dispose();
+            legendRoot.dispose();
+            legendRoot2.dispose();
+          };
+        }
+      }
     }
   }, [versusList, query]);
 
@@ -498,7 +607,9 @@ const ComparePage = () => {
                         <div
                           className='totalAmountBtn'
                           onMouseOver={AtotalAmountMouseOver}
-                          onMouseOut={AtotalAmountMouseOver}></div>
+                          onMouseOut={AtotalAmountMouseOver}>
+                          더보기
+                        </div>
                         <div className='totalAmountDesc'>
                           {versusList[0].totalAmount}
                         </div>
@@ -511,7 +622,9 @@ const ComparePage = () => {
                         <div
                           className='totalAmountBtn'
                           onMouseOver={BtotalAmountMouseOver}
-                          onMouseOut={BtotalAmountMouseOver}></div>
+                          onMouseOut={BtotalAmountMouseOver}>
+                          더보기
+                        </div>
                         <div className='totalAmountDesc'>
                           {versusList[1].totalAmount}
                         </div>
@@ -531,30 +644,129 @@ const ComparePage = () => {
                         </div>
                         <div className='desc'>{materialExplainDesc}</div>
                       </MatrialExplainWrap>
-                      <div className='legendTitle'>유효성분 함량</div>
+                      <div className='legendTitle'>
+                        유효성분 함량
+                        {allergy1 ? (
+                          <WarningAllergyTrue>
+                            <span>알레르기 주의</span>
+                            <div className='allergyIcon'>
+                              <span className='allergyAmountIcon'>
+                                내가 등록한 알레르기를 유발하는 성분이 포함되어
+                                있습니다. 복용에 주의하세요!
+                              </span>
+                            </div>
+                          </WarningAllergyTrue>
+                        ) : (
+                          <WarningAllergyFalse>
+                            <span>주의성분 없음</span>
+                          </WarningAllergyFalse>
+                        )}
+                      </div>
                       <div className='legendBox'>
                         <div id='legenddiv'></div>
                       </div>
                     </div>
                   </div>
                   <div className='versusContentMaterialWrap'>
-                    <div className='legendTitle'>주요 유효성분</div>
+                    <div className='legendTitle'>
+                      주요 유효성분
+                      <div className='mainMaterialIcon'>
+                        <span className='mainMaterialAmountIcon'>
+                          해당 의약품에서 가장 중요한 성분 3가지를 뽑아
+                          사용자에게 제공합니다. 제공되는 성분 3가지는 용량에
+                          상관없이{' '}
+                          <sapn className='mainMaterialDesc'>
+                            오직 중요순서로 기재됩니다.
+                          </sapn>
+                        </span>
+                      </div>
+                    </div>
                     <ul>
                       {versusList[0].materialName.map((list) =>
                         versusList[0].materialName.indexOf(list) < 3 ? (
-                          <li key={list.material}>
-                            <div className='versusContentMaterialPercent'>
-                              {Math.round(
-                                (Number(list.분량) /
-                                  medicineTotalAmount(versusList[0])) *
-                                  100
-                              )}
-                              %
-                            </div>
-                            <div className='versusContentMaterialName'>
-                              {list.material}
-                            </div>
-                          </li>
+                          versusList[0].materialName.indexOf(list) === 0 ? (
+                            <li key={list.material}>
+                              <div
+                                className={
+                                  list.allergy
+                                    ? 'top1AllergyTrue'
+                                    : 'top1AllergyFalse'
+                                }>
+                                <div className='versusContentMaterialPercent'>
+                                  {Math.round(
+                                    (Number(list.분량) /
+                                      medicineTotalAmount(versusList[0])) *
+                                      100
+                                  )}
+                                  %
+                                </div>
+                              </div>
+                              <div
+                                className={
+                                  list.allergy
+                                    ? 'versustMaterialNameAllergyTrue'
+                                    : 'versusMaterialNameAllergyFalse'
+                                }>
+                                {list.material}
+                              </div>
+                            </li>
+                          ) : versusList[0].materialName.indexOf(list) === 1 ? (
+                            <li key={list.material}>
+                              <div className='percentBox'>
+                                <div
+                                  className={
+                                    list.allergy
+                                      ? 'top2AllergyTrue'
+                                      : 'top2AllergyFalse'
+                                  }>
+                                  <div className='versusContentMaterialPercent'>
+                                    {Math.round(
+                                      (Number(list.분량) /
+                                        medicineTotalAmount(versusList[0])) *
+                                        100
+                                    )}
+                                    %
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                className={
+                                  list.allergy
+                                    ? 'versustMaterialNameAllergyTrue'
+                                    : 'versusMaterialNameAllergyFalse'
+                                }>
+                                {list.material}
+                              </div>
+                            </li>
+                          ) : (
+                            <li key={list.material}>
+                              <div className='percentBox'>
+                                <div
+                                  className={
+                                    list.allergy
+                                      ? 'top3AllergyTrue'
+                                      : 'top3AllergyFalse'
+                                  }>
+                                  <div className='versusContentMaterialPercent'>
+                                    {Math.round(
+                                      (Number(list.분량) /
+                                        medicineTotalAmount(versusList[0])) *
+                                        100
+                                    )}
+                                    %
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                className={
+                                  list.allergy
+                                    ? 'versustMaterialNameAllergyTrue'
+                                    : 'versusMaterialNameAllergyFalse'
+                                }>
+                                {list.material}
+                              </div>
+                            </li>
+                          )
                         ) : null
                       )}
                     </ul>
@@ -574,7 +786,24 @@ const ComparePage = () => {
                         </div>
                         <div className='desc'>{materialExplainDesc}</div>
                       </MatrialExplainWrap>
-                      <div className='legendTitle'>유효성분 함량</div>
+                      <div className='legendTitle'>
+                        유효성분 함량
+                        {allergy2 ? (
+                          <WarningAllergyTrue>
+                            <span>알레르기 주의</span>
+                            <div className='allergyIcon'>
+                              <span className='allergyAmountIcon'>
+                                내가 등록한 알레르기를 유발하는 성분이 포함되어
+                                있습니다. 복용에 주의하세요!
+                              </span>
+                            </div>
+                          </WarningAllergyTrue>
+                        ) : (
+                          <WarningAllergyFalse>
+                            <span>주의성분 없음</span>
+                          </WarningAllergyFalse>
+                        )}
+                      </div>
                       <div className='legendBox'>
                         <div id='legenddiv2'></div>
                       </div>
@@ -583,23 +812,105 @@ const ComparePage = () => {
                   <div
                     className='versusContentMaterialWrap'
                     style={{ float: 'right' }}>
-                    <div className='legendTitle'>주요 유효성분</div>
+                    <div className='legendTitle'>
+                      주요 유효성분
+                      <div className='mainMaterialIcon'>
+                        <span className='mainMaterialAmountIcon'>
+                          해당 의약품에서 가장 중요한 성분 3가지를 뽑아
+                          사용자에게 제공합니다. 제공되는 성분 3가지는 용량에
+                          상관없이{' '}
+                          <sapn className='mainMaterialDesc'>
+                            오직 중요순서로 기재됩니다.
+                          </sapn>
+                        </span>
+                      </div>
+                    </div>
                     <ul>
                       {versusList[1].materialName.map((list) =>
                         versusList[1].materialName.indexOf(list) < 3 ? (
-                          <li key={list.material}>
-                            <div className='versusContentMaterialPercent'>
-                              {Math.round(
-                                (Number(list.분량) /
-                                  medicineTotalAmount(versusList[1])) *
-                                  100
-                              )}
-                              %
-                            </div>
-                            <div className='versusContentMaterialName'>
-                              {list.material}
-                            </div>
-                          </li>
+                          versusList[1].materialName.indexOf(list) === 0 ? (
+                            <li key={list.material}>
+                              <div
+                                className={
+                                  list.allergy
+                                    ? 'top1AllergyTrue'
+                                    : 'top1AllergyFalse'
+                                }>
+                                <div className='versusContentMaterialPercent'>
+                                  {Math.round(
+                                    (Number(list.분량) /
+                                      medicineTotalAmount(versusList[1])) *
+                                      100
+                                  )}
+                                  %
+                                </div>
+                              </div>
+                              <div
+                                className={
+                                  list.allergy
+                                    ? 'versustMaterialNameAllergyTrue'
+                                    : 'versusMaterialNameAllergyFalse'
+                                }>
+                                {list.material}
+                              </div>
+                            </li>
+                          ) : versusList[1].materialName.indexOf(list) === 1 ? (
+                            <li key={list.material}>
+                              <div className='percentBox'>
+                                <div
+                                  className={
+                                    list.allergy
+                                      ? 'top2AllergyTrue'
+                                      : 'top2AllergyFalse'
+                                  }>
+                                  <div className='versusContentMaterialPercent'>
+                                    {Math.round(
+                                      (Number(list.분량) /
+                                        medicineTotalAmount(versusList[1])) *
+                                        100
+                                    )}
+                                    %
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                className={
+                                  list.allergy
+                                    ? 'versustMaterialNameAllergyTrue'
+                                    : 'versusMaterialNameAllergyFalse'
+                                }>
+                                {list.material}
+                              </div>
+                            </li>
+                          ) : (
+                            <li key={list.material}>
+                              <div className='percentBox'>
+                                <div
+                                  className={
+                                    list.allergy
+                                      ? 'top3AllergyTrue'
+                                      : 'top3AllergyFalse'
+                                  }>
+                                  <div className='versusContentMaterialPercent'>
+                                    {Math.round(
+                                      (Number(list.분량) /
+                                        medicineTotalAmount(versusList[1])) *
+                                        100
+                                    )}
+                                    %
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                className={
+                                  list.allergy
+                                    ? 'versustMaterialNameAllergyTrue'
+                                    : 'versusMaterialNameAllergyFalse'
+                                }>
+                                {list.material}
+                              </div>
+                            </li>
+                          )
                         ) : null
                       )}
                     </ul>
@@ -796,6 +1107,9 @@ const SubWrap = styled.div`
     font-weight: bold;
     text-align: center;
     margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .legendWrap {
     position: relative;
@@ -866,10 +1180,15 @@ const SubWrap = styled.div`
     margin-right: 5px;
   }
   .totalAmountBtn {
-    width: 20px;
+    width: 44px;
     height: 20px;
-    border-radius: 10px;
+    font-size: 13px;
+    line-height: 20px;
     background-color: #d0d0d0;
+    border-radius: 4px;
+    color: white;
+    margin-left: 4px;
+    text-align: center;
     cursor: pointer;
   }
   .totalAmountDesc {
@@ -902,13 +1221,13 @@ const SubWrap = styled.div`
     border-left: 3px solid transparent;
     border-right: 3px solid transparent;
     position: absolute;
-    top: -19px;
+    top: -20px;
   }
   .totalAmountWrap.A .totalAmountDesc::after {
-    right: 8px;
+    right: 19px;
   }
   .totalAmountWrap.B .totalAmountDesc::after {
-    left: 65px;
+    left: 81px;
   }
   #chartdiv {
     width: 430px;
@@ -924,7 +1243,7 @@ const SubWrap = styled.div`
     height: 1000px;
   }
   .versusContentMaterialWrap {
-    width: 400px;
+    width: 100%;
     height: 400px;
     padding: 30px 40px;
     background-color: white;
@@ -952,8 +1271,8 @@ const SubWrap = styled.div`
     line-height: 41px;
     font-weight: bold;
   }
-  .versusContentMaterialName {
-    width: 221px;
+  .versusMaterialNameAllergyTrue {
+    width: 75%;
     line-height: 34px;
     white-space: normal;
     overflow: hidden;
@@ -961,6 +1280,146 @@ const SubWrap = styled.div`
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    margin-left: 12px;
+    color: #ff3c26;
+    text-align: center;
+  }
+  .versusMaterialNameAllergyFalse {
+    width: 75%;
+    line-height: 34px;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin-left: 12px;
+    text-align: center;
+  }
+  .top1AllergyFalse {
+    width: 90px;
+    height: 90px;
+    background-color: #84a9ff;
+    color: black;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .top1AllergyTrue {
+    width: 90px;
+    height: 90px;
+    background-color: #ffecea;
+    color: #ff3c26;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .top2AllergyFalse {
+    width: 82px;
+    height: 82px;
+    background-color: #adc8ff;
+    color: #434343;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .top2AllergyTrue {
+    width: 82px;
+    height: 82px;
+    background-color: #ffecea;
+    color: #ff3c26;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .top3AllergyFalse {
+    width: 75px;
+    height: 75px;
+    background-color: #d6e4ff;
+    color: #686868;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .top3AllergyTrue {
+    width: 75px;
+    height: 75px;
+    background-color: #ffecea;
+    color: #ff3c26;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .percentBox {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mainMaterialIcon {
+    width: 30px;
+    height: 30px;
+    margin-left: 6px;
+    background-image: url('/assets/image/주요유효성분아이콘.png');
+    background-size: cover;
+    background-position: center;
+    display: inline-block;
+    position: relative;
+    :hover .mainMaterialAmountIcon {
+      display: block;
+    }
+    .mainMaterialAmountIcon {
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(11.5px);
+      display: none;
+      position: absolute;
+      top: 40px;
+      right: -50px;
+      text-align: center;
+      width: 256px;
+      padding: 12px;
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 350;
+      color: #ffffff;
+      opacity: 1;
+      z-index: 2;
+      font-weight: 400;
+      font-size: 14px;
+      word-break: break-all;
+      text-align: left;
+    }
+    .mainMaterialAmountIcon::after {
+      content: '';
+      width: 0px;
+      height: 0px;
+      border-bottom: 10px solid rgba(0, 0, 0, 0.8);
+      border-top: 10px solid transparent;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      position: absolute;
+      right: 60px;
+      top: -20px;
+    }
+    .mainMaterialDesc {
+      color: #82a1ff;
+      font-weight: 700;
+      font-size: 15px;
+    }
   }
 `;
 const NothingInBoxWrap = styled.div`
@@ -1025,6 +1484,96 @@ const MatrialExplainWrap = styled.div`
   .desc {
     font-size: 16px;
     line-height: 34px;
+  }
+`;
+
+const WarningAllergyTrue = styled.div`
+  width: 150px;
+  height: 34px;
+  background-color: #ffecea;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 20px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  color: #ff392b;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 20px;
+  .allergyIcon {
+    margin-left: 6px;
+    width: 20px;
+    height: 20px;
+    background-image: url('/assets/image/알러지성분안내아이콘.png');
+    background-size: cover;
+    background-position: center;
+    display: inline-block;
+  }
+  span {
+    font-size: 16px;
+  }
+  :hover .allergyAmountIcon {
+    display: block;
+  }
+  .allergyAmountIcon {
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(11.5px);
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: -26px;
+    text-align: center;
+    width: 256px;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 350;
+    color: #ffffff;
+    opacity: 1;
+    z-index: 2;
+    font-weight: 400;
+    font-size: 14px;
+    word-break: break-all;
+    text-align: left;
+  }
+  .allergyAmountIcon::after {
+    content: '';
+    width: 0px;
+    height: 0px;
+    border-bottom: 10px solid rgba(0, 0, 0, 0.8);
+    border-top: 10px solid transparent;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    position: absolute;
+    right: 44px;
+    top: -20px;
+  }
+`;
+
+const WarningAllergyFalse = styled.div`
+  width: 134px;
+  height: 34px;
+  background-color: #ddf3eb;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 20px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  color: #03935b;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 20px;
+  span {
+    font-size: 17px;
   }
 `;
 

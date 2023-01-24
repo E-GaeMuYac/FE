@@ -54,18 +54,39 @@ const BottomContents = ({ medicineInfo, query }) => {
 const Detail = () => {
   const param = useParams();
   let graphData = [];
+  let allergyDataArray = [];
   const [objGraph, setObjGraph] = useState({});
   const [grapDataArr, setGrapDataArr] = useState([]);
   const [materialExplainActive, setMaterialExplainActive] = useState(false);
   const [materialExplainY, setMaterialExplainY] = useState(0);
   const [materialExplainName, setMaterialExplainName] = useState('');
   const [materialExplainDesc, setMaterialExplainDesc] = useState('');
+  const [allergy, setAllergy] = useState(false);
   const location = useLocation().pathname;
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
   }).tab;
 
   const medicineItem = objGraph;
+
+  useLayoutEffect(() => {
+    if (objGraph) {
+      //그래프 초기화
+      allergyDataArray = [];
+
+      // 등록한 알러지 성분 정보 받아오기
+      for (let i = 0; i < objGraph?.materialName?.length; i++) {
+        const allergyData = {
+          material: objGraph?.materialName[i]?.material,
+          allergy: objGraph?.materialName[i]?.allergy,
+        };
+        allergyDataArray.push(allergyData);
+        if (objGraph?.materialName[i]?.allergy === true) {
+          setAllergy(true);
+        }
+      }
+    }
+  }, [objGraph, query]);
 
   //그래프에 들어갈 배열 생성
   useLayoutEffect(() => {
@@ -100,126 +121,184 @@ const Detail = () => {
 
   useLayoutEffect(() => {
     if (objGraph) {
-      const root = am5.Root.new('chartdiv');
+      for (let i = 0; i < objGraph?.materialName?.length; i++) {
+        // if (objGraph) {
+        const root = am5.Root.new('chartdiv');
 
-      // Set themes
-      root.setThemes([am5themes_Animated.new(root)]);
+        // Set themes
+        root.setThemes([am5themes_Animated.new(root)]);
 
-      // Create chart
-      const chart = root.container.children.push(
-        am5percent.PieChart.new(root, {
-          layout: root.verticalLayout,
-          innerRadius: am5.percent(50),
-        })
-      );
-
-      // Create series
-      const series = chart.series.push(
-        am5percent.PieSeries.new(root, {
-          valueField: '분량',
-          categoryField: 'material',
-          centerX: am5.percent(-20),
-          y: am5.percent(-4),
-          legendValueText: '{category}',
-          legendLabelText: `[bold {fill}]{value.formatNumber('#.#')}mg`,
-        })
-      );
-
-      //labels
-      series.labels.template.setAll({
-        maxWidth: 0,
-        oversizedBehavior: 'wrap',
-        textAlign: 'left',
-      });
-
-      series.ticks.template.setAll({
-        stroke: am5.color(0xffffff),
-        strokeWidth: 2,
-        strokeOpacity: 0,
-      });
-
-      series.labels.template.setAll({});
-
-      // 그래프 마우스 오버 시 툴팁
-      series.slices.template.set(
-        'tooltipText',
-        `{category} : {valuePercentTotal.formatNumber('0.00')}%`
-      );
-
-      const tooltip = am5.Tooltip.new(root, {});
-      tooltip.label.setAll({
-        oversizedBehavior: 'wrap',
-        maxWidth: 20,
-      });
-
-      series.data.setAll(medicine);
-
-      const legend = chart.children.push(
-        am5.Legend.new(root, {
-          position: 'absolute',
-          oversizedBehavior: 'wrap',
-          width: 380,
-          height: 280,
-          x: am5.percent(3),
-          y: am5.percent(9),
-          layout: root.verticalLayout,
-          verticalScrollbar: am5.Scrollbar.new(root, {
-            orientation: 'vertical',
-          }),
-        })
-      );
-
-      legend.markerRectangles.template.setAll({
-        cornerRadiusTL: 20,
-        cornerRadiusTR: 20,
-        cornerRadiusBL: 20,
-        cornerRadiusBR: 20,
-        width: 30,
-        height: 30,
-      });
-
-      legend.labels.template.setAll({
-        maxWidth: 80,
-        minWidth: 77,
-        marginRight: 10,
-        marginLeft: 28,
-        fontSize: 18,
-        lineHeight: 1.8,
-        width: 30,
-        height: 30,
-        //centerY: 0, // if we want labels to be top-aligned
-        oversizedBehavior: 'wrap',
-      });
-
-      legend.valueLabels.template.setAll({
-        maxWidth: 200,
-        minWidth: 200,
-        fontSize: 18,
-        lineHeight: 2,
-        oversizedBehavior: 'truncate',
-      });
-
-      legend.itemContainers.template.events.on('pointerover', (e) => {
-        setMaterialExplainActive(true);
-        setMaterialExplainName(
-          e.target.dataItem.dataContext.dataContext.material
+        // Create chart
+        const chart = root.container.children.push(
+          am5percent.PieChart.new(root, {
+            layout: root.verticalLayout,
+            innerRadius: am5.percent(50),
+          })
         );
-        setMaterialExplainY(e.target._privateSettings.y);
-        //e.target.dataItem.dataContext.dataContext.material = 성분 이름 추출
-        //e.target._privateSettings.y 축 좌표
-      });
-      legend.itemContainers.template.events.on('pointerout', (e) => {
-        setMaterialExplainActive(false);
-      });
 
-      legend.data.setAll(series.dataItems);
+        // Create series
+        const series = chart.series.push(
+          am5percent.PieSeries.new(root, {
+            valueField: '분량',
+            categoryField: 'material',
+            centerX: am5.percent(-18.5),
+            y: am5.percent(-4),
+            legendValueText: objGraph.materialName[i].allergy
+              ? '[#FF392B]{category}'
+              : '{category}',
+            legendLabelText: objGraph.materialName[i].allergy
+              ? `[bold #FF392B]{value.formatNumber('#.#')}mg`
+              : `[bold {fill}]{value.formatNumber('#.#')}mg`,
+          })
+        );
 
-      // Play initial series animation
-      series.appear(1000, 100);
+        //labels
+        series.labels.template.setAll({
+          maxWidth: 0,
+          oversizedBehavior: 'wrap',
+          textAlign: 'left',
+        });
 
-      return () => {
-        root.dispose();
-      };
+        series.ticks.template.setAll({
+          stroke: am5.color(0xffffff),
+          strokeWidth: 2,
+          strokeOpacity: 0,
+        });
+
+        series
+          .get('colors')
+          .set(
+            'colors',
+            objGraph.materialName[i].allergy
+              ? [
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                  am5.color(0xff392b),
+                ]
+              : [
+                  am5.color(0x091a7a),
+                  am5.color(0x102693),
+                  am5.color(0x1939b7),
+                  am5.color(0x254edb),
+                  am5.color(0x3366ff),
+                  am5.color(0x6690ff),
+                  am5.color(0x84a9ff),
+                  am5.color(0xadc8ff),
+                  am5.color(0xd6e4ff),
+                ]
+          );
+
+        // 그래프 마우스 오버 시 툴팁
+        series.slices.template.set(
+          'tooltipText',
+          `{category} : {valuePercentTotal.formatNumber('#.###')}%`
+        );
+
+        const tooltip = am5.Tooltip.new(root, {});
+        tooltip.label.setAll({
+          oversizedBehavior: 'wrap',
+          maxWidth: 20,
+          zIndex: 999,
+        });
+
+        series.data.setAll(medicine);
+
+        const legend = chart.children.push(
+          am5.Legend.new(root, {
+            position: 'absolute',
+            oversizedBehavior: 'wrap',
+            width: 380,
+            height: 280,
+            x: am5.percent(3),
+            y: am5.percent(9),
+            layout: root.verticalLayout,
+            verticalScrollbar: am5.Scrollbar.new(root, {
+              orientation: 'vertical',
+            }),
+          })
+        );
+
+        legend.markerRectangles.template.setAll({
+          cornerRadiusTL: 20,
+          cornerRadiusTR: 20,
+          cornerRadiusBL: 20,
+          cornerRadiusBR: 20,
+          width: 30,
+          height: 30,
+          // marginRight: 50,
+        });
+
+        legend.markers.template.setAll({
+          // maxWidth: 70,
+          // minWidth: 30,
+          width: 30,
+          marginRight: 10,
+          // textAlign: 'right',
+          // display: 'inline-block',
+        });
+
+        legend.labels.template.setAll({
+          // maxWidth: 100,
+          // minWidth: 80,
+          marginRight: 10,
+          // marginLeft: 60,
+          fontSize: 18,
+          lineHeight: 1.8,
+          minWidth: 65,
+          // height: 30,
+          //centerY: 0, // if we want labels to be top-aligned
+          oversizedBehavior: 'wrap',
+          textAlign: 'right',
+        });
+
+        legend.valueLabels.template.setAll({
+          maxWidth: 200,
+          minWidth: 200,
+          fontSize: 18,
+          lineHeight: 2,
+          oversizedBehavior: 'truncate',
+        });
+
+        legend.itemContainers.template.events.on('pointerover', (e) => {
+          setMaterialExplainActive(true);
+          setMaterialExplainName(
+            e.target.dataItem.dataContext.dataContext.material
+          );
+          setMaterialExplainY(e.target._privateSettings.y);
+          //e.target.dataItem.dataContext.dataContext.material = 성분 이름 추출
+          //e.target._privateSettings.y 축 좌표
+        });
+        legend.itemContainers.template.events.on('pointerout', (e) => {
+          setMaterialExplainActive(false);
+        });
+
+        legend.data.setAll(series.dataItems);
+
+        // Play initial series animation
+        series.appear(1000, 100);
+
+        return () => {
+          root.dispose();
+        };
+      }
     }
   }, [objGraph]);
 
@@ -337,19 +416,31 @@ const Detail = () => {
           }}>
           <MiddleCardBox>
             <div style={{ display: 'flex' }}>
-              {/* <GraphLabel
-              style={{ position: 'absolute', top: '50px', left: '150px' }}> */}
-              <GraphLabel style={{ marginLeft: '120px' }}>
+              <GraphLabel style={{ width: '700px', marginLeft: '100px' }}>
                 유효성분 함량
               </GraphLabel>
-              {/* <GraphLabel
-              style={{ position: 'absolute', top: '50px', right: '170px' }}> */}
-              <GraphLabel style={{ marginLeft: '275px' }}>
+              <GraphLabel style={{ width: '1100px', marginLeft: '252px' }}>
                 성분 그래프
+                {allergy ? (
+                  <WarningAllergyTrue>
+                    <span>알레르기 주의</span>
+                    <div className='allergyIcon'>
+                      <span className='allergyAmountIcon'>
+                        내가 등록한 알레르기를 유발하는 성분이 포함되어
+                        있습니다. 복용에 주의하세요!
+                      </span>
+                    </div>
+                  </WarningAllergyTrue>
+                ) : (
+                  <WarningAllergyFalse>
+                    <span>주의성분 없음</span>
+                  </WarningAllergyFalse>
+                )}
               </GraphLabel>
               <TotalAmountWrap>
                 총 용량
                 <TotalAmount>
+                  더보기
                   <span className='totalAmountIcon'>
                     {medicineItem?.totalAmount}
                   </span>
@@ -361,7 +452,6 @@ const Detail = () => {
               style={{
                 display: 'flex',
                 position: 'relative',
-                // marginBottom: '0px',
               }}>
               <MatrialExplainWrap
                 BoxY={materialExplainY}
@@ -375,23 +465,116 @@ const Detail = () => {
             <div id='chartdiv'></div>
           </MiddleCardBox>
           <RightCardBox>
-            <GraphLabel>주요 유효성분</GraphLabel>
+            <GraphLabel>
+              주요 유효성분
+              <div className='mainMaterialIcon'>
+                <span className='mainMaterialAmountIcon'>
+                  해당 의약품에서 가장 중요한 성분 3가지를 뽑아 사용자에게
+                  제공합니다. 제공되는 성분 3가지는 용량에 상관없이{' '}
+                  <sapn className='mainMaterialDesc'>
+                    오직 중요순서로 기재됩니다.
+                  </sapn>
+                </span>
+              </div>
+            </GraphLabel>
             <GraphTop3>
               {medicineItem?.materialName?.map((list) =>
                 medicineItem?.materialName?.indexOf(list) < 3 ? (
-                  <div className='graphTop3List' key={list.material}>
-                    <div className='versusContentMaterialPercent'>
-                      {Math.round(
-                        (Number(list.분량) /
-                          medicineTotalAmount(medicineItem)) *
-                          100
-                      )}
-                      %
+                  medicineItem?.materialName?.indexOf(list) === 0 ? (
+                    <div className='graphTop3List' key={list.material}>
+                      <div
+                        className={
+                          list.allergy ? 'top1AllergyTrue' : 'top1AllergyFalse'
+                        }>
+                        <div className='ContentMaterialPercent'>
+                          {Math.round(
+                            (Number(list.분량) /
+                              medicineTotalAmount(medicineItem)) *
+                              100
+                          )}
+                          %
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          list.allergy
+                            ? 'ContentMaterialNameAllergyTrue'
+                            : 'ContentMaterialNameAllergyFalse'
+                        }>
+                        {list.material}
+                      </div>
                     </div>
-                    <div className='versusContentMaterialName'>
-                      {list.material}
+                  ) : medicineItem?.materialName?.indexOf(list) === 1 ? (
+                    <div className='graphTop3List' key={list.material}>
+                      <div
+                        style={{
+                          width: '90px',
+                          height: '90px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                        <div
+                          className={
+                            list.allergy
+                              ? 'top2AllergyTrue'
+                              : 'top2AllergyFalse'
+                          }>
+                          <div className='ContentMaterialPercent'>
+                            {Math.round(
+                              (Number(list.분량) /
+                                medicineTotalAmount(medicineItem)) *
+                                100
+                            )}
+                            %
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          list.allergy
+                            ? 'ContentMaterialNameAllergyTrue'
+                            : 'ContentMaterialNameAllergyFalse'
+                        }>
+                        {list.material}
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className='graphTop3List' key={list.material}>
+                      <div
+                        style={{
+                          width: '90px',
+                          height: '90px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                        <div
+                          className={
+                            list.allergy
+                              ? 'top3AllergyTrue'
+                              : 'top3AllergyFalse'
+                          }>
+                          <div className='ContentMaterialPercent'>
+                            {Math.round(
+                              (Number(list.분량) /
+                                medicineTotalAmount(medicineItem)) *
+                                100
+                            )}
+                            %
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          list.allergy
+                            ? 'ContentMaterialNameAllergyTrue'
+                            : 'ContentMaterialNameAllergyFalse'
+                        }>
+                        {list.material}
+                      </div>
+                    </div>
+                  )
                 ) : null
               )}
             </GraphTop3>
@@ -473,18 +656,25 @@ const TotalAmountWrap = styled.div`
   align-items: center;
   position: absolute;
   top: 265px;
-  right: 206px;
+  right: 209px;
   z-index: 999;
+  color: #868686;
 `;
 
 const TotalAmount = styled.div`
-  width: 20px;
+  width: 44px;
   height: 20px;
-  background-image: url('/assets/image/돋보기아이콘.png');
+  font-size: 13px;
+  line-height: 20px;
+  background-color: #d0d0d0;
+  border-radius: 4px;
+  color: white;
+  /* background-image: url('/assets/image/돋보기아이콘.png');
   background-size: cover;
-  background-position: center;
+  background-position: center; */
   margin-left: 5px;
-  display: inline-block;
+  text-align: center;
+  /* display: inline-block; */
   :hover .totalAmountIcon {
     display: block;
   }
@@ -496,9 +686,9 @@ const TotalAmount = styled.div`
     display: none;
     position: absolute;
     top: 32px;
-    right: -26.5px;
+    right: -25px;
     text-align: center;
-    min-width: 130px;
+    min-width: 150px;
     max-width: 177px;
     padding: 12px;
     font-size: 14px;
@@ -508,10 +698,11 @@ const TotalAmount = styled.div`
     color: #ffffff;
     /* background-color: #ffffff; */
     opacity: 1;
-    /* z-index: 9999; */
+    /* z-index: 2; */
     font-weight: 400;
     font-size: 14px;
     word-break: break-all;
+    text-align: left;
   }
   .totalAmountIcon::after {
     content: '';
@@ -519,10 +710,10 @@ const TotalAmount = styled.div`
     height: 0px;
     border-bottom: 10px solid rgba(0, 0, 0, 0.8);
     border-top: 10px solid transparent;
-    border-left: 3px solid transparent;
-    border-right: 3px solid transparent;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
     position: absolute;
-    right: 33.5px;
+    right: 44px;
     top: -20px;
   }
 `;
@@ -570,18 +761,19 @@ const RightCardBox = styled.div`
     height: 18%;
     display: flex;
     align-items: center;
-    margin-top: 30px;
+    margin-top: 50px;
   }
-  .versusContentMaterialPercent {
+  .ContentMaterialPercent {
     width: 80px;
     font-size: 28px;
     line-height: 41px;
     font-weight: bold;
     display: flex;
-    margin-right: 5px;
+    /* margin-right: 5px; */
+    justify-content: center;
   }
-  .versusContentMaterialName {
-    width: 200px;
+  .ContentMaterialNameAllergyTrue {
+    width: 180px;
     font-size: 20px;
     white-space: normal;
     overflow: hidden;
@@ -590,6 +782,22 @@ const RightCardBox = styled.div`
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     margin-top: 3px;
+    margin-left: 20px;
+    color: #ff3c26;
+    text-align: center;
+  }
+  .ContentMaterialNameAllergyFalse {
+    width: 180px;
+    font-size: 20px;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin-top: 3px;
+    margin-left: 20px;
+    text-align: center;
   }
 `;
 
@@ -623,7 +831,7 @@ const WrapContents = styled.div`
     .tooltipText {
       border-radius: 8px;
       /* box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2); */
-      background-color: rgba(0, 0, 0, 0.54);
+      background-color: rgba(0, 0, 0, 0.8);
       box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
       display: none;
       position: absolute;
@@ -668,8 +876,74 @@ const WrapContents = styled.div`
 const GraphTop3 = styled.div`
   width: 100%;
   height: 300px;
-  margin-top: 77px;
+  margin-top: 70px;
   margin-left: 10px;
+  .top1AllergyFalse {
+    width: 90px;
+    height: 90px;
+    background-color: #84a9ff;
+    color: black;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .top1AllergyTrue {
+    width: 90px;
+    height: 90px;
+    background-color: #ffecea;
+    color: #ff3c26;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .top2AllergyFalse {
+    width: 82px;
+    height: 82px;
+    background-color: #adc8ff;
+    color: #434343;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .top2AllergyTrue {
+    width: 82px;
+    height: 82px;
+    background-color: #ffecea;
+    color: #ff3c26;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .top3AllergyFalse {
+    width: 75px;
+    height: 75px;
+    background-color: #d6e4ff;
+    color: #686868;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .top3AllergyTrue {
+    width: 75px;
+    height: 75px;
+    background-color: #ffecea;
+    color: #ff3c26;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
 `;
 
 const Image = styled.div`
@@ -754,12 +1028,163 @@ const Picked = styled.div`
 `;
 
 const GraphLabel = styled.div`
-  color: #868686;
+  /* width: 1000px; */
+  /* background-color: aliceblue; */
+  /* color: #868686; */
   display: flex;
   justify-content: center;
+  align-items: center;
   font-size: 30px;
   font-weight: 700;
   line-height: 43px;
+  .mainMaterialIcon {
+    width: 30px;
+    height: 30px;
+    margin-left: 6px;
+    background-image: url('/assets/image/주요유효성분아이콘.png');
+    background-size: cover;
+    background-position: center;
+    display: inline-block;
+    position: relative;
+    :hover .mainMaterialAmountIcon {
+      display: block;
+    }
+    .mainMaterialAmountIcon {
+      border-radius: 8px;
+      /* box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2); */
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(11.5px);
+      display: none;
+      position: absolute;
+      top: 40px;
+      right: -50px;
+      text-align: center;
+      width: 256px;
+      padding: 12px;
+      font-size: 14px;
+      line-height: 22px;
+      font-weight: 350;
+      /* color: #868686; */
+      color: #ffffff;
+      /* background-color: #ffffff; */
+      opacity: 1;
+      z-index: 2;
+      font-weight: 400;
+      font-size: 14px;
+      word-break: break-all;
+      text-align: left;
+    }
+    .mainMaterialAmountIcon::after {
+      content: '';
+      width: 0px;
+      height: 0px;
+      border-bottom: 10px solid rgba(0, 0, 0, 0.8);
+      border-top: 10px solid transparent;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      position: absolute;
+      right: 60px;
+      top: -20px;
+    }
+    .mainMaterialDesc {
+      color: #82a1ff;
+      font-weight: 700;
+      font-size: 15px;
+    }
+  }
+`;
+
+const WarningAllergyTrue = styled.div`
+  width: 150px;
+  height: 34px;
+  background-color: #ffecea;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 20px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  color: #ff392b;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 20px;
+  .allergyIcon {
+    margin-left: 6px;
+    width: 20px;
+    height: 20px;
+    background-image: url('/assets/image/알러지성분안내아이콘.png');
+    background-size: cover;
+    background-position: center;
+    display: inline-block;
+  }
+  span {
+    font-size: 16px;
+  }
+  :hover .allergyAmountIcon {
+    display: block;
+  }
+  .allergyAmountIcon {
+    border-radius: 8px;
+    /* box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2); */
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(11.5px);
+    display: none;
+    position: absolute;
+    top: 80px;
+    right: 14px;
+    text-align: center;
+    width: 256px;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 350;
+    /* color: #868686; */
+    color: #ffffff;
+    /* background-color: #ffffff; */
+    opacity: 1;
+    z-index: 2;
+    font-weight: 400;
+    font-size: 14px;
+    word-break: break-all;
+    text-align: left;
+  }
+  .allergyAmountIcon::after {
+    content: '';
+    width: 0px;
+    height: 0px;
+    border-bottom: 10px solid rgba(0, 0, 0, 0.8);
+    border-top: 10px solid transparent;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    position: absolute;
+    right: 44px;
+    top: -20px;
+  }
+`;
+
+const WarningAllergyFalse = styled.div`
+  width: 134px;
+  height: 34px;
+  background-color: #ddf3eb;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 20px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  color: #03935b;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 20px;
+  span {
+    font-size: 17px;
+  }
 `;
 
 const ScrollBar = styled.div`
@@ -789,10 +1214,8 @@ const ScrollBar = styled.div`
 
 const MatrialExplainWrap = styled.div`
   display: ${({ Active }) => (Active ? 'block' : 'none')};
-  width: 390px;
+  width: 367px;
   min-height: 50px;
-  /* height: 200px; */
-  /* background-color: rgba(255, 255, 255, 0.9); */
   background-color: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(11.5px);
   box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
@@ -801,17 +1224,15 @@ const MatrialExplainWrap = styled.div`
   line-height: 34px;
   position: absolute;
   top: -55px;
-  left: 0px;
+  left: 14px;
   z-index: 1;
   color: white;
-  /* color: black; */
-  /* top:200px */
-  /* top: ${({ BoxY }) => `${BoxY + 200}px`}; */
   text-align: center;
   backdrop-filter: blur(5px);
   .title {
     font-size: 18px;
-    margin-bottom: 15px;
+    margin-top: 15px;
+    margin-bottom: 25px;
     text-align: left;
     font-weight: 500;
     font-size: 18px;
