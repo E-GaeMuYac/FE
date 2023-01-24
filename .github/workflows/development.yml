@@ -1,4 +1,8 @@
 name: development deployment
+  env:
+    REACT_APP_API_ENDPOINT: ${{ secrets.REACT_APP_API_ENDPOINT }}
+    REACT_APP_EMAIL_X_API_KEY: ${{ secrets.REACT_APP_EMAIL_X_API_KEY }}
+    REACT_APP_PHONE_X_API_KEY: ${{ secrets.REACT_APP_PHONE_X_API_KEY }}
 
 on:
   pull_request:
@@ -17,10 +21,7 @@ jobs:
     steps:
       - name: Checkout source code.
         uses: actions/checkout@v2
-        env:
-          REACT_APP_API_ENDPOINT: ${{ secrets.REACT_APP_API_ENDPOINT }}
-          REACT_APP_EMAIL_X_API_KEY: ${{ secrets.REACT_APP_EMAIL_X_API_KEY }}
-          REACT_APP_PHONE_X_API_KEY: ${{ secrets.REACT_APP_PHONE_X_API_KEY }}
+
 
       - name: Install Dependencies
         run: npm install
