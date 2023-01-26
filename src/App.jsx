@@ -98,7 +98,7 @@ function App() {
           }
         />
         <Route
-          path='/reviewform'
+          path='/detail/:id/reviewform'
           element={
             <Layout>
               <AddReviews />

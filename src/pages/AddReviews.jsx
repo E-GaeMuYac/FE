@@ -1,62 +1,78 @@
+import { async } from 'q';
 import React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { useParams } from 'react-router';
 import styled from 'styled-components';
+import { userApi } from '../apis/apiInstance';
 import LikeItBtn from '../components/common/LikeItBtn';
 
 const AddReviews = () => {
+  const { id } = useParams();
+  const [medicineItem, setMedicineItem] = useState({});
+  const [content, setContent] = useState('');
+
+  useEffect(() => {
+    getMedicine();
+  }, []);
+
+  const getMedicine = async () => {
+    try {
+      const res = await userApi.get(`/api/products/${id}`);
+      setMedicineItem(res.data.product);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const handleInput = (e) => {
+    setContent(e.target.value);
+  };
+
+  const submitReview = async () => {
+    console.log(content);
+    try {
+      const res = await userApi.post(`/api/reviews/${id}`, { review: content });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Wrapper>
       <PageTitle>리뷰 작성하기</PageTitle>
       <CardBox>
         <WrapContents>
-          <Image /*imgUrl={medicineItem?.itemImage}*/ />
+          <Image imgUrl={medicineItem?.itemImage} />
           <div style={{ marginRight: '20px' }}>
-            <Name>{/*medicineItem?.itemName*/}</Name>
+            <Name>{medicineItem?.itemName}</Name>
             <Categorize>
-              {/* {medicineItem?.productType?.map((list) => {
+              {medicineItem?.productType?.map((list) => {
                 return <div key={list}>{list}</div>;
-              })} */}
+              })}
             </Categorize>
           </div>
           <div className='labelWrap'>
-            <TopLabel>{/*medicineItem?.entpName*/}</TopLabel>
+            <TopLabel>{medicineItem?.entpName}</TopLabel>
             <BottomLabel>
-              {/*medicineItem?.etcOtcCode*/}
+              {medicineItem?.etcOtcCode}
               <div className='etcOtcCodeDesc'>
-                {/* {medicineItem?.etcOtcCode === '전문의약품' ? ( */}
-                <span className='tooltipText'>
-                  의사 또는 치과의사의 지시와 감독에 따라 사용되어야 하는
-                  의약품으로, 의사의 처방전에 의해서만 구입하여 사용할 수 있다.
-                </span>
-                {/* ) : ( */}
-                <span className='tooltipText'>
-                  처방전 없이 약국에서 구입할 수 있는 의약품으로, 포장 용기에
-                  기재된 설명대로 올바르게 복용한다면 비교적 안전하게 사용할 수
-                  있다.
-                </span>
-                {/* )} */}
+                {medicineItem?.etcOtcCode === '전문의약품' ? (
+                  <span className='tooltipText'>
+                    의사 또는 치과의사의 지시와 감독에 따라 사용되어야 하는
+                    의약품으로, 의사의 처방전에 의해서만 구입하여 사용할 수
+                    있다.
+                  </span>
+                ) : (
+                  <span className='tooltipText'>
+                    처방전 없이 약국에서 구입할 수 있는 의약품으로, 포장 용기에
+                    기재된 설명대로 올바르게 복용한다면 비교적 안전하게 사용할
+                    수 있다.
+                  </span>
+                )}
               </div>
             </BottomLabel>
-          </div>
-          <div className='boxWrap'>
-            <Picked>
-              <LikeItBtn
-              // id={medicineItem?.medicineId}
-              // dibs={medicineItem?.dibs}
-              />
-            </Picked>
-            {/* {medicineItem?.medicineId === compareBoxArr[0].medicineId ||
-            medicineItem?.medicineId === compareBoxArr[1].medicineId ? ( */}
-            <div className='compareBox'>비교함 담기</div>
-            {/* ) : ( */}
-            <button
-              className='compareBox active'
-              /*onClick={() => {
-                  putInToCompareBox(objGraph);
-                }}*/
-            >
-              비교함 담기
-            </button>
-            {/* )} */}
           </div>
         </WrapContents>
       </CardBox>
@@ -67,10 +83,19 @@ const AddReviews = () => {
           리뷰는 안내 없이 즉시 삭제 처리됩니다.
         </span>
       </ReviewGuide>
-      <ReviewArea
-        placeholder='작성팁을 참고해 리뷰를 작성해 주시면 다른 사용자분들에게 더 도움이 될거에요!&#13;&#10;1)  의약품 섭취 전 어떤 증상이 있었나요?&#13;&#10;2)  섭취 후 어떤 개선 효과가 있었나요?&#13;&#10;3)  섭취 후 부작용이 있었나요?&#13;&#10;이 박스를 클릭해 리뷰 작성을 시작해주세요!'></ReviewArea>
+      <ContentBox>
+        <ReviewArea
+          maxLength={1000}
+          onChange={handleInput}
+          placeholder='작성팁을 참고해 리뷰를 작성해 주시면 다른 사용자분들에게 더 도움이 될거에요!&#13;&#10;1)  의약품 섭취 전 어떤 증상이 있었나요?&#13;&#10;2)  섭취 후 어떤 개선 효과가 있었나요?&#13;&#10;3)  섭취 후 부작용이 있었나요?&#13;&#10;이 박스를 클릭해 리뷰 작성을 시작해주세요!'></ReviewArea>
+        <CountText count={content.length}>
+          {content.length}자 / 1000자
+        </CountText>
+      </ContentBox>
       <SubmitBtnWrap>
-        <SubmitBtn>리뷰 등록하기</SubmitBtn>
+        <SubmitBtn type='button' onClick={submitReview}>
+          리뷰 등록하기
+        </SubmitBtn>
       </SubmitBtnWrap>
     </Wrapper>
   );
@@ -261,20 +286,53 @@ const ReviewGuide = styled.div`
   }
 `;
 
-const ReviewArea = styled.textarea`
-  width: 100%;
-  height: 480px;
-  padding: 50px 60px;
+const ContentBox = styled.div`
   background-color: #f6f7fa;
-  padding: 30px 60px;
   border-radius: 25px;
   border: 2px solid #e7e7e7;
+  width: 100%;
+  height: 480px;
+  padding: 0px 40px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  position: relative;
+`;
+
+const ReviewArea = styled.textarea`
+  width: 100%;
+  height: 360px;
+  background-color: #f6f7fa;
+  border: none;
   outline: none;
   resize: none;
+  font-size: 24px;
 
   ::placeholder {
     font-size: 24px;
   }
+
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: #e7e7e7;
+    border-radius: 5px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #b7b7b7;
+    border-radius: 5px;
+  }
+`;
+
+const CountText = styled.span`
+  position: absolute;
+  bottom: 20px;
+  right: 60px;
+  font-size: 15px;
+  font-weight: bold;
+  color: ${(props) => (props.count !== 1000 ? '#242424' : '#FF392B')};
 `;
 
 const SubmitBtnWrap = styled.div`
