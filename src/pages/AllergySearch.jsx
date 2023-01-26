@@ -1,8 +1,97 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCallback } from 'react';
 import styled from 'styled-components';
 import { userApi } from '../apis/apiInstance';
 import MaterialList from '../contents/MaterialList';
+
+const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
+  const [numArr, setNumArr] = useState([]);
+  const [numArrPage, setNumArrPage] = useState([]);
+  const [pageNum, setPageNum] = useState(0);
+
+  //서치 갯수에 따라 numArr 배열 생성
+  useEffect(() => {
+    let newArr = [];
+    let count = 1;
+    newArr.push(count);
+    for (let i = 0; i < searchLength; i++) {
+      if ((i + 1) % 5 === 0) {
+        count += 1;
+        newArr.push(count);
+      }
+    }
+    setNumArr(newArr);
+  }, [searchLength]);
+
+  // 페이지 넘버 변경. 스크롤 업 이벤트 생성
+  const pageNumChange = (num) => {
+    setNowPageNum(num);
+  };
+
+  //numArr의 길이에 따라 배열 쪼개기
+  useEffect(() => {
+    if (numArr) {
+      let newPage = [];
+
+      for (let i = 0; i < numArr.length; i += 10) {
+        let pageProp = numArr.slice(i, i + 10);
+
+        newPage.push(pageProp);
+      }
+      setNumArrPage(newPage);
+    }
+  }, [numArr]);
+
+  //다음 배열 페이지
+  const nextNumPage = () => {
+    setPageNum(pageNum + 1);
+  };
+
+  //이전 배열 페이지
+  const beforeNumPage = () => {
+    setPageNum(pageNum - 1);
+  };
+
+  return (
+    <PagenationWrap nowPageNum={nowPageNum}>
+      {numArr.length > 10 ? (
+        <>
+          {pageNum > 0 ? (
+            <div className='pagenationArrow left' onClick={beforeNumPage}></div>
+          ) : null}
+          {pageNum < numArrPage.length - 1 ? (
+            <div className='pagenationArrow right' onClick={nextNumPage}></div>
+          ) : null}
+        </>
+      ) : null}
+
+      <ul className='pagenationNumWrap'>
+        {numArrPage[pageNum]
+          ? numArrPage[pageNum].map((list) =>
+              list === nowPageNum ? (
+                <li
+                  className='Active'
+                  key={list}
+                  onClick={() => {
+                    pageNumChange(list);
+                  }}>
+                  {list}
+                </li>
+              ) : (
+                <li
+                  onClick={() => {
+                    pageNumChange(list);
+                  }}
+                  key={list}>
+                  {list}
+                </li>
+              )
+            )
+          : null}
+      </ul>
+    </PagenationWrap>
+  );
+};
 
 const AllergySearch = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +109,10 @@ const AllergySearch = () => {
   const [inputValue, setInputValue] = useState('');
 
   //검색결과 수
-  const [sumCount, setSumCount] = useState(0);
+  const [searchLength, setSearchLength] = useState(0);
+
+  //현재페이지
+  const [nowPageNum, setNowPageNum] = useState(1);
 
   const debounceFunction = (callback, delay) => {
     let timer;
@@ -57,38 +149,36 @@ const AllergySearch = () => {
     setInputValue(e.target.value);
   };
 
-  //검색 버튼 클릭 시
-  const handleClick = async () => {
-    setKeyword(inputValue);
+  useEffect(() => {
+    keywordSearch();
+  }, [nowPageNum, keyword]);
+
+  const keywordSearch = async () => {
     try {
       const res = await userApi.get(
-        `/api/allergies/search?value=${inputValue}&page=1&pageSize=5`
+        `/api/allergies/search?value=${keyword}&page=${nowPageNum}&pageSize=5`
       );
       console.log(res);
       setResult(res.data.rows);
-      setSumCount(res.data.count);
+      setSearchLength(res.data.count);
       setIsRes(false);
     } catch (error) {
       console.log(error);
     }
   };
 
+  //검색 버튼 클릭 시
+  const handleClick = () => {
+    setKeyword(inputValue);
+    setNowPageNum(1);
+  };
+
   //자동완성 리스트에서 1개 선택 시
   const pickSingleValue = async (e) => {
-    const value = e.target.innerText;
     setKeyword(e.target.innerText);
-    try {
-      const res = await userApi.get(
-        `/api/allergies/search?value=${value}&page=1&pageSize=5`
-      );
-      console.log(res);
-      setResult(res.data.rows);
-      setSumCount(res.data.count);
-      setIsRes(false);
-    } catch (error) {
-      console.log(error);
-    }
+    setNowPageNum(1);
   };
+
   return (
     <Wrapper>
       <Wrap>
@@ -117,20 +207,29 @@ const AllergySearch = () => {
           ) : null}
         </InputWrap>
       </Wrap>
-      <ResultSum>
-        <SearchKeyword>'{keyword}'</SearchKeyword>
-        <SearchSum> 검색결과 {sumCount}개</SearchSum>
-      </ResultSum>
-      <ListWrap>
-        {result?.map((result) => (
-          <MaterialList
-            result={result}
-            key={result.materialId}
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-          />
-        ))}
-      </ListWrap>
+      {keyword ? (
+        <>
+          <ResultSum>
+            <SearchKeyword>'{keyword}'</SearchKeyword>
+            <SearchSum> 검색결과 {searchLength}개</SearchSum>
+          </ResultSum>
+          <ListWrap>
+            {result?.map((result) => (
+              <MaterialList
+                result={result}
+                key={result.materialId}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+              />
+            ))}
+            <Pagenation
+              searchLength={searchLength}
+              nowPageNum={nowPageNum}
+              setNowPageNum={setNowPageNum}
+            />
+          </ListWrap>
+        </>
+      ) : null}
     </Wrapper>
   );
 };
@@ -158,7 +257,7 @@ const InputWrap = styled.div`
   display: flex;
   justify-content: center;
   background-color: #ffffff;
-  z-index: 9999;
+  z-index: 9998;
   position: relative;
 `;
 
@@ -251,4 +350,58 @@ const SearchSum = styled.span`
   font-weight: bold;
   font-size: 20px;
 `;
+
+const PagenationWrap = styled.div`
+  margin: 53px auto;
+  position: relative;
+  .pagenationNumWrap {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    justify-content: center;
+    gap: 29px;
+    padding: 0;
+    margin: 0;
+  }
+  .pagenationNumWrap li {
+    width: 33px;
+    height: 33px;
+    background-color: #e7e7e7;
+    border: 1px solid #e7e7e7;
+    border-radius: 8px;
+    font-size: 18px;
+    color: #868686;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .pagenationNumWrap li.Active {
+    background-color: white;
+    border: 1px solid #3366ff;
+    color: #242424;
+  }
+  .pagenationArrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 26px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+  }
+  .pagenationArrow.left {
+    left: -50px;
+    background-image: url('/assets/image/icon_page_arrow_left.png');
+  }
+  .pagenationArrow.right {
+    right: -50px;
+    background-image: url('/assets/image/icon_page_arrow_right.png');
+  }
+`;
+
 export default AllergySearch;
