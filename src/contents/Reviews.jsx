@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { IoIosWarning } from 'react-icons/io';
 import { AiFillLike, AiFillDislike } from 'react-icons/ai';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Reviews = () => {
   const navigate = useNavigate();
   const [moreShow, setMoreShow] = useState(true);
   const [like, setLike] = useState(false);
+
+  const { id } = useParams();
 
   const mock =
     '피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고 피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고';
@@ -23,7 +25,7 @@ const Reviews = () => {
             리뷰는 안내 없이 즉시 삭제 처리됩니다.
           </span>
         </ReviewDesc>
-        <ReviewpageBtn onClick={() => navigate('/reviewform')}>
+        <ReviewpageBtn onClick={() => navigate(`/detail/${id}/reviewform`)}>
           리뷰 쓰기
         </ReviewpageBtn>
       </ReviewBtnWrap>
