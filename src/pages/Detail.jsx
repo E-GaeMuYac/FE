@@ -15,6 +15,7 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 // 컴포넌트
 import TabBar from '../components/common/Tabbar';
 import LikeItBtn from '../components/common/LikeItBtn';
+import Reviews from '../contents/Reviews';
 
 const BottomContents = ({ medicineInfo, query }) => {
   const [ContentDesc, setContentDesc] = useState('');
@@ -583,9 +584,13 @@ const Detail = () => {
       </TopSection>
       <div style={{ marginBottom: '170px' }}>
         <TabBar location={location} query={query} />
-        <BottomSection>
-          <BottomContents medicineInfo={medicineItem} query={query} />
-        </BottomSection>
+        {query !== '리뷰' ? (
+          <BottomSection>
+            <BottomContents medicineInfo={medicineItem} query={query} />
+          </BottomSection>
+        ) : (
+          <Reviews />
+        )}
       </div>
     </>
   );
