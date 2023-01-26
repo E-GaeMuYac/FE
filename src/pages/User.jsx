@@ -7,10 +7,12 @@ import axios from 'axios';
 import { useGetLikeQuery } from '../query/likeQuery';
 import ProductList from '../components/common/productList';
 import Layout from '../components/layout/Layout';
+import Allergy from '../contents/Allergy';
 
 const User = (props) => {
   const navigate = useNavigate();
   const [likesArr, setLikesArr] = useState([]);
+  const [isClicked, setIsClicked] = useState('dibs');
   const [isTextClicked, setIsTextClicked] = useState(false);
   const [isFileClicked, setIsFileClicked] = useState(false);
   const [nickname, setNickname] = useState('');
@@ -354,15 +356,40 @@ const User = (props) => {
             </div>
           </Box>
         </MyPageWrap>
-        <LikelistHeader>
-          <span>찜한 의약품 목록 ({likeList.length}개)</span>
-        </LikelistHeader>
-        <LikeList>
-          {/* 임시 */}
-          {likeList.map((list) => (
-            <ProductList key={list.medicineId} list={{ ...list, dibs: true }} />
-          ))}
-        </LikeList>
+        <NavWrap>
+          <LikelistNav
+            isClicked={isClicked}
+            onClick={() => setIsClicked('dibs')}>
+            내가 찜한 의약품
+          </LikelistNav>
+          <AllergylistNav
+            isClicked={isClicked}
+            onClick={() => setIsClicked('allergy')}>
+            나의 알레르기
+          </AllergylistNav>
+          <ReviewlistNav
+            isClicked={isClicked}
+            onClick={() => setIsClicked('review')}>
+            내가 쓴 리뷰
+          </ReviewlistNav>
+        </NavWrap>
+        {isClicked === 'dibs' && (
+          <>
+            <LikelistHeader>
+              <span className='title'>'나의 찜'</span>
+              <span className='sum'>총 {likeList.length}개</span>
+            </LikelistHeader>
+            <LikeList>
+              {likeList.map((list) => (
+                <ProductList
+                  key={list.medicineId}
+                  list={{ ...list, dibs: true }}
+                />
+              ))}
+            </LikeList>
+          </>
+        )}
+        {isClicked === 'allergy' && <Allergy />}
       </Layout>
     </Wrapper>
   );
@@ -887,15 +914,21 @@ const Box = styled.div`
 `;
 
 const LikelistHeader = styled.div`
-  margin-top: 100px;
   width: 100%;
   height: 100px;
   display: flex;
   align-items: center;
 
-  span {
-    font-size: 32px;
+  .title {
+    font-size: 20px;
     font-weight: 700;
+  }
+
+  .sum {
+    font-size: 20px;
+    font-weight: 700;
+    text-indent: 15px;
+    color: #868686;
   }
 `;
 
@@ -907,6 +940,49 @@ const LikeList = styled.ul`
   padding: 0;
   margin: 0;
   margin-bottom: 218px;
+`;
+
+const NavWrap = styled.div`
+  width: 900px;
+  margin-top: 80px;
+  display: flex;
+`;
+
+const LikelistNav = styled.button`
+  width: 100%;
+  height: 60px;
+  font-size: 26px;
+  font-weight: bold;
+  border: none;
+  background-color: white;
+  border-bottom: ${({ isClicked }) =>
+    isClicked === 'dibs' ? '4px solid #3366FF' : '2px solid #868686'};
+  color: ${({ isClicked }) => (isClicked === 'dibs' ? '#3366FF' : '#868686')};
+`;
+
+const AllergylistNav = styled.button`
+  width: 100%;
+  height: 60px;
+  font-size: 26px;
+  font-weight: bold;
+  border: none;
+  background-color: white;
+  border-bottom: ${({ isClicked }) =>
+    isClicked === 'allergy' ? '4px solid #3366FF' : '2px solid #868686'};
+  color: ${({ isClicked }) =>
+    isClicked === 'allergy' ? '#3366FF' : '#868686'};
+`;
+
+const ReviewlistNav = styled.button`
+  width: 100%;
+  height: 60px;
+  font-size: 26px;
+  font-weight: bold;
+  border: none;
+  background-color: white;
+  border-bottom: ${({ isClicked }) =>
+    isClicked === 'review' ? '4px solid #3366FF' : '2px solid #868686'};
+  color: ${({ isClicked }) => (isClicked === 'review' ? '#3366FF' : '#868686')};
 `;
 
 export default User;
