@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { IoIosWarning } from 'react-icons/io';
 import { AiFillLike, AiFillDislike } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
 
 const Reviews = () => {
+  const navigate = useNavigate();
   const [moreShow, setMoreShow] = useState(true);
   const [like, setLike] = useState(false);
 
@@ -13,6 +15,18 @@ const Reviews = () => {
   console.log(like);
   return (
     <Wrapper>
+      <ReviewBtnWrap>
+        <ReviewDesc>
+          <p>000님의 리뷰로 같은 고민을 가진 분들이 도움이 될 수 있어요.</p>
+          <span>
+            리뷰에 해당 의약품과 무관한 내용이 포함되었거나, 어뷰징으로 판단된
+            리뷰는 안내 없이 즉시 삭제 처리됩니다.
+          </span>
+        </ReviewDesc>
+        <ReviewpageBtn onClick={() => navigate('/reviewform')}>
+          리뷰 쓰기
+        </ReviewpageBtn>
+      </ReviewBtnWrap>
       <ReviewNav>
         <ReviewHeader>
           <div className='total'>
@@ -70,8 +84,48 @@ const Reviews = () => {
 
 const Wrapper = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
+const ReviewBtnWrap = styled.div`
+  background-color: #f6f7fa;
+  width: 100%;
+  height: 120px;
+  border-radius: 25px;
+  padding: 30px 60px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ReviewDesc = styled.div`
+  width: 1070px;
+  line-height: 20px;
+  p {
+    font-size: 20px;
+  }
+
+  span {
+    font-size: 20px;
+    font-weight: bold;
+  }
+`;
+
+const ReviewpageBtn = styled.div`
+  width: 130px;
+  height: 44px;
+  background-color: #242424;
+  border-radius: 8px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  cursor: pointer;
+`;
 const ReviewNav = styled.div`
   background-color: #f6f7fa;
   width: 100%;
@@ -124,7 +178,6 @@ const SortTag = styled.span`
 const Contents = styled.div`
   width: 100%;
   border-radius: 23px;
-  margin-top: 20px;
   background-color: #f6f7fa;
   display: flex;
   flex-direction: column;

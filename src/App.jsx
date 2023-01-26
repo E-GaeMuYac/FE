@@ -15,6 +15,8 @@ import User from './pages/User';
 import Signup from './pages/Signup';
 import SocialLogin from './pages/SocialLogin';
 import Main from './pages/main/Main';
+import AllergySearch from './pages/AllergySearch';
+import AddReviews from './pages/AddReviews';
 
 // 컴포넌트
 import Layout from './components/layout/Layout';
@@ -87,6 +89,22 @@ function App() {
           }
         />
         {/* <Route path='/spinner' element={<Spinner />} /> */}
+        <Route
+          path='/allergy'
+          element={
+            <Layout>
+              <AllergySearch />
+            </Layout>
+          }
+        />
+        <Route
+          path='/reviewform'
+          element={
+            <Layout>
+              <AddReviews />
+            </Layout>
+          }
+        />
       </Routes>
     </>
   );
