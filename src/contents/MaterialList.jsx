@@ -43,7 +43,9 @@ const MaterialList = (props) => {
               </SelectBtn>
             )}
           </MoreInfoList>
-          <MoreInfoContent>{result.content}</MoreInfoContent>
+          <MoreInfoContent>
+            {result.content !== null ? result.content : '추가 정보 없음'}
+          </MoreInfoContent>
         </MoreInfoWrap>
       ) : (
         <ResultList key={result.materialId}>
