@@ -73,7 +73,11 @@ const Allergy = () => {
                         등록 해제
                       </CancelBtn>
                     </MoreInfoList>
-                    <MoreInfoContent>{result.content}</MoreInfoContent>
+                    <MoreInfoContent>
+                      {result.content !== null
+                        ? result.content
+                        : '추가 정보 없음'}
+                    </MoreInfoContent>
                   </MoreInfoWrap>
                 ) : (
                   <ResultList key={result.materialId}>
