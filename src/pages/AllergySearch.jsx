@@ -179,6 +179,12 @@ const AllergySearch = () => {
     setNowPageNum(1);
   };
 
+  const handleEnter = (e) => {
+    if (e.code === 'Enter') {
+      setKeyword(inputValue);
+    }
+  };
+
   return (
     <Wrapper>
       <Wrap>
@@ -186,6 +192,7 @@ const AllergySearch = () => {
           <SearchInput
             placeholder='알레르기 성분을 검색하여 등록해보세요!'
             onChange={handleChange}
+            onKeyDown={handleEnter}
           />
           <BtnWrap>
             <SearchBtn type='button' onClick={handleClick}>
