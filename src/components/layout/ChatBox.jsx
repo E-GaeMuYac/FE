@@ -39,11 +39,11 @@ const ChatBox = () => {
 
     // 내가 쓴 글 추가
     const hour =
-      new Date(Date.now()).getHours() > 10
+      new Date(Date.now()).getHours() >= 10
         ? new Date(Date.now()).getHours()
         : '0' + new Date(Date.now()).getHours();
     const minute =
-      new Date(Date.now()).getMinutes() > 10
+      new Date(Date.now()).getMinutes() >= 10
         ? new Date(Date.now()).getMinutes()
         : '0' + new Date(Date.now()).getMinutes();
     setMessageList((list) => [
@@ -64,11 +64,11 @@ const ChatBox = () => {
     socket?.on('receive', (content, link) => {
       if (content) {
         const hour =
-          new Date(Date.now()).getHours() > 10
+          new Date(Date.now()).getHours() >= 10
             ? new Date(Date.now()).getHours()
             : '0' + new Date(Date.now()).getHours();
         const minute =
-          new Date(Date.now()).getMinutes() > 10
+          new Date(Date.now()).getMinutes() >= 10
             ? new Date(Date.now()).getMinutes()
             : '0' + new Date(Date.now()).getMinutes();
 
