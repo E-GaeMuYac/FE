@@ -32,31 +32,33 @@ const ChatBox = () => {
     setInputValue(value);
   });
   const sendMessage = async () => {
-    await socket.emit('chatting', {
-      room: socket.id,
-      message: inputValue,
-    });
-
-    // 내가 쓴 글 추가
-    const hour =
-      new Date(Date.now()).getHours() >= 10
-        ? new Date(Date.now()).getHours()
-        : '0' + new Date(Date.now()).getHours();
-    const minute =
-      new Date(Date.now()).getMinutes() >= 10
-        ? new Date(Date.now()).getMinutes()
-        : '0' + new Date(Date.now()).getMinutes();
-    setMessageList((list) => [
-      ...list,
-      {
-        messageId: Date.now(),
-        time: hour + ':' + minute,
-        writer: '사용자',
+    if (inputValue.trim !== '') {
+      await socket.emit('chatting', {
+        room: socket.id,
         message: inputValue,
-      },
-    ]);
+      });
 
-    setInputValue('');
+      // 내가 쓴 글 추가
+      const hour =
+        new Date(Date.now()).getHours() >= 10
+          ? new Date(Date.now()).getHours()
+          : '0' + new Date(Date.now()).getHours();
+      const minute =
+        new Date(Date.now()).getMinutes() >= 10
+          ? new Date(Date.now()).getMinutes()
+          : '0' + new Date(Date.now()).getMinutes();
+      setMessageList((list) => [
+        ...list,
+        {
+          messageId: Date.now(),
+          time: hour + ':' + minute,
+          writer: '사용자',
+          message: inputValue,
+        },
+      ]);
+
+      setInputValue('');
+    }
   };
 
   useEffect(() => {
