@@ -313,6 +313,7 @@ const User = (props) => {
                     type='text'
                     defaultValue={nickname}
                     onChange={nickInput}
+                    maxLength={20}
                   />
                   <button className='o' onClick={changesDone}>
                     O
@@ -356,23 +357,25 @@ const User = (props) => {
             </div>
           </Box>
         </MyPageWrap>
-        <NavWrap>
-          <LikelistNav
-            isClicked={isClicked}
-            onClick={() => setIsClicked('dibs')}>
-            내가 찜한 의약품
-          </LikelistNav>
-          <AllergylistNav
-            isClicked={isClicked}
-            onClick={() => setIsClicked('allergy')}>
-            나의 알레르기
-          </AllergylistNav>
-          <ReviewlistNav
-            isClicked={isClicked}
-            onClick={() => setIsClicked('review')}>
-            내가 쓴 리뷰
-          </ReviewlistNav>
-        </NavWrap>
+        <Tabbar>
+          <NavWrap>
+            <LikelistNav
+              isClicked={isClicked}
+              onClick={() => setIsClicked('dibs')}>
+              내가 찜한 의약품
+            </LikelistNav>
+            <AllergylistNav
+              isClicked={isClicked}
+              onClick={() => setIsClicked('allergy')}>
+              나의 알레르기
+            </AllergylistNav>
+            <ReviewlistNav
+              isClicked={isClicked}
+              onClick={() => setIsClicked('review')}>
+              내가 쓴 리뷰
+            </ReviewlistNav>
+          </NavWrap>
+        </Tabbar>
         {isClicked === 'dibs' && (
           <>
             <LikelistHeader>
@@ -683,10 +686,12 @@ const ProfileWrap = styled.div`
   box-sizing: border-box;
   padding: 37px 40px;
   border-radius: 24px;
+  display: flex;
+  align-content: space-around;
 `;
 
 const NicknameBox = styled.div`
-  width: 60%;
+  width: 65%;
   .wrapNickname {
     width: 42px;
     height: 42px;
@@ -713,13 +718,13 @@ const NicknameBox = styled.div`
 
 const Nickname = styled.div`
   height: 42px;
-  font-size: 36px;
+  font-size: 20px;
   font-weight: 700;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   float: left;
-  margin-right: 8px;
+  margin-right: 5px;
 `;
 
 const NicknameInput = styled.div`
@@ -751,12 +756,12 @@ const NicknameInput = styled.div`
   .x {
     position: absolute;
     top: 11px;
-    right: 15px;
+    right: 35px;
   }
   .o {
     position: absolute;
     top: 11px;
-    right: 43px;
+    right: 63px;
   }
 `;
 
@@ -764,13 +769,14 @@ const ProfileMsg = styled.div`
   width: 250px;
   height: 72px;
   margin-top: 38px;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 700;
   color: #868686;
 `;
 
 const CalenderWrap = styled.div`
-  width: 40%;
+  width: 35%;
+  margin-left: 10px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -942,6 +948,11 @@ const LikeList = styled.ul`
   margin-bottom: 218px;
 `;
 
+const Tabbar = styled.div`
+  width: 100%;
+  border-bottom: 3px solid #e7e7e7;
+`;
+
 const NavWrap = styled.div`
   width: 900px;
   margin-top: 80px;
@@ -956,7 +967,7 @@ const LikelistNav = styled.button`
   border: none;
   background-color: white;
   border-bottom: ${({ isClicked }) =>
-    isClicked === 'dibs' ? '4px solid #3366FF' : '2px solid #868686'};
+    isClicked === 'dibs' ? '4px solid #3366FF' : 'none'};
   color: ${({ isClicked }) => (isClicked === 'dibs' ? '#3366FF' : '#868686')};
 `;
 
@@ -968,7 +979,7 @@ const AllergylistNav = styled.button`
   border: none;
   background-color: white;
   border-bottom: ${({ isClicked }) =>
-    isClicked === 'allergy' ? '4px solid #3366FF' : '2px solid #868686'};
+    isClicked === 'allergy' ? '4px solid #3366FF' : 'none'};
   color: ${({ isClicked }) =>
     isClicked === 'allergy' ? '#3366FF' : '#868686'};
 `;
@@ -981,7 +992,7 @@ const ReviewlistNav = styled.button`
   border: none;
   background-color: white;
   border-bottom: ${({ isClicked }) =>
-    isClicked === 'review' ? '4px solid #3366FF' : '2px solid #868686'};
+    isClicked === 'review' ? '4px solid #3366FF' : 'none'};
   color: ${({ isClicked }) => (isClicked === 'review' ? '#3366FF' : '#868686')};
 `;
 

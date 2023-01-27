@@ -6,7 +6,7 @@ const SocialLogin = (props) => {
   const navigation = useNavigate();
   const setIsToken = props.setistoken;
   const setUserImage = props.setuserimage;
-  const searchParams = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const accesstoken = searchParams.get('accesstoken');
   const refreshtoken = searchParams.get('refreshtoken');
   const nickname = searchParams.get('nickname');
