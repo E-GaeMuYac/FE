@@ -60,7 +60,7 @@ const ChatBox = () => {
   };
 
   useEffect(() => {
-    socket?.on('join', (data) => console.log(socket.request));
+    // socket?.on('join', (data) => console.log(socket.request));
     socket?.on('receive', (content, link) => {
       if (content) {
         const hour =
