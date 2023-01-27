@@ -101,7 +101,7 @@ function App() {
           path='/detail/:id/reviewform'
           element={
             <Layout>
-              <AddReviews />
+              <AddReviews setistoken={setIsToken} />
             </Layout>
           }
         />

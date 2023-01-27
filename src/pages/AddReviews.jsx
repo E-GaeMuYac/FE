@@ -1,18 +1,37 @@
 import React from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { userApi } from '../apis/apiInstance';
 
-const AddReviews = () => {
+const AddReviews = (props) => {
+  const setIsToken = props.setIsToken;
+  const navigate = useNavigate();
   const { id } = useParams();
   const [medicineItem, setMedicineItem] = useState({});
   const [content, setContent] = useState('');
+  const [nickname, setNickname] = useState('');
 
   useEffect(() => {
     getMedicine();
+    GetProfile();
   }, []);
+
+  const GetProfile = async () => {
+    try {
+      const res = await userApi.get('api/users/find');
+      setNickname(res.data.user.nickname);
+    } catch (e) {
+      console.log(e);
+      alert('로그인 정보가 필요합니다.');
+      setIsToken(false);
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('nickname');
+      navigate('/login');
+    }
+  };
 
   const getMedicine = async () => {
     try {
@@ -75,7 +94,9 @@ const AddReviews = () => {
         </WrapContents>
       </CardBox>
       <ReviewGuide>
-        <p>000님의 리뷰로 같은 고민을 가진 분들이 도움이 될 수 있어요.</p>
+        <p>
+          {nickname}님의 리뷰로 같은 고민을 가진 분들이 도움이 될 수 있어요.
+        </p>
         <span>
           리뷰에 해당 의약품과 무관한 내용이 포함되었거나, 어뷰징으로 판단된
           리뷰는 안내 없이 즉시 삭제 처리됩니다.
