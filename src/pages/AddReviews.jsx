@@ -1,11 +1,9 @@
-import { async } from 'q';
 import React from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
 import { userApi } from '../apis/apiInstance';
-import LikeItBtn from '../components/common/LikeItBtn';
 
 const AddReviews = () => {
   const { id } = useParams();
@@ -93,7 +91,10 @@ const AddReviews = () => {
         </CountText>
       </ContentBox>
       <SubmitBtnWrap>
-        <SubmitBtn type='button' onClick={submitReview}>
+        <SubmitBtn
+          type='button'
+          onClick={submitReview}
+          disabled={content.length < 10}>
           리뷰 등록하기
         </SubmitBtn>
       </SubmitBtnWrap>
@@ -332,7 +333,8 @@ const CountText = styled.span`
   right: 60px;
   font-size: 15px;
   font-weight: bold;
-  color: ${(props) => (props.count !== 1000 ? '#242424' : '#FF392B')};
+  color: ${(props) =>
+    props.count !== 1000 && props.count >= 10 ? '#242424' : '#FF392B'};
 `;
 
 const SubmitBtnWrap = styled.div`
@@ -342,11 +344,12 @@ const SubmitBtnWrap = styled.div`
   justify-content: center;
 `;
 
-const SubmitBtn = styled.div`
+const SubmitBtn = styled.button`
   width: 326px;
   height: 58px;
-  background-color: #3366ff;
+  background-color: ${(props) => (props.disabled ? '#c2d1ff' : '#3366FF')};
   color: white;
+  border: none;
   border-radius: 12px;
   font-size: 20px;
   display: flex;
