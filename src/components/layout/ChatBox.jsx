@@ -174,7 +174,7 @@ const ChatBox = () => {
               onChange={writeValue}
               placeholder='메세지 입력'
               onKeyDown={(e) => {
-                if (e.key === 'Enter') {
+                if (e.key === 'Enter' && e.nativeEvent.isComposing === false) {
                   sendMessage();
                 }
               }}
