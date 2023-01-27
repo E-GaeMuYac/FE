@@ -25,6 +25,7 @@ import CompareBox from './components/common/CompareBox';
 import FindAccount from './pages/FindAccount';
 import Reviews from './contents/Reviews';
 import MiniNav from './components/common/MiniNav';
+import ChatBox from './components/layout/ChatBox';
 // import Spinner from './components/common/Spinner';
 
 function App() {
@@ -121,6 +122,7 @@ function App() {
           element={<Reviews setistoken={setIsToken} />}
         />
       </Routes>
+      <ChatBox />
     </>
   );
 }
