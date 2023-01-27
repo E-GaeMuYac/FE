@@ -11,10 +11,32 @@ const Reviews = () => {
 
   const { id } = useParams();
 
-  const mock =
-    '피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고 피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고';
+  const tagName = [
+    '전체보기',
+    '만족',
+    '부작용',
+    '효과',
+    '개선',
+    '통증',
+    '졸음',
+    '가려움',
+    '어지러움',
+    '두통',
+    '설사',
+    '두드러기',
+    '발진',
+    '속쓰림',
+  ];
+  const [pickTag, setpickTag] = useState('전체보기');
 
-  console.log(like);
+  // const mock =
+  //   '피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고 피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고';
+
+  const mock = ['만족', '부작용', '효과', '개선', '발진'];
+
+  const pickTagColor = (e) => {
+    setpickTag(e.target.innerText);
+  };
   return (
     <Wrapper>
       <ReviewBtnWrap>
@@ -37,49 +59,57 @@ const Reviews = () => {
           </div>
         </ReviewHeader>
         <ReviewSorting>
-          <SortTag>키워드</SortTag>
-          <SortTag>키워드</SortTag>
-          <SortTag>리뷰</SortTag>
-          <SortTag>키워드</SortTag>
-          <SortTag>키워드</SortTag>
+          {tagName.map((tag) => (
+            <SortTag
+              key={tag}
+              tag={tag}
+              pickTag={pickTag}
+              onClick={pickTagColor}>
+              {tag}
+            </SortTag>
+          ))}
         </ReviewSorting>
       </ReviewNav>
-      <Contents>
-        <ReviewInfo>
-          <AccountBox>
-            <AccountBoxBg>
-              <AccountBoxImg /*imageUrl={imageUrl}*/ />
-            </AccountBoxBg>
-            <span>닉네임</span>
-          </AccountBox>
-          <DateWrited>2023년 1월 29일</DateWrited>
-        </ReviewInfo>
-        <Description>
-          {moreShow ? <DescSum>{mock}</DescSum> : <DescWhole>{mock}</DescWhole>}
-          <MoreBtn
-            className='more'
-            onClick={() => {
-              setMoreShow(!moreShow);
-            }}>
-            {moreShow ? '리뷰 자세히 보기 ▼' : '접기 ▲'}
-          </MoreBtn>
-        </Description>
-        <Exception>
-          <IoIosWarning size='26' color='#FF772B' />
-          <span>면책사항:</span>
-          <div>의학적 또는 전문가의 조언이 아닌 사용자의 의견입니다.</div>
-        </Exception>
-        <Recommend>
-          <LikeBtn like={like} onClick={() => setLike(!like)}>
-            <AiFillLike />
-            <div>도움 돼요</div>
-          </LikeBtn>
-          <UnlikeBtn>
-            <AiFillDislike />
-            <div>도움 안돼요</div>
-          </UnlikeBtn>
-        </Recommend>
-      </Contents>
+      {mock.map((a) =>
+        a.includes(pickTag) ? (
+          <Contents key={a}>
+            <ReviewInfo>
+              <AccountBox>
+                <AccountBoxBg>
+                  <AccountBoxImg /*imageUrl={imageUrl}*/ />
+                </AccountBoxBg>
+                <span>닉네임</span>
+              </AccountBox>
+              <DateWrited>2023년 1월 29일</DateWrited>
+            </ReviewInfo>
+            <Description>
+              {moreShow ? <DescSum>{a}</DescSum> : <DescWhole>{a}</DescWhole>}
+              <MoreBtn
+                className='more'
+                onClick={() => {
+                  setMoreShow(!moreShow);
+                }}>
+                {moreShow ? '리뷰 자세히 보기 ▼' : '접기 ▲'}
+              </MoreBtn>
+            </Description>
+            <Exception>
+              <IoIosWarning size='26' color='#FF772B' />
+              <span>면책사항:</span>
+              <div>의학적 또는 전문가의 조언이 아닌 사용자의 의견입니다.</div>
+            </Exception>
+            <Recommend>
+              <LikeBtn like={like} onClick={() => setLike(!like)}>
+                <AiFillLike />
+                <div>도움 돼요</div>
+              </LikeBtn>
+              <UnlikeBtn>
+                <AiFillDislike />
+                <div>도움 안돼요</div>
+              </UnlikeBtn>
+            </Recommend>
+          </Contents>
+        ) : null
+      )}
     </Wrapper>
   );
 };
@@ -163,8 +193,9 @@ const ReviewSorting = styled.div`
 `;
 
 const SortTag = styled.span`
-  background-color: #d0d0d0;
-  color: #868686;
+  background-color: ${(props) =>
+    props.tag === props.pickTag ? '#3366FF' : '#D0D0D0'};
+  color: ${(props) => (props.tag === props.pickTag ? 'white' : '#868686;')};
   min-width: 64px;
   height: 46px;
   padding: 0 10px;
@@ -175,6 +206,7 @@ const SortTag = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 
 const Contents = styled.div`
