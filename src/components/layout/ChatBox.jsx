@@ -32,7 +32,7 @@ const ChatBox = () => {
     setInputValue(value);
   });
   const sendMessage = async () => {
-    if (inputValue.trim !== '') {
+    if (inputValue.trim() !== '') {
       await socket.emit('chatting', {
         room: socket.id,
         message: inputValue,
