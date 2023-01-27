@@ -23,6 +23,7 @@ import Layout from './components/layout/Layout';
 import Header from './components/layout/Header';
 import CompareBox from './components/common/CompareBox';
 import FindAccount from './pages/FindAccount';
+import ChatBox from './components/layout/ChatBox';
 // import Spinner from './components/common/Spinner';
 
 function App() {
@@ -106,6 +107,7 @@ function App() {
           }
         />
       </Routes>
+      <ChatBox />
     </>
   );
 }
