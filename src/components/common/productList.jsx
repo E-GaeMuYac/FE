@@ -83,7 +83,7 @@ const SearchListWrap = styled.div`
     align-items: center;
     flex-direction: column;
     cursor: pointer;
-    box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.15);
   }
   .listImg {
     width: 100%;
