@@ -83,7 +83,7 @@ const SearchListWrap = styled.div`
     align-items: center;
     flex-direction: column;
     cursor: pointer;
-    box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.15);
   }
   .listImg {
     width: 100%;
@@ -136,7 +136,7 @@ const SearchListWrap = styled.div`
     align-items: center;
     justify-content: center;
     gap: 5px;
-    margin-bottom: 35px;
+    margin-bottom: 56px;
   }
   .listTag {
     max-width: 256px;
@@ -172,9 +172,12 @@ const SearchListWrap = styled.div`
     font-size: 14px;
     line-height: 20px;
     font-weight: bold;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.2);
   }
   .btnInBox.Active {
-    background-color: #3366ff;
+    background-color: #ebf0ff;
+    color: #3366ff;
+    border: 1px solid #3366ff;
     cursor: pointer;
   }
 `;
