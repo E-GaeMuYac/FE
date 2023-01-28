@@ -22,11 +22,21 @@ import Header from './components/layout/Header';
 import CompareBox from './components/common/CompareBox';
 import FindAccount from './pages/FindAccount';
 import ChatBox from './components/layout/ChatBox';
+import { useRecoilState } from 'recoil';
+import { nowRoute } from './recoil/recoilStore';
 // import Spinner from './components/common/Spinner';
 
 function App() {
   const [isToken, setIsToken] = useState('');
   const [userImage, setUserImage] = useState('');
+
+  const location = useLocation();
+
+  const [nowPage, setNowPage] = useRecoilState(nowRoute);
+
+  useEffect(() => {
+    setNowPage(location.pathname);
+  }, []);
 
   return (
     <>
