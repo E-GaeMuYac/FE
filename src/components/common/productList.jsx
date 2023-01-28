@@ -6,7 +6,7 @@ import LikeItBtn from './LikeItBtn';
 
 const ProductList = ({ list }) => {
   const navigate = useNavigate();
-  const [compareBoxArr, setCompareBoxArr] = useRecoilState(compareBoxData);
+  const [compareData, setCompareData] = useRecoilState(compareBoxData);
 
   const goToDetail = (id) => {
     navigate(`/detail/${id}?tab=효능 효과`);
@@ -14,11 +14,17 @@ const ProductList = ({ list }) => {
 
   const putInToCompareBox = (list) => {
     let count = 0;
-    for (let i = 0; i < compareBoxArr.length; i++) {
-      if (compareBoxArr[i].itemName === 'null') {
-        let newArr = [...compareBoxArr];
+
+    for (let i = 0; i < compareData.arr.length; i++) {
+      if (compareData.arr[i].itemName === 'null') {
+        let newArr = [...compareData.arr];
         newArr[i] = list;
-        setCompareBoxArr(newArr);
+        if (compareData.length === 1) {
+          setCompareData({ ...compareData, arr: newArr, isOpen: 'open' });
+        } else {
+          setCompareData({ ...compareData, arr: newArr });
+        }
+
         break;
       } else {
         count++;
@@ -53,8 +59,8 @@ const ProductList = ({ list }) => {
       </li>
       <div className='btnWrap'>
         <LikeItBtn id={list.medicineId} dibs={list.dibs} />
-        {list.medicineId === compareBoxArr[0].medicineId ||
-        list.medicineId === compareBoxArr[1].medicineId ? (
+        {list.medicineId === compareData.arr[0].medicineId ||
+        list.medicineId === compareData.arr[1].medicineId ? (
           <div className='btnInBox'>비교함 담기</div>
         ) : (
           <div

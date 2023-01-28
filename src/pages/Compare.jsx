@@ -92,10 +92,10 @@ const ComparePage = () => {
 
   const [versusList, setVersusList] = useState([]);
 
-  const compareBoxArr = useRecoilValue(compareBoxData);
+  const compareData = useRecoilValue(compareBoxData);
 
-  const comparePillIdA = compareBoxArr[0].medicineId;
-  const comparePillIdB = compareBoxArr[1].medicineId;
+  const comparePillIdA = compareData.arr[0].medicineId;
+  const comparePillIdB = compareData.arr[1].medicineId;
 
   useEffect(() => {
     if (!localStorage.getItem('refreshToken')) {
