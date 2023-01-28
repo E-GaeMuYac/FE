@@ -19,3 +19,8 @@ code {
 body {
   font-family: 'Noto Sans KR', sans-serif;
 }
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
