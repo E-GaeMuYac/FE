@@ -7,12 +7,14 @@ import axios from 'axios';
 import { useGetLikeQuery } from '../query/likeQuery';
 import ProductList from '../components/common/productList';
 import Layout from '../components/layout/Layout';
+import Allergy from '../contents/Allergy';
 
 import { Mobile, Laptop, PC } from '../query/useMediaQuery';
 
 const User = (props) => {
   const navigate = useNavigate();
   const [likesArr, setLikesArr] = useState([]);
+  const [isClicked, setIsClicked] = useState('dibs');
   const [isTextClicked, setIsTextClicked] = useState(false);
   const [isFileClicked, setIsFileClicked] = useState(false);
   const [nickname, setNickname] = useState('');
@@ -313,6 +315,7 @@ const User = (props) => {
                     type='text'
                     defaultValue={nickname}
                     onChange={nickInput}
+                    maxLength={20}
                   />
                   <button className='o' onClick={changesDone}>
                     O
@@ -367,15 +370,42 @@ const User = (props) => {
             </div>
           </Box>
         </MyPageWrap>
-        <LikelistHeader>
-          <span>찜한 의약품 목록 ({likeList.length}개)</span>
-        </LikelistHeader>
-        <LikeList>
-          {/* 임시 */}
-          {likeList.map((list) => (
-            <ProductList key={list.medicineId} list={{ ...list, dibs: true }} />
-          ))}
-        </LikeList>
+        <Tabbar>
+          <NavWrap>
+            <LikelistNav
+              isClicked={isClicked}
+              onClick={() => setIsClicked('dibs')}>
+              내가 찜한 의약품
+            </LikelistNav>
+            <AllergylistNav
+              isClicked={isClicked}
+              onClick={() => setIsClicked('allergy')}>
+              나의 알레르기
+            </AllergylistNav>
+            <ReviewlistNav
+              isClicked={isClicked}
+              onClick={() => setIsClicked('review')}>
+              내가 쓴 리뷰
+            </ReviewlistNav>
+          </NavWrap>
+        </Tabbar>
+        {isClicked === 'dibs' && (
+          <>
+            <LikelistHeader>
+              <span className='title'>'나의 찜'</span>
+              <span className='sum'>총 {likeList.length}개</span>
+            </LikelistHeader>
+            <LikeList>
+              {likeList.map((list) => (
+                <ProductList
+                  key={list.medicineId}
+                  list={{ ...list, dibs: true }}
+                />
+              ))}
+            </LikeList>
+          </>
+        )}
+        {isClicked === 'allergy' && <Allergy />}
       </Layout>
     </Wrapper>
   );
@@ -713,10 +743,12 @@ const ProfileWrap = styled.div`
   box-sizing: border-box;
   padding: 37px 40px;
   border-radius: 24px;
+  display: flex;
+  align-content: space-around;
 `;
 
 const NicknameBox = styled.div`
-  width: 60%;
+  width: 65%;
   .wrapNickname {
     width: 42px;
     height: 42px;
@@ -751,13 +783,13 @@ const Nickname = styled.div`
     margin-right: 3px;
   }
   height: 42px;
-  font-size: 36px;
+  font-size: 20px;
   font-weight: 700;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   float: left;
-  margin-right: 8px;
+  margin-right: 5px;
 `;
 
 const NicknameInput = styled.div`
@@ -789,12 +821,12 @@ const NicknameInput = styled.div`
   .x {
     position: absolute;
     top: 11px;
-    right: 15px;
+    right: 35px;
   }
   .o {
     position: absolute;
     top: 11px;
-    right: 43px;
+    right: 63px;
   }
 `;
 
@@ -807,7 +839,7 @@ const ProfileMsg = styled.div`
   width: 250px;
   height: 72px;
   margin-top: 38px;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 700;
   color: #868686;
 `;
@@ -1021,15 +1053,21 @@ const Box = styled.div`
 `;
 
 const LikelistHeader = styled.div`
-  margin-top: 100px;
   width: 100%;
   height: 100px;
   display: flex;
   align-items: center;
 
-  span {
-    font-size: 32px;
+  .title {
+    font-size: 20px;
     font-weight: 700;
+  }
+
+  .sum {
+    font-size: 20px;
+    font-weight: 700;
+    text-indent: 15px;
+    color: #868686;
   }
 `;
 
@@ -1041,6 +1079,54 @@ const LikeList = styled.ul`
   padding: 0;
   margin: 0;
   margin-bottom: 218px;
+`;
+
+const Tabbar = styled.div`
+  width: 100%;
+  border-bottom: 3px solid #e7e7e7;
+`;
+
+const NavWrap = styled.div`
+  width: 900px;
+  margin-top: 80px;
+  display: flex;
+`;
+
+const LikelistNav = styled.button`
+  width: 100%;
+  height: 60px;
+  font-size: 26px;
+  font-weight: bold;
+  border: none;
+  background-color: white;
+  border-bottom: ${({ isClicked }) =>
+    isClicked === 'dibs' ? '4px solid #3366FF' : 'none'};
+  color: ${({ isClicked }) => (isClicked === 'dibs' ? '#3366FF' : '#868686')};
+`;
+
+const AllergylistNav = styled.button`
+  width: 100%;
+  height: 60px;
+  font-size: 26px;
+  font-weight: bold;
+  border: none;
+  background-color: white;
+  border-bottom: ${({ isClicked }) =>
+    isClicked === 'allergy' ? '4px solid #3366FF' : 'none'};
+  color: ${({ isClicked }) =>
+    isClicked === 'allergy' ? '#3366FF' : '#868686'};
+`;
+
+const ReviewlistNav = styled.button`
+  width: 100%;
+  height: 60px;
+  font-size: 26px;
+  font-weight: bold;
+  border: none;
+  background-color: white;
+  border-bottom: ${({ isClicked }) =>
+    isClicked === 'review' ? '4px solid #3366FF' : 'none'};
+  color: ${({ isClicked }) => (isClicked === 'review' ? '#3366FF' : '#868686')};
 `;
 
 export default User;

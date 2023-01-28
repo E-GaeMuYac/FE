@@ -15,14 +15,23 @@ import User from './pages/User';
 import Signup from './pages/Signup';
 import SocialLogin from './pages/SocialLogin';
 import Main from './pages/main/Main';
+
 import LaptopDetail from './pages/Laptop/LaptopDetail';
 import LaptopCompare from './pages/Laptop/LaptopCompare';
+
+import AllergySearch from './pages/AllergySearch';
+import AddReviews from './pages/AddReviews';
 
 // 컴포넌트
 import Layout from './components/layout/Layout';
 import Header from './components/layout/Header';
 import CompareBox from './components/common/CompareBox';
 import FindAccount from './pages/FindAccount';
+import Reviews from './contents/Reviews';
+import MiniNav from './components/common/MiniNav';
+import ChatBox from './components/layout/ChatBox';
+import { useRecoilState } from 'recoil';
+import { nowRoute } from './recoil/recoilStore';
 // import Spinner from './components/common/Spinner';
 
 import { Mobile, Laptop, PC } from './query/useMediaQuery';
@@ -30,6 +39,14 @@ import { Mobile, Laptop, PC } from './query/useMediaQuery';
 function App() {
   const [isToken, setIsToken] = useState('');
   const [userImage, setUserImage] = useState('');
+
+  const location = useLocation();
+
+  const [nowPage, setNowPage] = useRecoilState(nowRoute);
+
+  useEffect(() => {
+    setNowPage(location.pathname);
+  }, []);
 
   return (
     <>
@@ -86,12 +103,14 @@ function App() {
           element={
             <>
               <PC>
+                <MiniNav />
                 <Layout>
                   <Detail />
                   <CompareBox />
                 </Layout>
               </PC>
               <Laptop>
+                <MiniNav />
                 <Layout>
                   <LaptopDetail />
                   <CompareBox />
@@ -114,7 +133,34 @@ function App() {
           }
         />
         {/* <Route path='/spinner' element={<Spinner />} /> */}
+        <Route
+          path='/allergy'
+          element={
+            <>
+              <MiniNav />
+              <Layout>
+                <AllergySearch />
+              </Layout>
+            </>
+          }
+        />
+        <Route
+          path='/detail/:id/reviewform'
+          element={
+            <>
+              <MiniNav />
+              <Layout>
+                <AddReviews setistoken={setIsToken} />
+              </Layout>
+            </>
+          }
+        />
+        <Route
+          path='/detail/:id?tab=리뷰'
+          element={<Reviews setistoken={setIsToken} />}
+        />
       </Routes>
+      <ChatBox />
     </>
   );
 }

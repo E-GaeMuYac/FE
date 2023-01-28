@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import styled from 'styled-components';
-import { compareBoxData } from '../../recoil/recoilStore';
+import { compareBoxData, nowRoute } from '../../recoil/recoilStore';
 
-const ListCardComp = ({ arrState, list }) => {
+const ListCardComp = ({ list }) => {
   const navigate = useNavigate();
-  const [isArr, setIsArr] = arrState;
+  const [compareData, setCompareData] = useRecoilState(compareBoxData);
 
   const [isFill, setIsFill] = useState(false);
 
@@ -18,16 +18,16 @@ const ListCardComp = ({ arrState, list }) => {
     } else {
       setIsFill(false);
     }
-  }, [isArr]);
+  }, [compareData.arr]);
 
   //상품 삭제
   const deleteList = (id) => {
-    let deletedArr = isArr.map((list) =>
+    let deletedArr = compareData.arr.map((list) =>
       list.medicineId === id
-        ? { medicineId: isArr.indexOf(list) + 1, itemName: 'null' }
+        ? { medicineId: compareData.arr.indexOf(list) + 1, itemName: 'null' }
         : list
     );
-    setIsArr(deletedArr);
+    setCompareData({ ...compareData, arr: deletedArr });
   };
 
   //서치페이지로 이동
@@ -68,81 +68,73 @@ const ListCardComp = ({ arrState, list }) => {
 
 const CompareBox = () => {
   const navigate = useNavigate();
-  // 토글 여부 state
-  const [isOpen, setIsOpen] = useState('close');
 
   // compareBox 배열
-  const [isArr, setIsArr] = useRecoilState(compareBoxData);
-  // compareBox null 갯수
-  const [isArrLength, setIsArrLength] = useState(0);
+  const [compareData, setCompareData] = useRecoilState(compareBoxData);
+
+  const nowPage = useRecoilValue(nowRoute);
 
   //itemNAme이 null이 아닌 것을 세어 length 표현
   useEffect(() => {
     let count = 0;
-    for (let i = 0; i < isArr.length; i++) {
-      if (isArr[i].itemName !== 'null') {
+    for (let i = 0; i < compareData.arr.length; i++) {
+      if (compareData.arr[i].itemName !== 'null') {
         count++;
       }
     }
-    setIsArrLength(count);
-  }, [isArr]);
+    setCompareData({ ...compareData, length: count });
+  }, [compareData.arr]);
 
+  //페이지를 이동하면 자동으로 클로즈
   useEffect(() => {
-    if (isArrLength === 2) {
-      setIsOpen('open');
-    } else if (isArrLength === 0) {
-      setIsOpen('close');
-    }
-  }, [isArrLength]);
+    setCompareData({ ...compareData, isOpen: 'close' });
+  }, [nowPage]);
 
   // onclick시 기능
   const boxToggle = () => {
-    switch (isOpen) {
+    switch (compareData.isOpen) {
       case 'close':
-        setIsOpen('open');
+        setCompareData({ ...compareData, isOpen: 'open' });
         break;
       case 'open':
-        setIsOpen('close');
+        setCompareData({ ...compareData, isOpen: 'close' });
         break;
       case 'hide':
-        setIsOpen('close');
+        setCompareData({ ...compareData, isOpen: 'close' });
         break;
     }
   };
   //onclick시 버튼 삭제
   const closeBox = () => {
-    setIsOpen('hide');
+    setCompareData({ ...compareData, isOpen: 'hide' });
   };
 
   // 비교하기 페이지로 이동
   const goToCompare = () => {
-    if (isArrLength === 2) {
+    if (compareData.length === 2) {
       navigate('/compare?tab=성분그래프');
-
-      //이동 후 state 초기화
-      setIsOpen(false);
     }
   };
 
   // 배열 초기화 버튼
   const listReset = () => {
-    const allDeletedArr = isArr.map((list) =>
+    const allDeletedArr = compareData.arr.map((list) =>
       list.itemName !== 'null'
-        ? { medicineId: isArr.indexOf(list) + 1, itemName: 'null' }
+        ? { medicineId: compareData.arr.indexOf(list) + 1, itemName: 'null' }
         : list
     );
-    setIsArr(allDeletedArr);
+    setCompareData({ ...compareData, arr: allDeletedArr, isOpen: 'close' });
   };
 
   return (
-    <Wrap isOpen={isOpen}>
+    <Wrap isOpen={compareData.isOpen}>
       <div className='wrap'>
         <div className='backLayout'></div>
         <div className='layout'>
-          <BoxTop isOpen={isOpen} isArrLength={isArrLength}>
+          <BoxTop isOpen={compareData.isOpen} isArrLength={compareData.length}>
             <div className='boxCommentWrap'>
               <div className='boxComment'>약품 비교함에 담기</div>
-              <div className='boxNum'>{isArrLength}/2</div>
+              <div className='boxNum'>{compareData.length}/2</div>
             </div>
             <div className='boxButtonWrap'>
               <div className='boxButtonReset' onClick={listReset}>
@@ -155,12 +147,8 @@ const CompareBox = () => {
             <div className='deleteBoxBtn' onClick={closeBox}></div>
           </BoxTop>
           <BoxContent>
-            {isArr.map((list) => (
-              <ListCardComp
-                key={list.medicineId}
-                list={list}
-                arrState={[isArr, setIsArr]}
-              />
+            {compareData.arr.map((list) => (
+              <ListCardComp key={list.medicineId} list={list} />
             ))}
           </BoxContent>
         </div>

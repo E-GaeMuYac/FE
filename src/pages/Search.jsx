@@ -227,7 +227,7 @@ const Search = () => {
             className='searchinput'
             value={inputValue}
             onChange={changeInputValue}
-            placeholder=' 검색어를 입력해주세요.'
+            placeholder='약 이름을 검색해보세요!'
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 doingSearch();
@@ -241,6 +241,7 @@ const Search = () => {
           </div>
           <div className='searchBtnWrap' onClick={doingSearch}>
             <div className='searchBtn'></div>
+            <div className='searchBtnText'>검색</div>
           </div>
         </div>
       </SearchBarWrap>
@@ -263,7 +264,7 @@ const Search = () => {
             <div className='searchTitleWrap'>
               <div className='searchText'>'{searchedWord}'</div>
               <div className='searchListNum'>
-                검색 결과 {searchLength?.toLocaleString('ko-KR')}개
+                검색 결과 {searchLength.toLocaleString('ko-KR')}개
               </div>
             </div>
             <div className='searchSort'>찜한순</div>
@@ -297,6 +298,7 @@ const SearchBarWrap = styled.div`
   align-items: center;
   justify-content: center;
   gap: 15px;
+  font-family: 'NanumSquare', sans-serif;
   .searchBar {
     @media screen and (max-width: 1440px) {
       width: 70%;
@@ -320,6 +322,7 @@ const SearchBarWrap = styled.div`
     height: 62px;
     margin-right: 10px;
     font-size: 24px;
+    font-weight: bold;
     position: relative;
   }
   .searchSortHeaderWrap {
@@ -328,7 +331,7 @@ const SearchBarWrap = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     cursor: pointer;
   }
   .searchSortList {
@@ -340,14 +343,15 @@ const SearchBarWrap = styled.div`
     }
     display: ${({ isOpenSearchSort }) => (isOpenSearchSort ? 'flex' : 'none')};
     position: absolute;
-    left: -3px;
+    left: -2px;
     top: -2px;
     width: 158px;
     height: 110px;
     justify-content: center;
     /* align-items: center; */
     list-style: none;
-    /* padding: 12px; */
+    padding: 11px 16px;
+    margin: 0;
     flex-direction: column;
     gap: 14px;
     background-color: white;
@@ -356,7 +360,7 @@ const SearchBarWrap = styled.div`
   }
   .searchSortList li {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     color: #868686;
     cursor: pointer;
     margin-left: -14px;
@@ -370,6 +374,7 @@ const SearchBarWrap = styled.div`
     @media screen and (max-width: 1440px) {
       margin-top: 3px;
     }
+    align-items: center;
   }
   .searchSortArrow {
     width: 32px;
@@ -428,14 +433,20 @@ const SearchBarWrap = styled.div`
     justify-content: center;
     border-radius: 210px;
     cursor: pointer;
-    background: linear-gradient(to left, #3366ff, #6690ff);
+    background: linear-gradient(#6690ff, #3366ff);
+    border: 1.4px solid #5e86ff;
   }
   .searchBtn {
-    width: 37px;
-    height: 37px;
+    width: 32px;
+    height: 32px;
     background-image: url('/assets/image/icon_search2.png');
     background-size: cover;
     background-position: center;
+    margin-right: 4px;
+  }
+  .searchBtnText {
+    font-size: 24px;
+    color: #ffffff;
   }
 `;
 const LatestSearchWrap = styled.div`
