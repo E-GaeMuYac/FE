@@ -174,7 +174,9 @@ const SearchListWrap = styled.div`
     font-weight: bold;
   }
   .btnInBox.Active {
-    background-color: #3366ff;
+    background-color: #ebf0ff;
+    color: #3366ff;
+    border: 1px solid #3366ff;
     cursor: pointer;
   }
 `;
