@@ -209,7 +209,7 @@ const Search = () => {
                       searchSortChoice(list);
                     }}>
                     {list}
-                    <div className='searchSortArrow'></div>
+                    <div className='searchSortArrow2'></div>
                   </li>
                 ) : (
                   <li
@@ -298,9 +298,11 @@ const SearchBarWrap = styled.div`
   justify-content: center;
   gap: 15px;
   .searchBar {
+    @media screen and (max-width: 1440px) {
+      width: 70%;
+    }
     max-width: 860px;
     width: 60%;
-    max-width: 860px;
     border: 1px solid #f6f7fa;
     background-color: #f6f7fa;
     border: none;
@@ -308,10 +310,13 @@ const SearchBarWrap = styled.div`
     display: flex;
   }
   .searchSortWrap {
+    @media screen and (max-width: 1440px) {
+      font-size: 20px;
+    }
     border-radius: 32px;
     background-color: white;
     border: 2px solid #f6f7fa;
-    width: 150px;
+    width: 158px;
     height: 62px;
     margin-right: 10px;
     font-size: 24px;
@@ -327,18 +332,26 @@ const SearchBarWrap = styled.div`
     cursor: pointer;
   }
   .searchSortList {
+    @media screen and (max-width: 1440px) {
+      font-size: 20px;
+      width: 148px;
+      height: 100px;
+      gap: 10px;
+    }
     display: ${({ isOpenSearchSort }) => (isOpenSearchSort ? 'flex' : 'none')};
     position: absolute;
     left: -3px;
     top: -2px;
-    width: 150px;
+    width: 158px;
+    height: 110px;
+    justify-content: center;
+    /* align-items: center; */
     list-style: none;
-    padding: 12px;
-    margin: 0;
+    /* padding: 12px; */
     flex-direction: column;
     gap: 14px;
     background-color: white;
-    border-radius: 33px;
+    border-radius: 32px;
     border: 2px solid #f6f7fa;
   }
   .searchSortList li {
@@ -346,9 +359,17 @@ const SearchBarWrap = styled.div`
     gap: 10px;
     color: #868686;
     cursor: pointer;
+    margin-left: -14px;
+    @media screen and (max-width: 1440px) {
+      margin-left: -13px;
+    }
   }
   .searchSortList li.choice {
     color: #242424;
+    margin-top: 1px;
+    @media screen and (max-width: 1440px) {
+      margin-top: 3px;
+    }
   }
   .searchSortArrow {
     width: 32px;
@@ -356,6 +377,19 @@ const SearchBarWrap = styled.div`
     background-image: url('/assets/image/arrow_down.png');
     background-size: cover;
     background-position: center;
+  }
+  .searchSortArrow2 {
+    width: 32px;
+    height: 32px;
+    background-image: url('/assets/image/arrow_down.png');
+    background-size: cover;
+    background-position: center;
+    margin-top: 2px;
+    margin-left: 0px;
+    @media screen and (max-width: 1440px) {
+      margin-top: -1px;
+      margin-left: 0px;
+    }
   }
   .searchinput {
     width: 475px;
@@ -447,6 +481,9 @@ const LatestSearchWrap = styled.div`
 const SearchResultWrap = styled.div`
   margin-bottom: 218px;
   .ExplainWrap {
+    @media screen and (max-width: 1440px) {
+      font-size: 24px;
+    }
     width: 676px;
     height: 66px;
     font-size: 30px;
@@ -489,6 +526,9 @@ const SearchResultWrap = styled.div`
     color: #868686;
   }
   .searchList {
+    @media screen and (max-width: 1440px) {
+      gap: 26px;
+    }
     display: flex;
     flex-wrap: wrap;
     gap: 28px;
@@ -541,10 +581,16 @@ const PagenationWrap = styled.div`
     cursor: pointer;
   }
   .pagenationArrow.left {
+    @media screen and (max-width: 1700px) {
+      left: 170px;
+    }
     left: 350px;
     background-image: url('/assets/image/icon_page_arrow_left.png');
   }
   .pagenationArrow.right {
+    @media screen and (max-width: 1700px) {
+      right: 170px;
+    }
     right: 350px;
     background-image: url('/assets/image/icon_page_arrow_right.png');
   }

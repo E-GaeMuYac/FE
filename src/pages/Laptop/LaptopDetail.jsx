@@ -3,9 +3,9 @@ import { useLocation, useParams } from 'react-router';
 import qs from 'qs';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { compareBoxData } from '../recoil/recoilStore';
+import { compareBoxData } from '../../recoil/recoilStore';
 
-import { useGetDetailQuery } from '../query/detailQuery';
+import { useGetDetailQuery } from '../../query/detailQuery';
 
 // 그래프 라이브러리
 import * as am5 from '@amcharts/amcharts5';
@@ -13,8 +13,8 @@ import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 
 // 컴포넌트
-import TabBar from '../components/common/Tabbar';
-import LikeItBtn from '../components/common/LikeItBtn';
+import TabBar from '../../components/common/Tabbar';
+import LikeItBtn from '../../components/common/LikeItBtn';
 
 const BottomContents = ({ medicineInfo, query }) => {
   const [ContentDesc, setContentDesc] = useState('');
@@ -122,7 +122,6 @@ const Detail = () => {
   useLayoutEffect(() => {
     if (objGraph) {
       for (let i = 0; i < objGraph?.materialName?.length; i++) {
-        // if (objGraph) {
         const root = am5.Root.new('chartdiv');
 
         // Set themes
@@ -141,7 +140,7 @@ const Detail = () => {
           am5percent.PieSeries.new(root, {
             valueField: '분량',
             categoryField: 'material',
-            centerX: am5.percent(-18.5),
+            centerX: am5.percent(-19),
             y: am5.percent(-4),
             legendValueText: objGraph.materialName[i].allergy
               ? '[#FF392B]{category}'
@@ -225,10 +224,10 @@ const Detail = () => {
           am5.Legend.new(root, {
             position: 'absolute',
             oversizedBehavior: 'wrap',
-            width: 380,
-            height: 280,
-            x: am5.percent(3),
-            y: am5.percent(9),
+            width: 310,
+            height: 230,
+            x: am5.percent(1),
+            y: am5.percent(4),
             layout: root.verticalLayout,
             verticalScrollbar: am5.Scrollbar.new(root, {
               orientation: 'vertical',
@@ -241,15 +240,15 @@ const Detail = () => {
           cornerRadiusTR: 20,
           cornerRadiusBL: 20,
           cornerRadiusBR: 20,
-          width: 30,
-          height: 30,
+          width: 25,
+          height: 25,
           // marginRight: 50,
         });
 
         legend.markers.template.setAll({
           // maxWidth: 70,
           // minWidth: 30,
-          width: 30,
+          width: 25,
           marginRight: 10,
           // textAlign: 'right',
           // display: 'inline-block',
@@ -260,8 +259,8 @@ const Detail = () => {
           // minWidth: 80,
           marginRight: 10,
           // marginLeft: 60,
-          fontSize: 18,
-          lineHeight: 1.8,
+          fontSize: 17,
+          lineHeight: 1.5,
           minWidth: 65,
           // height: 30,
           //centerY: 0, // if we want labels to be top-aligned
@@ -270,10 +269,10 @@ const Detail = () => {
         });
 
         legend.valueLabels.template.setAll({
-          maxWidth: 200,
-          minWidth: 200,
-          fontSize: 18,
-          lineHeight: 2,
+          maxWidth: 150,
+          minWidth: 150,
+          fontSize: 16,
+          lineHeight: 1.5,
           oversizedBehavior: 'truncate',
         });
 
@@ -416,10 +415,10 @@ const Detail = () => {
           }}>
           <MiddleCardBox>
             <div style={{ display: 'flex' }}>
-              <GraphLabel style={{ width: '700px', marginLeft: '100px' }}>
+              <GraphLabel style={{ marginLeft: '70px' }}>
                 유효성분 함량
               </GraphLabel>
-              <GraphLabel style={{ width: '1100px', marginLeft: '252px' }}>
+              <GraphLabel style={{ marginLeft: '103px' }}>
                 성분 그래프
                 {allergy ? (
                   <WarningAllergyTrue>
@@ -508,8 +507,8 @@ const Detail = () => {
                     <div className='graphTop3List' key={list.material}>
                       <div
                         style={{
-                          width: '90px',
-                          height: '90px',
+                          width: '120px',
+                          height: '120px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -543,8 +542,8 @@ const Detail = () => {
                     <div className='graphTop3List' key={list.material}>
                       <div
                         style={{
-                          width: '90px',
-                          height: '90px',
+                          width: '120px',
+                          height: '120px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -581,7 +580,7 @@ const Detail = () => {
           </RightCardBox>
         </div>
       </TopSection>
-      <div style={{ marginBottom: '170px' }}>
+      <div style={{ marginBottom: '150px' }}>
         <TabBar location={location} query={query} />
         <BottomSection>
           <BottomContents medicineInfo={medicineItem} query={query} />
@@ -593,7 +592,7 @@ const Detail = () => {
 
 const TopSection = styled.div`
   width: 100%;
-  margin-bottom: 58px;
+  margin-bottom: 40px;
 `;
 
 const BottomSection = styled.div`
@@ -621,8 +620,8 @@ const CardBox = styled.div`
 `;
 
 const MiddleCardBox = styled.div`
-  width: 950px;
-  height: 485px;
+  width: 68%;
+  height: 400px;
   border-radius: 25px;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
   position: relative;
@@ -632,7 +631,7 @@ const MiddleCardBox = styled.div`
     margin: auto;
     padding-top: 10px;
     width: 100%;
-    height: 380px;
+    height: 300px;
     font-size: 12px;
     position: absolute;
     top: 90px;
@@ -655,16 +654,17 @@ const TotalAmountWrap = styled.div`
   display: flex;
   align-items: center;
   position: absolute;
-  top: 265px;
-  right: 209px;
+  top: 230px;
+  right: 126px;
   z-index: 999;
   color: #868686;
+  font-size: 15px;
 `;
 
 const TotalAmount = styled.div`
   width: 44px;
   height: 20px;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 20px;
   background-color: #d0d0d0;
   border-radius: 4px;
@@ -719,8 +719,8 @@ const TotalAmount = styled.div`
 `;
 
 const RightCardBox = styled.div`
-  width: 380px;
-  height: 485px;
+  width: 30%;
+  height: 400px;
   padding: 40px;
   border-radius: 25px;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
@@ -761,7 +761,7 @@ const RightCardBox = styled.div`
     height: 18%;
     display: flex;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 38px;
   }
   .ContentMaterialPercent {
     width: 80px;
@@ -876,11 +876,12 @@ const WrapContents = styled.div`
 const GraphTop3 = styled.div`
   width: 100%;
   height: 300px;
-  margin-top: 70px;
-  margin-left: 10px;
+  margin-top: 0px;
+  margin-left: 0px;
+  /* background-color: #84a9ff; */
   .top1AllergyFalse {
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
     background-color: #84a9ff;
     color: black;
     border-radius: 50px;
@@ -890,8 +891,8 @@ const GraphTop3 = styled.div`
     text-align: center;
   }
   .top1AllergyTrue {
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
     background-color: #ffecea;
     color: #ff3c26;
     border-radius: 50px;
@@ -901,8 +902,8 @@ const GraphTop3 = styled.div`
     text-align: center;
   }
   .top2AllergyFalse {
-    width: 82px;
-    height: 82px;
+    width: 74px;
+    height: 74px;
     background-color: #adc8ff;
     color: #434343;
     border-radius: 50px;
@@ -912,8 +913,8 @@ const GraphTop3 = styled.div`
     text-align: center;
   }
   .top2AllergyTrue {
-    width: 82px;
-    height: 82px;
+    width: 74px;
+    height: 74px;
     background-color: #ffecea;
     color: #ff3c26;
     border-radius: 50px;
@@ -923,8 +924,8 @@ const GraphTop3 = styled.div`
     text-align: center;
   }
   .top3AllergyFalse {
-    width: 75px;
-    height: 75px;
+    width: 68px;
+    height: 68px;
     background-color: #d6e4ff;
     color: #686868;
     border-radius: 50px;
@@ -934,8 +935,8 @@ const GraphTop3 = styled.div`
     text-align: center;
   }
   .top3AllergyTrue {
-    width: 75px;
-    height: 75px;
+    width: 68px;
+    height: 68px;
     background-color: #ffecea;
     color: #ff3c26;
     border-radius: 50px;
@@ -958,10 +959,10 @@ const Image = styled.div`
 `;
 
 const Name = styled.div`
-  min-width: 360px;
-  max-width: 380px;
+  min-width: 200px;
+  max-width: 220px;
   margin: auto;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   line-height: 35px;
   justify-content: center;
@@ -992,6 +993,12 @@ const BottomLabel = styled.div`
 
 const Categorize = styled.div`
   div {
+    @media screen and (max-width: 1700px) {
+      font-size: 14px;
+      min-width: 54px;
+      height: 30px;
+      padding: 0 2px;
+    }
     padding: 0 5px;
     min-width: 69px;
     height: 35px;
@@ -1033,10 +1040,11 @@ const GraphLabel = styled.div`
   /* color: #868686; */
   display: flex;
   justify-content: center;
+  /* text-align: left; */
   align-items: center;
-  font-size: 30px;
+  font-size: 25px;
   font-weight: 700;
-  line-height: 43px;
+  line-height: 40px;
   .mainMaterialIcon {
     width: 30px;
     height: 30px;
@@ -1214,7 +1222,7 @@ const ScrollBar = styled.div`
 
 const MatrialExplainWrap = styled.div`
   display: ${({ Active }) => (Active ? 'block' : 'none')};
-  width: 367px;
+  width: 293px;
   min-height: 50px;
   background-color: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(11.5px);
@@ -1224,7 +1232,7 @@ const MatrialExplainWrap = styled.div`
   line-height: 34px;
   position: absolute;
   top: -55px;
-  left: 14px;
+  left: -5px;
   z-index: 1;
   color: white;
   text-align: center;
@@ -1235,12 +1243,12 @@ const MatrialExplainWrap = styled.div`
     margin-bottom: 25px;
     text-align: left;
     font-weight: 500;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 34px;
     color: #f0f0f0;
     span {
       margin-left: 6px;
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 700;
       line-height: 35px;
       color: #82a1ff;

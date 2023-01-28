@@ -8,6 +8,8 @@ import { useGetLikeQuery } from '../query/likeQuery';
 import ProductList from '../components/common/productList';
 import Layout from '../components/layout/Layout';
 
+import { Mobile, Laptop, PC } from '../query/useMediaQuery';
+
 const User = (props) => {
   const navigate = useNavigate();
   const [likesArr, setLikesArr] = useState([]);
@@ -336,9 +338,20 @@ const User = (props) => {
           <Box>
             <EventBox to='/event'>
               <h1>EVENT</h1>
-              <div style={{ fontSize: '18px' }}>
-                간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
-              </div>
+              <PC>
+                <div>
+                  간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
+                </div>
+              </PC>
+              <Laptop>
+                <div>
+                  간단한
+                  <br />
+                  설문조사하고
+                  <br /> <span>기프티콘</span>
+                  <br /> 받아 가세요!
+                </div>
+              </Laptop>
               <div className='image' />
             </EventBox>
           </Box>
@@ -346,7 +359,7 @@ const User = (props) => {
             <div className='messageBox'>
               <h1>필너츠 꿀팁</h1>
               <div className='image' />
-              <span>마우스를 가져다대보세요</span>
+              <span>마우스를 가져다 대보세요</span>
             </div>
             <div className='messagePopup'>
               <h2>필너츠 꿀팁</h2>
@@ -373,6 +386,9 @@ const Wrapper = styled.div`
 `;
 
 const MyPageHeader = styled.div`
+  @media screen and (max-width: 1440px) {
+    margin-bottom: 20px;
+  }
   width: 100%;
   margin-bottom: 53px;
   display: flex;
@@ -562,13 +578,20 @@ const MyPageWrap = styled.div`
 `;
 
 const BackgroundUserImage = styled.div`
+  @media screen and (max-width: 1440px) {
+    width: 150px;
+    height: 150px;
+  }
   width: 180px;
   height: 180px;
   border-radius: 150px;
-  background-color: #f6f7fa; ;
+  background-color: #f6f7fa;
 `;
 
 const ProfileImg = styled.div`
+  @media screen and (max-width: 1440px) {
+    height: 190px;
+  }
   width: 178px;
   height: 225px;
   display: flex;
@@ -577,6 +600,11 @@ const ProfileImg = styled.div`
 `;
 
 const UserImage = styled.div`
+  @media screen and (max-width: 1440px) {
+    width: 126px;
+    height: 126px;
+    margin: 12px 12px;
+  }
   margin: 15px 15px;
   width: 150px;
   height: 150px;
@@ -592,6 +620,10 @@ const UserImage = styled.div`
   position: relative;
 
   label {
+    @media screen and (max-width: 1440px) {
+      top: 100px;
+      left: 110px;
+    }
     width: 38px;
     height: 38px;
     border-radius: 50%;
@@ -607,11 +639,21 @@ const UserImage = styled.div`
 `;
 
 const ModifyBtnBox = styled.div`
+  @media screen and (max-width: 1440px) {
+    margin-top: auto;
+    gap: 7px;
+  }
   display: flex;
   gap: 10px;
 `;
 
 const CancelBtn = styled.button`
+  @media screen and (max-width: 1440px) {
+    margin-top: auto;
+    width: 58px;
+    height: 30px;
+    font-size: 14px;
+  }
   width: 84px;
   height: 34px;
   margin-top: 16px;
@@ -624,6 +666,11 @@ const CancelBtn = styled.button`
 `;
 
 const FinishBtn = styled.button`
+  @media screen and (max-width: 1440px) {
+    margin-top: auto;
+    height: 30px;
+    font-size: 14px;
+  }
   width: 84px;
   height: 34px;
   margin-top: 16px;
@@ -636,6 +683,11 @@ const FinishBtn = styled.button`
 `;
 
 const DefaultImgBtn = styled.button`
+  @media screen and (max-width: 1440px) {
+    margin-top: auto;
+    height: 30px;
+    font-size: 14px;
+  }
   width: 150px;
   height: 34px;
   margin-top: 16px;
@@ -649,6 +701,11 @@ const DefaultImgBtn = styled.button`
 `;
 
 const ProfileWrap = styled.div`
+  @media screen and (max-width: 1440px) {
+    width: 380px;
+    height: 190px;
+    padding: 25px 28px;
+  }
   background-color: #f6f7fa;
   width: 466px;
   height: 225px;
@@ -676,6 +733,10 @@ const NicknameBox = styled.div`
     cursor: pointer;
   }
   .editNickname {
+    @media screen and (max-width: 1440px) {
+      width: 30px;
+      height: 30px;
+    }
     width: 38px;
     height: 38px;
     background-image: url('/assets/image/닉네임수정아이콘.png');
@@ -685,6 +746,10 @@ const NicknameBox = styled.div`
 `;
 
 const Nickname = styled.div`
+  @media screen and (max-width: 1440px) {
+    font-size: 28px;
+    margin-right: 3px;
+  }
   height: 42px;
   font-size: 36px;
   font-weight: 700;
@@ -734,6 +799,11 @@ const NicknameInput = styled.div`
 `;
 
 const ProfileMsg = styled.div`
+  @media screen and (max-width: 1440px) {
+    width: 200px;
+    font-size: 21px;
+    margin-top: 26px;
+  }
   width: 250px;
   height: 72px;
   margin-top: 38px;
@@ -743,11 +813,20 @@ const ProfileMsg = styled.div`
 `;
 
 const CalenderWrap = styled.div`
+  @media screen and (max-width: 1440px) {
+    width: 40%;
+  }
   width: 40%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   .calendar {
+    @media screen and (max-width: 1440px) {
+      /* width: 100%;
+      height: 100%; */
+      width: 110px;
+      height: 115px;
+    }
     background-image: url('/assets/image/캘린더.png');
     background-size: cover;
     background-position: center;
@@ -758,18 +837,29 @@ const CalenderWrap = styled.div`
     align-items: center;
     flex-direction: column;
     span {
+      @media screen and (max-width: 1440px) {
+        font-size: 16px;
+        margin-top: 36px;
+      }
       margin-top: 40px;
       font-size: 18px;
       font-weight: 600;
       color: #868686;
     }
     h1 {
+      @media screen and (max-width: 1440px) {
+        font-size: 33px;
+      }
       font-size: 40px;
       font-weight: bold;
     }
   }
 `;
 const EventBox = styled(Link)`
+  @media screen and (max-width: 1440px) {
+    width: 100%;
+    height: 100%;
+  }
   background-color: #cefbd8;
   width: 324px;
   height: 225px;
@@ -786,18 +876,31 @@ const EventBox = styled(Link)`
     font-weight: 700;
   }
   div {
+    @media screen and (max-width: 1440px) {
+      font-size: 15px;
+      top: 70px;
+    }
     position: absolute;
     font-size: 18px;
     font-weight: bold;
-    top: 105px;
-    left: 25px;
-    line-height: 30px;
+    top: 110px;
+    left: 22px;
+    line-height: 24px;
   }
   span {
+    @media screen and (max-width: 1440px) {
+      font-size: 15px;
+    }
     color: #ff8365;
     font-weight: 900;
   }
   .image {
+    @media screen and (max-width: 1440px) {
+      top: 70px;
+      left: 128px;
+      width: 62px;
+      height: 90px;
+    }
     width: 87px;
     height: 127px;
     background-image: url('/assets/image/설문아이콘.png');
@@ -810,11 +913,19 @@ const EventBox = styled(Link)`
 `;
 
 const Box = styled.div`
+  @media screen and (max-width: 1440px) {
+    width: 300px;
+    height: 190px;
+  }
   width: 324px;
   height: 225px;
   position: relative;
 
   .messageBox {
+    @media screen and (max-width: 1440px) {
+      width: 100%;
+      height: 100%;
+    }
     background-color: #d6e4ff;
     width: 324px;
     height: 225px;
@@ -823,6 +934,10 @@ const Box = styled.div`
     cursor: pointer;
 
     h1 {
+      @media screen and (max-width: 1440px) {
+        font-size: 24px;
+        padding-top: 22px;
+      }
       text-align: center;
       padding-top: 20px;
       font-size: 28px;
@@ -830,6 +945,10 @@ const Box = styled.div`
       margin-bottom: 20px;
     }
     .image {
+      @media screen and (max-width: 1440px) {
+        width: 90px;
+        height: 60px;
+      }
       width: 135px;
       height: 84px;
       background-image: url('/assets/image/꿀팁아이콘.png');
@@ -840,6 +959,9 @@ const Box = styled.div`
       margin: auto;
     }
     span {
+      @media screen and (max-width: 1440px) {
+        font-size: 15px;
+      }
       margin-top: 15px;
       display: flex;
       justify-content: center;
@@ -851,6 +973,10 @@ const Box = styled.div`
   }
 
   .messagePopup {
+    @media screen and (max-width: 1440px) {
+      width: 100%;
+      height: 100%;
+    }
     display: none;
     background: rgba(255, 255, 255, 0.43);
     backdrop-filter: blur(15px);
@@ -866,11 +992,19 @@ const Box = styled.div`
     position: absolute;
     top: 0;
     h2 {
+      @media screen and (max-width: 1440px) {
+        font-size: 24px;
+        padding-top: 2px;
+        margin-bottom: 5px;
+      }
       font-size: 28px;
       font-weight: 700;
       margin-bottom: 20px;
     }
     div {
+      @media screen and (max-width: 1440px) {
+        font-size: 14px;
+      }
       width: 100%;
       height: 125px;
       word-break: keep-all;

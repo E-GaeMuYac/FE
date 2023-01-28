@@ -123,11 +123,17 @@ const Header = (props) => {
 };
 
 const Wrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 70px;
+  }
   width: 100%;
   height: 80px;
 `;
 
 const HeaderWrapper = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 70px;
+  }
   background-color: white;
   width: 100%;
   margin: 0 auto;

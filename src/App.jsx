@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 
 //page
-import ComparePage from './pages/Compare';
+import Compare from './pages/Compare';
 import Login from './pages/Login';
 import Search from './pages/Search';
 import Detail from './pages/Detail';
@@ -15,6 +15,8 @@ import User from './pages/User';
 import Signup from './pages/Signup';
 import SocialLogin from './pages/SocialLogin';
 import Main from './pages/main/Main';
+import LaptopDetail from './pages/Laptop/LaptopDetail';
+import LaptopCompare from './pages/Laptop/LaptopCompare';
 
 // 컴포넌트
 import Layout from './components/layout/Layout';
@@ -22,6 +24,8 @@ import Header from './components/layout/Header';
 import CompareBox from './components/common/CompareBox';
 import FindAccount from './pages/FindAccount';
 // import Spinner from './components/common/Spinner';
+
+import { Mobile, Laptop, PC } from './query/useMediaQuery';
 
 function App() {
   const [isToken, setIsToken] = useState('');
@@ -53,7 +57,20 @@ function App() {
             </Layout>
           }
         />
-        <Route exact path='/compare' element={<ComparePage />} />
+        <Route
+          exact
+          path='/compare'
+          element={
+            <>
+              <PC>
+                <Compare />
+              </PC>
+              <Laptop>
+                <LaptopCompare />
+              </Laptop>
+            </>
+          }
+        />
         <Route
           exact
           path='/login'
@@ -67,10 +84,20 @@ function App() {
         <Route
           path='/detail/:id'
           element={
-            <Layout>
-              <Detail />
-              <CompareBox />
-            </Layout>
+            <>
+              <PC>
+                <Layout>
+                  <Detail />
+                  <CompareBox />
+                </Layout>
+              </PC>
+              <Laptop>
+                <Layout>
+                  <LaptopDetail />
+                  <CompareBox />
+                </Layout>
+              </Laptop>
+            </>
           }
         />
         <Route
