@@ -96,7 +96,6 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
 
 const MyReviews = ({ userId }) => {
   const [moreShow, setMoreShow] = useState(0);
-  const [like, setLike] = useState(false);
   const [myReviewArr, setMyReviewArr] = useState([]);
   const [content, setContent] = useState('');
   const [searchLength, setSearchLength] = useState(0);
@@ -159,8 +158,7 @@ const MyReviews = ({ userId }) => {
 
   const handleLike = async (id) => {
     try {
-      const res = await userApi.put(`/api/reviews/${id}/like`);
-      console.log(res);
+      await userApi.put(`/api/reviews/${id}/like`);
       getMyReviews();
     } catch (error) {
       console.log(error);
@@ -169,8 +167,7 @@ const MyReviews = ({ userId }) => {
 
   const handleDisLike = async (id) => {
     try {
-      const res = await userApi.put(`/api/reviews/${id}/dislike`);
-      console.log(res);
+      await userApi.put(`/api/reviews/${id}/dislike`);
       getMyReviews();
     } catch (error) {
       console.log(error);
