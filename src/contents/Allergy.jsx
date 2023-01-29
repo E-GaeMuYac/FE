@@ -15,7 +15,6 @@ const Allergy = () => {
   const getAllergyList = async () => {
     try {
       const res = await userApi.get('/api/allergies/user');
-      console.log(res);
       setMyAllergy(res.data.data);
     } catch (error) {
       console.log(error);
@@ -29,17 +28,12 @@ const Allergy = () => {
   const toggleMaterial = async (materialId) => {
     try {
       const res = await userApi.put(`/api/allergies/${materialId}`);
-      console.log(res);
       alert(res.data.msg);
       getAllergyList();
     } catch (error) {
       console.log(error);
     }
   };
-
-  //   const arrowHandler = (a) => {
-  //     setIsOpen(a);
-  //   };
 
   return (
     <Wrapper>

@@ -98,9 +98,9 @@ const AllergySearch = () => {
 
   //검색키워드
   const [keyword, setKeyword] = useState('');
+
   //자동완성 관련 state
   const [autoValueList, setAutoValueList] = useState([]);
-  const [isRes, setIsRes] = useState(false);
 
   //검색결과
   const [result, setResult] = useState([]);
@@ -130,17 +130,14 @@ const AllergySearch = () => {
       const res = await userApi.get(
         `/api/allergies/search?value=${value}&page=1&pageSize=8`
       );
-      console.log(res);
       setAutoValueList(res.data.rows);
-      setIsRes(true);
     } catch (error) {
-      setIsRes(false);
       console.log(error);
     }
   };
 
   const searchValue = useCallback(
-    debounceFunction((value) => autoSearch(value), 200),
+    debounceFunction((value) => autoSearch(value), 100),
     []
   );
 
@@ -151,6 +148,7 @@ const AllergySearch = () => {
 
   useEffect(() => {
     keywordSearch();
+    setInputValue('');
   }, [nowPageNum, keyword]);
 
   const keywordSearch = async () => {
@@ -158,10 +156,8 @@ const AllergySearch = () => {
       const res = await userApi.get(
         `/api/allergies/search?value=${keyword}&page=${nowPageNum}&pageSize=5`
       );
-      console.log(res);
       setResult(res.data.rows);
       setSearchLength(res.data.count);
-      setIsRes(false);
     } catch (error) {
       console.log(error);
     }
@@ -191,6 +187,7 @@ const AllergySearch = () => {
         <InputWrap>
           <SearchInput
             placeholder='알레르기 성분을 검색하여 등록해보세요!'
+            value={inputValue}
             onChange={handleChange}
             onKeyDown={handleEnter}
           />
@@ -199,12 +196,12 @@ const AllergySearch = () => {
               <SearchIcon />
             </SearchBtn>
           </BtnWrap>
-          {isRes ? (
+          {inputValue ? (
             <AutoResult>
               {autoValueList ? (
-                autoValueList.map((i) => (
+                autoValueList.map((autoValue) => (
                   <SingleResult onClick={pickSingleValue}>
-                    {i.name}
+                    {autoValue.name}
                   </SingleResult>
                 ))
               ) : (
