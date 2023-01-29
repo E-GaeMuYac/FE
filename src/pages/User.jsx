@@ -338,37 +338,39 @@ const User = (props) => {
               </div>
             </CalenderWrap>
           </ProfileWrap>
-          <Box>
-            <EventBox to='/event'>
-              <h1>EVENT</h1>
-              <PC>
-                <div>
-                  간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
-                </div>
-              </PC>
-              <Laptop>
-                <div>
-                  간단한
-                  <br />
-                  설문조사하고
-                  <br /> <span>기프티콘</span>
-                  <br /> 받아 가세요!
-                </div>
-              </Laptop>
-              <div className='image' />
-            </EventBox>
-          </Box>
-          <Box>
-            <div className='messageBox'>
-              <h1>필너츠 꿀팁</h1>
-              <div className='image' />
-              <span>마우스를 가져다 대보세요</span>
-            </div>
-            <div className='messagePopup'>
-              <h2>필너츠 꿀팁</h2>
-              <div>{serviceMsg}</div>
-            </div>
-          </Box>
+          <div style={{ display: 'flex', gap: '30px' }}>
+            <Box>
+              <EventBox to='/event'>
+                <h1>EVENT</h1>
+                <PC>
+                  <div>
+                    간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
+                  </div>
+                </PC>
+                <Laptop>
+                  <div>
+                    간단한
+                    <br />
+                    설문조사하고
+                    <br /> <span>기프티콘</span>
+                    <br /> 받아 가세요!
+                  </div>
+                </Laptop>
+                <div className='image' />
+              </EventBox>
+            </Box>
+            <Box>
+              <div className='messageBox'>
+                <h1>필너츠 꿀팁</h1>
+                <div className='image' />
+                <span>마우스를 가져다 대보세요</span>
+              </div>
+              <div className='messagePopup'>
+                <h2>필너츠 꿀팁</h2>
+                <div>{serviceMsg}</div>
+              </div>
+            </Box>
+          </div>
         </MyPageWrap>
         <Tabbar>
           <NavWrap>
@@ -416,7 +418,7 @@ const Wrapper = styled.div`
 `;
 
 const MyPageHeader = styled.div`
-  @media screen and (max-width: 1440px) {
+  @media screen and (max-width: 1700px) {
     margin-bottom: 20px;
   }
   width: 100%;
@@ -608,7 +610,7 @@ const MyPageWrap = styled.div`
 `;
 
 const BackgroundUserImage = styled.div`
-  @media screen and (max-width: 1440px) {
+  @media screen and (max-width: 1700px) {
     width: 150px;
     height: 150px;
   }
@@ -619,7 +621,7 @@ const BackgroundUserImage = styled.div`
 `;
 
 const ProfileImg = styled.div`
-  @media screen and (max-width: 1440px) {
+  @media screen and (max-width: 1700px) {
     height: 190px;
   }
   width: 178px;
@@ -630,7 +632,7 @@ const ProfileImg = styled.div`
 `;
 
 const UserImage = styled.div`
-  @media screen and (max-width: 1440px) {
+  @media screen and (max-width: 1700px) {
     width: 126px;
     height: 126px;
     margin: 12px 12px;
@@ -650,7 +652,7 @@ const UserImage = styled.div`
   position: relative;
 
   label {
-    @media screen and (max-width: 1440px) {
+    @media screen and (max-width: 1700px) {
       top: 100px;
       left: 110px;
     }
@@ -669,7 +671,7 @@ const UserImage = styled.div`
 `;
 
 const ModifyBtnBox = styled.div`
-  @media screen and (max-width: 1440px) {
+  @media screen and (max-width: 1700px) {
     margin-top: auto;
     gap: 7px;
   }
@@ -678,7 +680,7 @@ const ModifyBtnBox = styled.div`
 `;
 
 const CancelBtn = styled.button`
-  @media screen and (max-width: 1440px) {
+  @media screen and (max-width: 1700px) {
     margin-top: auto;
     width: 58px;
     height: 30px;
@@ -696,7 +698,7 @@ const CancelBtn = styled.button`
 `;
 
 const FinishBtn = styled.button`
-  @media screen and (max-width: 1440px) {
+  @media screen and (max-width: 1700px) {
     margin-top: auto;
     height: 30px;
     font-size: 14px;
@@ -713,7 +715,7 @@ const FinishBtn = styled.button`
 `;
 
 const DefaultImgBtn = styled.button`
-  @media screen and (max-width: 1440px) {
+  @media screen and (max-width: 1700px) {
     margin-top: auto;
     height: 30px;
     font-size: 14px;
@@ -731,7 +733,7 @@ const DefaultImgBtn = styled.button`
 `;
 
 const ProfileWrap = styled.div`
-  @media screen and (max-width: 1440px) {
+  @media screen and (max-width: 1700px) {
     width: 380px;
     height: 190px;
     padding: 25px 28px;
@@ -743,7 +745,6 @@ const ProfileWrap = styled.div`
   box-sizing: border-box;
   padding: 37px 40px;
   border-radius: 24px;
-  display: flex;
   align-content: space-around;
 `;
 
@@ -765,7 +766,7 @@ const NicknameBox = styled.div`
     cursor: pointer;
   }
   .editNickname {
-    @media screen and (max-width: 1440px) {
+    @media screen and (max-width: 1700px) {
       width: 30px;
       height: 30px;
     }
@@ -778,7 +779,7 @@ const NicknameBox = styled.div`
 `;
 
 const Nickname = styled.div`
-  @media screen and (max-width: 1440px) {
+  @media screen and (max-width: 1700px) {
     font-size: 28px;
     margin-right: 3px;
   }
@@ -831,7 +832,7 @@ const NicknameInput = styled.div`
 `;
 
 const ProfileMsg = styled.div`
-  @media screen and (max-width: 1440px) {
+  @media screen and (max-width: 1700px) {
     width: 200px;
     font-size: 21px;
     margin-top: 26px;
@@ -845,7 +846,7 @@ const ProfileMsg = styled.div`
 `;
 
 const CalenderWrap = styled.div`
-  @media screen and (max-width: 1440px) {
+  @media screen and (max-width: 1700px) {
     width: 40%;
   }
   width: 40%;
@@ -853,7 +854,7 @@ const CalenderWrap = styled.div`
   align-items: center;
   justify-content: flex-end;
   .calendar {
-    @media screen and (max-width: 1440px) {
+    @media screen and (max-width: 1700px) {
       /* width: 100%;
       height: 100%; */
       width: 110px;
@@ -869,7 +870,7 @@ const CalenderWrap = styled.div`
     align-items: center;
     flex-direction: column;
     span {
-      @media screen and (max-width: 1440px) {
+      @media screen and (max-width: 1700px) {
         font-size: 16px;
         margin-top: 36px;
       }
@@ -879,7 +880,7 @@ const CalenderWrap = styled.div`
       color: #868686;
     }
     h1 {
-      @media screen and (max-width: 1440px) {
+      @media screen and (max-width: 1700px) {
         font-size: 33px;
       }
       font-size: 40px;
@@ -888,9 +889,9 @@ const CalenderWrap = styled.div`
   }
 `;
 const EventBox = styled(Link)`
-  @media screen and (max-width: 1440px) {
-    width: 100%;
-    height: 100%;
+  @media screen and (max-width: 1700px) {
+    width: 209px;
+    height: 190px;
   }
   background-color: #cefbd8;
   width: 324px;
@@ -908,7 +909,7 @@ const EventBox = styled(Link)`
     font-weight: 700;
   }
   div {
-    @media screen and (max-width: 1440px) {
+    @media screen and (max-width: 1700px) {
       font-size: 15px;
       top: 70px;
     }
@@ -920,14 +921,14 @@ const EventBox = styled(Link)`
     line-height: 24px;
   }
   span {
-    @media screen and (max-width: 1440px) {
+    @media screen and (max-width: 1700px) {
       font-size: 15px;
     }
     color: #ff8365;
     font-weight: 900;
   }
   .image {
-    @media screen and (max-width: 1440px) {
+    @media screen and (max-width: 1700px) {
       top: 70px;
       left: 128px;
       width: 62px;
@@ -945,18 +946,18 @@ const EventBox = styled(Link)`
 `;
 
 const Box = styled.div`
-  @media screen and (max-width: 1440px) {
-    width: 300px;
+  @media screen and (max-width: 1700px) {
+    width: 209px;
     height: 190px;
   }
   width: 324px;
   height: 225px;
   position: relative;
-
+  display: flex;
   .messageBox {
-    @media screen and (max-width: 1440px) {
-      width: 100%;
-      height: 100%;
+    @media screen and (max-width: 1700px) {
+      width: 209px;
+      height: 190px;
     }
     background-color: #d6e4ff;
     width: 324px;
@@ -966,7 +967,7 @@ const Box = styled.div`
     cursor: pointer;
 
     h1 {
-      @media screen and (max-width: 1440px) {
+      @media screen and (max-width: 1700px) {
         font-size: 24px;
         padding-top: 22px;
       }
@@ -977,7 +978,7 @@ const Box = styled.div`
       margin-bottom: 20px;
     }
     .image {
-      @media screen and (max-width: 1440px) {
+      @media screen and (max-width: 1700px) {
         width: 90px;
         height: 60px;
       }
@@ -991,7 +992,7 @@ const Box = styled.div`
       margin: auto;
     }
     span {
-      @media screen and (max-width: 1440px) {
+      @media screen and (max-width: 1700px) {
         font-size: 15px;
       }
       margin-top: 15px;
@@ -1005,7 +1006,7 @@ const Box = styled.div`
   }
 
   .messagePopup {
-    @media screen and (max-width: 1440px) {
+    @media screen and (max-width: 1700px) {
       width: 100%;
       height: 100%;
     }
@@ -1024,7 +1025,7 @@ const Box = styled.div`
     position: absolute;
     top: 0;
     h2 {
-      @media screen and (max-width: 1440px) {
+      @media screen and (max-width: 1700px) {
         font-size: 24px;
         padding-top: 2px;
         margin-bottom: 5px;
@@ -1034,7 +1035,7 @@ const Box = styled.div`
       margin-bottom: 20px;
     }
     div {
-      @media screen and (max-width: 1440px) {
+      @media screen and (max-width: 1700px) {
         font-size: 14px;
       }
       width: 100%;
@@ -1072,6 +1073,7 @@ const LikelistHeader = styled.div`
 `;
 
 const LikeList = styled.ul`
+  min-width: 1024px;
   display: flex;
   flex-wrap: wrap;
   gap: 25px;

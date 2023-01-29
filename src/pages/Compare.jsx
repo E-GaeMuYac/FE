@@ -1431,13 +1431,10 @@ const SubWrap = styled.div`
 `;
 const NothingInBoxWrap = styled.div`
   width: 100%;
-  height: 1000px;
+  height: 100vh;
   background-color: #f9faff;
   @media screen and (max-width: 1700px) {
     padding-top: 60px;
-    height: 80vh;
-  }
-  @media screen and (min-width: 2560px) {
     height: 80vh;
   }
   .title {

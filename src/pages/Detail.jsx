@@ -19,7 +19,7 @@ import Reviews from '../contents/Reviews';
 
 const BottomContents = ({ medicineInfo, query }) => {
   const [ContentDesc, setContentDesc] = useState('');
-
+  console.log(medicineInfo);
   useEffect(() => {
     switch (query) {
       case '용법 용량':
@@ -351,6 +351,7 @@ const Detail = () => {
       }
     }
   }, [materialExplainName, objGraph]);
+  console.log(medicineItem);
 
   return (
     <>

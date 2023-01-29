@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 
 //page
-import Compare from './pages/Compare';
+import ComparePage from './pages/Compare';
 import Login from './pages/Login';
 import Search from './pages/Search';
 import Detail from './pages/Detail';
@@ -80,7 +80,7 @@ function App() {
           element={
             <>
               <PC>
-                <Compare />
+                <ComparePage />
               </PC>
               <Laptop>
                 <LaptopCompare />

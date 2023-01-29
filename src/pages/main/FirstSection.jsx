@@ -70,6 +70,9 @@ const MainContentShow = styled.h1`
     line-height: 65px;
     padding-bottom: 0vh;
   }
+  @media screen and (max-width: 1920px) {
+    padding-bottom: 10vh;
+  }
   width: 100%;
   font-weight: 700;
   font-size: 60px;
@@ -91,6 +94,10 @@ const ImgWrap = styled.div`
 const ContentImg = styled.div`
   @media screen and (max-width: 1700px) {
     background-size: 60%;
+  }
+  @media screen and (max-width: 1920px) {
+    background-size: 70%;
+    background-position: top;
   }
   background-image: url('/assets/image/메인 섹션1.png');
   background-position: center;

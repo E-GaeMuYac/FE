@@ -15,10 +15,11 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 // 컴포넌트
 import TabBar from '../../components/common/Tabbar';
 import LikeItBtn from '../../components/common/LikeItBtn';
+import Reviews from '../../contents/Reviews';
 
 const BottomContents = ({ medicineInfo, query }) => {
   const [ContentDesc, setContentDesc] = useState('');
-
+  console.log(medicineInfo);
   useEffect(() => {
     switch (query) {
       case '용법 용량':
@@ -314,14 +315,14 @@ const Detail = () => {
     // console.log(objGraph);
   }, [data]);
 
-  const [compareBoxArr, setCompareBoxArr] = useRecoilState(compareBoxData);
+  const [compareData, setCompareData] = useRecoilState(compareBoxData);
 
   const putInToCompareBox = (list) => {
-    for (let i = 0; i < compareBoxArr.length; i++) {
-      if (compareBoxArr[i].itemName === 'null') {
-        let newArr = [...compareBoxArr];
+    for (let i = 0; i < compareData.arr.length; i++) {
+      if (compareData.arr[i].itemName === 'null') {
+        let newArr = [...compareData.arr];
         newArr[i] = list;
-        setCompareBoxArr(newArr);
+        setCompareData({ ...compareData, arr: newArr });
         break;
       }
     }
@@ -392,8 +393,8 @@ const Detail = () => {
                   dibs={medicineItem?.dibs}
                 />
               </Picked>
-              {medicineItem?.medicineId === compareBoxArr[0].medicineId ||
-              medicineItem?.medicineId === compareBoxArr[1].medicineId ? (
+              {medicineItem?.medicineId === compareData.arr[0].medicineId ||
+              medicineItem?.medicineId === compareData.arr[1].medicineId ? (
                 <div className='compareBox'>비교함 담기</div>
               ) : (
                 <button
@@ -582,9 +583,13 @@ const Detail = () => {
       </TopSection>
       <div style={{ marginBottom: '150px' }}>
         <TabBar location={location} query={query} />
-        <BottomSection>
-          <BottomContents medicineInfo={medicineItem} query={query} />
-        </BottomSection>
+        {query !== '리뷰' ? (
+          <BottomSection>
+            <BottomContents medicineInfo={medicineItem} query={query} />
+          </BottomSection>
+        ) : (
+          <Reviews />
+        )}
       </div>
     </>
   );

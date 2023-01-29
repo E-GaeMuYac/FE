@@ -11,7 +11,7 @@ export const Mobile = ({ children }) => {
 export const Laptop = ({ children }) => {
   const isLaptop = useMediaQuery({
     query: '(max-width:1700px)',
-    // query: '(min-width:1024px) and (max-width:1440px)',
+    // query: '(min-width:1024px) and (max-width:1700px)',
   });
   return <>{isLaptop && children}</>;
 };
