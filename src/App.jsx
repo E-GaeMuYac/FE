@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 
 //page
-import ComparePage from './pages/Compare';
+import Compare from './pages/Compare';
 import Login from './pages/Login';
 import Search from './pages/Search';
 import Detail from './pages/Detail';
@@ -15,6 +15,10 @@ import User from './pages/User';
 import Signup from './pages/Signup';
 import SocialLogin from './pages/SocialLogin';
 import Main from './pages/main/Main';
+
+import LaptopDetail from './pages/Laptop/LaptopDetail';
+import LaptopCompare from './pages/Laptop/LaptopCompare';
+
 import AllergySearch from './pages/AllergySearch';
 import AddReviews from './pages/AddReviews';
 
@@ -29,6 +33,8 @@ import ChatBox from './components/layout/ChatBox';
 import { useRecoilState } from 'recoil';
 import { nowRoute } from './recoil/recoilStore';
 // import Spinner from './components/common/Spinner';
+
+import { Mobile, Laptop, PC } from './query/useMediaQuery';
 
 function App() {
   const [isToken, setIsToken] = useState('');
@@ -68,7 +74,20 @@ function App() {
             </Layout>
           }
         />
-        <Route exact path='/compare' element={<ComparePage />} />
+        <Route
+          exact
+          path='/compare'
+          element={
+            <>
+              <PC>
+                <Compare />
+              </PC>
+              <Laptop>
+                <LaptopCompare />
+              </Laptop>
+            </>
+          }
+        />
         <Route
           exact
           path='/login'
@@ -83,11 +102,20 @@ function App() {
           path='/detail/:id'
           element={
             <>
-              <MiniNav />
-              <Layout>
-                <Detail />
-                <CompareBox />
-              </Layout>
+              <PC>
+                <MiniNav />
+                <Layout>
+                  <Detail />
+                  <CompareBox />
+                </Layout>
+              </PC>
+              <Laptop>
+                <MiniNav />
+                <Layout>
+                  <LaptopDetail />
+                  <CompareBox />
+                </Layout>
+              </Laptop>
             </>
           }
         />

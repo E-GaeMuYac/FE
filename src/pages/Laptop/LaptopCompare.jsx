@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useLayoutEffect, useState } from 'react';
 
 //component
-import TabBar from '../components/common/Tabbar';
+import TabBar from '../../components/common/Tabbar';
 
 // 그래프 라이브러리
 import * as am5 from '@amcharts/amcharts5';
@@ -14,11 +14,11 @@ import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 
 import { useRecoilValue } from 'recoil';
-import { compareBoxData } from '../recoil/recoilStore';
+import { compareBoxData } from '../../recoil/recoilStore';
 
-import { useGetVersusQuery } from '../query/versusQuery';
-import LikeItBtn from '../components/common/LikeItBtn';
-import Layout from '../components/layout/Layout';
+import { useGetVersusQuery } from '../../query/versusQuery';
+import LikeItBtn from '../../components/common/LikeItBtn';
+import Layout from '../../components/layout/Layout';
 
 const VersusContent = ({ medicineInfo, query }) => {
   // ------------------------------------------------------------
@@ -92,10 +92,10 @@ const ComparePage = () => {
 
   const [versusList, setVersusList] = useState([]);
 
-  const compareData = useRecoilValue(compareBoxData);
+  const compareBoxArr = useRecoilValue(compareBoxData);
 
-  const comparePillIdA = compareData.arr[0].medicineId;
-  const comparePillIdB = compareData.arr[1].medicineId;
+  const comparePillIdA = compareBoxArr[0].medicineId;
+  const comparePillIdB = compareBoxArr[1].medicineId;
 
   useEffect(() => {
     if (!localStorage.getItem('refreshToken')) {
@@ -229,6 +229,9 @@ const ComparePage = () => {
     if (versusList.length === 2 && query === '성분그래프') {
       for (let i = 0; i < versusList[0].materialName?.length; i++) {
         for (let j = 0; j < versusList[1].materialName?.length; j++) {
+          // console.log(versusList[0].materialName[i].allergy);
+          // console.log(versusList[1].materialName[j].allergy);
+
           const root = am5.Root.new('chartdiv');
 
           const chart = root.container.children.push(
@@ -258,6 +261,7 @@ const ComparePage = () => {
               radius: am5.percent(90),
               innerRadius: am5.percent(50),
               centerX: 40,
+              y: am5.percent(10),
               startAngle: -90,
               endAngle: -270,
 
@@ -330,6 +334,7 @@ const ComparePage = () => {
               radius: am5.percent(90),
               innerRadius: am5.percent(50),
               centerX: -40,
+              y: am5.percent(10),
               startAngle: -90,
               endAngle: 90,
               tooltip: tootip,
@@ -406,13 +411,13 @@ const ComparePage = () => {
             minWidth: 60,
             maxWidth: 100,
             marginRight: 10,
-            fontSize: 18,
+            fontSize: 17,
           });
           legend.valueLabels.template.setAll({
-            minWidth: 130,
-            maxWidth: 130,
+            minWidth: 120,
+            maxWidth: 120,
             marginRight: 10,
-            fontSize: 18,
+            fontSize: 16,
             // 오버사이즈 시 처리.
             // truncate : 말줄임, none: 겹침, wrap: 줄바꿈, fit: 딱맞게 폰트사이즈 조절
             oversizedBehavior: 'truncate',
@@ -454,13 +459,13 @@ const ComparePage = () => {
             minWidth: 60,
             maxWidth: 100,
             marginRight: 10,
-            fontSize: 18,
+            fontSize: 17,
           });
           legend2.valueLabels.template.setAll({
-            minWidth: 130,
-            maxWidth: 130,
+            minWidth: 120,
+            maxWidth: 120,
             marginRight: 10,
-            fontSize: 18,
+            fontSize: 16,
             // 오버사이즈 시 처리.
             // truncate : 말줄임, none: 겹침, wrap: 줄바꿈, fit: 딱맞게 폰트사이즈 조절
             oversizedBehavior: 'truncate',
@@ -479,9 +484,9 @@ const ComparePage = () => {
           });
           //마커 크기 변경
           legend.markers.template.setAll({
-            width: 30,
-            height: 30,
-            marginRight: 17,
+            width: 25,
+            height: 25,
+            marginRight: 10,
           });
 
           //마커 동그랗게 변경
@@ -494,9 +499,9 @@ const ComparePage = () => {
 
           //마커 크기 변경
           legend2.markers.template.setAll({
-            width: 30,
-            height: 30,
-            marginRight: 17,
+            width: 25,
+            height: 25,
+            marginRight: 10,
           });
 
           //마커 동그랗게 변경
@@ -634,7 +639,8 @@ const ComparePage = () => {
                       <div className='legendWrap'>
                         <MatrialExplainWrap
                           BoxY={materialExplainY}
-                          Active={materialAExplainActive}>
+                          Active={materialAExplainActive}
+                          style={{ left: '1px' }}>
                           <div className='title'>
                             <span>성분명</span>
                             {materialExplainName}
@@ -802,7 +808,7 @@ const ComparePage = () => {
                             </WarningAllergyFalse>
                           )}
                         </div>
-                        <div className='legendBox'>
+                        <div className='legendBox2'>
                           <div id='legenddiv2'></div>
                         </div>
                       </div>
@@ -941,16 +947,12 @@ const ComparePage = () => {
 };
 
 const Wrap = styled.div`
-  @media screen and (min-width: 2560px) {
-    min-height: 93.8vh;
-  }
   width: 100%;
-  /* height: 93.8vh; */
-  /* background-color: aliceblue; */
+  /* height: 100vh; */
 `;
 const MainWrap = styled.div`
   width: 100%;
-  margin: 0 auto 15px;
+  margin: 0 auto 20px;
   .title {
     font-size: 30px;
     font-weight: bold;
@@ -1072,7 +1074,7 @@ const VersusCardWrap = styled.div`
 `;
 const SubWrap = styled.div`
   width: 100%;
-  margin-bottom: 100px;
+  margin-bottom: 150px;
   .content {
     width: 100%;
     display: flex;
@@ -1084,7 +1086,7 @@ const SubWrap = styled.div`
     width: 100%;
     background-color: #f6f7fa;
     border-radius: 25px;
-    padding: 40px 70px;
+    padding: 40px 40px;
     white-space: pre-wrap;
     word-break: break-all;
     min-height: 530px;
@@ -1110,7 +1112,7 @@ const SubWrap = styled.div`
   }
   .legendTitle {
     color: #242424;
-    font-size: 30px;
+    font-size: 25px;
     font-weight: bold;
     text-align: center;
     margin-bottom: 30px;
@@ -1122,18 +1124,35 @@ const SubWrap = styled.div`
     position: relative;
   }
   .legendBox {
-    width: 338px;
-    height: 405px;
+    width: 260px;
+    height: 294px;
     overflow-y: scroll;
   }
   .legendBox::-webkit-scrollbar {
-    width: 18px;
+    width: 15px;
   }
   .legendBox::-webkit-scrollbar-thumb {
     background-color: #b7b7b7;
     border-radius: 5px;
   }
   .legendBox::-webkit-scrollbar-track {
+    background-color: white;
+    border-radius: 5px;
+  }
+  .legendBox2 {
+    width: 260px;
+    height: 294px;
+    overflow-y: scroll;
+    margin-left: auto;
+  }
+  .legendBox2::-webkit-scrollbar {
+    width: 15px;
+  }
+  .legendBox2::-webkit-scrollbar-thumb {
+    background-color: #b7b7b7;
+    border-radius: 5px;
+  }
+  .legendBox2::-webkit-scrollbar-track {
     background-color: white;
     border-radius: 5px;
   }
@@ -1155,7 +1174,7 @@ const SubWrap = styled.div`
     justify-content: center;
   }
   .graphNameBox {
-    width: 155px;
+    width: 140px;
   }
   .graphName {
     padding: 6px 10px;
@@ -1238,7 +1257,7 @@ const SubWrap = styled.div`
   }
   #chartdiv {
     width: 430px;
-    height: 400px;
+    height: 300px;
     margin-bottom: 30px;
   }
   #legenddiv {
@@ -1434,11 +1453,10 @@ const NothingInBoxWrap = styled.div`
   height: 1000px;
   background-color: #f9faff;
   @media screen and (max-width: 1700px) {
-    padding-top: 60px;
-    height: 80vh;
+    height: 93.8vh;
   }
   @media screen and (min-width: 2560px) {
-    height: 80vh;
+    height: 93.8vh;
   }
   .title {
     font-size: 40px;
@@ -1448,7 +1466,7 @@ const NothingInBoxWrap = styled.div`
     text-align: center;
     margin-bottom: 58px;
     @media screen and (max-width: 1700px) {
-      /* margin-bottom: 40px; */
+      margin-bottom: 40px;
       font-size: 35px;
     }
     @media screen and (min-width: 2560px) {
@@ -1463,8 +1481,8 @@ const NothingInBoxWrap = styled.div`
     background-position: center;
     margin-bottom: 55px;
     @media screen and (max-width: 1700px) {
-      /* background-size: 100%;
-      background-repeat: no-repeat; */
+      background-size: 100%;
+      background-repeat: no-repeat;
       margin-bottom: 0px;
       height: 200px;
     }
@@ -1479,21 +1497,21 @@ const NothingInBoxWrap = styled.div`
     background-size: cover;
     background-position: center;
     @media screen and (max-width: 1700px) {
-      /* background-size: 100%;
-      background-repeat: no-repeat; */
+      background-size: 100%;
+      background-repeat: no-repeat;
       height: 340px;
     }
   }
 `;
 const MatrialExplainWrap = styled.div`
   display: ${({ Active }) => (Active ? 'block' : 'none')};
-  width: 338px;
+  width: 257px;
   background-color: rgba(0, 0, 0, 0.54);
   padding: 29px 24px 16px;
   border-radius: 24px;
   line-height: 34px;
   position: absolute;
-  left: 0px;
+  left: 36px;
   z-index: 1;
   color: white;
   /* top: ${({ BoxY }) => `${BoxY - 15}px`}; */
@@ -1501,17 +1519,17 @@ const MatrialExplainWrap = styled.div`
 
   backdrop-filter: blur(5px);
   .title {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 15px;
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     color: #87a5ff;
     font-weight: bold;
     min-height: 65px;
   }
   .title span {
-    width: 90px;
-    font-size: 18px;
+    min-width: 56px;
+    font-size: 17px;
     margin-right: 6px;
     line-height: 34px;
     color: white;
@@ -1591,7 +1609,7 @@ const WarningAllergyTrue = styled.div`
 `;
 
 const WarningAllergyFalse = styled.div`
-  width: 134px;
+  width: 128px;
   height: 34px;
   background-color: #ddf3eb;
   border-radius: 8px;
@@ -1608,7 +1626,7 @@ const WarningAllergyFalse = styled.div`
   font-size: 18px;
   line-height: 20px;
   span {
-    font-size: 17px;
+    font-size: 16px;
   }
 `;
 

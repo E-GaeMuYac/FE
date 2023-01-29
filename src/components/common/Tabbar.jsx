@@ -71,6 +71,7 @@ const Wrap = styled.div`
   margin-bottom: 16px;
   border-bottom: 1px solid #d9d9d9;
   ul {
+    padding: 0px;
     height: 100%;
     display: flex;
     align-items: center;

@@ -185,6 +185,9 @@ const Wrap = styled.div`
     margin: 0 auto;
     max-width: 1050px;
     height: 100%;
+    @media screen and (max-width: 1440px) {
+      max-width: 800px;
+    }
   }
   .backLayout {
     position: absolute;
@@ -306,8 +309,14 @@ const BoxContent = styled.div`
   gap: 50px;
   position: relative;
   z-index: 2;
+  @media screen and (max-width: 1440px) {
+    gap: 4%;
+  }
 `;
 const ListCard = styled.div`
+  @media screen and (max-width: 1440px) {
+    width: 48%;
+  }
   position: relative;
   width: 90%;
   height: 186px;
@@ -322,6 +331,9 @@ const ListCard = styled.div`
       ? null
       : `background-color: #E7E7E7; justify-content: center; flex-direction: column;`}
   .cardImg {
+    @media screen and (max-width: 1440px) {
+      min-width: 150px;
+    }
     width: 160px;
     height: 100%;
     background-image: ${({ image }) =>
