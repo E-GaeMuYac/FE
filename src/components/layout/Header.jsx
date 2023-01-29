@@ -60,6 +60,8 @@ const Header = (props) => {
       setUserImage(res.data.user.imageUrl);
     } catch (e) {
       console.error(e);
+      localStorage.clear();
+      navigate('/login');
     }
   };
 
