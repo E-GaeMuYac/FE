@@ -145,10 +145,32 @@ const MyReviews = ({ userId }) => {
   };
 
   const deleteReview = async (id) => {
+    if (window.confirm('리뷰를 삭제하시겠습니까?')) {
+      try {
+        const res = await userApi.delete(`/api/reviews/${id}`);
+        alert(res.data.message);
+        setClickEdit(false);
+        getMyReviews();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const handleLike = async (id) => {
     try {
-      const res = await userApi.delete(`/api/reviews/${id}`);
-      alert(res.data.message);
-      setClickEdit(false);
+      const res = await userApi.put(`/api/reviews/${id}/like`);
+      console.log(res);
+      getMyReviews();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDisLike = async (id) => {
+    try {
+      const res = await userApi.put(`/api/reviews/${id}/dislike`);
+      console.log(res);
       getMyReviews();
     } catch (error) {
       console.log(error);
@@ -224,31 +246,36 @@ const MyReviews = ({ userId }) => {
             <ModifyArea value={content} onChange={handleChangeReview} />
           ) : (
             <Description>
-              {moreShow === review.reviewId ? (
-                <>
-                  <DescWhole>{review.review}</DescWhole>
-                  <FoldBtn
-                    onClick={() => {
-                      setMoreShow(false);
-                    }}>
-                    접기 ▲
-                  </FoldBtn>
-                </>
+              {review.review.length > 260 ? (
+                moreShow !== review.reviewId ? (
+                  <>
+                    <DescSum>{review.review}</DescSum>
+                    <MoreBtn
+                      className='more'
+                      onClick={() => {
+                        setMoreShow(review.reviewId);
+                      }}>
+                      리뷰 자세히 보기 ▼
+                    </MoreBtn>
+                  </>
+                ) : (
+                  <>
+                    <DescWhole>{review.review}</DescWhole>
+                    <FoldBtn
+                      onClick={() => {
+                        setMoreShow(false);
+                      }}>
+                      접기 ▲
+                    </FoldBtn>
+                  </>
+                )
               ) : (
-                <>
-                  <DescSum>{review.review}</DescSum>
-                  <MoreBtn
-                    className='more'
-                    onClick={() => {
-                      setMoreShow(review.reviewId);
-                    }}>
-                    리뷰 자세히 보기 ▼
-                  </MoreBtn>
-                </>
+                <DescWhole style={{ marginBottom: '10px' }}>
+                  {review.review}
+                </DescWhole>
               )}
             </Description>
           )}
-
           <Exception>
             <IoIosWarning size='26' color='#FF772B' />
             <span>면책사항:</span>
@@ -261,14 +288,18 @@ const MyReviews = ({ userId }) => {
               alignItems: 'center',
             }}>
             <Recommend>
-              <LikeBtn like={like} onClick={() => setLike(!like)}>
+              <LikeBtn
+                like={review.like}
+                onClick={() => handleLike(review.reviewId)}>
                 <AiFillLike />
-                <div>도움 돼요</div>
+                <div>도움 돼요 {review.likeCount}</div>
               </LikeBtn>
-              <UnlikeBtn>
+              <DislikeBtn
+                disLike={review.dislike}
+                onClick={() => handleDisLike(review.reviewId)}>
                 <AiFillDislike />
                 <div>도움 안돼요</div>
-              </UnlikeBtn>
+              </DislikeBtn>
             </Recommend>
             <DateWrited>
               {review.updatedAt
@@ -307,13 +338,6 @@ const Contents = styled.div`
   display: flex;
   flex-direction: column;
   padding: 30px 60px;
-`;
-
-const CardBox = styled.div`
-  width: 100%;
-  margin: auto;
-  border-radius: 25px;
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
 `;
 
 const WrapContents = styled.div`
@@ -467,28 +491,9 @@ const BottomLabel = styled.div`
   text-align: left;
 `;
 
-const ReviewInfo = styled.div`
-  width: 100%;
-  height: 115px;
-  display: flex;
-  position: relative;
-`;
-
-const MedicineImage = styled.div`
-  background-color: pink;
-  background-image: ${(imageUrl) =>
-    imageUrl ? `url(${imageUrl})` : `url('/assets/image/default_img.png')`};
-  background-size: cover;
-  width: 160px;
-  height: 85px;
-  border-radius: 10px;
-  position: absolute;
-  background-position: 50% -50%;
-`;
-
 const ModifyArea = styled.textarea`
   width: 100%;
-  height: 105px;
+  height: 300px;
   background-color: white;
   border: 1px solid #e7e7e7;
   border-radius: 8px;
@@ -520,6 +525,8 @@ const Description = styled.div`
 
 const DescSum = styled.div`
   font-size: 24px;
+  width: 100%;
+  height: 110px;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -594,15 +601,14 @@ const LikeBtn = styled.button`
   }
 `;
 
-const UnlikeBtn = styled.button`
+const DislikeBtn = styled.button`
   width: 127px;
   height: 36px;
   border-radius: 87px;
   border: none;
-  background-color: #e7e7e7;
-  color: #868686;
+  background-color: ${({ disLike }) => (disLike ? '#3366FF' : '#e7e7e7')};
+  color: ${({ disLike }) => (disLike ? '#ffffff' : '#868686')};
   display: flex;
-  /* flex-direction: row; */
   justify-content: center;
   align-items: center;
   div {
