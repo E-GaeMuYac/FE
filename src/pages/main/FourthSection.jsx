@@ -8,7 +8,7 @@ const FourthSection = (props) => {
     <Flex>
       <Wrapper>
         <PC>
-          {scrollPoint > 2400 && (
+          {scrollPoint > 2000 && (
             <Content1>
               <h3>상세페이지</h3>
               <h2>
@@ -19,12 +19,12 @@ const FourthSection = (props) => {
             </Content1>
           )}
           <ContentsWrap>
-            {scrollPoint > 2500 && (
+            {scrollPoint > 2300 && (
               <AlignWrap>
                 <Content2 />
               </AlignWrap>
             )}
-            {scrollPoint > 2700 && (
+            {scrollPoint > 2400 && (
               <AlignWrap>
                 <Content3>
                   <div className='subTitle'>
@@ -66,7 +66,7 @@ const FourthSection = (props) => {
                 </Content4>
               </AlignWrap>
             )}
-            {scrollPoint > 3450 && (
+            {scrollPoint > 3200 && (
               <AlignWrap>
                 <Content5 />
               </AlignWrap>
@@ -78,7 +78,7 @@ const FourthSection = (props) => {
                 <Content6 />
               </AlignWrap>
             )}
-            {scrollPoint > 4100 && (
+            {scrollPoint > 4000 && (
               <AlignWrap>
                 <Content7>
                   <div>
@@ -125,7 +125,7 @@ const FourthSection = (props) => {
                 </Content8>
               </AlignWrap>
             )}
-            {scrollPoint > 5000 && (
+            {scrollPoint > 4700 && (
               <AlignWrap>
                 <Content9 />
               </AlignWrap>

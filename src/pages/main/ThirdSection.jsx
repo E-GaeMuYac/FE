@@ -47,11 +47,12 @@ const Flex = styled.div`
 `;
 
 const Wrapper = styled.div`
-  @media screen and (max-width: 1700px) {
+  /* @media screen and (max-width: 1700px) {
     margin-top: 30vh;
-    margin-bottom: 25vh;
-  }
+    padding-bottom: 25vh;
+  } */
   width: 100%;
+  height: 80vh;
   /* height: 841px; */
   position: relative;
   display: flex;
@@ -111,13 +112,17 @@ const Content1 = styled.div`
 const Content2 = styled.div`
   @media screen and (max-width: 1700px) {
     background-size: 85%;
+    background-position: top;
+  }
+  @media screen and (max-width: 1920px) {
+    background-position: top;
   }
   background-image: url('/assets/image/검색바.png');
-  background-position: center;
+  background-position: top;
   background-size: contain;
   background-repeat: no-repeat;
   width: 860px;
-  max-height: 106px;
+  max-height: 150px;
   height: 12.32vw;
   /* margin-top: 200px; */
   /* display: flex;

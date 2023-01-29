@@ -14,6 +14,7 @@ import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 
 import { useRecoilValue } from 'recoil';
+// import { compareBoxData } from '../../recoil/recoilStore';
 import { compareBoxData } from '../../recoil/recoilStore';
 
 import { useGetVersusQuery } from '../../query/versusQuery';
@@ -83,7 +84,7 @@ const VersusCard = ({ info }) => {
   );
 };
 
-const ComparePage = () => {
+const LaptopCompare = () => {
   const location = useLocation().pathname;
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
@@ -94,8 +95,8 @@ const ComparePage = () => {
 
   const compareBoxArr = useRecoilValue(compareBoxData);
 
-  const comparePillIdA = compareBoxArr[0].medicineId;
-  const comparePillIdB = compareBoxArr[1].medicineId;
+  const comparePillIdA = compareBoxArr.arr[0].medicineId;
+  const comparePillIdB = compareBoxArr.arr[1].medicineId;
 
   useEffect(() => {
     if (!localStorage.getItem('refreshToken')) {
@@ -1630,4 +1631,4 @@ const WarningAllergyFalse = styled.div`
   }
 `;
 
-export default ComparePage;
+export default LaptopCompare;
