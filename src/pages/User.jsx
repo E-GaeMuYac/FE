@@ -8,6 +8,7 @@ import { useGetLikeQuery } from '../query/likeQuery';
 import ProductList from '../components/common/productList';
 import Layout from '../components/layout/Layout';
 import Allergy from '../contents/Allergy';
+import MyReviews from '../contents/MyReview';
 
 const User = (props) => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const User = (props) => {
   const [delPassword, setDelPassword] = useState('');
   const [isShow, setIsShow] = useState(false);
   const [loginType, setLoginType] = useState('');
+  const [userId, setUserId] = useState('');
   const setUserImage = props.setuserimage;
   const setIsToken = props.setistoken;
 
@@ -41,6 +43,7 @@ const User = (props) => {
       setLoginCount(res.data.user.loginCount);
       setImageUrl(res.data.user.imageUrl);
       setLoginType(res.data.user.loginType);
+      setUserId(res.data.user.userId);
     } catch (e) {
       console.log(e);
       alert('로그인 정보가 필요합니다.');
@@ -393,6 +396,7 @@ const User = (props) => {
           </>
         )}
         {isClicked === 'allergy' && <Allergy />}
+        {isClicked === 'review' && <MyReviews userId={userId} />}
       </Layout>
     </Wrapper>
   );
