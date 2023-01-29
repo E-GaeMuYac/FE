@@ -47,10 +47,10 @@ const AddReviews = (props) => {
   };
 
   const submitReview = async () => {
-    console.log(content);
     try {
       const res = await userApi.post(`/api/reviews/${id}`, { review: content });
-      console.log(res);
+      alert(res.data.message);
+      navigate(-1);
     } catch (error) {
       console.log(error);
     }
