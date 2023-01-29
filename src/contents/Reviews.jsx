@@ -3,13 +3,110 @@ import styled from 'styled-components';
 import { IoIosWarning } from 'react-icons/io';
 import { AiFillLike, AiFillDislike } from 'react-icons/ai';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { userApi } from '../apis/apiInstance';
 
-const Reviews = () => {
+const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
+  const [numArr, setNumArr] = useState([]);
+  const [numArrPage, setNumArrPage] = useState([]);
+  const [pageNum, setPageNum] = useState(0);
+
+  //서치 갯수에 따라 numArr 배열 생성
+  useEffect(() => {
+    let newArr = [];
+    let count = 1;
+    newArr.push(count);
+    for (let i = 0; i < searchLength; i++) {
+      if ((i + 1) % 5 === 0) {
+        count += 1;
+        newArr.push(count);
+      }
+    }
+    setNumArr(newArr);
+  }, [searchLength]);
+
+  // 페이지 넘버 변경. 스크롤 업 이벤트 생성
+  const pageNumChange = (num) => {
+    setNowPageNum(num);
+  };
+
+  //numArr의 길이에 따라 배열 쪼개기
+  useEffect(() => {
+    if (numArr) {
+      let newPage = [];
+
+      for (let i = 0; i < numArr.length; i += 10) {
+        let pageProp = numArr.slice(i, i + 10);
+
+        newPage.push(pageProp);
+      }
+      setNumArrPage(newPage);
+    }
+  }, [numArr]);
+
+  //다음 배열 페이지
+  const nextNumPage = () => {
+    setPageNum(pageNum + 1);
+  };
+
+  //이전 배열 페이지
+  const beforeNumPage = () => {
+    setPageNum(pageNum - 1);
+  };
+
+  return (
+    <PagenationWrap nowPageNum={nowPageNum}>
+      {numArr.length > 10 ? (
+        <>
+          {pageNum > 0 ? (
+            <div className='pagenationArrow left' onClick={beforeNumPage}></div>
+          ) : null}
+          {pageNum < numArrPage.length - 1 ? (
+            <div className='pagenationArrow right' onClick={nextNumPage}></div>
+          ) : null}
+        </>
+      ) : null}
+
+      <ul className='pagenationNumWrap'>
+        {numArrPage[pageNum]
+          ? numArrPage[pageNum].map((list) =>
+              list === nowPageNum ? (
+                <li
+                  className='Active'
+                  key={list}
+                  onClick={() => {
+                    pageNumChange(list);
+                  }}>
+                  {list}
+                </li>
+              ) : (
+                <li
+                  onClick={() => {
+                    pageNumChange(list);
+                  }}
+                  key={list}>
+                  {list}
+                </li>
+              )
+            )
+          : null}
+      </ul>
+    </PagenationWrap>
+  );
+};
+
+const Reviews = (props) => {
   const navigate = useNavigate();
-  const [moreShow, setMoreShow] = useState(true);
-  const [like, setLike] = useState(false);
-
+  const [moreShow, setMoreShow] = useState(0);
+  const [reviewArr, setReviewArr] = useState([]);
+  const [nickname, setNickname] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [searchLength, setSearchLength] = useState(0);
+  const setIsToken = props.setIsToken;
   const { id } = useParams();
+
+  //현재페이지
+  const [nowPageNum, setNowPageNum] = useState(1);
 
   const tagName = [
     '전체보기',
@@ -29,19 +126,79 @@ const Reviews = () => {
   ];
   const [pickTag, setpickTag] = useState('전체보기');
 
-  // const mock =
-  //   '피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고 피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고피부에 도움이 되는 비타민이랑 L시스테인 같이 먹고 있어요. 과일 좋아하지 않는 분들은 비타민 C 꾸준히 챙겨드시면 좋아요. 신맛 느끼지 않고 캡슐에 들어 있어서 먹기 편해요. 개인적으로 작은 용량의 제품을 먹어서 비우는게 더 좋은 거 같아요. 대용량은 약을 덜어내면서 계속 공기와 접촉하니 이렇게 작은용량이 좋은 것 같아요! 비싸고 브랜드 있는 제품과 비교해서 비타민 함량이 고용량이고';
+  useEffect(() => {
+    getReviews();
+    GetProfile();
+  }, [nowPageNum, pickTag]);
 
-  const mock = ['만족', '부작용', '효과', '개선', '발진'];
+  const GetProfile = async () => {
+    try {
+      const res = await userApi.get('api/users/find');
+      setNickname(res.data.user.nickname);
+      setImageUrl(res.data.user.imageUrl);
+    } catch (e) {
+      console.log(e);
+      alert('로그인 정보가 필요합니다.');
+      setIsToken(false);
+      localStorage.clear();
+      navigate('/login');
+    }
+  };
+
+  const getReviews = async () => {
+    if (pickTag === '전체보기') {
+      try {
+        const res = await userApi.get(
+          `/api/reviews?medicineId=${id}&page=${nowPageNum}&pageSize=5`
+        );
+        setReviewArr(res.data.reviewList);
+        setSearchLength(res.data.totalReview);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        const res = await userApi.get(
+          `/api/reviews?medicineId=${id}&page=${nowPageNum}&pageSize=5&tag=${pickTag}`
+        );
+        setReviewArr(res.data.reviewList);
+        setSearchLength(res.data.totalReview);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   const pickTagColor = (e) => {
     setpickTag(e.target.innerText);
+    setNowPageNum(1);
   };
+
+  const handleLike = async (id) => {
+    try {
+      await userApi.put(`/api/reviews/${id}/like`);
+      getReviews();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDisLike = async (id) => {
+    try {
+      await userApi.put(`/api/reviews/${id}/dislike`);
+      getReviews();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Wrapper>
       <ReviewBtnWrap>
         <ReviewDesc>
-          <p>000님의 리뷰로 같은 고민을 가진 분들이 도움이 될 수 있어요.</p>
+          <p>
+            {nickname}님의 리뷰로 같은 고민을 가진 분들이 도움이 될 수 있어요.
+          </p>
           <span>
             리뷰에 해당 의약품과 무관한 내용이 포함되었거나, 어뷰징으로 판단된
             리뷰는 안내 없이 즉시 삭제 처리됩니다.
@@ -55,7 +212,7 @@ const Reviews = () => {
         <ReviewHeader>
           <div className='total'>
             <span className='title'>리뷰</span>
-            <span className='sum'> 300개</span>
+            <span className='sum'> {searchLength}개</span>
           </div>
         </ReviewHeader>
         <ReviewSorting>
@@ -70,46 +227,95 @@ const Reviews = () => {
           ))}
         </ReviewSorting>
       </ReviewNav>
-      {mock.map((a) =>
-        a.includes(pickTag) ? (
-          <Contents key={a}>
+      {reviewArr.map((review) =>
+        review.review.includes(pickTag) || pickTag === '전체보기' ? (
+          <Contents key={review.reviewId}>
             <ReviewInfo>
               <AccountBox>
                 <AccountBoxBg>
-                  <AccountBoxImg /*imageUrl={imageUrl}*/ />
+                  <AccountBoxImg imageUrl={imageUrl} />
                 </AccountBoxBg>
-                <span>닉네임</span>
+                <span>{nickname}</span>
               </AccountBox>
-              <DateWrited>2023년 1월 29일</DateWrited>
+              <DateWrited>
+                {review.updatedAt
+                  .replace('T', '. ')
+                  .split(' ')[0]
+                  .split('-')
+                  .join('.')
+                  .replace('.', '년 ')
+                  .replace('.', '월 ')
+                  .replace('.', '일')}
+              </DateWrited>
             </ReviewInfo>
             <Description>
-              {moreShow ? <DescSum>{a}</DescSum> : <DescWhole>{a}</DescWhole>}
-              <MoreBtn
-                className='more'
-                onClick={() => {
-                  setMoreShow(!moreShow);
-                }}>
-                {moreShow ? '리뷰 자세히 보기 ▼' : '접기 ▲'}
-              </MoreBtn>
+              {review.review.length > 260 ? (
+                moreShow !== review.reviewId ? (
+                  <>
+                    <DescSum>{review.review}</DescSum>
+                    <MoreBtn
+                      className='more'
+                      onClick={() => {
+                        setMoreShow(review.reviewId);
+                      }}>
+                      리뷰 자세히 보기 ▼
+                    </MoreBtn>
+                  </>
+                ) : (
+                  <>
+                    <DescWhole>{review.review}</DescWhole>
+                    <FoldBtn
+                      onClick={() => {
+                        setMoreShow(false);
+                      }}>
+                      접기 ▲
+                    </FoldBtn>
+                  </>
+                )
+              ) : (
+                <DescWhole style={{ marginBottom: '10px' }}>
+                  {review.review}
+                </DescWhole>
+              )}
             </Description>
             <Exception>
               <IoIosWarning size='26' color='#FF772B' />
               <span>면책사항:</span>
               <div>의학적 또는 전문가의 조언이 아닌 사용자의 의견입니다.</div>
             </Exception>
-            <Recommend>
-              <LikeBtn like={like} onClick={() => setLike(!like)}>
-                <AiFillLike />
-                <div>도움 돼요</div>
-              </LikeBtn>
-              <UnlikeBtn>
-                <AiFillDislike />
-                <div>도움 안돼요</div>
-              </UnlikeBtn>
-            </Recommend>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Recommend>
+                <LikeBtn
+                  like={review.like}
+                  onClick={() => handleLike(review.reviewId)}>
+                  <AiFillLike />
+                  <div>도움 돼요</div>
+                </LikeBtn>
+                <DislikeBtn
+                  disLike={review.dislike}
+                  onClick={() => handleDisLike(review.reviewId)}>
+                  <AiFillDislike />
+                  <div>도움 안돼요</div>
+                </DislikeBtn>
+              </Recommend>
+              <ReportBtn>
+                <div />
+                신고하기
+              </ReportBtn>
+            </div>
           </Contents>
         ) : null
       )}
+      <Pagenation
+        searchLength={searchLength}
+        nowPageNum={nowPageNum}
+        setNowPageNum={setNowPageNum}
+      />
     </Wrapper>
   );
 };
@@ -217,6 +423,7 @@ const Contents = styled.div`
   flex-direction: column;
   padding: 30px 60px;
 `;
+
 const ReviewInfo = styled.div`
   width: 100%;
   height: 58px;
@@ -227,7 +434,6 @@ const ReviewInfo = styled.div`
 const AccountBox = styled.div`
   height: 58px;
   display: flex;
-  /* justify-content: center; */
   align-items: center;
   span {
     font-size: 20px;
@@ -247,8 +453,7 @@ const AccountBoxBg = styled.div`
 `;
 
 const AccountBoxImg = styled.div`
-  /* background-image: ${({ imageUrl }) => `url(${imageUrl})`}; */
-  background-color: pink;
+  background-image: ${({ imageUrl }) => `url(${imageUrl})`};
   background-size: cover;
   background-position: center;
   width: 42px;
@@ -283,6 +488,19 @@ const DescWhole = styled.div`
 `;
 
 const MoreBtn = styled.button`
+  background-color: #e7e7e7;
+  appearance: none;
+  margin: 15px 0;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: none;
+  color: #3366ff;
+  font-weight: bold;
+  font-size: 20px;
+  cursor: pointer;
+`;
+
+const FoldBtn = styled.button`
   background-color: #e7e7e7;
   appearance: none;
   margin: 15px 0;
@@ -333,19 +551,89 @@ const LikeBtn = styled.button`
   }
 `;
 
-const UnlikeBtn = styled.button`
+const DislikeBtn = styled.button`
   width: 127px;
   height: 36px;
   border-radius: 87px;
   border: none;
-  background-color: #e7e7e7;
-  color: #868686;
+  background-color: ${({ disLike }) => (disLike ? '#3366FF' : '#e7e7e7')};
+  color: ${({ disLike }) => (disLike ? '#ffffff' : '#868686')};
   display: flex;
-  /* flex-direction: row; */
   justify-content: center;
   align-items: center;
   div {
     text-indent: 5px;
+  }
+`;
+
+const ReportBtn = styled.div`
+  width: 123px;
+  height: 36px;
+  border-radius: 87px;
+  background-color: #ffd3ce;
+  color: #ff392b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  div {
+    background-image: url('/assets/image/warnIcon.png');
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
+`;
+
+const PagenationWrap = styled.div`
+  margin: 53px auto;
+  position: relative;
+  .pagenationNumWrap {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    justify-content: center;
+    gap: 29px;
+    padding: 0;
+    margin: 0;
+  }
+  .pagenationNumWrap li {
+    width: 33px;
+    height: 33px;
+    background-color: #e7e7e7;
+    border: 1px solid #e7e7e7;
+    border-radius: 8px;
+    font-size: 18px;
+    color: #868686;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .pagenationNumWrap li.Active {
+    background-color: white;
+    border: 1px solid #3366ff;
+    color: #242424;
+  }
+  .pagenationArrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 26px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+  }
+  .pagenationArrow.left {
+    left: -50px;
+    background-image: url('/assets/image/icon_page_arrow_left.png');
+  }
+  .pagenationArrow.right {
+    right: -50px;
+    background-image: url('/assets/image/icon_page_arrow_right.png');
   }
 `;
 export default Reviews;
