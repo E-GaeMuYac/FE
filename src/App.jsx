@@ -15,6 +15,7 @@ import User from './pages/User';
 import Signup from './pages/Signup';
 import SocialLogin from './pages/SocialLogin';
 import Main from './pages/main/Main';
+import Event from './pages/Event';
 
 import LaptopDetail from './pages/Laptop/LaptopDetail';
 import LaptopCompare from './pages/Laptop/LaptopCompare';
@@ -159,6 +160,7 @@ function App() {
           path='/detail/:id?tab=리뷰'
           element={<Reviews setistoken={setIsToken} />}
         />
+        <Route path='/event' element={<Event />} />
       </Routes>
       <ChatBox />
     </>
