@@ -28,6 +28,7 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   // 페이지 넘버 변경. 스크롤 업 이벤트 생성
   const pageNumChange = (num) => {
     setNowPageNum(num);
+    window.scrollTo(0, 800);
   };
 
   //numArr의 길이에 따라 배열 쪼개기
@@ -101,6 +102,10 @@ const Reviews = (props) => {
   const [reviewArr, setReviewArr] = useState([]);
   const [nickname, setNickname] = useState('');
   const [searchLength, setSearchLength] = useState(0);
+  const [sort, setSort] = useState('');
+  const [sortText, setSortText] = useState('최신순');
+  const [pickTag, setpickTag] = useState('전체보기');
+  const [openDrop, setOpenDrop] = useState(false);
   const setIsToken = props.setIsToken;
   const { id } = useParams();
 
@@ -123,12 +128,11 @@ const Reviews = (props) => {
     '발진',
     '속쓰림',
   ];
-  const [pickTag, setpickTag] = useState('전체보기');
 
   useEffect(() => {
     getReviews();
     GetProfile();
-  }, [nowPageNum, pickTag]);
+  }, [nowPageNum, pickTag, sort]);
 
   const GetProfile = async () => {
     try {
@@ -147,18 +151,17 @@ const Reviews = (props) => {
     if (pickTag === '전체보기') {
       try {
         const res = await userApi.get(
-          `/api/reviews?medicineId=${id}&page=${nowPageNum}&pageSize=5`
+          `/api/reviews?medicineId=${id}&page=${nowPageNum}&pageSize=5&order=${sort}`
         );
         setReviewArr(res.data.reviewList);
         setSearchLength(res.data.totalReview);
-        console.log(res.data.reviewList);
       } catch (error) {
         console.log(error);
       }
     } else {
       try {
         const res = await userApi.get(
-          `/api/reviews?medicineId=${id}&page=${nowPageNum}&pageSize=5&tag=${pickTag}`
+          `/api/reviews?medicineId=${id}&page=${nowPageNum}&pageSize=5&tag=${pickTag}&order=${sort}`
         );
         setReviewArr(res.data.reviewList);
         setSearchLength(res.data.totalReview);
@@ -191,6 +194,17 @@ const Reviews = (props) => {
     }
   };
 
+  const handleDropdown = (sort) => {
+    setSort(sort);
+    setNowPageNum(1);
+    setOpenDrop(false);
+    if (sort === 'updatedAt') {
+      setSortText('최신순');
+    } else if (sort === 'likeCount') {
+      setSortText('추천순');
+    }
+  };
+
   return (
     <Wrapper>
       <ReviewBtnWrap>
@@ -213,6 +227,25 @@ const Reviews = (props) => {
             <span className='title'>리뷰</span>
             <span className='sum'> {searchLength}개</span>
           </div>
+          {openDrop ? (
+            <DropOpen>
+              <SortDefault onClick={() => setOpenDrop(false)}>
+                <SortName>{sortText}</SortName>
+                <Arrow>▲</Arrow>
+              </SortDefault>
+              <CreatedAt onClick={() => handleDropdown('updatedAt')}>
+                최신순
+              </CreatedAt>
+              <LikeCount onClick={() => handleDropdown('likeCount')}>
+                추천순
+              </LikeCount>
+            </DropOpen>
+          ) : (
+            <SortDefault onClick={() => setOpenDrop(true)}>
+              <SortName>{sortText}</SortName>
+              <Arrow>▼</Arrow>
+            </SortDefault>
+          )}
         </ReviewHeader>
         <ReviewSorting>
           {tagName.map((tag) => (
@@ -377,7 +410,7 @@ const ReviewHeader = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  position: relative;
   .title {
     font-size: 24px;
     font-weight: bold;
@@ -387,6 +420,67 @@ const ReviewHeader = styled.div`
     font-weight: bold;
     color: #3366ff;
   }
+`;
+
+const SortDefault = styled.div`
+  width: 130px;
+  height: 44px;
+  border-radius: 8px;
+  background-color: #e7e7e7;
+  position: absolute;
+  right: 0;
+  color: #868686;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`;
+
+const SortName = styled.span`
+  position: absolute;
+  left: 30px;
+`;
+
+const Arrow = styled.span`
+  position: absolute;
+  right: 10px;
+`;
+
+const DropOpen = styled.div`
+  background-color: white;
+  width: 130px;
+  height: 132px;
+  position: absolute;
+  border-radius: 8px;
+  right: 0;
+  top: 8px;
+`;
+
+const CreatedAt = styled.div`
+  width: 130px;
+  height: 44px;
+  border-radius: 8px;
+  position: absolute;
+  top: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 2px;
+  color: #868686;
+  cursor: pointer;
+`;
+
+const LikeCount = styled.div`
+  width: 130px;
+  height: 44px;
+  border-radius: 8px;
+  position: absolute;
+  top: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 2px;
+  color: #868686;
+  cursor: pointer;
 `;
 
 const ReviewSorting = styled.div`
