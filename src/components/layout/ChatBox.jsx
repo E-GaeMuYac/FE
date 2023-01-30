@@ -19,8 +19,12 @@ const ChatBox = () => {
 
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const [userId, setUserId] = useState(0);
+  const [userId, setUserId] = useState(null);
   const [nickname, setNickname] = useState('');
+
+  const [adminChatList, setAdminChatList] = useState([]);
+  const [adminUser, setAdminUser] = useState('');
+  const [adminRoom, setAdminRoom] = useState('');
 
   // ---------------------------------------------------------------
 
@@ -37,8 +41,10 @@ const ChatBox = () => {
     }
   }, []);
 
-  const adminIdArr = [654];
-
+  //어드민 id 배열
+  const adminIdArr = process.env.REACT_APP_ADMIN_ID_ARR.split('|').map((i) =>
+    Number(i)
+  );
   //로그인한 유저의 id가 관리자 배열에 포함될 경우 admin화
   useEffect(() => {
     if (adminIdArr.includes(userId)) {
@@ -46,61 +52,29 @@ const ChatBox = () => {
     }
   }, [userId]);
 
+  //소켓 연결
   useEffect(() => {
     setSocket(io.connect(process.env.REACT_APP_SOCKET_ENDPOINT));
   }, []);
 
+  //버튼 클릭 시 방에 입장
   const OpenChatBox = async () => {
     if (!isOpenchatBox) {
       setIsOpenchatBox(true);
       await socket.emit('join', {
-        room: userId ? userId : socket.id,
-        nickname: nickname ? nickname : socket.id,
+        room: userId ? userId : null,
       });
+      if (isAdmin) {
+        setChatType('상담');
+      }
     } else if (isOpenchatBox) {
       setIsOpenchatBox(false);
       setMessageList([]);
       setChatType('챗봇');
     }
   };
-
-  const writeValue = useCallback(({ target: { value } }) => {
-    setInputValue(value);
-  });
-  const sendMessage = async () => {
-    if (inputValue.trim() !== '') {
-      await socket.emit('chatting', {
-        type: chatType,
-        room: userId ? userId : socket.id,
-        message: inputValue,
-        user: nickname ? nickname : socket.id,
-      });
-
-      // 내가 쓴 글 추가
-      const hour =
-        new Date(Date.now()).getHours() >= 10
-          ? new Date(Date.now()).getHours()
-          : '0' + new Date(Date.now()).getHours();
-      const minute =
-        new Date(Date.now()).getMinutes() >= 10
-          ? new Date(Date.now()).getMinutes()
-          : '0' + new Date(Date.now()).getMinutes();
-      setMessageList((list) => [
-        ...list,
-        {
-          _id: Date.now(),
-          time: hour + ':' + minute,
-          writer: '사용자',
-          message: inputValue,
-        },
-      ]);
-
-      setInputValue('');
-    }
-  };
-
+  // 방 입장 시 안내 문구
   useEffect(() => {
-    // 방 입장 시 안내 문구
     socket?.on('join', (content, link) => {
       socket?.on('load', (chats) => {
         setMessageList(chats);
@@ -128,56 +102,7 @@ const ChatBox = () => {
         ]);
       }
     });
-
-    // 채팅 받기
-    socket?.on('receive', (content, link) => {
-      if (content) {
-        const hour =
-          new Date(Date.now()).getHours() >= 10
-            ? new Date(Date.now()).getHours()
-            : '0' + new Date(Date.now()).getHours();
-        const minute =
-          new Date(Date.now()).getMinutes() >= 10
-            ? new Date(Date.now()).getMinutes()
-            : '0' + new Date(Date.now()).getMinutes();
-
-        setMessageList((list) => [
-          ...list,
-          {
-            _id: Date.now(),
-            time: hour + ':' + minute,
-            writer: '관리자',
-            message: content,
-            link: link,
-          },
-        ]);
-      }
-    });
   }, [socket]);
-  // ---------------------------------------------------------------
-  // 버튼 클릭 시 상담모드로 전환
-  const callAdmin = () => {
-    setChatType('상담');
-
-    //관리자 연결 매세지 생성
-    const hour =
-      new Date(Date.now()).getHours() >= 10
-        ? new Date(Date.now()).getHours()
-        : '0' + new Date(Date.now()).getHours();
-    const minute =
-      new Date(Date.now()).getMinutes() >= 10
-        ? new Date(Date.now()).getMinutes()
-        : '0' + new Date(Date.now()).getMinutes();
-    setMessageList((list) => [
-      ...list,
-      {
-        _id: Date.now(),
-        time: hour + ':' + minute,
-        writer: '관리자',
-        message: '관리자가 연결되었습니다',
-      },
-    ]);
-  };
   // ---------------------------------------------------------------
   const chatTag = [
     {
@@ -197,16 +122,28 @@ const ChatBox = () => {
       comment: '설문조사에 참여하고싶은데 어디에 하면 되나요?',
     },
   ];
-
-  //태그를 누르면 자동으로 글 송신
-  const tagChat = async (comment) => {
-    await socket.emit('chatting', {
-      type: chatType,
-      room: userId ? userId : socket.id,
-      message: comment,
-      user: nickname ? nickname : socket.id,
-    });
-
+  //input에 채팅 작성
+  const writeValue = useCallback(({ target: { value } }) => {
+    setInputValue(value);
+  });
+  //메세지 전송
+  const sendFromUser = async (msg) => {
+    if (isAdmin) {
+      await socket.emit('adminSend', {
+        room: adminRoom,
+        message: msg,
+        user: adminUser,
+      });
+    } else {
+      if (msg.trim() !== '') {
+        await socket.emit('chatting', {
+          type: chatType,
+          room: userId,
+          message: msg,
+          user: nickname ? nickname : socket.id,
+        });
+      }
+    }
     // 내가 쓴 글 추가
     const hour =
       new Date(Date.now()).getHours() >= 10
@@ -220,12 +157,99 @@ const ChatBox = () => {
       ...list,
       {
         _id: Date.now(),
-        time: hour + ':' + minute,
-        writer: '사용자',
-        message: comment,
+        time: `${hour}:${minute}`,
+        writer: nickname,
+        message: msg,
       },
     ]);
+
+    setInputValue('');
   };
+  // 채팅 받기
+  useEffect(() => {
+    socket?.on('receive', (content, link) => {
+      const hour =
+        new Date(Date.now()).getHours() >= 10
+          ? new Date(Date.now()).getHours()
+          : '0' + new Date(Date.now()).getHours();
+      const minute =
+        new Date(Date.now()).getMinutes() >= 10
+          ? new Date(Date.now()).getMinutes()
+          : '0' + new Date(Date.now()).getMinutes();
+      setMessageList((list) => [
+        ...list,
+        {
+          _id: Date.now(),
+          time: `${hour}:${minute}`,
+          writer: 'another',
+          message: content,
+          link: link,
+        },
+      ]);
+    });
+  }, [socket]);
+  // ---------------------------------------------------------------
+
+  // 버튼 클릭 시 상담모드로 전환
+  const callAdmin = () => {
+    setChatType('상담');
+  };
+  const adminJoinRoom = async (roomData) => {
+    await socket.emit('adminJoin', userId);
+    setAdminUser(roomData.user);
+    setAdminRoom(roomData.room);
+  };
+
+  // 관리자 입장 문구 출력
+  useEffect(() => {
+    socket?.on('adminJoin', (msg) => {
+      const hour =
+        new Date(Date.now()).getHours() >= 10
+          ? new Date(Date.now()).getHours()
+          : '0' + new Date(Date.now()).getHours();
+      const minute =
+        new Date(Date.now()).getMinutes() >= 10
+          ? new Date(Date.now()).getMinutes()
+          : '0' + new Date(Date.now()).getMinutes();
+      setMessageList((list) => [
+        ...list,
+        {
+          _id: Date.now(),
+          time: hour + ':' + minute,
+          writer: 'another',
+          message: msg,
+        },
+      ]);
+    });
+  }, [socket]);
+  useEffect(() => {
+    if (isAdmin) {
+      socket?.on('getRooms', (data) => {
+        setAdminChatList(data);
+      });
+    }
+  }, [socket, isAdmin]);
+  useEffect(() => {
+    socket?.on('adminReceive', (msg) => {
+      const hour =
+        new Date(Date.now()).getHours() >= 10
+          ? new Date(Date.now()).getHours()
+          : '0' + new Date(Date.now()).getHours();
+      const minute =
+        new Date(Date.now()).getMinutes() >= 10
+          ? new Date(Date.now()).getMinutes()
+          : '0' + new Date(Date.now()).getMinutes();
+      setMessageList((list) => [
+        ...list,
+        {
+          _id: Date.now(),
+          time: hour + ':' + minute,
+          writer: 'another',
+          message: msg,
+        },
+      ]);
+    });
+  }, [socket]);
 
   // ---------------------------------------------------------------
   return (
@@ -239,8 +263,15 @@ const ChatBox = () => {
                 <div className='title'>리스트</div>
               </div>
               <ul>
-                <li>이재정님</li>
-                <li>류현님</li>
+                {adminChatList?.map((list) => (
+                  <li
+                    key={list._id}
+                    onClick={() => {
+                      adminJoinRoom(list);
+                    }}>
+                    {list.room}
+                  </li>
+                ))}
               </ul>
             </div>
           )}
@@ -255,7 +286,7 @@ const ChatBox = () => {
                     <li
                       key={tag.tagName}
                       onClick={() => {
-                        tagChat(tag.comment);
+                        sendFromUser(tag.comment);
                       }}>
                       {tag.tagName}
                     </li>
@@ -265,7 +296,7 @@ const ChatBox = () => {
               <ScrollToBottom className='room'>
                 <ul>
                   {messageList.map((list) =>
-                    list.writer === '사용자' ? (
+                    list.writer === nickname ? (
                       <li className='me' key={list._id}>
                         <div className='messageTime'>{list.time}</div>
                         <div className='messageBox'>{list.message}</div>
@@ -304,12 +335,12 @@ const ChatBox = () => {
                       e.key === 'Enter' &&
                       e.nativeEvent.isComposing === false
                     ) {
-                      sendMessage();
+                      sendFromUser(inputValue);
                     }
                   }}
                   value={inputValue}
                 />
-                <button onClick={sendMessage}>send</button>
+                <button onClick={() => sendFromUser(inputValue)}>send</button>
               </div>
             </ChartBoxRoom>
           </div>
