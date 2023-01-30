@@ -42,7 +42,7 @@ const Wrapper = styled.div`
   background-color: #f0f0f0;
   display: flex;
   align-items: center;
-  padding-left: 725px;
+  padding-left: 38.5%;
 `;
 
 const LinkNav = styled(Link)`
