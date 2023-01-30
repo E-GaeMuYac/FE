@@ -100,7 +100,6 @@ const Reviews = (props) => {
   const [moreShow, setMoreShow] = useState(0);
   const [reviewArr, setReviewArr] = useState([]);
   const [nickname, setNickname] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
   const [searchLength, setSearchLength] = useState(0);
   const setIsToken = props.setIsToken;
   const { id } = useParams();
@@ -135,7 +134,6 @@ const Reviews = (props) => {
     try {
       const res = await userApi.get('api/users/find');
       setNickname(res.data.user.nickname);
-      setImageUrl(res.data.user.imageUrl);
     } catch (e) {
       console.log(e);
       alert('로그인 정보가 필요합니다.');
@@ -153,6 +151,7 @@ const Reviews = (props) => {
         );
         setReviewArr(res.data.reviewList);
         setSearchLength(res.data.totalReview);
+        console.log(res.data.reviewList);
       } catch (error) {
         console.log(error);
       }
@@ -233,9 +232,9 @@ const Reviews = (props) => {
             <ReviewInfo>
               <AccountBox>
                 <AccountBoxBg>
-                  <AccountBoxImg imageUrl={imageUrl} />
+                  <AccountBoxImg imageUrl={review.userImage} />
                 </AccountBoxBg>
-                <span>{nickname}</span>
+                <span>{review.nickname}</span>
               </AccountBox>
               <DateWrited>
                 {review.updatedAt
@@ -294,7 +293,7 @@ const Reviews = (props) => {
                   like={review.like}
                   onClick={() => handleLike(review.reviewId)}>
                   <AiFillLike />
-                  <div>도움 돼요</div>
+                  <div>도움 돼요 {review.likeCount}</div>
                 </LikeBtn>
                 <DislikeBtn
                   disLike={review.dislike}
@@ -330,7 +329,7 @@ const Wrapper = styled.div`
 const ReviewBtnWrap = styled.div`
   background-color: #f6f7fa;
   width: 100%;
-  height: 120px;
+  min-height: 120px;
   border-radius: 25px;
   padding: 30px 60px;
   display: flex;
@@ -353,7 +352,7 @@ const ReviewDesc = styled.div`
 `;
 
 const ReviewpageBtn = styled.div`
-  width: 130px;
+  min-width: 130px;
   height: 44px;
   background-color: #242424;
   border-radius: 8px;
@@ -367,7 +366,7 @@ const ReviewpageBtn = styled.div`
 const ReviewNav = styled.div`
   background-color: #f6f7fa;
   width: 100%;
-  height: 178px;
+  min-height: 178px;
   border-radius: 25px;
   padding: 30px 60px;
 `;
@@ -392,9 +391,10 @@ const ReviewHeader = styled.div`
 
 const ReviewSorting = styled.div`
   width: 100%;
-  height: 60px;
+  min-height: 60px;
   display: flex;
   align-items: center;
+  flex-flow: wrap;
   gap: 10px;
 `;
 
