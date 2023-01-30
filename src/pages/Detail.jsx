@@ -144,12 +144,14 @@ const Detail = () => {
             categoryField: 'material',
             centerX: am5.percent(-18.5),
             y: am5.percent(-4),
-            legendValueText: objGraph.materialName[i].allergy
-              ? '[#FF392B]{category}'
-              : '{category}',
-            legendLabelText: objGraph.materialName[i].allergy
-              ? `[bold #FF392B]{value.formatNumber('#.#')}mg`
-              : `[bold {fill}]{value.formatNumber('#.#')}mg`,
+            legendValueText: '[{fill}]{category}',
+            legendLabelText: `[bold {fill}]{value.formatNumber('#.#')}mg`,
+            // legendValueText: objGraph.materialName[i].allergy
+            //   ? '[#FF392B]{category}'
+            //   : '[{fill}]{category}',
+            // legendLabelText: objGraph.materialName[i].allergy
+            //   ? `[bold #FF392B]{value.formatNumber('#.#')}mg`
+            //   : `[bold {fill}]{value.formatNumber('#.#')}mg`,
           })
         );
 
@@ -168,44 +170,76 @@ const Detail = () => {
 
         series
           .get('colors')
-          .set(
-            'colors',
-            objGraph.materialName[i].allergy
-              ? [
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                  am5.color(0xff392b),
-                ]
-              : [
-                  am5.color(0x091a7a),
-                  am5.color(0x102693),
-                  am5.color(0x1939b7),
-                  am5.color(0x254edb),
-                  am5.color(0x3366ff),
-                  am5.color(0x6690ff),
-                  am5.color(0x84a9ff),
-                  am5.color(0xadc8ff),
-                  am5.color(0xd6e4ff),
-                ]
-          );
+          .set('colors', [
+            objGraph.materialName[0]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x091a7a),
+            objGraph.materialName[1]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x102693),
+            objGraph.materialName[2]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x1939b7),
+            objGraph.materialName[3]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x254edb),
+            objGraph.materialName[4]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x3366ff),
+            objGraph.materialName[5]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x6690ff),
+            objGraph.materialName[6]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x84a9ff),
+            objGraph.materialName[7]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0xadc8ff),
+            objGraph.materialName[8]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0xd6e4ff),
+          ]);
+
+        // series
+        //   .get('colors')
+        //   .set(
+        //     'colors',
+        //     objGraph.materialName[i].allergy
+        //       ? [
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //           am5.color(0xff392b),
+        //         ]
+        //       : [
+        //           am5.color(0x091a7a),
+        //           am5.color(0x102693),
+        //           am5.color(0x1939b7),
+        //           am5.color(0x254edb),
+        //           am5.color(0x3366ff),
+        //           am5.color(0x6690ff),
+        //           am5.color(0x84a9ff),
+        //           am5.color(0xadc8ff),
+        //           am5.color(0xd6e4ff),
+        //         ]
+        //   );
 
         // 그래프 마우스 오버 시 툴팁
         series.slices.template.set(
@@ -376,13 +410,13 @@ const Detail = () => {
                     <span className='tooltipText'>
                       의사 또는 치과의사의 지시와 감독에 따라 사용되어야 하는
                       의약품으로, 의사의 처방전에 의해서만 구입하여 사용할 수
-                      있다.
+                      있습니다.
                     </span>
                   ) : (
                     <span className='tooltipText'>
                       처방전 없이 약국에서 구입할 수 있는 의약품으로, 포장
                       용기에 기재된 설명대로 올바르게 복용한다면 비교적 안전하게
-                      사용할 수 있다.
+                      사용할 수 있습니다.
                     </span>
                   )}
                 </div>
@@ -426,7 +460,7 @@ const Detail = () => {
                 {allergy ? (
                   <WarningAllergyTrue>
                     <span>알레르기 주의</span>
-                    <div className='allergyIcon'>
+                    <div className='allergyTrueIcon'>
                       <span className='allergyAmountIcon'>
                         내가 등록한 알레르기를 유발하는 성분이 포함되어
                         있습니다. 복용에 주의하세요!
@@ -436,6 +470,12 @@ const Detail = () => {
                 ) : (
                   <WarningAllergyFalse>
                     <span>주의성분 없음</span>
+                    <div className='allergyFalseIcon'>
+                      <span className='allergyAmountIcon'>
+                        내가 등록한 알레르기를 유발하는 성분이 포함되어 있지
+                        않습니다. 알레르기 등록은 마이페이지에서 가능해요!
+                      </span>
+                    </div>
                   </WarningAllergyFalse>
                 )}
               </GraphLabel>
@@ -826,6 +866,7 @@ const WrapContents = styled.div`
   .etcOtcCodeDesc {
     width: 20px;
     height: 20px;
+    position: relative;
     background-image: url('/assets/image/의약품목설명아이콘.png');
     background-size: cover;
     background-position: center;
@@ -841,7 +882,9 @@ const WrapContents = styled.div`
       box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
       display: none;
       position: absolute;
-      max-width: 310px;
+      top: 30px;
+      left: -30px;
+      width: 310px;
       padding: 13px;
       font-size: 15px;
       line-height: 21px;
@@ -852,6 +895,18 @@ const WrapContents = styled.div`
       z-index: 2;
       font-weight: 400;
       font-size: 14px;
+    }
+    .tooltipText::after {
+      content: '';
+      width: 0px;
+      height: 0px;
+      border-bottom: 10px solid rgba(0, 0, 0, 0.8);
+      border-top: 10px solid transparent;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      position: absolute;
+      left: 36.5px;
+      top: -20px;
     }
   }
   .compareBox {
@@ -1117,11 +1172,11 @@ const WarningAllergyTrue = styled.div`
   font-weight: 700;
   font-size: 18px;
   line-height: 20px;
-  .allergyIcon {
+  .allergyTrueIcon {
     margin-left: 6px;
     width: 20px;
     height: 20px;
-    background-image: url('/assets/image/알러지성분안내아이콘.png');
+    background-image: url('/assets/image/알러지성분안내아이콘_red.png');
     background-size: cover;
     background-position: center;
     display: inline-block;
@@ -1166,13 +1221,13 @@ const WarningAllergyTrue = styled.div`
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     position: absolute;
-    right: 44px;
+    right: 54px;
     top: -20px;
   }
 `;
 
 const WarningAllergyFalse = styled.div`
-  width: 134px;
+  width: 150px;
   height: 34px;
   background-color: #ddf3eb;
   border-radius: 8px;
@@ -1188,8 +1243,57 @@ const WarningAllergyFalse = styled.div`
   font-weight: 700;
   font-size: 18px;
   line-height: 20px;
+  .allergyFalseIcon {
+    margin-left: 6px;
+    width: 20px;
+    height: 20px;
+    background-image: url('/assets/image/알러지성분안내아이콘_green.png');
+    background-size: cover;
+    background-position: center;
+    display: inline-block;
+  }
   span {
-    font-size: 17px;
+    font-size: 16px;
+  }
+  :hover .allergyAmountIcon {
+    display: block;
+  }
+  .allergyAmountIcon {
+    border-radius: 8px;
+    /* box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2); */
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(11.5px);
+    display: none;
+    position: absolute;
+    top: 80px;
+    right: 14px;
+    text-align: center;
+    width: 256px;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 350;
+    /* color: #868686; */
+    color: #ffffff;
+    /* background-color: #ffffff; */
+    opacity: 1;
+    z-index: 2;
+    font-weight: 400;
+    font-size: 14px;
+    word-break: break-all;
+    text-align: left;
+  }
+  .allergyAmountIcon::after {
+    content: '';
+    width: 0px;
+    height: 0px;
+    border-bottom: 10px solid rgba(0, 0, 0, 0.8);
+    border-top: 10px solid transparent;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    position: absolute;
+    right: 54px;
+    top: -20px;
   }
 `;
 

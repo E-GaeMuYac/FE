@@ -131,14 +131,10 @@ const Signup = () => {
 
   // 이메일 인증번호 전송 api 호출 함수
   const postSendEmailCode = async (payload) => {
-    const header = { 'x-api-key': process.env.REACT_APP_EMAIL_X_API_KEY };
     try {
-      const data = await axios.post(
-        'https://vns95wu8w0.execute-api.ap-northeast-2.amazonaws.com/default/email-HelloWorldFunction-tNcmw2rS5dhV',
-        { email: payload.email }, //data(req.body)
-        {
-          headers: header,
-        } //config
+      const data = await api.post(
+        `/api/users/authentication/email`,
+        { email: payload.email } //data(req.body));
       );
       // console.log('인증번호 전송 성공', data);
       // console.log('인증번호', data.data.body.code);
@@ -250,14 +246,10 @@ const Signup = () => {
   };
 
   const postSendPhoneCode = async (payload) => {
-    const header = { 'x-api-key': process.env.REACT_APP_PHONE_X_API_KEY };
     try {
-      const data = await axios.post(
-        'https://7s5fem53oh.execute-api.ap-northeast-2.amazonaws.com/default/phone-HelloWorldFunction-LuB9PruLAanW',
-        { phoneNumber: payload.phoneNumber }, //data(req.body)
-        {
-          headers: header,
-        } //config
+      const data = await api.post(
+        '/api/users/authentication/phone',
+        { phoneNumber: payload.phoneNumber } //data(req.body)
       );
       // console.log('인증번호 전송 성공', data);
       setResponsePhoneCode(data.data.code);
