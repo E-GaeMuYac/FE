@@ -171,6 +171,7 @@ const SearchListWrap = styled.div`
   .listTag {
     @media screen and (max-width: 1700px) {
       font-size: 12px;
+      font-weight: 500;
       line-height: 13px;
       padding: 6px;
     }
@@ -203,6 +204,7 @@ const SearchListWrap = styled.div`
   .btnInBox {
     @media screen and (max-width: 1700px) {
       width: 55%;
+      font-size: 15px;
     }
     width: 205px;
     height: 100%;

@@ -338,7 +338,7 @@ const User = (props) => {
               </div>
             </CalenderWrap>
           </ProfileWrap>
-          <div style={{ display: 'flex', gap: '30px' }}>
+          <BoxWrap>
             <Box>
               <EventBox to='/event'>
                 <h1>EVENT</h1>
@@ -370,7 +370,7 @@ const User = (props) => {
                 <div>{serviceMsg}</div>
               </div>
             </Box>
-          </div>
+          </BoxWrap>
         </MyPageWrap>
         <Tabbar>
           <NavWrap>
@@ -428,6 +428,9 @@ const MyPageHeader = styled.div`
   align-items: center;
 
   span {
+    @media screen and (max-width: 1700px) {
+      font-size: 26px;
+    }
     font-size: 32px;
     font-weight: 700;
   }
@@ -602,6 +605,9 @@ const EmailBoxImg = styled.div`
 `;
 
 const MyPageWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    gap: 18px;
+  }
   width: 100%;
   height: 225px;
   display: flex;
@@ -611,8 +617,8 @@ const MyPageWrap = styled.div`
 
 const BackgroundUserImage = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 150px;
-    height: 150px;
+    width: 130px;
+    height: 130px;
   }
   width: 180px;
   height: 180px;
@@ -622,7 +628,7 @@ const BackgroundUserImage = styled.div`
 
 const ProfileImg = styled.div`
   @media screen and (max-width: 1700px) {
-    height: 190px;
+    height: 170px;
   }
   width: 178px;
   height: 225px;
@@ -633,9 +639,9 @@ const ProfileImg = styled.div`
 
 const UserImage = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 126px;
-    height: 126px;
-    margin: 12px 12px;
+    width: 108px;
+    height: 108px;
+    margin: 11px 11px;
   }
   margin: 15px 15px;
   width: 150px;
@@ -653,8 +659,8 @@ const UserImage = styled.div`
 
   label {
     @media screen and (max-width: 1700px) {
-      top: 100px;
-      left: 110px;
+      top: 76px;
+      left: 84px;
     }
     width: 38px;
     height: 38px;
@@ -734,8 +740,8 @@ const DefaultImgBtn = styled.button`
 
 const ProfileWrap = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 380px;
-    height: 190px;
+    width: 320px;
+    height: 170px;
     padding: 25px 28px;
   }
   background-color: #f6f7fa;
@@ -749,7 +755,7 @@ const ProfileWrap = styled.div`
 `;
 
 const NicknameBox = styled.div`
-  width: 65%;
+  width: 60%;
   .wrapNickname {
     width: 42px;
     height: 42px;
@@ -767,8 +773,8 @@ const NicknameBox = styled.div`
   }
   .editNickname {
     @media screen and (max-width: 1700px) {
-      width: 30px;
-      height: 30px;
+      width: 26px;
+      height: 26px;
     }
     width: 38px;
     height: 38px;
@@ -780,7 +786,7 @@ const NicknameBox = styled.div`
 
 const Nickname = styled.div`
   @media screen and (max-width: 1700px) {
-    font-size: 28px;
+    font-size: 18px;
     margin-right: 3px;
   }
   height: 42px;
@@ -833,8 +839,8 @@ const NicknameInput = styled.div`
 
 const ProfileMsg = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 200px;
-    font-size: 21px;
+    width: 150px;
+    font-size: 16px;
     margin-top: 26px;
   }
   width: 250px;
@@ -855,10 +861,8 @@ const CalenderWrap = styled.div`
   justify-content: flex-end;
   .calendar {
     @media screen and (max-width: 1700px) {
-      /* width: 100%;
-      height: 100%; */
-      width: 110px;
-      height: 115px;
+      width: 102px;
+      height: 110px;
     }
     background-image: url('/assets/image/캘린더.png');
     background-size: cover;
@@ -871,8 +875,8 @@ const CalenderWrap = styled.div`
     flex-direction: column;
     span {
       @media screen and (max-width: 1700px) {
-        font-size: 16px;
-        margin-top: 36px;
+        font-size: 14px;
+        margin-top: 34px;
       }
       margin-top: 40px;
       font-size: 18px;
@@ -881,7 +885,7 @@ const CalenderWrap = styled.div`
     }
     h1 {
       @media screen and (max-width: 1700px) {
-        font-size: 33px;
+        font-size: 28px;
       }
       font-size: 40px;
       font-weight: bold;
@@ -890,8 +894,8 @@ const CalenderWrap = styled.div`
 `;
 const EventBox = styled(Link)`
   @media screen and (max-width: 1700px) {
-    width: 209px;
-    height: 190px;
+    width: 235px;
+    height: 170px;
   }
   background-color: #cefbd8;
   width: 324px;
@@ -903,6 +907,10 @@ const EventBox = styled(Link)`
   cursor: pointer;
 
   h1 {
+    @media screen and (max-width: 1700px) {
+      font-size: 24px;
+      padding-top: 15px;
+    }
     text-align: center;
     padding-top: 20px;
     font-size: 28px;
@@ -910,8 +918,9 @@ const EventBox = styled(Link)`
   }
   div {
     @media screen and (max-width: 1700px) {
-      font-size: 15px;
-      top: 70px;
+      font-size: 14px;
+      top: 56px;
+      left: 32px;
     }
     position: absolute;
     font-size: 18px;
@@ -929,10 +938,10 @@ const EventBox = styled(Link)`
   }
   .image {
     @media screen and (max-width: 1700px) {
-      top: 70px;
-      left: 128px;
-      width: 62px;
-      height: 90px;
+      top: 50px;
+      left: 136px;
+      width: 70px;
+      height: 100px;
     }
     width: 87px;
     height: 127px;
@@ -945,10 +954,18 @@ const EventBox = styled(Link)`
   }
 `;
 
+const BoxWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    gap: 18px;
+  }
+  display: flex;
+  gap: 30px;
+`;
+
 const Box = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 209px;
-    height: 190px;
+    width: 235px;
+    height: 170px;
   }
   width: 324px;
   height: 225px;
@@ -956,8 +973,8 @@ const Box = styled.div`
   display: flex;
   .messageBox {
     @media screen and (max-width: 1700px) {
-      width: 209px;
-      height: 190px;
+      width: 235px;
+      height: 170px;
     }
     background-color: #d6e4ff;
     width: 324px;
@@ -968,8 +985,8 @@ const Box = styled.div`
 
     h1 {
       @media screen and (max-width: 1700px) {
-        font-size: 24px;
-        padding-top: 22px;
+        font-size: 23px;
+        padding-top: 15px;
       }
       text-align: center;
       padding-top: 20px;
@@ -979,8 +996,8 @@ const Box = styled.div`
     }
     .image {
       @media screen and (max-width: 1700px) {
-        width: 90px;
-        height: 60px;
+        width: 86px;
+        height: 54px;
       }
       width: 135px;
       height: 84px;
@@ -1026,9 +1043,9 @@ const Box = styled.div`
     top: 0;
     h2 {
       @media screen and (max-width: 1700px) {
-        font-size: 24px;
-        padding-top: 2px;
-        margin-bottom: 5px;
+        font-size: 23px;
+        margin-top: -5px;
+        margin-bottom: 2px;
       }
       font-size: 28px;
       font-weight: 700;
@@ -1036,7 +1053,7 @@ const Box = styled.div`
     }
     div {
       @media screen and (max-width: 1700px) {
-        font-size: 14px;
+        font-size: 13px;
       }
       width: 100%;
       height: 125px;
@@ -1060,11 +1077,17 @@ const LikelistHeader = styled.div`
   align-items: center;
 
   .title {
+    @media screen and (max-width: 1700px) {
+      font-size: 17px;
+    }
     font-size: 20px;
     font-weight: 700;
   }
 
   .sum {
+    @media screen and (max-width: 1700px) {
+      font-size: 17px;
+    }
     font-size: 20px;
     font-weight: 700;
     text-indent: 15px;
@@ -1073,6 +1096,10 @@ const LikelistHeader = styled.div`
 `;
 
 const LikeList = styled.ul`
+  @media screen and (max-width: 1700px) {
+    margin-bottom: 160px;
+    gap: 18px;
+  }
   min-width: 1024px;
   display: flex;
   flex-wrap: wrap;
@@ -1089,12 +1116,19 @@ const Tabbar = styled.div`
 `;
 
 const NavWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 600px;
+  }
   width: 900px;
   margin-top: 80px;
   display: flex;
 `;
 
 const LikelistNav = styled.button`
+  @media screen and (max-width: 1700px) {
+    font-size: 18px;
+    height: 40px;
+  }
   width: 100%;
   height: 60px;
   font-size: 26px;
@@ -1107,6 +1141,10 @@ const LikelistNav = styled.button`
 `;
 
 const AllergylistNav = styled.button`
+  @media screen and (max-width: 1700px) {
+    font-size: 18px;
+    height: 40px;
+  }
   width: 100%;
   height: 60px;
   font-size: 26px;
@@ -1120,6 +1158,10 @@ const AllergylistNav = styled.button`
 `;
 
 const ReviewlistNav = styled.button`
+  @media screen and (max-width: 1700px) {
+    font-size: 18px;
+    height: 40px;
+  }
   width: 100%;
   height: 60px;
   font-size: 26px;
