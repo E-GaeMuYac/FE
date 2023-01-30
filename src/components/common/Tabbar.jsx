@@ -66,6 +66,9 @@ const TabBar = ({ location, query }) => {
 };
 
 const Wrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 1024px;
+  }
   width: 100%;
   height: 40px;
   margin-bottom: 16px;

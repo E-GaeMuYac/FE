@@ -409,13 +409,13 @@ const Detail = () => {
                     <span className='tooltipText'>
                       의사 또는 치과의사의 지시와 감독에 따라 사용되어야 하는
                       의약품으로, 의사의 처방전에 의해서만 구입하여 사용할 수
-                      있다.
+                      있습니다.
                     </span>
                   ) : (
                     <span className='tooltipText'>
                       처방전 없이 약국에서 구입할 수 있는 의약품으로, 포장
                       용기에 기재된 설명대로 올바르게 복용한다면 비교적 안전하게
-                      사용할 수 있다.
+                      사용할 수 있습니다.
                     </span>
                   )}
                 </div>
@@ -637,12 +637,12 @@ const Detail = () => {
 };
 
 const TopSection = styled.div`
-  width: 100%;
+  width: 1024px;
   margin-bottom: 40px;
 `;
 
 const BottomSection = styled.div`
-  width: 100%;
+  width: 1024px;
   height: 325px;
   border-radius: 23px;
   background-color: #ebebeb;
@@ -666,7 +666,7 @@ const CardBox = styled.div`
 `;
 
 const MiddleCardBox = styled.div`
-  width: 68%;
+  width: 696px;
   height: 400px;
   border-radius: 25px;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
@@ -765,7 +765,7 @@ const TotalAmount = styled.div`
 `;
 
 const RightCardBox = styled.div`
-  width: 30%;
+  width: 307px;
   height: 400px;
   padding: 40px;
   border-radius: 25px;
@@ -866,6 +866,7 @@ const WrapContents = styled.div`
   .etcOtcCodeDesc {
     width: 20px;
     height: 20px;
+    position: relative;
     background-image: url('/assets/image/의약품목설명아이콘.png');
     background-size: cover;
     background-position: center;
@@ -881,7 +882,9 @@ const WrapContents = styled.div`
       box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
       display: none;
       position: absolute;
-      max-width: 310px;
+      top: 30px;
+      left: -30px;
+      width: 310px;
       padding: 13px;
       font-size: 15px;
       line-height: 21px;
@@ -893,7 +896,20 @@ const WrapContents = styled.div`
       font-weight: 400;
       font-size: 14px;
     }
+    .tooltipText::after {
+      content: '';
+      width: 0px;
+      height: 0px;
+      border-bottom: 10px solid rgba(0, 0, 0, 0.8);
+      border-top: 10px solid transparent;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      position: absolute;
+      left: 36.5px;
+      top: -20px;
+    }
   }
+
   .compareBox {
     width: 276px;
     height: 50px;
@@ -1043,7 +1059,7 @@ const Categorize = styled.div`
       font-size: 14px;
       min-width: 54px;
       height: 30px;
-      padding: 0 2px;
+      padding: 0 5px;
     }
     padding: 0 5px;
     min-width: 69px;
