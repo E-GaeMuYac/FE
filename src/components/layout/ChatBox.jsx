@@ -195,7 +195,7 @@ const ChatBox = () => {
     setChatType('상담');
   };
   const adminJoinRoom = async (roomData) => {
-    await socket.emit('adminJoin', userId);
+    await socket.emit('adminJoin', roomData.room);
     setAdminUser(roomData.user);
     setAdminRoom(roomData.room);
   };
