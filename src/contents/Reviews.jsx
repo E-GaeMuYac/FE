@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { IoIosWarning } from 'react-icons/io';
 import { AiFillLike, AiFillDislike } from 'react-icons/ai';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { userApi } from '../apis/apiInstance';
 
@@ -101,8 +101,9 @@ const Reviews = (props) => {
   const [moreShow, setMoreShow] = useState(0);
   const [reviewArr, setReviewArr] = useState([]);
   const [nickname, setNickname] = useState('');
+  const [userId, setUserId] = useState(0);
   const [searchLength, setSearchLength] = useState(0);
-  const [sort, setSort] = useState('');
+  const [sort, setSort] = useState('updatedAt');
   const [sortText, setSortText] = useState('최신순');
   const [pickTag, setpickTag] = useState('전체보기');
   const [openDrop, setOpenDrop] = useState(false);
@@ -138,6 +139,7 @@ const Reviews = (props) => {
     try {
       const res = await userApi.get('api/users/find');
       setNickname(res.data.user.nickname);
+      setUserId(res.data.user.userId);
     } catch (e) {
       console.log(e);
       alert('로그인 정보가 필요합니다.');
@@ -335,10 +337,18 @@ const Reviews = (props) => {
                   <div>도움 안돼요</div>
                 </DislikeBtn>
               </Recommend>
-              <ReportBtn>
-                <div />
-                신고하기
-              </ReportBtn>
+              {review.userId === userId ? (
+                <EditBtn
+                  to={`/detail/${review.medicineId}/editform/${review.reviewId}`}>
+                  <div />
+                  수정하기
+                </EditBtn>
+              ) : (
+                <ReportBtn>
+                  <div />
+                  신고하기
+                </ReportBtn>
+              )}
             </div>
           </Contents>
         ) : null
@@ -660,6 +670,26 @@ const DislikeBtn = styled.button`
   }
 `;
 
+const EditBtn = styled(Link)`
+  width: 123px;
+  height: 36px;
+  border-radius: 87px;
+  background-color: #868686;
+  color: white !important;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  div {
+    background-image: url('/assets/image/닉네임수정아이콘.png');
+    background-size: cover;
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+  }
+`;
+
 const ReportBtn = styled.div`
   width: 123px;
   height: 36px;
@@ -672,6 +702,7 @@ const ReportBtn = styled.div`
   cursor: pointer;
   div {
     background-image: url('/assets/image/warnIcon.png');
+    background-size: cover;
     width: 24px;
     height: 24px;
     margin-right: 10px;
