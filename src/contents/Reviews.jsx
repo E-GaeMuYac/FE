@@ -100,7 +100,6 @@ const Reviews = (props) => {
   const [moreShow, setMoreShow] = useState(0);
   const [reviewArr, setReviewArr] = useState([]);
   const [nickname, setNickname] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
   const [searchLength, setSearchLength] = useState(0);
   const setIsToken = props.setIsToken;
   const { id } = useParams();
@@ -135,7 +134,6 @@ const Reviews = (props) => {
     try {
       const res = await userApi.get('api/users/find');
       setNickname(res.data.user.nickname);
-      setImageUrl(res.data.user.imageUrl);
     } catch (e) {
       console.log(e);
       alert('로그인 정보가 필요합니다.');
@@ -234,7 +232,7 @@ const Reviews = (props) => {
             <ReviewInfo>
               <AccountBox>
                 <AccountBoxBg>
-                  <AccountBoxImg imageUrl={imageUrl} />
+                  <AccountBoxImg imageUrl={review.userImage} />
                 </AccountBoxBg>
                 <span>{review.nickname}</span>
               </AccountBox>
