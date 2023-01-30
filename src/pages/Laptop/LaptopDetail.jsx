@@ -451,10 +451,10 @@ const Detail = () => {
           }}>
           <MiddleCardBox>
             <div style={{ display: 'flex' }}>
-              <GraphLabel style={{ marginLeft: '70px' }}>
+              <GraphLabel style={{ marginLeft: '100px' }}>
                 유효성분 함량
               </GraphLabel>
-              <GraphLabel style={{ marginLeft: '165px' }}>
+              <GraphLabel style={{ marginLeft: '170px' }}>
                 성분 그래프
                 {allergy ? (
                   <WarningAllergyTrue>
@@ -637,11 +637,18 @@ const Detail = () => {
 };
 
 const TopSection = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin-bottom: 30px;
+  }
   width: 1024px;
   margin-bottom: 40px;
 `;
 
 const BottomSection = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 280px;
+    padding: 26px 22px;
+  }
   width: 1024px;
   height: 325px;
   border-radius: 23px;
@@ -810,6 +817,10 @@ const RightCardBox = styled.div`
     margin-top: 38px;
   }
   .ContentMaterialPercent {
+    @media screen and (max-width: 1700px) {
+      font-size: 22px;
+      line-height: 36px;
+    }
     width: 80px;
     font-size: 28px;
     line-height: 41px;
@@ -819,6 +830,9 @@ const RightCardBox = styled.div`
     justify-content: center;
   }
   .ContentMaterialNameAllergyTrue {
+    @media screen and (max-width: 1700px) {
+      font-size: 18px;
+    }
     width: 180px;
     font-size: 20px;
     white-space: normal;
@@ -833,6 +847,9 @@ const RightCardBox = styled.div`
     text-align: center;
   }
   .ContentMaterialNameAllergyFalse {
+    @media screen and (max-width: 1700px) {
+      font-size: 18px;
+    }
     width: 180px;
     font-size: 20px;
     white-space: normal;
@@ -864,6 +881,10 @@ const WrapContents = styled.div`
     right: 30px;
   }
   .etcOtcCodeDesc {
+    @media screen and (max-width: 1700px) {
+      width: 18px;
+      height: 18px;
+    }
     width: 20px;
     height: 20px;
     position: relative;
@@ -911,6 +932,11 @@ const WrapContents = styled.div`
   }
 
   .compareBox {
+    @media screen and (max-width: 1700px) {
+      width: 250px;
+      height: 46px;
+      /* font-size: 16px; */
+    }
     width: 276px;
     height: 50px;
     background-color: #cccccc;
@@ -1021,6 +1047,9 @@ const Image = styled.div`
 `;
 
 const Name = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 20px;
+  }
   min-width: 200px;
   max-width: 220px;
   margin: auto;
@@ -1031,6 +1060,10 @@ const Name = styled.div`
 `;
 
 const TopLabel = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 15px;
+    line-height: 22px;
+  }
   height: 24px;
   font-size: 16px;
   font-weight: 700;
@@ -1041,6 +1074,10 @@ const TopLabel = styled.div`
 `;
 
 const BottomLabel = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 15px;
+    line-height: 22px;
+  }
   height: 24px;
   font-size: 16px;
   font-weight: 700;
@@ -1080,6 +1117,10 @@ const Categorize = styled.div`
 `;
 
 const Picked = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 46px;
+    height: 46px;
+  }
   width: 50px;
   height: 50px;
   display: flex;
@@ -1087,9 +1128,18 @@ const Picked = styled.div`
   justify-content: center;
   margin-right: 24px;
   div {
+    @media screen and (max-width: 1700px) {
+      width: 43px;
+      height: 43px;
+    }
     width: 48px;
     height: 48px;
     .btnLikeImg {
+      @media screen and (max-width: 1700px) {
+        margin-top: 2px;
+        width: 26px;
+        height: 24px;
+      }
       width: 28.5px;
       height: 25.33px;
     }
@@ -1097,6 +1147,9 @@ const Picked = styled.div`
 `;
 
 const GraphLabel = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 22px;
+  }
   /* width: 1000px; */
   /* background-color: aliceblue; */
   /* color: #868686; */
@@ -1108,6 +1161,11 @@ const GraphLabel = styled.div`
   font-weight: 700;
   line-height: 40px;
   .mainMaterialIcon {
+    @media screen and (max-width: 1700px) {
+      width: 25px;
+      height: 25px;
+      margin-top: 4px;
+    }
     width: 30px;
     height: 30px;
     margin-left: 6px;
@@ -1157,6 +1215,9 @@ const GraphLabel = styled.div`
       top: -20px;
     }
     .mainMaterialDesc {
+      @media screen and (max-width: 1700px) {
+        font-size: 14px;
+      }
       color: #82a1ff;
       font-weight: 700;
       font-size: 15px;
@@ -1165,6 +1226,11 @@ const GraphLabel = styled.div`
 `;
 
 const WarningAllergyTrue = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 130px;
+    height: 30px;
+    font-size: 16px;
+  }
   width: 140px;
   height: 34px;
   background-color: #ffecea;
@@ -1182,6 +1248,12 @@ const WarningAllergyTrue = styled.div`
   font-size: 18px;
   line-height: 20px;
   .allergyTrueIcon {
+    @media screen and (max-width: 1700px) {
+      width: 18px;
+      height: 18px;
+      margin-top: 1px;
+      margin-left: 4px;
+    }
     margin-left: 6px;
     width: 20px;
     height: 20px;
@@ -1236,6 +1308,11 @@ const WarningAllergyTrue = styled.div`
 `;
 
 const WarningAllergyFalse = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 130px;
+    height: 30px;
+    font-size: 16px;
+  }
   width: 140px;
   height: 34px;
   background-color: #ddf3eb;
@@ -1253,6 +1330,12 @@ const WarningAllergyFalse = styled.div`
   font-size: 18px;
   line-height: 20px;
   .allergyFalseIcon {
+    @media screen and (max-width: 1700px) {
+      width: 18px;
+      height: 18px;
+      margin-top: 1px;
+      margin-left: 4px;
+    }
     margin-left: 6px;
     width: 20px;
     height: 20px;
@@ -1307,6 +1390,10 @@ const WarningAllergyFalse = styled.div`
 `;
 
 const ScrollBar = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 228px;
+    font-size: 17px;
+  }
   width: 100%;
   white-space: pre-wrap;
   font-size: 20px;

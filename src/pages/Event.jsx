@@ -9,9 +9,16 @@ const Event = () => {
   );
 };
 const Wrap = styled.div`
+  @media screen and (min-width: 2560px) {
+    height: 94.4vh;
+  }
+  @media screen and (max-width: 1700px) {
+    height: 94.4vh;
+  }
   width: 100%;
   min-width: 1024px;
-  height: 1440px;
+  height: 1200px;
+  min-height: 900px;
   max-height: 170vh;
   background-color: #3366ff;
 `;

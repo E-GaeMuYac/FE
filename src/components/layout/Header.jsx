@@ -133,7 +133,7 @@ const Wrap = styled.div`
 
 const HeaderWrapper = styled.div`
   @media screen and (max-width: 1700px) {
-    height: 55px;
+    height: 60px;
   }
   background-color: white;
   width: 100%;
