@@ -295,7 +295,7 @@ const Reviews = (props) => {
                   like={review.like}
                   onClick={() => handleLike(review.reviewId)}>
                   <AiFillLike />
-                  <div>도움 돼요</div>
+                  <div>도움 돼요 {review.likeCount}</div>
                 </LikeBtn>
                 <DislikeBtn
                   disLike={review.dislike}
