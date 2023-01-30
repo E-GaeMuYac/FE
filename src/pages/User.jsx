@@ -17,6 +17,7 @@ const User = (props) => {
   const [isTextClicked, setIsTextClicked] = useState(false);
   const [isFileClicked, setIsFileClicked] = useState(false);
   const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [loginCount, setLoginCount] = useState('');
   const [prevImg, setPrevImg] = useState('');
@@ -44,13 +45,12 @@ const User = (props) => {
       setImageUrl(res.data.user.imageUrl);
       setLoginType(res.data.user.loginType);
       setUserId(res.data.user.userId);
+      setEmail(res.data.user.email);
     } catch (e) {
       console.log(e);
       alert('로그인 정보가 필요합니다.');
       setIsToken(false);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('nickname');
+      localStorage.clear();
       navigate('/login');
     }
   };
@@ -145,8 +145,7 @@ const User = (props) => {
 
   const defaultImgHandler = async () => {
     try {
-      const res = await userApi.put('/api/users/update/image');
-      console.log(res);
+      await userApi.put('/api/users/update/image');
       window.location.reload('/mypage');
     } catch (e) {
       console.log(e);
@@ -223,7 +222,7 @@ const User = (props) => {
                 <EmailBoxBg>
                   <EmailBoxImg imageUrl={imageUrl} />
                 </EmailBoxBg>
-                <span>test@naver.com</span>
+                <span>{email}</span>
               </EmailBox>
               <div className='form-floating form-width'>
                 <input
