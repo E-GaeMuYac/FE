@@ -22,6 +22,7 @@ import LaptopCompare from './pages/Laptop/LaptopCompare';
 
 import AllergySearch from './pages/AllergySearch';
 import AddReviews from './pages/AddReviews';
+import ModifyReviews from './pages/ModifyReviews';
 
 // 컴포넌트
 import Layout from './components/layout/Layout';
@@ -152,6 +153,17 @@ function App() {
               <MiniNav />
               <Layout>
                 <AddReviews setistoken={setIsToken} />
+              </Layout>
+            </>
+          }
+        />
+        <Route
+          path='/detail/:medicineId/editform/:reviewId'
+          element={
+            <>
+              {/* <MiniNav /> */}
+              <Layout>
+                <ModifyReviews setistoken={setIsToken} />
               </Layout>
             </>
           }

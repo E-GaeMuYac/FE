@@ -4,6 +4,7 @@ import { IoIosWarning } from 'react-icons/io';
 import { AiFillLike, AiFillDislike } from 'react-icons/ai';
 import { useEffect } from 'react';
 import { userApi } from '../apis/apiInstance';
+import { Link } from 'react-router-dom';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
@@ -27,6 +28,7 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   // 페이지 넘버 변경. 스크롤 업 이벤트 생성
   const pageNumChange = (num) => {
     setNowPageNum(num);
+    window.scrollTo(0, 300);
   };
 
   //numArr의 길이에 따라 배열 쪼개기
@@ -97,9 +99,7 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
 const MyReviews = ({ userId }) => {
   const [moreShow, setMoreShow] = useState(0);
   const [myReviewArr, setMyReviewArr] = useState([]);
-  const [content, setContent] = useState('');
   const [searchLength, setSearchLength] = useState(0);
-  const [clickEdit, setClickEdit] = useState(0);
 
   //현재페이지
   const [nowPageNum, setNowPageNum] = useState(1);
@@ -121,34 +121,11 @@ const MyReviews = ({ userId }) => {
     }
   };
 
-  const modifyReview = (e) => {
-    setContent(e.review);
-    setClickEdit(e.reviewId);
-  };
-
-  const handleChangeReview = (e) => {
-    setContent(e.target.value);
-  };
-
-  const submitmodify = async (id) => {
-    try {
-      const res = await userApi.put(`/api/reviews/${id}`, {
-        review: content,
-      });
-      alert(res.data.message);
-      setClickEdit(false);
-      getMyReviews();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const deleteReview = async (id) => {
     if (window.confirm('리뷰를 삭제하시겠습니까?')) {
       try {
         const res = await userApi.delete(`/api/reviews/${id}`);
         alert(res.data.message);
-        setClickEdit(false);
         getMyReviews();
       } catch (error) {
         console.log(error);
@@ -181,7 +158,9 @@ const MyReviews = ({ userId }) => {
           <WrapContents>
             <Image imgUrl={review?.itemImage} />
             <div style={{ marginRight: '20px' }}>
-              <Name>{review?.itemName}</Name>
+              <Name to={`/detail/${review.medicineId}?tab=효능 효과`}>
+                {review?.itemName}
+              </Name>
               <Categorize>
                 {review?.productType?.map((list) => {
                   return <div key={list}>{list}</div>;
@@ -210,69 +189,48 @@ const MyReviews = ({ userId }) => {
               </BottomLabel>
             </div>
             <div className='buttonWrap'>
-              {clickEdit === review.reviewId ? (
-                <>
-                  <button
-                    className='reviewBtn modify'
-                    onClick={() => submitmodify(review.reviewId)}>
-                    수정완료
-                  </button>
-                  <button
-                    className='reviewBtn delete'
-                    onClick={() => setClickEdit(false)}>
-                    취소하기
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    className='reviewBtn modify'
-                    onClick={() => modifyReview(review)}>
-                    수정하기
-                  </button>
-                  <button
-                    className='reviewBtn delete'
-                    onClick={() => deleteReview(review.reviewId)}>
-                    삭제하기
-                  </button>
-                </>
-              )}
+              <Link
+                to={`/detail/${review.medicineId}/editform/${review.reviewId}`}
+                className='reviewBtn modify'>
+                수정하기
+              </Link>
+              <button
+                className='reviewBtn delete'
+                onClick={() => deleteReview(review.reviewId)}>
+                삭제하기
+              </button>
             </div>
           </WrapContents>
-          {clickEdit === review.reviewId ? (
-            <ModifyArea value={content} onChange={handleChangeReview} />
-          ) : (
-            <Description>
-              {review.review.length > 260 ? (
-                moreShow !== review.reviewId ? (
-                  <>
-                    <DescSum>{review.review}</DescSum>
-                    <MoreBtn
-                      className='more'
-                      onClick={() => {
-                        setMoreShow(review.reviewId);
-                      }}>
-                      리뷰 자세히 보기 ▼
-                    </MoreBtn>
-                  </>
-                ) : (
-                  <>
-                    <DescWhole>{review.review}</DescWhole>
-                    <FoldBtn
-                      onClick={() => {
-                        setMoreShow(false);
-                      }}>
-                      접기 ▲
-                    </FoldBtn>
-                  </>
-                )
+          <Description>
+            {review.review.length > 260 ? (
+              moreShow !== review.reviewId ? (
+                <>
+                  <DescSum>{review.review}</DescSum>
+                  <MoreBtn
+                    className='more'
+                    onClick={() => {
+                      setMoreShow(review.reviewId);
+                    }}>
+                    리뷰 자세히 보기 ▼
+                  </MoreBtn>
+                </>
               ) : (
-                <DescWhole style={{ marginBottom: '10px' }}>
-                  {review.review}
-                </DescWhole>
-              )}
-            </Description>
-          )}
+                <>
+                  <DescWhole>{review.review}</DescWhole>
+                  <FoldBtn
+                    onClick={() => {
+                      setMoreShow(false);
+                    }}>
+                    접기 ▲
+                  </FoldBtn>
+                </>
+              )
+            ) : (
+              <DescWhole style={{ marginBottom: '10px' }}>
+                {review.review}
+              </DescWhole>
+            )}
+          </Description>
           <Exception>
             <IoIosWarning size='26' color='#FF772B' />
             <span>면책사항:</span>
@@ -418,6 +376,10 @@ const WrapContents = styled.div`
     }
     .modify {
       background-color: #868686;
+      display: flex;
+      text-decoration: none;
+      align-items: center;
+      justify-content: center;
     }
     .delete {
       background-color: red;
@@ -436,10 +398,12 @@ const Image = styled.div`
   margin-right: 30px;
 `;
 
-const Name = styled.div`
+const Name = styled(Link)`
   min-width: 360px;
   max-width: 380px;
   margin: auto;
+  color: black !important;
+  text-decoration: none;
   font-size: 24px;
   font-weight: 700;
   line-height: 35px;
