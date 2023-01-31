@@ -61,7 +61,7 @@ const Signup = () => {
   const getVerifyEmail = async (params) => {
     try {
       const data = await api.get(
-        `/api/users/signup?email=${params.queryKey[1]}`
+        `/api/users/signup/email?email=${params.queryKey[1]}`
       );
       return data;
     } catch (error) {
