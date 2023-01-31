@@ -10,6 +10,8 @@ import MyLikeList from '../contents/MyLikeList';
 import Allergy from '../contents/Allergy';
 import MyReviews from '../contents/MyReview';
 
+import { Mobile, Laptop, PC } from '../query/useMediaQuery';
+
 const User = (props) => {
   const navigate = useNavigate();
   const [isTextClicked, setIsTextClicked] = useState(false);
@@ -351,6 +353,9 @@ const Wrapper = styled.div`
 `;
 
 const MyPageHeader = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin-bottom: 20px;
+  }
   width: 100%;
   margin-bottom: 53px;
   display: flex;
@@ -358,6 +363,9 @@ const MyPageHeader = styled.div`
   align-items: center;
 
   span {
+    @media screen and (max-width: 1700px) {
+      font-size: 26px;
+    }
     font-size: 32px;
     font-weight: 700;
   }
@@ -532,6 +540,9 @@ const EmailBoxImg = styled.div`
 `;
 
 const MyPageWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    gap: 18px;
+  }
   width: 100%;
   height: 225px;
   display: flex;
@@ -540,13 +551,20 @@ const MyPageWrap = styled.div`
 `;
 
 const BackgroundUserImage = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 130px;
+    height: 130px;
+  }
   width: 180px;
   height: 180px;
   border-radius: 150px;
-  background-color: #f6f7fa; ;
+  background-color: #f6f7fa;
 `;
 
 const ProfileImg = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 170px;
+  }
   width: 178px;
   height: 225px;
   display: flex;
@@ -555,6 +573,11 @@ const ProfileImg = styled.div`
 `;
 
 const UserImage = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 108px;
+    height: 108px;
+    margin: 11px 11px;
+  }
   margin: 15px 15px;
   width: 150px;
   height: 150px;
@@ -570,6 +593,10 @@ const UserImage = styled.div`
   position: relative;
 
   label {
+    @media screen and (max-width: 1700px) {
+      top: 76px;
+      left: 84px;
+    }
     width: 38px;
     height: 38px;
     border-radius: 50%;
@@ -585,11 +612,21 @@ const UserImage = styled.div`
 `;
 
 const ModifyBtnBox = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin-top: auto;
+    gap: 7px;
+  }
   display: flex;
   gap: 10px;
 `;
 
 const CancelBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    margin-top: auto;
+    width: 58px;
+    height: 30px;
+    font-size: 14px;
+  }
   width: 84px;
   height: 34px;
   margin-top: 16px;
@@ -602,6 +639,11 @@ const CancelBtn = styled.button`
 `;
 
 const FinishBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    margin-top: auto;
+    height: 30px;
+    font-size: 14px;
+  }
   width: 84px;
   height: 34px;
   margin-top: 16px;
@@ -614,6 +656,11 @@ const FinishBtn = styled.button`
 `;
 
 const DefaultImgBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    margin-top: auto;
+    height: 30px;
+    font-size: 14px;
+  }
   width: 150px;
   height: 34px;
   margin-top: 16px;
@@ -627,6 +674,11 @@ const DefaultImgBtn = styled.button`
 `;
 
 const ProfileWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 320px;
+    height: 170px;
+    padding: 25px 28px;
+  }
   background-color: #f6f7fa;
   width: 466px;
   height: 225px;
@@ -634,12 +686,11 @@ const ProfileWrap = styled.div`
   box-sizing: border-box;
   padding: 37px 40px;
   border-radius: 24px;
-  display: flex;
   align-content: space-around;
 `;
 
 const NicknameBox = styled.div`
-  width: 65%;
+  width: 60%;
   .wrapNickname {
     width: 42px;
     height: 42px;
@@ -656,6 +707,10 @@ const NicknameBox = styled.div`
     cursor: pointer;
   }
   .editNickname {
+    @media screen and (max-width: 1700px) {
+      width: 26px;
+      height: 26px;
+    }
     width: 38px;
     height: 38px;
     background-image: url('/assets/image/닉네임수정아이콘.png');
@@ -665,6 +720,10 @@ const NicknameBox = styled.div`
 `;
 
 const Nickname = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 18px;
+    margin-right: 3px;
+  }
   height: 42px;
   font-size: 20px;
   font-weight: 700;
@@ -714,6 +773,11 @@ const NicknameInput = styled.div`
 `;
 
 const ProfileMsg = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 150px;
+    font-size: 16px;
+    margin-top: 26px;
+  }
   width: 250px;
   height: 72px;
   margin-top: 38px;
@@ -723,12 +787,18 @@ const ProfileMsg = styled.div`
 `;
 
 const CalenderWrap = styled.div`
-  width: 35%;
-  margin-left: 10px;
+  @media screen and (max-width: 1700px) {
+    width: 40%;
+  }
+  width: 40%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   .calendar {
+    @media screen and (max-width: 1700px) {
+      width: 102px;
+      height: 110px;
+    }
     background-image: url('/assets/image/캘린더.png');
     background-size: cover;
     background-position: center;
@@ -739,18 +809,29 @@ const CalenderWrap = styled.div`
     align-items: center;
     flex-direction: column;
     span {
+      @media screen and (max-width: 1700px) {
+        font-size: 14px;
+        margin-top: 34px;
+      }
       margin-top: 40px;
       font-size: 18px;
       font-weight: 600;
       color: #868686;
     }
     h1 {
+      @media screen and (max-width: 1700px) {
+        font-size: 28px;
+      }
       font-size: 40px;
       font-weight: bold;
     }
   }
 `;
 const EventBox = styled(Link)`
+  @media screen and (max-width: 1700px) {
+    width: 235px;
+    height: 170px;
+  }
   background-color: #cefbd8;
   width: 324px;
   height: 225px;
@@ -761,24 +842,42 @@ const EventBox = styled(Link)`
   cursor: pointer;
 
   h1 {
+    @media screen and (max-width: 1700px) {
+      font-size: 24px;
+      padding-top: 15px;
+    }
     text-align: center;
     padding-top: 20px;
     font-size: 28px;
     font-weight: 700;
   }
   div {
+    @media screen and (max-width: 1700px) {
+      font-size: 14px;
+      top: 56px;
+      left: 32px;
+    }
     position: absolute;
     font-size: 18px;
     font-weight: bold;
-    top: 105px;
-    left: 25px;
-    line-height: 30px;
+    top: 110px;
+    left: 22px;
+    line-height: 24px;
   }
   span {
+    @media screen and (max-width: 1700px) {
+      font-size: 15px;
+    }
     color: #ff8365;
     font-weight: 900;
   }
   .image {
+    @media screen and (max-width: 1700px) {
+      top: 50px;
+      left: 136px;
+      width: 70px;
+      height: 100px;
+    }
     width: 87px;
     height: 127px;
     background-image: url('/assets/image/설문아이콘.png');
@@ -790,12 +889,28 @@ const EventBox = styled(Link)`
   }
 `;
 
+const BoxWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    gap: 18px;
+  }
+  display: flex;
+  gap: 30px;
+`;
+
 const Box = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 235px;
+    height: 170px;
+  }
   width: 324px;
   height: 225px;
   position: relative;
-
+  display: flex;
   .messageBox {
+    @media screen and (max-width: 1700px) {
+      width: 235px;
+      height: 170px;
+    }
     background-color: #d6e4ff;
     width: 324px;
     height: 225px;
@@ -804,6 +919,10 @@ const Box = styled.div`
     cursor: pointer;
 
     h1 {
+      @media screen and (max-width: 1700px) {
+        font-size: 23px;
+        padding-top: 15px;
+      }
       text-align: center;
       padding-top: 20px;
       font-size: 28px;
@@ -811,6 +930,10 @@ const Box = styled.div`
       margin-bottom: 20px;
     }
     .image {
+      @media screen and (max-width: 1700px) {
+        width: 86px;
+        height: 54px;
+      }
       width: 135px;
       height: 84px;
       background-image: url('/assets/image/꿀팁아이콘.png');
@@ -821,6 +944,9 @@ const Box = styled.div`
       margin: auto;
     }
     span {
+      @media screen and (max-width: 1700px) {
+        font-size: 15px;
+      }
       margin-top: 15px;
       display: flex;
       justify-content: center;
@@ -832,6 +958,10 @@ const Box = styled.div`
   }
 
   .messagePopup {
+    @media screen and (max-width: 1700px) {
+      width: 100%;
+      height: 100%;
+    }
     display: none;
     background: rgba(255, 255, 255, 0.43);
     backdrop-filter: blur(15px);
@@ -847,11 +977,19 @@ const Box = styled.div`
     position: absolute;
     top: 0;
     h2 {
+      @media screen and (max-width: 1700px) {
+        font-size: 23px;
+        margin-top: -5px;
+        margin-bottom: 2px;
+      }
       font-size: 28px;
       font-weight: 700;
       margin-bottom: 20px;
     }
     div {
+      @media screen and (max-width: 1700px) {
+        font-size: 13px;
+      }
       width: 100%;
       height: 125px;
       word-break: keep-all;

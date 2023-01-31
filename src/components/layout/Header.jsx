@@ -124,11 +124,17 @@ const Header = (props) => {
 };
 
 const Wrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 55px;
+  }
   width: 100%;
   height: 80px;
 `;
 
 const HeaderWrapper = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 60px;
+  }
   background-color: white;
   width: 100%;
   margin: 0 auto;
@@ -142,6 +148,11 @@ const HeaderWrapper = styled.div`
 `;
 
 const HeaderBox = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 55px;
+    width: 1024px;
+    min-width: 1024px;
+  }
   width: 1380px;
   height: 80px;
   position: relative;
@@ -154,6 +165,10 @@ const HeaderBox = styled.div`
 `;
 
 const LogoBox = styled(Link)`
+  @media screen and (max-width: 1700px) {
+    width: 178.2px;
+    height: 36px;
+  }
   position: absolute;
   left: 0;
   width: 198px;
@@ -172,6 +187,13 @@ const LogoBox = styled(Link)`
 `;
 
 const CategoryBox = styled.div`
+
+
+  @media screen and (max-width: 1700px) {
+    font-size: 16px;
+    gap: 40px;
+  }
+
   height: 100%;
   display: flex;
   justify-content: center;
@@ -199,6 +221,12 @@ const SignBox = styled.div`
 `;
 
 const LoginBtn = styled(Link)`
+  @media screen and (max-width: 1700px) {
+    width: 80px;
+    height: 34px;
+    font-size: 13px;
+    font-weight: 700;
+  }
   background-color: #3366ff;
   width: 100px;
   height: 39px;
@@ -215,6 +243,12 @@ const LoginBtn = styled(Link)`
 `;
 
 const SignupBtn = styled(Link)`
+  @media screen and (max-width: 1700px) {
+    width: 80px;
+    height: 34px;
+    font-size: 13px;
+    font-weight: 700;
+  }
   background-color: #ebf0ff;
   width: 100px;
   height: 39px;
@@ -230,23 +264,39 @@ const SignupBtn = styled(Link)`
   cursor: pointer;
 `;
 const BackgroundMypageBtn = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 44px;
+  }
   cursor: pointer;
   height: 50px;
   display: flex;
   align-items: center;
   .myinfoImg {
+    @media screen and (max-width: 1700px) {
+      width: 44px;
+      height: 44px;
+    }
     width: 50px;
     height: 50px;
     border-radius: 50%;
     background-color: #f6f7fa;
   }
   .mypage {
+    @media screen and (max-width: 1700px) {
+      font-size: 13px;
+    }
+    margin-left: 5px;
     color: #868686;
     font-size: 15px;
   }
 `;
 
 const MypageBtn = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 36px;
+    height: 36px;
+    margin: 4px 4px;
+  }
   background-image: ${({ props }) => `url(${props})`};
   background-size: cover;
   background-position: center;
@@ -260,6 +310,12 @@ const MypageBtn = styled.div`
 `;
 
 const LogoutBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    width: 80px;
+    height: 34px;
+    font-size: 13px;
+    font-weight: 700;
+  }
   background-color: #3366ff;
   width: 100px;
   height: 39px;

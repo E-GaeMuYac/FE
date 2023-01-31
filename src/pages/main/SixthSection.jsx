@@ -1,26 +1,44 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import { Mobile, Laptop, PC } from '../../query/useMediaQuery';
 
 const SixthSection = (props) => {
   const scrollPoint = props.scrollpoint;
   return (
     <Flex>
       <Wrapper>
-        {scrollPoint > 5797 && (
-          <>
-            <Content1>
-              <h3>찜하기</h3>
-              <div />
+        <PC>
+          {scrollPoint > 6800 && (
+            <div className='contentsBox'>
+              {/* <Content1>
               <h2>
-                찜하기를 눌러 <br />
-                내가 자주 복용하는 <br />
-                약을 담아보세요
+                땅콩의 껍질을 까서 먹듯,
+                <br />
+                약의 속도 파헤쳐 보자
               </h2>
-            </Content1>
-            <Content2 />
-            <Content3 />
-          </>
-        )}
+            </Content1> */}
+              <Content1 />
+              <Content2 />
+              <Content3>지금 체험해보기</Content3>
+            </div>
+          )}
+        </PC>
+        <Laptop>
+          {scrollPoint > 4700 && (
+            <div className='contentsBox'>
+              {/* <Content1>
+              <h2>
+                땅콩의 껍질을 까서 먹듯,
+                <br />
+                약의 속도 파헤쳐 보자
+              </h2>
+            </Content1> */}
+              <Content1 />
+              <Content2 />
+              <Content3>지금 체험해보기</Content3>
+            </div>
+          )}
+        </Laptop>
       </Wrapper>
     </Flex>
   );
@@ -34,8 +52,21 @@ const Flex = styled.div`
 
 const Wrapper = styled.div`
   width: 1920px;
-  height: 879px;
-  position: relative;
+  height: 100vh;
+  /* position: relative; */
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+  .contentsBox {
+    /* background-color: aliceblue; */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+  }
 `;
 
 const show = keyframes`
@@ -66,52 +97,69 @@ const slide = keyframes`
 `;
 
 const Content1 = styled.div`
-  width: 443px;
-  height: 443px;
-  position: absolute;
-  top: 150px;
-  left: 500px;
-  animation: ${show} 1s ease-in;
-  h3 {
-    margin: 0 0 20px 0;
-    font-size: 28px;
-    color: #00c58d;
+  @media screen and (max-width: 1700px) {
+    background-size: 70%;
+    background-position: center;
   }
-  div {
-    background-image: url('/assets/image/찜로고.png');
-    background-size: cover;
-    width: 99px;
-    height: 99px;
-    animation: ${vibration} 0.1s 1s ease-in;
-    animation-iteration-count: 5;
-  }
+  background-image: url('/assets/image/메인 섹션6-1.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 540px;
+  height: 162px;
+  /* text-align: center; */
+  /* margin-top: 300px; */
+  /* display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; */
+  animation: ${show} 2s ease-out forwards;
   h2 {
-    position: absolute;
+    /* position: absolute; */
     font-size: 50px;
   }
 `;
 
 const Content2 = styled.div`
-  background-image: url('/assets/image/약정보카드.png');
+  @media screen and (max-width: 1700px) {
+    background-size: 70%;
+    background-position: center;
+    margin: 3vh 0 1vh 0;
+  }
+  background-image: url('/assets/image/메인 섹션6.png');
   background-size: cover;
-  width: 450px;
-  height: 485px;
-  position: absolute;
+  background-repeat: no-repeat;
+  width: 288px;
+  height: 248px;
+  margin: 100px 0 30px 0;
+  /* position: absolute;
   top: 115px;
-  right: 400px;
-  animation: ${slide} 1s 1.5s ease-out forwards;
+  right: 400px; */
+  animation: ${show} 2s ease-out forwards;
   opacity: 0;
 `;
 
-const Content3 = styled.div`
-  background-image: url('/assets/image/약정보카드2.png');
-  background-size: cover;
-  width: 400px;
-  height: 485px;
-  position: absolute;
+const Content3 = styled.button`
+  @media screen and (max-width: 1700px) {
+    width: 270px;
+    height: 58px;
+    font-size: 23px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  width: 420px;
+  height: 80px;
+  background-color: #3366ff;
+  border: 0;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 28px;
+  color: #ffffff;
+  /* margin: 70px 0 100px 0; */
+  /* position: absolute;
   top: 110px;
-  right: 0px;
-  animation: ${slide} 0.5s 2s ease-out forwards;
+  right: 0px; */
+  animation: ${show} 2s ease-out forwards;
   opacity: 0;
 `;
 

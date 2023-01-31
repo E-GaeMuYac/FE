@@ -10,6 +10,11 @@ import User from './pages/User';
 import Signup from './pages/Signup';
 import SocialLogin from './pages/SocialLogin';
 import Main from './pages/main/Main';
+import Event from './pages/Event';
+
+import LaptopDetail from './pages/Laptop/LaptopDetail';
+import LaptopCompare from './pages/Laptop/LaptopCompare';
+
 import AllergySearch from './pages/AllergySearch';
 import AddReviews from './pages/AddReviews';
 import ModifyReviews from './pages/ModifyReviews';
@@ -22,11 +27,23 @@ import FindAccount from './pages/FindAccount';
 import Reviews from './contents/Reviews';
 import MiniNav from './components/common/MiniNav';
 import ChatBox from './components/layout/ChatBox';
+import { useRecoilState } from 'recoil';
+import { nowRoute } from './recoil/recoilStore';
 // import Spinner from './components/common/Spinner';
+
+import { Mobile, Laptop, PC } from './query/useMediaQuery';
 
 function App() {
   const [isToken, setIsToken] = useState('');
   const [userImage, setUserImage] = useState('');
+
+  const location = useLocation();
+
+  const [nowPage, setNowPage] = useRecoilState(nowRoute);
+
+  useEffect(() => {
+    setNowPage(location.pathname);
+  }, []);
 
   return (
     <>
@@ -54,7 +71,20 @@ function App() {
             </Layout>
           }
         />
-        <Route exact path='/compare' element={<ComparePage />} />
+        <Route
+          exact
+          path='/compare'
+          element={
+            <>
+              <PC>
+                <ComparePage />
+              </PC>
+              <Laptop>
+                <LaptopCompare />
+              </Laptop>
+            </>
+          }
+        />
         <Route
           exact
           path='/login'
@@ -75,6 +105,19 @@ function App() {
                 <CompareBox />
               </Layout>
             </>
+          }
+        />
+        <Route
+          path='/mypage'
+          element={
+            <Layout>
+              <User
+                setuserimage={setUserImage}
+                setistoken={setIsToken}
+                istoken={isToken}
+              />
+              <CompareBox />
+            </Layout>
           }
         />
         {/* <Route path='/spinner' element={<Spinner />} /> */}
@@ -115,19 +158,7 @@ function App() {
           path='/detail/:id?tab=리뷰'
           element={<Reviews setistoken={setIsToken} />}
         />
-        <Route
-          path='/mypage'
-          element={
-            <Layout>
-              <User
-                setuserimage={setUserImage}
-                setistoken={setIsToken}
-                istoken={isToken}
-              />
-              <CompareBox />
-            </Layout>
-          }
-        />
+        <Route path='/event' element={<Event />} />
       </Routes>
       <ChatBox />
     </>
