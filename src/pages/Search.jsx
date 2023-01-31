@@ -109,8 +109,8 @@ const Search = () => {
   const [isOpenSearchSort, setIsOpenSearchSort] = useState(false);
 
   //약 검색 input 용 데이터모음
-  const [inputValue, setInputValue] = useState('');
   const [searchedWord, setSearchedWord] = useRecoilState(searchWord);
+  const [inputValue, setInputValue] = useState(searchedWord);
 
   const [isActiveDeleteBtn, setIsActiveDeleteBtn] = useState(false);
 
