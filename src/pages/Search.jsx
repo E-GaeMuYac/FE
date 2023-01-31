@@ -227,7 +227,11 @@ const Search = () => {
             className='searchinput'
             value={inputValue}
             onChange={changeInputValue}
-            placeholder='약 이름을 검색해보세요!'
+            placeholder={
+              searchKinds === '약 이름'
+                ? '약 이름을 검색해보세요!'
+                : '약 분류를 검색해보세요!'
+            }
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 doingSearch();
@@ -267,7 +271,7 @@ const Search = () => {
                 검색 결과 {searchLength.toLocaleString('ko-KR')}개
               </div>
             </div>
-            <div className='searchSort'>찜한순</div>
+            <div className='searchSort'>찜이 많은 순</div>
           </div>
           <ul className='searchList'>
             {searhArr.map((list) => (
