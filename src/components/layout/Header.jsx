@@ -79,7 +79,6 @@ const Header = (props) => {
   // ---------------------------------------------------------------------
 
   const pageArr = [
-    { pageName: 'ABOUT', pathName: '/' },
     { pageName: '검색하기', pathName: '/search' },
     { pageName: '비교하기', pathName: '/compare' },
     { pageName: '이벤트', pathName: '/event' },
@@ -134,7 +133,6 @@ const Wrap = styled.div`
 const HeaderWrapper = styled.div`
   @media screen and (max-width: 1700px) {
     height: 60px;
-    min-width: 1024px;
   }
   background-color: white;
   width: 100%;
