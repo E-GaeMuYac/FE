@@ -34,6 +34,15 @@ const ProductList = ({ list }) => {
       }
     }
   };
+  const putOutToCompareBox = (id) => {
+    let deletedArr = compareData.arr.map((list) =>
+      list.medicineId === id
+        ? { medicineId: compareData.arr.indexOf(list) + 1, itemName: 'null' }
+        : list
+    );
+    setCompareData({ ...compareData, arr: deletedArr });
+  };
+
   return (
     <SearchListWrap key={list.medicineId} image={list.itemImage}>
       <li
@@ -61,7 +70,13 @@ const ProductList = ({ list }) => {
         <LikeItBtn id={list.medicineId} dibs={list.dibs} />
         {list.medicineId === compareData.arr[0].medicineId ||
         list.medicineId === compareData.arr[1].medicineId ? (
-          <div className='btnInBox'>비교함 담기</div>
+          <div
+            className='btnInBox'
+            onClick={() => {
+              putOutToCompareBox(list.medicineId);
+            }}>
+            비교함 담기 취소
+          </div>
         ) : (
           <div
             className='btnInBox Active'
@@ -179,11 +194,11 @@ const SearchListWrap = styled.div`
     line-height: 20px;
     font-weight: bold;
     box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.2);
+    cursor: pointer;
   }
   .btnInBox.Active {
     background-color: #ebf0ff;
     color: #3366ff;
     border: 1px solid #3366ff;
-    cursor: pointer;
   }
 `;
