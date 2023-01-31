@@ -149,13 +149,17 @@ const Login = (props) => {
 };
 
 const BackGround = styled.div`
-  min-height: 95vh;
+  min-height: 96vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #ebf0ff;
 `;
 const Wrapper = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 590px;
+    height: 620px;
+  }
   width: 800px;
   height: 820px;
   display: flex;
@@ -167,6 +171,10 @@ const Wrapper = styled.div`
 `;
 
 const LoginWrapper = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 350px;
+    height: 480px;
+  }
   width: 480px;
   height: 680px;
   display: flex;
@@ -175,19 +183,37 @@ const LoginWrapper = styled.div`
 `;
 
 const LogoWrapper = styled.div`
+  @media screen and (max-width: 1700px) {
+    background-size: 70%;
+  }
   background-image: url('/assets/image/pillnutsLogo.png');
+  background-position: center;
   background-size: cover;
+  background-repeat: no-repeat;
   width: 343px;
   height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
 `;
 
 const FormWrapper = styled.form`
+  @media screen and (max-width: 1700px) {
+    height: 240px;
+    margin-top: 13px;
+  }
   width: 100%;
   height: 350px;
   margin-top: 30px;
 `;
 
 const Input = styled.input`
+  @media screen and (max-width: 1700px) {
+    height: 35px;
+    font-size: 16px;
+    margin-top: 15px;
+  }
   width: 100%;
   height: 50px;
   margin-top: 30px;
@@ -196,6 +222,9 @@ const Input = styled.input`
   text-indent: 10px;
   font-size: 20px;
   ::placeholder {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+    }
     color: #919191;
     font-size: 18px;
   }
@@ -205,6 +234,11 @@ const Input = styled.input`
 `;
 
 const SubmitBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    height: 50px;
+    font-size: 20px;
+    margin-top: 22px;
+  }
   width: 100%;
   height: 70px;
   margin-top: 30px;
@@ -218,6 +252,10 @@ const SubmitBtn = styled.button`
 `;
 
 const SaveId = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin-top: 8px;
+    font-size: 15px;
+  }
   height: 35px;
   margin-top: 30px;
   display: flex;
@@ -225,6 +263,10 @@ const SaveId = styled.div`
 `;
 
 const CheckBox = styled.input`
+  @media screen and (max-width: 1700px) {
+    width: 22px;
+    height: 22px;
+  }
   appearance: none;
   width: 25px;
   height: 25px;
@@ -235,6 +277,10 @@ const CheckBox = styled.input`
   cursor: pointer;
 
   &:checked {
+    @media screen and (max-width: 1700px) {
+      width: 22px;
+      height: 22px;
+    }
     width: 25px;
     height: 25px;
     margin: 8px;
@@ -246,12 +292,18 @@ const CheckBox = styled.input`
 `;
 
 const ManageAccount = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin-top: 5px;
+  }
   display: flex;
   flex-direction: row;
   margin-top: 30px;
 `;
 
 const SignUp = styled(Link)`
+  @media screen and (max-width: 1700px) {
+    font-size: 15px;
+  }
   width: 90px;
   border-right: 2px solid #eaeaea;
   font-size: 16px;
@@ -260,6 +312,9 @@ const SignUp = styled(Link)`
 `;
 
 const FindAccount = styled(Link)`
+  @media screen and (max-width: 1700px) {
+    font-size: 15px;
+  }
   margin-left: 28px;
   font-size: 16px;
   text-decoration: none;
@@ -267,6 +322,9 @@ const FindAccount = styled(Link)`
 `;
 
 const SocialLogin = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin-top: 12px;
+  }
   width: 100%;
   height: 150px;
   margin-top: 30px;
@@ -275,6 +333,11 @@ const SocialLogin = styled.div`
 `;
 
 const KakaoBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    margin-top: 5px;
+    height: 40px;
+    font-size: 15px;
+  }
   width: 100%;
   height: 44px;
   position: relative;
@@ -286,6 +349,9 @@ const KakaoBtn = styled.button`
   cursor: pointer;
 
   div {
+    @media screen and (max-width: 1700px) {
+      left: 10px;
+    }
     background-image: url('/assets/image/카카오로고.png');
     background-size: cover;
     background-position: center;
@@ -299,6 +365,10 @@ const KakaoBtn = styled.button`
 `;
 
 const NaverBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    height: 40px;
+    font-size: 15px;
+  }
   width: 100%;
   height: 44px;
   position: relative;
@@ -310,6 +380,9 @@ const NaverBtn = styled.button`
   cursor: pointer;
 
   div {
+    @media screen and (max-width: 1700px) {
+      left: 5px;
+    }
     background-image: url('/assets/image/네이버로고.png');
     background-size: cover;
     background-position: center;
@@ -323,6 +396,10 @@ const NaverBtn = styled.button`
 `;
 
 const GoogleBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    height: 40px;
+    font-size: 15px;
+  }
   width: 100%;
   height: 44px;
   position: relative;
@@ -334,6 +411,12 @@ const GoogleBtn = styled.button`
   cursor: pointer;
 
   div {
+    @media screen and (max-width: 1700px) {
+      width: 28px;
+      height: 28px;
+      top: 6px;
+      left: 7px;
+    }
     background-image: url('/assets/image/구글로고.png');
     background-size: center;
     background-position: center;

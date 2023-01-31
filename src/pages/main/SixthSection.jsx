@@ -17,14 +17,14 @@ const SixthSection = (props) => {
                 약의 속도 파헤쳐 보자
               </h2>
             </Content1> */}
-              <Content1 />
+              {/* <Content1 /> */}
               <Content2 />
               <Content3>지금 체험해보기</Content3>
             </div>
           )}
         </PC>
         <Laptop>
-          {scrollPoint > 4700 && (
+          {scrollPoint > 4200 && (
             <div className='contentsBox'>
               {/* <Content1>
               <h2>
@@ -33,7 +33,7 @@ const SixthSection = (props) => {
                 약의 속도 파헤쳐 보자
               </h2>
             </Content1> */}
-              <Content1 />
+              {/* <Content1 /> */}
               <Content2 />
               <Content3>지금 체험해보기</Content3>
             </div>
@@ -121,16 +121,17 @@ const Content1 = styled.div`
 
 const Content2 = styled.div`
   @media screen and (max-width: 1700px) {
-    background-size: 70%;
+    background-size: 60%;
     background-position: center;
-    margin: 3vh 0 1vh 0;
+    margin: 3vh 0 0 0;
+    height: 400px;
   }
   background-image: url('/assets/image/메인 섹션6.png');
   background-size: cover;
   background-repeat: no-repeat;
-  width: 288px;
-  height: 248px;
-  margin: 100px 0 30px 0;
+  width: 430px;
+  height: 484px;
+  margin: 100px 0 80px 0;
   /* position: absolute;
   top: 115px;
   right: 400px; */
