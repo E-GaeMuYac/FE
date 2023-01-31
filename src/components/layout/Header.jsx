@@ -86,7 +86,7 @@ const Header = (props) => {
   ];
 
   const goToMypage = () => {
-    navigate('/mypage');
+    navigate('/mypage?tab=내가 찜한 의약품');
   };
 
   // ---------------------------------------------------------------------
@@ -95,7 +95,6 @@ const Header = (props) => {
     <Wrap>
       <HeaderWrapper>
         <HeaderBox>
-          {/* 이미지로 교체 예정 */}
           <LogoBox to='/' />
           <CategoryBox>
             {pageArr.map((page) => (
@@ -173,7 +172,6 @@ const LogoBox = styled(Link)`
 `;
 
 const CategoryBox = styled.div`
-  /* width: 55%; */
   height: 100%;
   display: flex;
   justify-content: center;
