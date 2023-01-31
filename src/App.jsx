@@ -1,10 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-} from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Route, Routes } from 'react-router-dom';
 
 //page
 import ComparePage from './pages/Compare';
@@ -82,19 +77,6 @@ function App() {
             </>
           }
         />
-        <Route
-          path='/mypage'
-          element={
-            <>
-              <User
-                setuserimage={setUserImage}
-                setistoken={setIsToken}
-                istoken={isToken}
-              />
-              <CompareBox />
-            </>
-          }
-        />
         {/* <Route path='/spinner' element={<Spinner />} /> */}
         <Route
           path='/allergy'
@@ -132,6 +114,19 @@ function App() {
         <Route
           path='/detail/:id?tab=리뷰'
           element={<Reviews setistoken={setIsToken} />}
+        />
+        <Route
+          path='/mypage'
+          element={
+            <Layout>
+              <User
+                setuserimage={setUserImage}
+                setistoken={setIsToken}
+                istoken={isToken}
+              />
+              <CompareBox />
+            </Layout>
+          }
         />
       </Routes>
       <ChatBox />

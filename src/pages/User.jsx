@@ -4,16 +4,14 @@ import { IoMdSettings } from 'react-icons/io';
 import { api, userApi } from '../apis/apiInstance';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useGetLikeQuery } from '../query/likeQuery';
-import ProductList from '../components/common/productList';
-import Layout from '../components/layout/Layout';
+import MypageTab from '../contents/MypageTab';
+import qs from 'qs';
+import MyLikeList from '../contents/MyLikeList';
 import Allergy from '../contents/Allergy';
 import MyReviews from '../contents/MyReview';
 
 const User = (props) => {
   const navigate = useNavigate();
-  const [likesArr, setLikesArr] = useState([]);
-  const [isClicked, setIsClicked] = useState('dibs');
   const [isTextClicked, setIsTextClicked] = useState(false);
   const [isFileClicked, setIsFileClicked] = useState(false);
   const [nickname, setNickname] = useState('');
@@ -31,9 +29,12 @@ const User = (props) => {
   const setUserImage = props.setuserimage;
   const setIsToken = props.setistoken;
 
+  const query = qs.parse(window.location.search, {
+    ignoreQueryPrefix: true,
+  }).tab;
+
   useEffect(() => {
     GetProfile();
-    LikesList();
     UserMessage();
   }, []);
 
@@ -52,15 +53,6 @@ const User = (props) => {
       setIsToken(false);
       localStorage.clear();
       navigate('/login');
-    }
-  };
-
-  const LikesList = async () => {
-    try {
-      const res = await userApi.get('api/products/dibs');
-      setLikesArr(res.data);
-    } catch (e) {
-      console.log(e);
     }
   };
 
@@ -194,18 +186,6 @@ const User = (props) => {
     }
   };
 
-  // ---------------------------------------------------------------------------
-  const [likeList, setLikeList] = useState([]);
-
-  const { data } = useGetLikeQuery();
-
-  useEffect(() => {
-    if (data) {
-      setLikeList(data.data);
-    }
-  }, [data]);
-  // ---------------------------------------------------------------------------
-
   return (
     <Wrapper>
       {isShow && (
@@ -255,148 +235,113 @@ const User = (props) => {
           </Modal>
         </ModalBackground>
       )}
-      <Layout>
-        <MyPageHeader>
-          <span>마이페이지</span>
-          <div className='deleteAccount'>
-            <button onClick={sortLoginType}>회원탈퇴</button>
-          </div>
-        </MyPageHeader>
-        <MyPageWrap>
-          <ProfileImg>
-            <BackgroundUserImage>
-              <UserImage userImg={imageUrl} prevImg={prevImg}>
-                <label htmlFor='file-input'>
-                  <IoMdSettings
-                    style={{
-                      position: 'absolute',
-                      top: 4,
-                      right: 4,
-                      color: 'white',
-                    }}
-                    size='30'
-                  />
-                </label>
-                <input
-                  id='file-input'
-                  type='file'
-                  accept='image/*'
-                  onChange={imageInput}
+      <MyPageHeader>
+        <span>마이페이지</span>
+        <div className='deleteAccount'>
+          <button onClick={sortLoginType}>회원탈퇴</button>
+        </div>
+      </MyPageHeader>
+      <MyPageWrap>
+        <ProfileImg>
+          <BackgroundUserImage>
+            <UserImage userImg={imageUrl} prevImg={prevImg}>
+              <label htmlFor='file-input'>
+                <IoMdSettings
+                  style={{
+                    position: 'absolute',
+                    top: 4,
+                    right: 4,
+                    color: 'white',
+                  }}
+                  size='30'
                 />
-              </UserImage>
-            </BackgroundUserImage>
-            {isFileClicked ? (
-              <ModifyBtnBox>
-                <CancelBtn type='button' onClick={cancelImgChange}>
-                  취소
-                </CancelBtn>
-                <FinishBtn type='button' onClick={modifyImage}>
-                  변경완료
-                </FinishBtn>
-              </ModifyBtnBox>
-            ) : (
-              <DefaultImgBtn type='button' onClick={defaultImgHandler}>
-                기본이미지로 변경
-              </DefaultImgBtn>
-            )}
-          </ProfileImg>
-          <ProfileWrap>
-            <NicknameBox>
-              {!isTextClicked ? (
-                <div style={{ display: 'flex' }}>
-                  <Nickname>{nickname ? `${nickname}님` : 'OOO님'}</Nickname>
-                  <div className='wrapNickname'>
-                    <button className='editNickname' onClick={changeNickname} />
-                  </div>
+              </label>
+              <input
+                id='file-input'
+                type='file'
+                accept='image/*'
+                onChange={imageInput}
+              />
+            </UserImage>
+          </BackgroundUserImage>
+          {isFileClicked ? (
+            <ModifyBtnBox>
+              <CancelBtn type='button' onClick={cancelImgChange}>
+                취소
+              </CancelBtn>
+              <FinishBtn type='button' onClick={modifyImage}>
+                변경완료
+              </FinishBtn>
+            </ModifyBtnBox>
+          ) : (
+            <DefaultImgBtn type='button' onClick={defaultImgHandler}>
+              기본이미지로 변경
+            </DefaultImgBtn>
+          )}
+        </ProfileImg>
+        <ProfileWrap>
+          <NicknameBox>
+            {!isTextClicked ? (
+              <div style={{ display: 'flex' }}>
+                <Nickname>{nickname ? `${nickname}님` : 'OOO님'}</Nickname>
+                <div className='wrapNickname'>
+                  <button className='editNickname' onClick={changeNickname} />
                 </div>
-              ) : (
-                <NicknameInput>
-                  <input
-                    type='text'
-                    defaultValue={nickname}
-                    onChange={nickInput}
-                    maxLength={20}
-                  />
-                  <button className='o' onClick={changesDone}>
-                    O
-                  </button>
-                  <button className='x' onClick={cancelChange}>
-                    X
-                  </button>
-                </NicknameInput>
-              )}
-              <ProfileMsg>
-                필너츠에 오신 것을
-                <br />
-                환영합니다!
-              </ProfileMsg>
-            </NicknameBox>
-            <CalenderWrap>
-              <div className='calendar'>
-                <span>출석일수</span>
-                <h1>{`${loginCount}일`}</h1>
               </div>
-            </CalenderWrap>
-          </ProfileWrap>
-          <Box>
-            <EventBox to='/event'>
-              <h1>EVENT</h1>
-              <div style={{ fontSize: '18px' }}>
-                간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
-              </div>
-              <div className='image' />
-            </EventBox>
-          </Box>
-          <Box>
-            <div className='messageBox'>
-              <h1>필너츠 꿀팁</h1>
-              <div className='image' />
-              <span>마우스를 가져다대보세요</span>
-            </div>
-            <div className='messagePopup'>
-              <h2>필너츠 꿀팁</h2>
-              <div>{serviceMsg}</div>
-            </div>
-          </Box>
-        </MyPageWrap>
-        <Tabbar>
-          <NavWrap>
-            <LikelistNav
-              isClicked={isClicked}
-              onClick={() => setIsClicked('dibs')}>
-              내가 찜한 의약품
-            </LikelistNav>
-            <AllergylistNav
-              isClicked={isClicked}
-              onClick={() => setIsClicked('allergy')}>
-              나의 알레르기
-            </AllergylistNav>
-            <ReviewlistNav
-              isClicked={isClicked}
-              onClick={() => setIsClicked('review')}>
-              내가 쓴 리뷰
-            </ReviewlistNav>
-          </NavWrap>
-        </Tabbar>
-        {isClicked === 'dibs' && (
-          <>
-            <LikelistHeader>
-              <span className='title'>'나의 찜'</span>
-              <span className='sum'>총 {likeList.length}개</span>
-            </LikelistHeader>
-            <LikeList>
-              {likeList.map((list) => (
-                <ProductList
-                  key={list.medicineId}
-                  list={{ ...list, dibs: true }}
+            ) : (
+              <NicknameInput>
+                <input
+                  type='text'
+                  defaultValue={nickname}
+                  onChange={nickInput}
+                  maxLength={20}
                 />
-              ))}
-            </LikeList>
-          </>
-        )}
-        {isClicked === 'allergy' && <Allergy />}
-        {isClicked === 'review' && <MyReviews userId={userId} />}
-      </Layout>
+                <button className='o' onClick={changesDone}>
+                  O
+                </button>
+                <button className='x' onClick={cancelChange}>
+                  X
+                </button>
+              </NicknameInput>
+            )}
+            <ProfileMsg>
+              필너츠에 오신 것을
+              <br />
+              환영합니다!
+            </ProfileMsg>
+          </NicknameBox>
+          <CalenderWrap>
+            <div className='calendar'>
+              <span>출석일수</span>
+              <h1>{`${loginCount}일`}</h1>
+            </div>
+          </CalenderWrap>
+        </ProfileWrap>
+        <Box>
+          <EventBox to='/event'>
+            <h1>EVENT</h1>
+            <div style={{ fontSize: '18px' }}>
+              간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
+            </div>
+            <div className='image' />
+          </EventBox>
+        </Box>
+        <Box>
+          <div className='messageBox'>
+            <h1>필너츠 꿀팁</h1>
+            <div className='image' />
+            <span>마우스를 가져다대보세요</span>
+          </div>
+          <div className='messagePopup'>
+            <h2>필너츠 꿀팁</h2>
+            <div>{serviceMsg}</div>
+          </div>
+        </Box>
+      </MyPageWrap>
+      <MypageTab query={query} />
+      {query === '내가 찜한 의약품' && <MyLikeList />}
+      {query === '나의 알레르기' && <Allergy />}
+      {query === '내가 쓴 리뷰' && <MyReviews />}
     </Wrapper>
   );
 };
@@ -920,83 +865,6 @@ const Box = styled.div`
     display: block;
     pointer-events: none;
   }
-`;
-
-const LikelistHeader = styled.div`
-  width: 100%;
-  height: 100px;
-  display: flex;
-  align-items: center;
-
-  .title {
-    font-size: 20px;
-    font-weight: 700;
-  }
-
-  .sum {
-    font-size: 20px;
-    font-weight: 700;
-    text-indent: 15px;
-    color: #868686;
-  }
-`;
-
-const LikeList = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  margin-bottom: 218px;
-`;
-
-const Tabbar = styled.div`
-  width: 100%;
-  border-bottom: 3px solid #e7e7e7;
-`;
-
-const NavWrap = styled.div`
-  width: 900px;
-  margin-top: 80px;
-  display: flex;
-`;
-
-const LikelistNav = styled.button`
-  width: 100%;
-  height: 60px;
-  font-size: 26px;
-  font-weight: bold;
-  border: none;
-  background-color: white;
-  border-bottom: ${({ isClicked }) =>
-    isClicked === 'dibs' ? '4px solid #3366FF' : 'none'};
-  color: ${({ isClicked }) => (isClicked === 'dibs' ? '#3366FF' : '#868686')};
-`;
-
-const AllergylistNav = styled.button`
-  width: 100%;
-  height: 60px;
-  font-size: 26px;
-  font-weight: bold;
-  border: none;
-  background-color: white;
-  border-bottom: ${({ isClicked }) =>
-    isClicked === 'allergy' ? '4px solid #3366FF' : 'none'};
-  color: ${({ isClicked }) =>
-    isClicked === 'allergy' ? '#3366FF' : '#868686'};
-`;
-
-const ReviewlistNav = styled.button`
-  width: 100%;
-  height: 60px;
-  font-size: 26px;
-  font-weight: bold;
-  border: none;
-  background-color: white;
-  border-bottom: ${({ isClicked }) =>
-    isClicked === 'review' ? '4px solid #3366FF' : 'none'};
-  color: ${({ isClicked }) => (isClicked === 'review' ? '#3366FF' : '#868686')};
 `;
 
 export default User;
