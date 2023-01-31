@@ -96,6 +96,11 @@ export default ProductList;
 const SearchListWrap = styled.div`
   position: relative;
   li {
+    @media screen and (max-width: 1700px) {
+      width: 240px;
+      height: 277px;
+      padding: 24px 24px;
+    }
     padding: 30px 34px;
     width: 324px;
     height: 360px;
@@ -107,6 +112,10 @@ const SearchListWrap = styled.div`
     box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.15);
   }
   .listImg {
+    @media screen and (max-width: 1700px) {
+      height: 40%;
+      margin-bottom: 10px;
+    }
     width: 100%;
     height: 110px;
     background-image: ${({ image }) =>
@@ -118,6 +127,9 @@ const SearchListWrap = styled.div`
     background-repeat: no-repeat;
   }
   .listSubTextWrap {
+    @media screen and (max-width: 1700px) {
+      margin-bottom: 8px;
+    }
     display: flex;
     align-items: center;
     justify-content: center;
@@ -132,6 +144,10 @@ const SearchListWrap = styled.div`
     margin: 0 8px;
   }
   .listSubText {
+    @media screen and (max-width: 1700px) {
+      font-size: 13px;
+      line-height: 13px;
+    }
     width: 126px;
     font-size: 15px;
     line-height: 22px;
@@ -141,6 +157,11 @@ const SearchListWrap = styled.div`
     text-overflow: ellipsis;
   }
   .listName {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+      line-height: 24px;
+      margin-bottom: 6px;
+    }
     font-size: 20px;
     line-height: 29px;
     font-weight: bold;
@@ -152,6 +173,9 @@ const SearchListWrap = styled.div`
     text-overflow: ellipsis;
   }
   .listTagWrap {
+    @media screen and (max-width: 1700px) {
+      margin-bottom: 25px;
+    }
     width: 256px;
     display: flex;
     align-items: center;
@@ -160,6 +184,12 @@ const SearchListWrap = styled.div`
     margin-bottom: 56px;
   }
   .listTag {
+    @media screen and (max-width: 1700px) {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 13px;
+      padding: 6px;
+    }
     max-width: 256px;
     white-space: nowrap;
     overflow: hidden;
@@ -173,15 +203,24 @@ const SearchListWrap = styled.div`
     line-height: 15px;
   }
   .btnWrap {
+    @media screen and (max-width: 1700px) {
+      height: 34px;
+      width: 100%;
+      left: 30px;
+    }
     position: absolute;
     left: 34px;
-    bottom: 30px;
+    bottom: 24px;
     display: flex;
     align-items: center;
     gap: 14px;
     height: 38px;
   }
   .btnInBox {
+    @media screen and (max-width: 1700px) {
+      width: 55%;
+      font-size: 15px;
+    }
     width: 205px;
     height: 100%;
     background-color: #cccccc;

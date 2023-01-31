@@ -4,18 +4,20 @@ import { IoMdSettings } from 'react-icons/io';
 import { api, userApi } from '../apis/apiInstance';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useGetLikeQuery } from '../query/likeQuery';
-import ProductList from '../components/common/productList';
-import Layout from '../components/layout/Layout';
+import MypageTab from '../contents/MypageTab';
+import qs from 'qs';
+import MyLikeList from '../contents/MyLikeList';
 import Allergy from '../contents/Allergy';
+import MyReviews from '../contents/MyReview';
+
+import { Mobile, Laptop, PC } from '../query/useMediaQuery';
 
 const User = (props) => {
   const navigate = useNavigate();
-  const [likesArr, setLikesArr] = useState([]);
-  const [isClicked, setIsClicked] = useState('dibs');
   const [isTextClicked, setIsTextClicked] = useState(false);
   const [isFileClicked, setIsFileClicked] = useState(false);
   const [nickname, setNickname] = useState('');
+  const [email, setEmail] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [loginCount, setLoginCount] = useState('');
   const [prevImg, setPrevImg] = useState('');
@@ -25,12 +27,16 @@ const User = (props) => {
   const [delPassword, setDelPassword] = useState('');
   const [isShow, setIsShow] = useState(false);
   const [loginType, setLoginType] = useState('');
+  const [userId, setUserId] = useState('');
   const setUserImage = props.setuserimage;
   const setIsToken = props.setistoken;
 
+  const query = qs.parse(window.location.search, {
+    ignoreQueryPrefix: true,
+  }).tab;
+
   useEffect(() => {
     GetProfile();
-    LikesList();
     UserMessage();
   }, []);
 
@@ -41,23 +47,14 @@ const User = (props) => {
       setLoginCount(res.data.user.loginCount);
       setImageUrl(res.data.user.imageUrl);
       setLoginType(res.data.user.loginType);
+      setUserId(res.data.user.userId);
+      setEmail(res.data.user.email);
     } catch (e) {
       console.log(e);
       alert('로그인 정보가 필요합니다.');
       setIsToken(false);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('nickname');
+      localStorage.clear();
       navigate('/login');
-    }
-  };
-
-  const LikesList = async () => {
-    try {
-      const res = await userApi.get('api/products/dibs');
-      setLikesArr(res.data);
-    } catch (e) {
-      console.log(e);
     }
   };
 
@@ -142,8 +139,7 @@ const User = (props) => {
 
   const defaultImgHandler = async () => {
     try {
-      const res = await userApi.put('/api/users/update/image');
-      console.log(res);
+      await userApi.put('/api/users/update/image');
       window.location.reload('/mypage');
     } catch (e) {
       console.log(e);
@@ -192,18 +188,6 @@ const User = (props) => {
     }
   };
 
-  // ---------------------------------------------------------------------------
-  const [likeList, setLikeList] = useState([]);
-
-  const { data } = useGetLikeQuery();
-
-  useEffect(() => {
-    if (data) {
-      setLikeList(data.data);
-    }
-  }, [data]);
-  // ---------------------------------------------------------------------------
-
   return (
     <Wrapper>
       {isShow && (
@@ -220,7 +204,7 @@ const User = (props) => {
                 <EmailBoxBg>
                   <EmailBoxImg imageUrl={imageUrl} />
                 </EmailBoxBg>
-                <span>test@naver.com</span>
+                <span>{email}</span>
               </EmailBox>
               <div className='form-floating form-width'>
                 <input
@@ -253,95 +237,106 @@ const User = (props) => {
           </Modal>
         </ModalBackground>
       )}
-      <Layout>
-        <MyPageHeader>
-          <span>마이페이지</span>
-          <div className='deleteAccount'>
-            <button onClick={sortLoginType}>회원탈퇴</button>
-          </div>
-        </MyPageHeader>
-        <MyPageWrap>
-          <ProfileImg>
-            <BackgroundUserImage>
-              <UserImage userImg={imageUrl} prevImg={prevImg}>
-                <label htmlFor='file-input'>
-                  <IoMdSettings
-                    style={{
-                      position: 'absolute',
-                      top: 4,
-                      right: 4,
-                      color: 'white',
-                    }}
-                    size='30'
-                  />
-                </label>
-                <input
-                  id='file-input'
-                  type='file'
-                  accept='image/*'
-                  onChange={imageInput}
+      <MyPageHeader>
+        <span>마이페이지</span>
+        <div className='deleteAccount'>
+          <button onClick={sortLoginType}>회원탈퇴</button>
+        </div>
+      </MyPageHeader>
+      <MyPageWrap>
+        <ProfileImg>
+          <BackgroundUserImage>
+            <UserImage userImg={imageUrl} prevImg={prevImg}>
+              <label htmlFor='file-input'>
+                <IoMdSettings
+                  style={{
+                    position: 'absolute',
+                    top: 4,
+                    right: 4,
+                    color: 'white',
+                  }}
+                  size='30'
                 />
-              </UserImage>
-            </BackgroundUserImage>
-            {isFileClicked ? (
-              <ModifyBtnBox>
-                <CancelBtn type='button' onClick={cancelImgChange}>
-                  취소
-                </CancelBtn>
-                <FinishBtn type='button' onClick={modifyImage}>
-                  변경완료
-                </FinishBtn>
-              </ModifyBtnBox>
-            ) : (
-              <DefaultImgBtn type='button' onClick={defaultImgHandler}>
-                기본이미지로 변경
-              </DefaultImgBtn>
-            )}
-          </ProfileImg>
-          <ProfileWrap>
-            <NicknameBox>
-              {!isTextClicked ? (
-                <div style={{ display: 'flex' }}>
-                  <Nickname>{nickname ? `${nickname}님` : 'OOO님'}</Nickname>
-                  <div className='wrapNickname'>
-                    <button className='editNickname' onClick={changeNickname} />
-                  </div>
+              </label>
+              <input
+                id='file-input'
+                type='file'
+                accept='image/*'
+                onChange={imageInput}
+              />
+            </UserImage>
+          </BackgroundUserImage>
+          {isFileClicked ? (
+            <ModifyBtnBox>
+              <CancelBtn type='button' onClick={cancelImgChange}>
+                취소
+              </CancelBtn>
+              <FinishBtn type='button' onClick={modifyImage}>
+                변경완료
+              </FinishBtn>
+            </ModifyBtnBox>
+          ) : (
+            <DefaultImgBtn type='button' onClick={defaultImgHandler}>
+              기본이미지로 변경
+            </DefaultImgBtn>
+          )}
+        </ProfileImg>
+        <ProfileWrap>
+          <NicknameBox>
+            {!isTextClicked ? (
+              <div style={{ display: 'flex' }}>
+                <Nickname>{nickname ? `${nickname}님` : 'OOO님'}</Nickname>
+                <div className='wrapNickname'>
+                  <button className='editNickname' onClick={changeNickname} />
                 </div>
-              ) : (
-                <NicknameInput>
-                  <input
-                    type='text'
-                    defaultValue={nickname}
-                    onChange={nickInput}
-                    maxLength={20}
-                  />
-                  <button className='o' onClick={changesDone}>
-                    O
-                  </button>
-                  <button className='x' onClick={cancelChange}>
-                    X
-                  </button>
-                </NicknameInput>
-              )}
-              <ProfileMsg>
-                필너츠에 오신 것을
-                <br />
-                환영합니다!
-              </ProfileMsg>
-            </NicknameBox>
-            <CalenderWrap>
-              <div className='calendar'>
-                <span>출석일수</span>
-                <h1>{`${loginCount}일`}</h1>
               </div>
-            </CalenderWrap>
-          </ProfileWrap>
+            ) : (
+              <NicknameInput>
+                <input
+                  type='text'
+                  defaultValue={nickname}
+                  onChange={nickInput}
+                  maxLength={20}
+                />
+                <button className='o' onClick={changesDone}>
+                  O
+                </button>
+                <button className='x' onClick={cancelChange}>
+                  X
+                </button>
+              </NicknameInput>
+            )}
+            <ProfileMsg>
+              필너츠에 오신 것을
+              <br />
+              환영합니다!
+            </ProfileMsg>
+          </NicknameBox>
+          <CalenderWrap>
+            <div className='calendar'>
+              <span>출석일수</span>
+              <h1>{`${loginCount}일`}</h1>
+            </div>
+          </CalenderWrap>
+        </ProfileWrap>
+        <BoxWrap>
           <Box>
             <EventBox to='/event'>
               <h1>EVENT</h1>
-              <div style={{ fontSize: '18px' }}>
-                간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
-              </div>
+              <PC>
+                <div>
+                  간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
+                </div>
+              </PC>
+              <Laptop>
+                <div>
+                  간단한
+                  <br />
+                  설문조사하고
+                  <br /> <span>기프티콘</span>
+                  <br /> 받아 가세요!
+                </div>
+              </Laptop>
               <div className='image' />
             </EventBox>
           </Box>
@@ -349,51 +344,19 @@ const User = (props) => {
             <div className='messageBox'>
               <h1>필너츠 꿀팁</h1>
               <div className='image' />
-              <span>마우스를 가져다대보세요</span>
+              <span>마우스를 가져다 대보세요</span>
             </div>
             <div className='messagePopup'>
               <h2>필너츠 꿀팁</h2>
               <div>{serviceMsg}</div>
             </div>
           </Box>
-        </MyPageWrap>
-        <Tabbar>
-          <NavWrap>
-            <LikelistNav
-              isClicked={isClicked}
-              onClick={() => setIsClicked('dibs')}>
-              내가 찜한 의약품
-            </LikelistNav>
-            <AllergylistNav
-              isClicked={isClicked}
-              onClick={() => setIsClicked('allergy')}>
-              나의 알레르기
-            </AllergylistNav>
-            <ReviewlistNav
-              isClicked={isClicked}
-              onClick={() => setIsClicked('review')}>
-              내가 쓴 리뷰
-            </ReviewlistNav>
-          </NavWrap>
-        </Tabbar>
-        {isClicked === 'dibs' && (
-          <>
-            <LikelistHeader>
-              <span className='title'>'나의 찜'</span>
-              <span className='sum'>총 {likeList.length}개</span>
-            </LikelistHeader>
-            <LikeList>
-              {likeList.map((list) => (
-                <ProductList
-                  key={list.medicineId}
-                  list={{ ...list, dibs: true }}
-                />
-              ))}
-            </LikeList>
-          </>
-        )}
-        {isClicked === 'allergy' && <Allergy />}
-      </Layout>
+        </BoxWrap>
+      </MyPageWrap>
+      <MypageTab query={query} />
+      {query === '내가 찜한 의약품' && <MyLikeList />}
+      {query === '나의 알레르기' && <Allergy />}
+      {query === '내가 쓴 리뷰' && <MyReviews />}
     </Wrapper>
   );
 };
@@ -403,6 +366,9 @@ const Wrapper = styled.div`
 `;
 
 const MyPageHeader = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin-bottom: 20px;
+  }
   width: 100%;
   margin-bottom: 53px;
   display: flex;
@@ -410,10 +376,16 @@ const MyPageHeader = styled.div`
   align-items: center;
 
   span {
+    @media screen and (max-width: 1700px) {
+      font-size: 26px;
+    }
     font-size: 32px;
     font-weight: 700;
   }
   button {
+    @media screen and (max-width: 1700px) {
+      font-size: 14px;
+    }
     width: 100px;
     height: 30px;
     border: none;
@@ -471,6 +443,11 @@ const ModalBackground = styled.div`
 `;
 
 const Modal = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 500px;
+    height: 400px;
+    /* background-color: aliceblue; */
+  }
   background-color: #ffff;
   border-radius: 40px;
   display: flex;
@@ -483,12 +460,24 @@ const Modal = styled.div`
 `;
 
 const Content = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 80%;
+    height: 80%;
+    /* background-color: #bce253; */
+  }
   width: 499px;
   height: 483px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  .form-floating {
+    margin-top: -20px;
+  }
   .form-control {
+    @media screen and (max-width: 1700px) {
+      width: 100%;
+      margin-bottom: 0px;
+    }
     width: 480px;
     margin-bottom: 70px;
     display: flex;
@@ -515,6 +504,10 @@ const ModalBtnWrap = styled.div`
   justify-content: center;
   gap: 10px;
   .cancel {
+    @media screen and (max-width: 1700px) {
+      width: 180px;
+      height: 40px;
+    }
     width: 228px;
     height: 44px;
     border-radius: 50px;
@@ -522,6 +515,10 @@ const ModalBtnWrap = styled.div`
     background-color: #e7e7e7;
   }
   .proceed {
+    @media screen and (max-width: 1700px) {
+      width: 180px;
+      height: 40px;
+    }
     width: 228px;
     height: 44px;
     border-radius: 50px;
@@ -532,6 +529,9 @@ const ModalBtnWrap = styled.div`
 `;
 
 const SignupInfo = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin-top: 0px;
+  }
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -539,29 +539,48 @@ const SignupInfo = styled.div`
 `;
 
 const PrimarySpan = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 27px;
+    margin-bottom: 5px;
+  }
   font-size: 32px;
   font-weight: 700;
   color: #242424;
 `;
 
 const SecondarySpan = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 14px;
+  }
   font-size: 15px;
   color: #868686;
 `;
 
 const EmailBox = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 60px;
+    /* background-color: aqua; */
+    margin-top: 00px;
+  }
   width: 100%;
   height: 64px;
   display: flex;
   justify-content: center;
   align-items: center;
   span {
+    @media screen and (max-width: 1700px) {
+      font-size: 20px;
+    }
     font-size: 30px;
     font-weight: bold;
   }
 `;
 
 const EmailBoxBg = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 44px;
+    height: 44px;
+  }
   width: 56px;
   height: 56px;
   margin: 10px;
@@ -573,6 +592,10 @@ const EmailBoxBg = styled.div`
 `;
 
 const EmailBoxImg = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 36px;
+    height: 36px;
+  }
   background-image: ${({ imageUrl }) => `url(${imageUrl})`};
   background-size: cover;
   background-position: center;
@@ -584,6 +607,9 @@ const EmailBoxImg = styled.div`
 `;
 
 const MyPageWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    gap: 18px;
+  }
   width: 100%;
   height: 225px;
   display: flex;
@@ -592,13 +618,20 @@ const MyPageWrap = styled.div`
 `;
 
 const BackgroundUserImage = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 130px;
+    height: 130px;
+  }
   width: 180px;
   height: 180px;
   border-radius: 150px;
-  background-color: #f6f7fa; ;
+  background-color: #f6f7fa;
 `;
 
 const ProfileImg = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 170px;
+  }
   width: 178px;
   height: 225px;
   display: flex;
@@ -607,6 +640,11 @@ const ProfileImg = styled.div`
 `;
 
 const UserImage = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 108px;
+    height: 108px;
+    margin: 11px 11px;
+  }
   margin: 15px 15px;
   width: 150px;
   height: 150px;
@@ -622,6 +660,10 @@ const UserImage = styled.div`
   position: relative;
 
   label {
+    @media screen and (max-width: 1700px) {
+      top: 76px;
+      left: 84px;
+    }
     width: 38px;
     height: 38px;
     border-radius: 50%;
@@ -637,11 +679,21 @@ const UserImage = styled.div`
 `;
 
 const ModifyBtnBox = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin-top: auto;
+    gap: 7px;
+  }
   display: flex;
   gap: 10px;
 `;
 
 const CancelBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    margin-top: auto;
+    width: 58px;
+    height: 30px;
+    font-size: 14px;
+  }
   width: 84px;
   height: 34px;
   margin-top: 16px;
@@ -654,6 +706,11 @@ const CancelBtn = styled.button`
 `;
 
 const FinishBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    margin-top: auto;
+    height: 30px;
+    font-size: 14px;
+  }
   width: 84px;
   height: 34px;
   margin-top: 16px;
@@ -666,6 +723,11 @@ const FinishBtn = styled.button`
 `;
 
 const DefaultImgBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    margin-top: auto;
+    height: 30px;
+    font-size: 14px;
+  }
   width: 150px;
   height: 34px;
   margin-top: 16px;
@@ -679,6 +741,11 @@ const DefaultImgBtn = styled.button`
 `;
 
 const ProfileWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 320px;
+    height: 170px;
+    padding: 25px 28px;
+  }
   background-color: #f6f7fa;
   width: 466px;
   height: 225px;
@@ -686,12 +753,11 @@ const ProfileWrap = styled.div`
   box-sizing: border-box;
   padding: 37px 40px;
   border-radius: 24px;
-  display: flex;
   align-content: space-around;
 `;
 
 const NicknameBox = styled.div`
-  width: 65%;
+  width: 60%;
   .wrapNickname {
     width: 42px;
     height: 42px;
@@ -708,6 +774,10 @@ const NicknameBox = styled.div`
     cursor: pointer;
   }
   .editNickname {
+    @media screen and (max-width: 1700px) {
+      width: 26px;
+      height: 26px;
+    }
     width: 38px;
     height: 38px;
     background-image: url('/assets/image/닉네임수정아이콘.png');
@@ -717,6 +787,10 @@ const NicknameBox = styled.div`
 `;
 
 const Nickname = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 18px;
+    margin-right: 3px;
+  }
   height: 42px;
   font-size: 20px;
   font-weight: 700;
@@ -766,6 +840,11 @@ const NicknameInput = styled.div`
 `;
 
 const ProfileMsg = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 150px;
+    font-size: 16px;
+    margin-top: 26px;
+  }
   width: 250px;
   height: 72px;
   margin-top: 38px;
@@ -775,12 +854,18 @@ const ProfileMsg = styled.div`
 `;
 
 const CalenderWrap = styled.div`
-  width: 35%;
-  margin-left: 10px;
+  @media screen and (max-width: 1700px) {
+    width: 40%;
+  }
+  width: 40%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   .calendar {
+    @media screen and (max-width: 1700px) {
+      width: 102px;
+      height: 110px;
+    }
     background-image: url('/assets/image/캘린더.png');
     background-size: cover;
     background-position: center;
@@ -791,18 +876,29 @@ const CalenderWrap = styled.div`
     align-items: center;
     flex-direction: column;
     span {
+      @media screen and (max-width: 1700px) {
+        font-size: 14px;
+        margin-top: 34px;
+      }
       margin-top: 40px;
       font-size: 18px;
       font-weight: 600;
       color: #868686;
     }
     h1 {
+      @media screen and (max-width: 1700px) {
+        font-size: 28px;
+      }
       font-size: 40px;
       font-weight: bold;
     }
   }
 `;
 const EventBox = styled(Link)`
+  @media screen and (max-width: 1700px) {
+    width: 235px;
+    height: 170px;
+  }
   background-color: #cefbd8;
   width: 324px;
   height: 225px;
@@ -813,24 +909,42 @@ const EventBox = styled(Link)`
   cursor: pointer;
 
   h1 {
+    @media screen and (max-width: 1700px) {
+      font-size: 24px;
+      padding-top: 15px;
+    }
     text-align: center;
     padding-top: 20px;
     font-size: 28px;
     font-weight: 700;
   }
   div {
+    @media screen and (max-width: 1700px) {
+      font-size: 14px;
+      top: 56px;
+      left: 32px;
+    }
     position: absolute;
     font-size: 18px;
     font-weight: bold;
-    top: 105px;
-    left: 25px;
-    line-height: 30px;
+    top: 110px;
+    left: 22px;
+    line-height: 24px;
   }
   span {
+    @media screen and (max-width: 1700px) {
+      font-size: 15px;
+    }
     color: #ff8365;
     font-weight: 900;
   }
   .image {
+    @media screen and (max-width: 1700px) {
+      top: 50px;
+      left: 136px;
+      width: 70px;
+      height: 100px;
+    }
     width: 87px;
     height: 127px;
     background-image: url('/assets/image/설문아이콘.png');
@@ -842,12 +956,28 @@ const EventBox = styled(Link)`
   }
 `;
 
+const BoxWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    gap: 18px;
+  }
+  display: flex;
+  gap: 30px;
+`;
+
 const Box = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 235px;
+    height: 170px;
+  }
   width: 324px;
   height: 225px;
   position: relative;
-
+  display: flex;
   .messageBox {
+    @media screen and (max-width: 1700px) {
+      width: 235px;
+      height: 170px;
+    }
     background-color: #d6e4ff;
     width: 324px;
     height: 225px;
@@ -856,6 +986,10 @@ const Box = styled.div`
     cursor: pointer;
 
     h1 {
+      @media screen and (max-width: 1700px) {
+        font-size: 23px;
+        padding-top: 15px;
+      }
       text-align: center;
       padding-top: 20px;
       font-size: 28px;
@@ -863,6 +997,10 @@ const Box = styled.div`
       margin-bottom: 20px;
     }
     .image {
+      @media screen and (max-width: 1700px) {
+        width: 86px;
+        height: 54px;
+      }
       width: 135px;
       height: 84px;
       background-image: url('/assets/image/꿀팁아이콘.png');
@@ -873,6 +1011,9 @@ const Box = styled.div`
       margin: auto;
     }
     span {
+      @media screen and (max-width: 1700px) {
+        font-size: 15px;
+      }
       margin-top: 15px;
       display: flex;
       justify-content: center;
@@ -884,6 +1025,10 @@ const Box = styled.div`
   }
 
   .messagePopup {
+    @media screen and (max-width: 1700px) {
+      width: 100%;
+      height: 100%;
+    }
     display: none;
     background: rgba(255, 255, 255, 0.43);
     backdrop-filter: blur(15px);
@@ -899,11 +1044,19 @@ const Box = styled.div`
     position: absolute;
     top: 0;
     h2 {
+      @media screen and (max-width: 1700px) {
+        font-size: 23px;
+        margin-top: -5px;
+        margin-bottom: 2px;
+      }
       font-size: 28px;
       font-weight: 700;
       margin-bottom: 20px;
     }
     div {
+      @media screen and (max-width: 1700px) {
+        font-size: 13px;
+      }
       width: 100%;
       height: 125px;
       word-break: keep-all;
@@ -917,83 +1070,6 @@ const Box = styled.div`
     display: block;
     pointer-events: none;
   }
-`;
-
-const LikelistHeader = styled.div`
-  width: 100%;
-  height: 100px;
-  display: flex;
-  align-items: center;
-
-  .title {
-    font-size: 20px;
-    font-weight: 700;
-  }
-
-  .sum {
-    font-size: 20px;
-    font-weight: 700;
-    text-indent: 15px;
-    color: #868686;
-  }
-`;
-
-const LikeList = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  margin-bottom: 218px;
-`;
-
-const Tabbar = styled.div`
-  width: 100%;
-  border-bottom: 3px solid #e7e7e7;
-`;
-
-const NavWrap = styled.div`
-  width: 900px;
-  margin-top: 80px;
-  display: flex;
-`;
-
-const LikelistNav = styled.button`
-  width: 100%;
-  height: 60px;
-  font-size: 26px;
-  font-weight: bold;
-  border: none;
-  background-color: white;
-  border-bottom: ${({ isClicked }) =>
-    isClicked === 'dibs' ? '4px solid #3366FF' : 'none'};
-  color: ${({ isClicked }) => (isClicked === 'dibs' ? '#3366FF' : '#868686')};
-`;
-
-const AllergylistNav = styled.button`
-  width: 100%;
-  height: 60px;
-  font-size: 26px;
-  font-weight: bold;
-  border: none;
-  background-color: white;
-  border-bottom: ${({ isClicked }) =>
-    isClicked === 'allergy' ? '4px solid #3366FF' : 'none'};
-  color: ${({ isClicked }) =>
-    isClicked === 'allergy' ? '#3366FF' : '#868686'};
-`;
-
-const ReviewlistNav = styled.button`
-  width: 100%;
-  height: 60px;
-  font-size: 26px;
-  font-weight: bold;
-  border: none;
-  background-color: white;
-  border-bottom: ${({ isClicked }) =>
-    isClicked === 'review' ? '4px solid #3366FF' : 'none'};
-  color: ${({ isClicked }) => (isClicked === 'review' ? '#3366FF' : '#868686')};
 `;
 
 export default User;

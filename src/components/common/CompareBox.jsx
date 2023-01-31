@@ -188,6 +188,9 @@ const Wrap = styled.div`
     margin: 0 auto;
     max-width: 1050px;
     height: 100%;
+    @media screen and (max-width: 1700px) {
+      max-width: 800px;
+    }
   }
   .backLayout {
     position: absolute;
@@ -247,6 +250,10 @@ const Wrap = styled.div`
   }
 `;
 const BoxTop = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 800px;
+    height: 66px;
+  }
   height: 100px;
   width: 100%;
   display: flex;
@@ -255,6 +262,9 @@ const BoxTop = styled.div`
   z-index: 2;
   position: relative;
   .boxCommentWrap {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+    }
     font-size: 20px;
     line-height: 28px;
     font-weight: bold;
@@ -265,6 +275,9 @@ const BoxTop = styled.div`
     align-items: center;
   }
   .boxButtonReset {
+    @media screen and (max-width: 1700px) {
+      font-size: 13px;
+    }
     color: #f43f3f;
     font-size: 14px;
     line-height: 20px;
@@ -274,11 +287,21 @@ const BoxTop = styled.div`
     margin-right: 14px;
   }
   .boxButtonResetImg {
+    @media screen and (max-width: 1700px) {
+      width: 20px;
+      height: 20px;
+    }
     width: 24px;
     height: 24px;
     background-image: url('/assets/image/icon_reset.png');
+    background-size: cover;
   }
   .goToCompareBtn {
+    @media screen and (max-width: 1700px) {
+      font-size: 15px;
+      width: 136px;
+      height: 38px;
+    }
     width: 170px;
     height: 40px;
     background-color: ${({ isArrLength }) =>
@@ -290,6 +313,10 @@ const BoxTop = styled.div`
     font-weight: bold;
   }
   .deleteBoxBtn {
+    @media screen and (max-width: 1700px) {
+      width: 26px;
+      height: 26px;
+    }
     width: 40px;
     height: 40px;
     background-image: url('/assets/image/icon_delete2.png');
@@ -303,14 +330,25 @@ const BoxTop = styled.div`
   }
 `;
 const BoxContent = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 800px;
+    padding-top: 15px;
+  }
   height: 222px;
   width: 100%;
   display: flex;
   gap: 50px;
   position: relative;
   z-index: 2;
+  @media screen and (max-width: 1700px) {
+    gap: 4%;
+  }
 `;
 const ListCard = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 48%;
+    height: 170px;
+  }
   position: relative;
   width: 90%;
   height: 186px;
@@ -325,6 +363,9 @@ const ListCard = styled.div`
       ? null
       : `background-color: #E7E7E7; justify-content: center; flex-direction: column;`}
   .cardImg {
+    @media screen and (max-width: 1700px) {
+      min-width: 150px;
+    }
     width: 160px;
     height: 100%;
     background-image: ${({ image }) =>
@@ -334,6 +375,9 @@ const ListCard = styled.div`
     margin-right: 24px;
   }
   .listName {
+    @media screen and (max-width: 1700px) {
+      width: 65%;
+    }
     font-size: 18px;
     line-height: 26px;
     font-weight: bold;
@@ -389,6 +433,9 @@ const ListCard = styled.div`
     margin-bottom: 10px;
   }
   .addComment {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+    }
     font-size: 18px;
     line-height: 26px;
     color: #242424;

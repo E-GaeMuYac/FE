@@ -131,14 +131,10 @@ const Signup = () => {
 
   // 이메일 인증번호 전송 api 호출 함수
   const postSendEmailCode = async (payload) => {
-    const header = { 'x-api-key': process.env.REACT_APP_EMAIL_X_API_KEY };
     try {
-      const data = await axios.post(
-        'https://vns95wu8w0.execute-api.ap-northeast-2.amazonaws.com/default/email-HelloWorldFunction-tNcmw2rS5dhV',
-        { email: payload.email }, //data(req.body)
-        {
-          headers: header,
-        } //config
+      const data = await api.post(
+        `/api/users/authentication/email`,
+        { email: payload.email } //data(req.body));
       );
       // console.log('인증번호 전송 성공', data);
       // console.log('인증번호', data.data.body.code);
@@ -250,14 +246,10 @@ const Signup = () => {
   };
 
   const postSendPhoneCode = async (payload) => {
-    const header = { 'x-api-key': process.env.REACT_APP_PHONE_X_API_KEY };
     try {
-      const data = await axios.post(
-        'https://7s5fem53oh.execute-api.ap-northeast-2.amazonaws.com/default/phone-HelloWorldFunction-LuB9PruLAanW',
-        { phoneNumber: payload.phoneNumber }, //data(req.body)
-        {
-          headers: header,
-        } //config
+      const data = await api.post(
+        '/api/users/authentication/phone',
+        { phoneNumber: payload.phoneNumber } //data(req.body)
       );
       // console.log('인증번호 전송 성공', data);
       setResponsePhoneCode(data.data.code);
@@ -719,6 +711,10 @@ const BackGround = styled.div`
 `;
 
 const Wrapper = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 600px;
+    height: 950px;
+  }
   width: 800px;
   height: 1050px;
   display: flex;
@@ -730,6 +726,10 @@ const Wrapper = styled.div`
 `;
 
 const SignupWrapper = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 420px;
+    /* background-color: #e71c1c; */
+  }
   width: 480px;
   /* height: 660px; */
   display: flex;
@@ -746,6 +746,9 @@ const SignupWrapper = styled.div`
 
   .successs {
     input {
+      @media screen and (max-width: 1700px) {
+        width: 300px;
+      }
       margin-top: 10px;
       height: 50px;
       width: 350px;
@@ -762,6 +765,9 @@ const SignupWrapper = styled.div`
   }
   .errorr {
     input {
+      @media screen and (max-width: 1700px) {
+        width: 300px;
+      }
       margin-top: 10px;
       height: 50px;
       width: 350px;
@@ -819,21 +825,33 @@ const SignupInfo = styled.div`
 `;
 
 const PrimarySpan = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 27px;
+  }
   font-size: 32px;
   font-weight: 700;
   color: #242424;
 `;
 
 const SecondarySpan = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 14px;
+  }
   font-size: 16px;
   color: #868686;
 `;
 
 const CombinedForm = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 420px;
+    justify-content: space-between;
+  }
   width: 480px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+  /* background-color: aliceblue; */
   /* .successBtn {
     background-color: #4fc759;
   }
@@ -843,19 +861,22 @@ const CombinedForm = styled.div`
 `;
 
 const ButtonSt = styled.button`
+  @media screen and (max-width: 1700px) {
+    width: 100px;
+    font-size: 12px;
+    margin-top: auto;
+  }
   width: 125px;
   height: 35px;
   border: none;
   border-radius: 50px;
   margin-left: 5px;
-  /* background-color: #8bc790; */
-  /* color: #ffffff; */
+  margin-top: auto;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   :active {
     box-shadow: 0px 0px 0 rgb(0, 0, 0, 0.3);
-    /* background-color: #4d9e54 !important; */
     background-color: #bebebe !important;
   }
 `;
@@ -869,6 +890,9 @@ const NavBtnWrapper = styled.div`
 `;
 
 const NavBackBtn = styled(Link)`
+  @media screen and (max-width: 1700px) {
+    width: 47%;
+  }
   width: 228px;
   height: 44px;
   border: none;
@@ -883,6 +907,9 @@ const NavBackBtn = styled(Link)`
 `;
 
 const NavSubmitBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    width: 47%;
+  }
   width: 228px;
   height: 44px;
   border: none;

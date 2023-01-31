@@ -26,12 +26,11 @@ const Main = () => {
       <FourthSection scrollpoint={scrollPoint} />
       <FifthSection scrollpoint={scrollPoint} />
       <SixthSection scrollpoint={scrollPoint} />
-      <SeventhSection scrollpoint={scrollPoint} />
     </Wrapper>
   );
 };
 const Wrapper = styled.div`
-  height: 400vh;
+  /* height: 585vh; */
   display: flex;
   flex-direction: column;
 `;

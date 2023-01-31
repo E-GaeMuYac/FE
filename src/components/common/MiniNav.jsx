@@ -4,12 +4,8 @@ import { Link, useParams } from 'react-router-dom';
 
 const MiniNav = () => {
   const { id } = useParams();
-  console.log(id);
-  console.log(window.location.pathname);
 
   const currentLocation = window.location.pathname;
-
-  const detailNav = ['검색하기', '상세 페이지'];
 
   return (
     <Wrapper>
@@ -29,7 +25,7 @@ const MiniNav = () => {
           <LinkNav to={`/detail/${id}/reviewform`}>리뷰 작성하기</LinkNav>
         </>
       )}
-      {currentLocation.includes('/detail') && (
+      {currentLocation === `/detail/${id}` && (
         <>
           <LinkNav to='/search'>검색하기</LinkNav>
           <SpanNav>▶</SpanNav>
@@ -41,12 +37,17 @@ const MiniNav = () => {
 };
 
 const Wrapper = styled.div`
-  width: 1920px;
+  @media screen and (max-width: 1700px) {
+    padding-top: 5px;
+    font-size: 15px;
+  }
+  width: 100%;
+  min-width: 1024px;
   height: 38px;
   background-color: #f0f0f0;
   display: flex;
   align-items: center;
-  padding-left: 725px;
+  justify-content: center;
 `;
 
 const LinkNav = styled(Link)`
@@ -60,6 +61,8 @@ const SpanNav = styled.span`
   color: #868686;
   font-weight: bold;
   margin: 0 5px;
+  display: flex;
+  align-items: center;
 `;
 
 export default MiniNav;

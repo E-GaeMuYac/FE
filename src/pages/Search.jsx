@@ -225,7 +225,7 @@ const Search = () => {
                       searchSortChoice(list);
                     }}>
                     {list}
-                    <div className='searchSortArrow'></div>
+                    <div className='searchSortArrow2'></div>
                   </li>
                 ) : (
                   <li
@@ -254,11 +254,14 @@ const Search = () => {
               }
             }}
           />
-          <div className='deleteSearchInputValue'>
+          <div
+            className='deleteSearchInputValueBtn'
+            onClick={deleteSearchValue}></div>
+          {/* <div className='deleteSearchInputValue'>
             <div
               className='deleteSearchInputValueBtn'
               onClick={deleteSearchValue}></div>
-          </div>
+          </div> */}
           <div className='searchBtnWrap' onClick={doingSearch}>
             <div className='searchBtn'></div>
             <div className='searchBtnText'>검색</div>
@@ -321,9 +324,15 @@ const Search = () => {
 };
 
 const Wrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    padding-top: 50px;
+  }
   padding-top: 100px;
 `;
 const SearchBarWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin: 0 auto 35px;
+  }
   margin: 0 auto 46px;
   display: flex;
   align-items: center;
@@ -331,16 +340,25 @@ const SearchBarWrap = styled.div`
   gap: 15px;
   font-family: 'NanumSquare', sans-serif;
   .searchBar {
+    @media screen and (max-width: 1700px) {
+      width: 70%;
+      height: 50px;
+    }
     max-width: 860px;
     width: 60%;
-    max-width: 860px;
     border: 1px solid #f6f7fa;
     background-color: #f6f7fa;
     border: none;
     border-radius: 60px;
     display: flex;
+    position: relative;
   }
   .searchSortWrap {
+    @media screen and (max-width: 1700px) {
+      font-size: 18px;
+      height: 50px;
+      width: 130px;
+    }
     border-radius: 32px;
     background-color: white;
     border: 2px solid #f6f7fa;
@@ -352,8 +370,12 @@ const SearchBarWrap = styled.div`
     position: relative;
   }
   .searchSortHeaderWrap {
-    width: 100%;
-    height: 100%;
+    @media screen and (max-width: 1700px) {
+      height: 50px;
+      width: 130px;
+    }
+    width: 150px;
+    height: 58px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -361,28 +383,51 @@ const SearchBarWrap = styled.div`
     cursor: pointer;
   }
   .searchSortList {
+    @media screen and (max-width: 1700px) {
+      font-size: 18px;
+      width: 149px;
+      height: 90px;
+      gap: 10px;
+      width: 130px;
+      border-radius: 26px;
+      padding: 7px 9px;
+    }
     display: ${({ isOpenSearchSort }) => (isOpenSearchSort ? 'flex' : 'none')};
     position: absolute;
     left: -2px;
     top: -2px;
     width: 150px;
-    list-style: none;
+    /* width: 158px;
+    height: 110px;
+    justify-content: center;
+    list-style: none; */
     padding: 11px 16px;
     margin: 0;
     flex-direction: column;
     gap: 14px;
     background-color: white;
-    border-radius: 33px;
+    border-radius: 32px;
     border: 2px solid #f6f7fa;
   }
   .searchSortList li {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     color: #868686;
     cursor: pointer;
+    margin-left: 2px;
+    @media screen and (max-width: 1700px) {
+      gap: 8px;
+      margin-left: 8.5px;
+      margin-top: 2.5px;
+    }
   }
   .searchSortList li.choice {
     color: #242424;
+    /* margin-top: 1px; */
+    @media screen and (max-width: 1700px) {
+      /* margin-top: 3px; */
+    }
+    display: flex;
     align-items: center;
   }
   .searchSortArrow {
@@ -392,7 +437,24 @@ const SearchBarWrap = styled.div`
     background-size: cover;
     background-position: center;
   }
+  .searchSortArrow2 {
+    width: 32px;
+    height: 32px;
+    background-image: url('/assets/image/arrow_down.png');
+    background-size: cover;
+    background-position: center;
+    margin-top: 2px;
+    margin-left: 0px;
+    @media screen and (max-width: 1700px) {
+      margin-top: -1px;
+      margin-left: -0.5px;
+    }
+  }
   .searchinput {
+    @media screen and (max-width: 1700px) {
+      height: 50px;
+      font-size: 16px;
+    }
     width: 475px;
     font-size: 20px;
     font-weight: bold;
@@ -405,6 +467,10 @@ const SearchBarWrap = styled.div`
     color: #b7b7b7;
   }
   .deleteSearchInputValue {
+    @media screen and (max-width: 1700px) {
+      margin-right: 12px;
+      height: 50px;
+    }
     flex-grow: 1;
     height: 62px;
     display: flex;
@@ -412,6 +478,13 @@ const SearchBarWrap = styled.div`
     justify-content: center;
   }
   .deleteSearchInputValueBtn {
+    @media screen and (max-width: 1700px) {
+      right: 112px;
+      top: 14px;
+    }
+    right: 140px;
+    top: 20px;
+    position: absolute;
     display: ${({ isActiveDeleteBtn }) =>
       isActiveDeleteBtn ? 'blick' : 'none'};
     width: 24px;
@@ -422,6 +495,13 @@ const SearchBarWrap = styled.div`
     cursor: pointer;
   }
   .searchBtnWrap {
+    @media screen and (max-width: 1700px) {
+      width: 100px;
+      height: 50px;
+    }
+    position: absolute;
+    top: 0;
+    right: 0;
     width: 125px;
     height: 62px;
     display: flex;
@@ -433,6 +513,10 @@ const SearchBarWrap = styled.div`
     border: 1.4px solid #5e86ff;
   }
   .searchBtn {
+    @media screen and (max-width: 1700px) {
+      width: 26px;
+      height: 26px;
+    }
     width: 32px;
     height: 32px;
     background-image: url('/assets/image/icon_search2.png');
@@ -441,6 +525,9 @@ const SearchBarWrap = styled.div`
     margin-right: 4px;
   }
   .searchBtnText {
+    @media screen and (max-width: 1700px) {
+      font-size: 18px;
+    }
     font-size: 24px;
     color: #ffffff;
   }
@@ -488,6 +575,11 @@ const LatestSearchWrap = styled.div`
 const SearchResultWrap = styled.div`
   margin-bottom: 218px;
   .ExplainWrap {
+    @media screen and (max-width: 1700px) {
+      font-size: 22px;
+      width: 600px;
+      height: 58px;
+    }
     width: 676px;
     height: 66px;
     font-size: 30px;
@@ -527,9 +619,16 @@ const SearchResultWrap = styled.div`
     color: #868686;
   }
   .searchSort {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+    }
     color: #868686;
   }
   .searchList {
+    @media screen and (max-width: 1700px) {
+      gap: 21.33px;
+      min-width: 1024px;
+    }
     display: flex;
     flex-wrap: wrap;
     gap: 28px;
@@ -582,10 +681,16 @@ const PagenationWrap = styled.div`
     cursor: pointer;
   }
   .pagenationArrow.left {
+    @media screen and (max-width: 1700px) {
+      left: 170px;
+    }
     left: 350px;
     background-image: url('/assets/image/icon_page_arrow_left.png');
   }
   .pagenationArrow.right {
+    @media screen and (max-width: 1700px) {
+      right: 170px;
+    }
     right: 350px;
     background-image: url('/assets/image/icon_page_arrow_right.png');
   }

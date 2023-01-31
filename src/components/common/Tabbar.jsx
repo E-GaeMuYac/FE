@@ -66,11 +66,19 @@ const TabBar = ({ location, query }) => {
 };
 
 const Wrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 1024px;
+    min-width: 1024px;
+  }
   width: 100%;
   height: 40px;
   margin-bottom: 16px;
   border-bottom: 1px solid #d9d9d9;
   ul {
+    @media screen and (max-width: 1700px) {
+      gap: 2px;
+    }
+    padding: 0px;
     height: 100%;
     display: flex;
     align-items: center;
@@ -80,6 +88,10 @@ const Wrap = styled.div`
   }
 `;
 const TabName = styled.li`
+  @media screen and (max-width: 1700px) {
+    font-size: 16px;
+    width: 100px;
+  }
   width: 100px;
   height: 100%;
   display: flex;
