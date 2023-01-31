@@ -188,6 +188,20 @@ const Search = () => {
     }
   }, [data]);
   // -----------------------------------------------------------------------------
+  const TopSearchArr = [
+    '타이레놀500밀리그람',
+    '판콜에스내복액',
+    '판피린큐액',
+    '까스활명수큐액',
+    '탁센연질캡슐',
+    '콜대원코프큐시럽',
+    '텐텐츄정',
+    '케토톱플라스타',
+    '광동원탕',
+    '벤포벨에스정',
+  ];
+
+  // -----------------------------------------------------------------------------
   return (
     <Wrap>
       <SearchBarWrap
@@ -227,7 +241,11 @@ const Search = () => {
             className='searchinput'
             value={inputValue}
             onChange={changeInputValue}
-            placeholder='약 이름을 검색해보세요!'
+            placeholder={
+              searchKinds === '약 이름'
+                ? '약 이름을 검색해보세요!'
+                : '약 분류를 검색해보세요!'
+            }
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 doingSearch();
@@ -270,7 +288,7 @@ const Search = () => {
                 검색 결과 {searchLength.toLocaleString('ko-KR')}개
               </div>
             </div>
-            <div className='searchSort'>찜한순</div>
+            <div className='searchSort'>찜이 많은 순</div>
           </div>
           <ul className='searchList'>
             {searhArr.map((list) => (
@@ -287,7 +305,18 @@ const Search = () => {
             searchLength={searchLength}
           />
         </SearchResultWrap>
-      ) : null}
+      ) : (
+        <TopSearchWrap>
+          <div className='title'>인기 검색어</div>
+          <ul className='desc'>
+            {TopSearchArr.map((list) => (
+              <li key={list}>
+                {TopSearchArr.indexOf(list) + 1}. {list}
+              </li>
+            ))}
+          </ul>
+        </TopSearchWrap>
+      )}
     </Wrap>
   );
 };
@@ -662,6 +691,34 @@ const PagenationWrap = styled.div`
     }
     right: 350px;
     background-image: url('/assets/image/icon_page_arrow_right.png');
+  }
+`;
+const TopSearchWrap = styled.div`
+  width: 520px;
+  margin: 144px auto;
+  .title {
+    font-size: 24px;
+    line-height: 35px;
+    color: #242424;
+    font-weight: bold;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e7e7e7;
+    margin-bottom: 24px;
+  }
+  .desc {
+    height: 245px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 25px;
+  }
+  .desc li {
+    font-size: 20px;
+    line-height: 29px;
+    width: 251px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
