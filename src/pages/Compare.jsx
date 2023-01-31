@@ -1009,7 +1009,7 @@ const ComparePage = () => {
         <Wrap style={{ backgroundColor: '#f9faff' }}>
           <Layout>
             <NothingInBoxWrap>
-              <div className='title'>약국 비교함에 약을 담아 비교해보세요!</div>
+              <div className='title'>약품 비교함에 약을 담아 비교해보세요!</div>
               <div className='explainImage1'></div>
               <div className='explainImage2'></div>
             </NothingInBoxWrap>
