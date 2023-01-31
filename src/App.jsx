@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  useLocation,
-} from 'react-router-dom';
-
+import { Route, Routes, useLocation } from 'react-router-dom';
 //page
 import ComparePage from './pages/Compare';
 import Login from './pages/Login';
@@ -16,14 +10,11 @@ import Signup from './pages/Signup';
 import SocialLogin from './pages/SocialLogin';
 import Main from './pages/main/Main';
 import Event from './pages/Event';
-
 import LaptopDetail from './pages/Laptop/LaptopDetail';
 import LaptopCompare from './pages/Laptop/LaptopCompare';
-
 import AllergySearch from './pages/AllergySearch';
 import AddReviews from './pages/AddReviews';
 import ModifyReviews from './pages/ModifyReviews';
-
 // 컴포넌트
 import Layout from './components/layout/Layout';
 import Header from './components/layout/Header';
@@ -35,21 +26,17 @@ import ChatBox from './components/layout/ChatBox';
 import { useRecoilState } from 'recoil';
 import { nowRoute } from './recoil/recoilStore';
 // import Spinner from './components/common/Spinner';
-
 import { Mobile, Laptop, PC } from './query/useMediaQuery';
 
 function App() {
   const [isToken, setIsToken] = useState('');
   const [userImage, setUserImage] = useState('');
-
   const location = useLocation();
-
   const [nowPage, setNowPage] = useRecoilState(nowRoute);
 
   useEffect(() => {
     setNowPage(location.pathname);
   }, []);
-
   return (
     <>
       <Header
@@ -124,14 +111,14 @@ function App() {
         <Route
           path='/mypage'
           element={
-            <>
+            <Layout>
               <User
                 setuserimage={setUserImage}
                 setistoken={setIsToken}
                 istoken={isToken}
               />
               <CompareBox />
-            </>
+            </Layout>
           }
         />
         {/* <Route path='/spinner' element={<Spinner />} /> */}
@@ -178,5 +165,4 @@ function App() {
     </>
   );
 }
-
 export default App;

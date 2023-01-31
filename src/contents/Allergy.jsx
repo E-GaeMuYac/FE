@@ -115,6 +115,7 @@ const Allergy = () => {
 
 const Wrapper = styled.div`
   width: 100%;
+  padding-bottom: 80px;
 `;
 
 const AllergyListWrap = styled.div`
