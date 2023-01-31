@@ -1,18 +1,38 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import { Mobile, Laptop, PC } from '../../query/useMediaQuery';
 
 const ThirdSection = (props) => {
   const scrollPoint = props.scrollpoint;
   return (
     <Flex>
       <Wrapper>
-        {scrollPoint > 633 && (
-          <Content1>
-            <h3>검색</h3>
-            <h2>약에 대해 궁금하다면 검색을 해보세요!</h2>
-          </Content1>
-        )}
-        {scrollPoint > 720 && <Content2 />}
+        <PC>
+          {scrollPoint > 1000 && (
+            <Content1>
+              <h3>검색</h3>
+              <h1>
+                약에 대해 궁금하다면
+                <br />
+                검색을 해보세요!
+              </h1>
+            </Content1>
+          )}
+          {scrollPoint > 1400 && <Content2 />}
+        </PC>
+        <Laptop>
+          {scrollPoint > 600 && (
+            <Content1>
+              <h3>검색</h3>
+              <h1>
+                약에 대해 궁금하다면
+                <br />
+                검색을 해보세요!
+              </h1>
+            </Content1>
+          )}
+          {scrollPoint > 1000 && <Content2 />}
+        </Laptop>
       </Wrapper>
     </Flex>
   );
@@ -27,9 +47,18 @@ const Flex = styled.div`
 `;
 
 const Wrapper = styled.div`
-  width: 1140px;
-  height: 841px;
+  /* @media screen and (max-width: 1700px) {
+    margin-top: 30vh;
+    padding-bottom: 25vh;
+  } */
+  width: 100%;
+  height: 80vh;
+  /* height: 841px; */
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const show = keyframes`
@@ -51,30 +80,54 @@ const slide = keyframes`
 `;
 
 const Content1 = styled.div`
-  width: 500px;
-  height: 300px;
-  position: absolute;
-  top: 150px;
-  left: 325px;
-  animation: ${show} 1s ease-in forwards;
-  h3 {
-    font-size: 28px;
-    margin-left: 15px;
-    color: #00c58d;
+  @media screen and (max-width: 1700px) {
+    margin-top: 1vh;
+    margin-bottom: 6vh;
   }
-  h2 {
+  margin-top: 300px;
+  margin-bottom: 150px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  animation: ${slide} 1s 0.5s ease-out forwards;
+  h3 {
+    @media screen and (max-width: 1700px) {
+      font-size: 20px;
+    }
+    font-size: 28px;
+    font-weight: 700;
+    color: #3366ff;
+  }
+  h1 {
+    @media screen and (max-width: 1700px) {
+      font-size: 36px;
+      line-height: 55px;
+    }
     font-size: 50px;
     text-align: center;
+    font-weight: 700;
   }
 `;
 
 const Content2 = styled.div`
+  @media screen and (max-width: 1700px) {
+    background-size: 85%;
+    background-position: top;
+  }
+  @media screen and (max-width: 1920px) {
+    background-position: top;
+  }
   background-image: url('/assets/image/검색바.png');
-  width: 917px;
-  height: 147px;
-  position: absolute;
-  top: 500px;
-  left: 130px;
+  background-position: top;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 860px;
+  max-height: 150px;
+  height: 12.32vw;
+  /* margin-top: 200px; */
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
   opacity: 0;
   animation: ${slide} 1s 0.5s ease-out forwards;
 `;

@@ -35,6 +35,10 @@ const LikeItBtn = ({ id, dibs }) => {
 export default LikeItBtn;
 
 const LikeItBtnWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 34px;
+    height: 34px;
+  }
   width: 38px;
   height: 38px;
   border-radius: 8px;
@@ -44,6 +48,10 @@ const LikeItBtnWrap = styled.div`
   align-items: center;
   justify-content: center;
   .btnLikeImg {
+    @media screen and (max-width: 1700px) {
+      width: 20px;
+      height: 20px;
+    }
     width: 26px;
     height: 26px;
     background-image: ${({ heartActive }) =>
