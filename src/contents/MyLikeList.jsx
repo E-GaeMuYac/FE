@@ -33,13 +33,17 @@ const LikelistHeader = styled.div`
   height: 100px;
   display: flex;
   align-items: center;
-
   .title {
+    @media screen and (max-width: 1700px) {
+      font-size: 17px;
+    }
     font-size: 20px;
     font-weight: 700;
   }
-
   .sum {
+    @media screen and (max-width: 1700px) {
+      font-size: 17px;
+    }
     font-size: 20px;
     font-weight: 700;
     text-indent: 15px;
@@ -48,6 +52,11 @@ const LikelistHeader = styled.div`
 `;
 
 const LikeList = styled.ul`
+  @media screen and (max-width: 1700px) {
+    margin-bottom: 160px;
+    gap: 18px;
+  }
+  min-width: 1024px;
   display: flex;
   flex-wrap: wrap;
   gap: 25px;
@@ -56,4 +65,5 @@ const LikeList = styled.ul`
   margin: 0;
   margin-bottom: 218px;
 `;
+
 export default MyLikeList;

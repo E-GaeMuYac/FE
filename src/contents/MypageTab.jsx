@@ -19,9 +19,9 @@ const Tab = ({ tab, location, query }) => {
   }, [tab, query]);
 
   return (
-    <LikelistNav isClicked={isClicked} onClick={tabChange}>
+    <NavTap isClicked={isClicked} onClick={tabChange}>
       {tab}
-    </LikelistNav>
+    </NavTap>
   );
 };
 
@@ -46,15 +46,20 @@ const Tabbar = styled.div`
 `;
 
 const NavWrap = styled.div`
-  background-color: pink;
+  @media screen and (max-width: 1700px) {
+    width: 600px;
+  }
   width: 900px;
   margin-top: 80px;
   display: flex;
-  flex-direction: row;
 `;
 
-const LikelistNav = styled.button`
-  width: 300px;
+const NavTap = styled.button`
+  @media screen and (max-width: 1700px) {
+    font-size: 18px;
+    height: 40px;
+  }
+  width: 100%;
   height: 60px;
   font-size: 26px;
   font-weight: bold;

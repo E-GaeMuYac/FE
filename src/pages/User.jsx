@@ -319,26 +319,39 @@ const User = (props) => {
             </div>
           </CalenderWrap>
         </ProfileWrap>
-        <Box>
-          <EventBox to='/event'>
-            <h1>EVENT</h1>
-            <div style={{ fontSize: '18px' }}>
-              간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
+        <BoxWrap>
+          <Box>
+            <EventBox to='/event'>
+              <h1>EVENT</h1>
+              <PC>
+                <div>
+                  간단한 설문조사하고 <br /> <span>기프티콘</span> 받아가세요!
+                </div>
+              </PC>
+              <Laptop>
+                <div>
+                  간단한
+                  <br />
+                  설문조사하고
+                  <br /> <span>기프티콘</span>
+                  <br /> 받아 가세요!
+                </div>
+              </Laptop>
+              <div className='image' />
+            </EventBox>
+          </Box>
+          <Box>
+            <div className='messageBox'>
+              <h1>필너츠 꿀팁</h1>
+              <div className='image' />
+              <span>마우스를 가져다 대보세요</span>
             </div>
-            <div className='image' />
-          </EventBox>
-        </Box>
-        <Box>
-          <div className='messageBox'>
-            <h1>필너츠 꿀팁</h1>
-            <div className='image' />
-            <span>마우스를 가져다대보세요</span>
-          </div>
-          <div className='messagePopup'>
-            <h2>필너츠 꿀팁</h2>
-            <div>{serviceMsg}</div>
-          </div>
-        </Box>
+            <div className='messagePopup'>
+              <h2>필너츠 꿀팁</h2>
+              <div>{serviceMsg}</div>
+            </div>
+          </Box>
+        </BoxWrap>
       </MyPageWrap>
       <MypageTab query={query} />
       {query === '내가 찜한 의약품' && <MyLikeList />}
