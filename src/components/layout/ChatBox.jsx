@@ -45,8 +45,6 @@ const ChatBox = () => {
   const adminIdArr = process.env.REACT_APP_ADMIN_ID_ARR.split('|').map((i) =>
     Number(i)
   );
-  // console.log(process.env.REACT_APP_ADMIN_ID_ARR);
-  // console.log(userId);
   //로그인한 유저의 id가 관리자 배열에 포함될 경우 admin화
   useEffect(() => {
     if (adminIdArr.includes(userId)) {
@@ -100,6 +98,9 @@ const ChatBox = () => {
           },
         ]);
       }
+    });
+    socket?.on('load', (data) => {
+      console.log(data);
     });
   }, [socket]);
   // ---------------------------------------------------------------
@@ -208,6 +209,7 @@ const ChatBox = () => {
     await socket.emit('adminJoin', roomData.room);
     setAdminUser(roomData.user);
     setAdminRoom(roomData.room);
+    setChatType('상담');
     setMessageList([]);
   };
   // 관리자 퇴장
@@ -223,6 +225,7 @@ const ChatBox = () => {
 
   // 관리자 입장, 퇴장 문구 출력
   useEffect(() => {
+    //입장
     socket?.on('adminJoin', (msg) => {
       const hour =
         new Date(Date.now()).getHours() >= 10
@@ -241,19 +244,35 @@ const ChatBox = () => {
           message: msg,
         },
       ]);
-      if (msg === '관리자가 나가셨습니다!') {
-        setChatType('챗봇');
-      }
+    });
+    //퇴장
+    socket?.on('adminLeave', (msg) => {
+      const hour =
+        new Date(Date.now()).getHours() >= 10
+          ? new Date(Date.now()).getHours()
+          : '0' + new Date(Date.now()).getHours();
+      const minute =
+        new Date(Date.now()).getMinutes() >= 10
+          ? new Date(Date.now()).getMinutes()
+          : '0' + new Date(Date.now()).getMinutes();
+      setMessageList((list) => [
+        ...list,
+        {
+          _id: Date.now(),
+          time: hour + ':' + minute,
+          writer: 'another',
+          message: msg,
+        },
+      ]);
+      setChatType('챗봇');
     });
   }, [socket]);
   // 관리자 채팅방 리스트 가져오기
   useEffect(() => {
-    if (isAdmin) {
-      socket?.on('getRooms', (data) => {
-        setAdminChatList(data);
-      });
-    }
-  }, [socket, isAdmin, adminRoom]);
+    socket?.on('getRooms', (data) => {
+      setAdminChatList(data);
+    });
+  }, [socket]);
   //관리자 채팅 받기
   useEffect(() => {
     socket?.on('adminReceive', (msg) => {
@@ -406,8 +425,8 @@ const ChatBoxOpenBtn = styled.div`
   position: fixed;
   right: 100px;
   bottom: 130px;
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   border-radius: 50px;
   background-color: #3366ff;
   background-image: url('/assets/image/chatBot.png');
@@ -420,10 +439,10 @@ const ChatBoxOpenBtn = styled.div`
 const ChatBoxWrap = styled.div`
   position: fixed;
   right: 100px;
-  bottom: 200px;
+  bottom: 220px;
   overflow: hidden;
   border-radius: 10px;
-  box-shadow: 3px 3px 10px 1px gray;
+  box-shadow: 3px 3px 10px 0px #b7b7b7;
   background-color: white;
   display: flex;
   align-items: center;
