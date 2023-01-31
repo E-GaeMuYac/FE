@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Route, Routes, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 //page
 import ComparePage from './pages/Compare';
