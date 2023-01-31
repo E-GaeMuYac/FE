@@ -6,6 +6,8 @@ import { useGetSearchQuery } from '../query/searchQuery';
 
 //component
 import ProductList from '../components/common/productList';
+import { useRecoilState } from 'recoil';
+import { searchWord } from '../recoil/recoilStore';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
@@ -108,7 +110,7 @@ const Search = () => {
 
   //약 검색 input 용 데이터모음
   const [inputValue, setInputValue] = useState('');
-  const [searchedWord, setSearchedWord] = useState('');
+  const [searchedWord, setSearchedWord] = useRecoilState(searchWord);
 
   const [isActiveDeleteBtn, setIsActiveDeleteBtn] = useState(false);
 
