@@ -5,18 +5,26 @@ import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { userApi } from '../apis/apiInstance';
 
-const AddReviews = (props) => {
+const ModifyReviews = (props) => {
   const setIsToken = props.setIsToken;
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { medicineId, reviewId } = useParams();
   const [medicineItem, setMedicineItem] = useState({});
   const [content, setContent] = useState('');
   const [nickname, setNickname] = useState('');
 
   useEffect(() => {
     getMedicine();
+    getReviews();
     GetProfile();
   }, []);
+
+  const getCurrentContent = (reviewList) => {
+    const review = reviewList.find((obj) => {
+      return obj.reviewId === parseInt(reviewId);
+    });
+    setContent(review.review);
+  };
 
   const GetProfile = async () => {
     try {
@@ -26,19 +34,27 @@ const AddReviews = (props) => {
       console.log(e);
       alert('로그인 정보가 필요합니다.');
       setIsToken(false);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('nickname');
+      localStorage.clear();
       navigate('/login');
     }
   };
 
   const getMedicine = async () => {
     try {
-      const res = await userApi.get(`/api/products/${id}`);
+      const res = await userApi.get(`/api/products/${medicineId}`);
       setMedicineItem(res.data.product);
     } catch (e) {
       console.log(e);
+    }
+  };
+
+  const getReviews = async () => {
+    try {
+      const res = await userApi.get(`/api/reviews?medicineId=${medicineId}`);
+      const reviewList = await res.data.reviewList;
+      getCurrentContent(reviewList);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -46,9 +62,11 @@ const AddReviews = (props) => {
     setContent(e.target.value);
   };
 
-  const submitReview = async () => {
+  const submitmodify = async () => {
     try {
-      const res = await userApi.post(`/api/reviews/${id}`, { review: content });
+      const res = await userApi.put(`/api/reviews/${reviewId}`, {
+        review: content,
+      });
       alert(res.data.message);
       navigate(-1);
     } catch (error) {
@@ -58,7 +76,7 @@ const AddReviews = (props) => {
 
   return (
     <Wrapper>
-      <PageTitle>리뷰 작성하기</PageTitle>
+      <PageTitle>리뷰 수정하기</PageTitle>
       <CardBox>
         <WrapContents>
           <Image imgUrl={medicineItem?.itemImage} />
@@ -105,6 +123,7 @@ const AddReviews = (props) => {
       <ContentBox>
         <ReviewArea
           maxLength={1000}
+          value={content}
           onChange={handleInput}
           placeholder='작성팁을 참고해 리뷰를 작성해 주시면 다른 사용자분들에게 더 도움이 될거에요!&#13;&#10;1)  의약품 섭취 전 어떤 증상이 있었나요?&#13;&#10;2)  섭취 후 어떤 개선 효과가 있었나요?&#13;&#10;3)  섭취 후 부작용이 있었나요?&#13;&#10;이 박스를 클릭해 리뷰 작성을 시작해주세요!'></ReviewArea>
         <CountText count={content.length}>
@@ -114,9 +133,9 @@ const AddReviews = (props) => {
       <SubmitBtnWrap>
         <SubmitBtn
           type='button'
-          onClick={submitReview}
+          onClick={submitmodify}
           disabled={content.length < 10}>
-          리뷰 등록하기
+          리뷰 수정하기
         </SubmitBtn>
       </SubmitBtnWrap>
     </Wrapper>
@@ -273,23 +292,6 @@ const BottomLabel = styled.div`
   text-align: left;
 `;
 
-const Picked = styled.div`
-  width: 50px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 24px;
-  div {
-    width: 48px;
-    height: 48px;
-    .btnLikeImg {
-      width: 28.5px;
-      height: 25.33px;
-    }
-  }
-`;
-
 const ReviewGuide = styled.div`
   width: 100%;
   height: 120px;
@@ -377,4 +379,4 @@ const SubmitBtn = styled.button`
   align-items: center;
   justify-content: center;
 `;
-export default AddReviews;
+export default ModifyReviews;

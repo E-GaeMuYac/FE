@@ -60,6 +60,8 @@ const Header = (props) => {
       setUserImage(res.data.user.imageUrl);
     } catch (e) {
       console.error(e);
+      localStorage.clear();
+      navigate('/login');
     }
   };
 
@@ -84,7 +86,7 @@ const Header = (props) => {
   ];
 
   const goToMypage = () => {
-    navigate('/mypage');
+    navigate('/mypage?tab=내가 찜한 의약품');
   };
 
   // ---------------------------------------------------------------------
@@ -185,10 +187,13 @@ const LogoBox = styled(Link)`
 `;
 
 const CategoryBox = styled.div`
+
+
   @media screen and (max-width: 1700px) {
     font-size: 16px;
     gap: 40px;
   }
+
   height: 100%;
   display: flex;
   justify-content: center;
