@@ -158,6 +158,7 @@ const AllergySearch = () => {
       );
       setResult(res.data.rows);
       setSearchLength(res.data.count);
+      setIsOpen(false);
     } catch (error) {
       console.log(error);
     }
@@ -179,6 +180,7 @@ const AllergySearch = () => {
     if (e.code === 'Enter') {
       setKeyword(inputValue);
     }
+    setNowPageNum(1);
   };
 
   return (
