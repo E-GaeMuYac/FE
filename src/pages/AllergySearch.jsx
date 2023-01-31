@@ -183,6 +183,9 @@ const AllergySearch = () => {
 
   return (
     <Wrapper>
+      <Header>
+        <span>알레르기 등록</span>
+      </Header>
       <Wrap>
         <InputWrap>
           <SearchInput
@@ -254,9 +257,27 @@ const Wrap = styled.div`
   border-bottom: 1px solid #e7e7e7;
 `;
 
+const Header = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin-bottom: 30px;
+  }
+  width: 100%;
+  margin-bottom: 53px;
+  display: flex;
+  align-items: center;
+
+  span {
+    @media screen and (max-width: 1700px) {
+      font-size: 26px;
+    }
+    font-size: 28px;
+    font-weight: 700;
+  }
+`;
+
 const InputWrap = styled.div`
   width: 860px;
-  margin: 80px 0 70px 0;
+  margin-bottom: 70px;
   border-radius: 163px;
   display: flex;
   justify-content: center;
