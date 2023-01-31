@@ -92,12 +92,14 @@ const FourthSection = (props) => {
                     </h1>
                   </div>
                   <p>
-                    약의 이해를 위해 성분의 함량에 관계없이, <br />
+                    약의 이해를 돕기 위해 성분의 함량에 관계없이,
+                    <br />
                     중요순서로 3개를 뽑아 정보를 제공합니다.
                   </p>
                   <p>
-                    궁금하신 성분 위에 마우스, 손을 가져다 대면 성분의 효능에
-                    대해 알려드려요!
+                    성분 함량이 가장 많다고 해서 가장 중요한 성분이
+                    <br />
+                    아닐 수 있으니 꼭 주요 유효성분을 확인해주세요!
                   </p>
                 </Content7>
               </AlignWrap>
@@ -217,7 +219,7 @@ const FourthSection = (props) => {
                     </h1>
                   </div>
                   <p>
-                    약의 이해를 위해 성분의 함량에 관계없이,
+                    약의 이해를 돕기 위해 성분의 함량에 관계없이,
                     <br />
                     중요순서로 3개를 뽑아 정보를 제공합니다.
                   </p>
@@ -245,7 +247,7 @@ const FourthSection = (props) => {
                     </h1>
                   </div>
                   <p>
-                    약의 대해 궁금한 정보가 있다면 탭을 클릭해보세요.
+                    약에 대해 궁금한 정보가 있다면 탭을 클릭해보세요.
                     <br />
                     당신이 원하는 정보를 제공해드릴게요.
                   </p>
@@ -485,7 +487,7 @@ const Content6 = styled.div`
 `;
 
 const Content7 = styled.div`
-  width: 440px;
+  width: 450px;
   /* margin-top: 225px; */
   opacity: 0;
   animation: ${slide} 1s 0.5s ease-out forwards;

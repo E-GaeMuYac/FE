@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 
 const FirstSection = (props) => {
   const scrollPoint = props.scrollpoint;
-  console.log(scrollPoint);
+
   return (
     <Flex>
       <Wrapper>
