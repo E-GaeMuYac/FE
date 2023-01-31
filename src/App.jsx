@@ -24,6 +24,7 @@ import FindAccount from './pages/FindAccount';
 import Reviews from './contents/Reviews';
 import MiniNav from './components/common/MiniNav';
 import ChatBox from './components/layout/ChatBox';
+import Footer from './components/layout/Footer';
 import { useRecoilState } from 'recoil';
 import { nowRoute } from './recoil/recoilStore';
 // import Spinner from './components/common/Spinner';
@@ -38,6 +39,7 @@ function App() {
   useEffect(() => {
     setNowPage(location.pathname);
   }, []);
+
   return (
     <>
       <Header
@@ -162,6 +164,7 @@ function App() {
         />
         <Route path='/event' element={<Event />} />
       </Routes>
+      <Footer />
       <ChatBox />
     </>
   );
