@@ -71,12 +71,20 @@ const MaterialList = (props) => {
 };
 
 const ResultWrap = styled.div`
-  width: 1380px;
+  @media screen and (max-width: 1700px) {
+    max-width: 1024px;
+    margin: auto;
+  }
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
 
 const ResultList = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 70px;
+    padding: 20px;
+  }
   background-color: white;
   width: 100%;
   height: 95px;
@@ -90,12 +98,20 @@ const ResultList = styled.div`
 `;
 
 const PillTitle = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 18px;
+  }
   color: #242424;
   font-weight: bold;
   font-size: 24px;
 `;
 
 const SelectBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    width: 115px;
+    height: 38px;
+    font-size: 17px;
+  }
   width: 130px;
   height: 44px;
   border-radius: 10px;
@@ -110,6 +126,11 @@ const SelectBtn = styled.button`
 `;
 
 const CancelBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    width: 115px;
+    height: 38px;
+    font-size: 17px;
+  }
   width: 130px;
   height: 44px;
   border-radius: 10px;
@@ -121,6 +142,11 @@ const CancelBtn = styled.button`
 `;
 
 const MoreBtn = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 36px;
+    height: 36px;
+    right: 170px;
+  }
   background-image: url('/assets/image/arrow_down_big.png');
   background-size: cover;
   width: 50px;
@@ -130,13 +156,22 @@ const MoreBtn = styled.div`
 `;
 
 const MoreInfoWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    min-height: 170px;
+    max-height: 500px;
+  }
   width: 100%;
-  height: 316px;
+  min-height: 170px;
+  max-height: 500px;
   border-radius: 20px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
 `;
 
 const MoreInfoList = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 70px;
+    padding: 20px;
+  }
   width: 100%;
   height: 120px;
   border-top-left-radius: 20px;
@@ -149,9 +184,16 @@ const MoreInfoList = styled.div`
 `;
 
 const MoreInfoContent = styled.div`
+  @media screen and (max-width: 1700px) {
+    min-height: 100px;
+    max-height: 500px;
+    padding: 30px;
+    font-size: 18px;
+  }
   background-color: #f6f7fa;
   width: 100%;
-  height: 196px;
+  min-height: 100px;
+  max-height: 500px;
   box-sizing: border-box;
   padding: 40px;
   border-bottom-left-radius: 20px;
@@ -161,6 +203,11 @@ const MoreInfoContent = styled.div`
 `;
 
 const FoldBtn = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 36px;
+    height: 36px;
+    right: 170px;
+  }
   background-image: url('/assets/image/arrow_up_big.png');
   background-size: cover;
   width: 50px;

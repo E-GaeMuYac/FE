@@ -134,6 +134,7 @@ const Wrap = styled.div`
 const HeaderWrapper = styled.div`
   @media screen and (max-width: 1700px) {
     height: 60px;
+    min-width: 1024px;
   }
   background-color: white;
   width: 100%;
@@ -187,8 +188,6 @@ const LogoBox = styled(Link)`
 `;
 
 const CategoryBox = styled.div`
-
-
   @media screen and (max-width: 1700px) {
     font-size: 16px;
     gap: 40px;

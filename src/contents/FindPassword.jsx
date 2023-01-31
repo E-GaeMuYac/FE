@@ -45,15 +45,10 @@ const BottomContents = ({
   const [readOnlyPhoneCode, setReadOnlyPhoneCode] = useState(false);
 
   const postSendPhoneCode = async (payload) => {
-    const header = { 'x-api-key': process.env.REACT_APP_PHONE_X_API_KEY };
     try {
-      const data = await axios.post(
-        'https://7s5fem53oh.execute-api.ap-northeast-2.amazonaws.com/default/phone-HelloWorldFunction-LuB9PruLAanW',
-        { phoneNumber: payload.phoneNumber },
-        {
-          headers: header,
-        }
-      );
+      const data = await api.post('/api/users/authentication/phone', {
+        phoneNumber: payload.phoneNumber,
+      });
       setResponsePhoneCode(data.data.code);
     } catch (error) {
       return error;
@@ -554,6 +549,9 @@ const FindPassword = () => {
 };
 
 const PasswordWrapper = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 100%;
+  }
   width: 480px;
   padding: 30px 0;
   display: flex;
@@ -579,6 +577,9 @@ const FormBox = styled.div`
 `;
 
 const CombinedForm = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 100%;
+  }
   width: 480px;
   display: flex;
   flex-direction: row;
@@ -586,6 +587,11 @@ const CombinedForm = styled.div`
 `;
 
 const ButtonSt = styled.button`
+  @media screen and (max-width: 1700px) {
+    width: 100px;
+    font-size: 12px;
+    margin-top: auto;
+  }
   width: 125px;
   height: 35px;
   border: none;
@@ -619,6 +625,9 @@ const NavBtnWrapper = styled.div`
 `;
 
 const NavBackBtn = styled(Link)`
+  @media screen and (max-width: 1700px) {
+    width: 47%;
+  }
   width: 228px;
   height: 44px;
   border: none;
@@ -633,6 +642,9 @@ const NavBackBtn = styled(Link)`
 `;
 
 const NavSubmitBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    width: 47%;
+  }
   width: 228px;
   height: 44px;
   border: none;

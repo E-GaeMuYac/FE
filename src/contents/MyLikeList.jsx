@@ -35,14 +35,14 @@ const LikelistHeader = styled.div`
   align-items: center;
   .title {
     @media screen and (max-width: 1700px) {
-      font-size: 17px;
+      font-size: 18px;
     }
     font-size: 20px;
     font-weight: 700;
   }
   .sum {
     @media screen and (max-width: 1700px) {
-      font-size: 17px;
+      font-size: 18px;
     }
     font-size: 20px;
     font-weight: 700;

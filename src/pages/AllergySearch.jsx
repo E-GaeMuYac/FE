@@ -197,6 +197,7 @@ const AllergySearch = () => {
           <BtnWrap>
             <SearchBtn type='button' onClick={handleClick}>
               <SearchIcon />
+              <span>검색</span>
             </SearchBtn>
           </BtnWrap>
           {inputValue ? (
@@ -250,7 +251,10 @@ const Wrapper = styled.div`
 `;
 
 const Wrap = styled.div`
-  width: 1380px;
+  @media screen and (max-width: 1700px) {
+    min-width: 1024px;
+  }
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -276,6 +280,9 @@ const Header = styled.div`
 `;
 
 const InputWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 70%;
+  }
   width: 860px;
   margin-bottom: 70px;
   border-radius: 163px;
@@ -287,6 +294,10 @@ const InputWrap = styled.div`
 `;
 
 const SearchInput = styled.input`
+  @media screen and (max-width: 1700px) {
+    height: 50px;
+    font-size: 16px;
+  }
   width: 730px;
   height: 65px;
   outline: none;
@@ -299,12 +310,19 @@ const SearchInput = styled.input`
   text-indent: 30px;
 
   ::placeholder {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+    }
     color: #b7b7b7;
     font-size: 24px;
   }
 `;
 
 const BtnWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 110px;
+    height: 50px;
+  }
   width: 130px;
   height: 65px;
   background-color: white;
@@ -313,6 +331,10 @@ const BtnWrap = styled.div`
 `;
 
 const SearchBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    width: 110px;
+    height: 50px;
+  }
   width: 130px;
   height: 65px;
   display: flex;
@@ -324,9 +346,23 @@ const SearchBtn = styled.button`
   z-index: 9999;
   cursor: pointer;
   background: linear-gradient(to left, #3366ff, #6690ff);
+  span {
+    @media screen and (max-width: 1700px) {
+      font-size: 18px;
+      margin-top: -2px;
+    }
+    font-size: 24px;
+    color: #ffffff;
+    margin-left: 5px;
+    margin-top: -3px;
+  }
 `;
 
 const SearchIcon = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 26px;
+    height: 26px;
+  }
   width: 37px;
   height: 37px;
   background-image: url(/assets/image/icon_search2.png);
@@ -335,6 +371,11 @@ const SearchIcon = styled.div`
 `;
 
 const AutoResult = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 100%;
+    height: 360px;
+    padding: 30px 35px;
+  }
   background-color: #f6f7fa;
   width: 860px;
   height: 470px;
@@ -347,30 +388,39 @@ const AutoResult = styled.div`
 `;
 
 const SingleResult = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 40px;
+  }
   width: 100%;
   height: 50px;
   cursor: pointer;
 `;
 
 const ResultSum = styled.div`
-  width: 1380px;
+  width: 100%;
   margin: 25px 0;
 `;
 
 const ListWrap = styled.div`
-  width: 1380px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 15px;
 `;
 
 const SearchKeyword = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 18px;
+  }
   color: #242424;
   font-weight: bold;
   font-size: 20px;
 `;
 
 const SearchSum = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 18px;
+  }
   color: #868686;
   font-weight: bold;
   font-size: 20px;

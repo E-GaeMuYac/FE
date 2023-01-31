@@ -383,6 +383,9 @@ const MyPageHeader = styled.div`
     font-weight: 700;
   }
   button {
+    @media screen and (max-width: 1700px) {
+      font-size: 14px;
+    }
     width: 100px;
     height: 30px;
     border: none;
@@ -440,6 +443,11 @@ const ModalBackground = styled.div`
 `;
 
 const Modal = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 500px;
+    height: 400px;
+    /* background-color: aliceblue; */
+  }
   background-color: #ffff;
   border-radius: 40px;
   display: flex;
@@ -452,12 +460,24 @@ const Modal = styled.div`
 `;
 
 const Content = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 80%;
+    height: 80%;
+    /* background-color: #bce253; */
+  }
   width: 499px;
   height: 483px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  .form-floating {
+    margin-top: -20px;
+  }
   .form-control {
+    @media screen and (max-width: 1700px) {
+      width: 100%;
+      margin-bottom: 0px;
+    }
     width: 480px;
     margin-bottom: 70px;
     display: flex;
@@ -484,6 +504,10 @@ const ModalBtnWrap = styled.div`
   justify-content: center;
   gap: 10px;
   .cancel {
+    @media screen and (max-width: 1700px) {
+      width: 180px;
+      height: 40px;
+    }
     width: 228px;
     height: 44px;
     border-radius: 50px;
@@ -491,6 +515,10 @@ const ModalBtnWrap = styled.div`
     background-color: #e7e7e7;
   }
   .proceed {
+    @media screen and (max-width: 1700px) {
+      width: 180px;
+      height: 40px;
+    }
     width: 228px;
     height: 44px;
     border-radius: 50px;
@@ -501,6 +529,9 @@ const ModalBtnWrap = styled.div`
 `;
 
 const SignupInfo = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin-top: 0px;
+  }
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -508,29 +539,48 @@ const SignupInfo = styled.div`
 `;
 
 const PrimarySpan = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 27px;
+    margin-bottom: 5px;
+  }
   font-size: 32px;
   font-weight: 700;
   color: #242424;
 `;
 
 const SecondarySpan = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 14px;
+  }
   font-size: 15px;
   color: #868686;
 `;
 
 const EmailBox = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 60px;
+    /* background-color: aqua; */
+    margin-top: 00px;
+  }
   width: 100%;
   height: 64px;
   display: flex;
   justify-content: center;
   align-items: center;
   span {
+    @media screen and (max-width: 1700px) {
+      font-size: 20px;
+    }
     font-size: 30px;
     font-weight: bold;
   }
 `;
 
 const EmailBoxBg = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 44px;
+    height: 44px;
+  }
   width: 56px;
   height: 56px;
   margin: 10px;
@@ -542,6 +592,10 @@ const EmailBoxBg = styled.div`
 `;
 
 const EmailBoxImg = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 36px;
+    height: 36px;
+  }
   background-image: ${({ imageUrl }) => `url(${imageUrl})`};
   background-size: cover;
   background-position: center;
