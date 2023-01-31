@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserView, MobileView } from 'react-device-detect';
 
 //page
 import ComparePage from './pages/Compare';
@@ -16,19 +17,21 @@ import LaptopCompare from './pages/Laptop/LaptopCompare';
 import AllergySearch from './pages/AllergySearch';
 import AddReviews from './pages/AddReviews';
 import ModifyReviews from './pages/ModifyReviews';
+import FindAccount from './pages/FindAccount';
+
 // 컴포넌트
 import Layout from './components/layout/Layout';
 import Header from './components/layout/Header';
 import CompareBox from './components/common/CompareBox';
-import FindAccount from './pages/FindAccount';
 import Reviews from './contents/Reviews';
 import MiniNav from './components/common/MiniNav';
 import ChatBox from './components/layout/ChatBox';
+import Mobile from './contents/Mobile';
 import Footer from './components/layout/Footer';
 import { useRecoilState } from 'recoil';
 import { nowRoute } from './recoil/recoilStore';
 // import Spinner from './components/common/Spinner';
-import { Mobile, Laptop, PC } from './query/useMediaQuery';
+import { Laptop, PC } from './query/useMediaQuery';
 
 function App() {
   const [isToken, setIsToken] = useState('');
@@ -42,78 +45,84 @@ function App() {
 
   return (
     <>
-      <Header
-        istoken={isToken}
-        setistoken={setIsToken}
-        userimage={userImage}
-        setuserimage={setUserImage}
-      />
-      <Routes>
-        <Route
-          exact
-          path='/login/loading'
-          element={
-            <SocialLogin setistoken={setIsToken} setuserimage={setUserImage} />
-          }
+      <BrowserView>
+        <Header
+          istoken={isToken}
+          setistoken={setIsToken}
+          userimage={userImage}
+          setuserimage={setUserImage}
         />
-        <Route
-          exact
-          path='/search'
-          element={
-            <Layout>
-              <Search />
-              <CompareBox />
-            </Layout>
-          }
-        />
-        <Route
-          exact
-          path='/compare'
-          element={
-            <>
-              <PC>
-                <ComparePage />
-              </PC>
-              <Laptop>
-                <LaptopCompare />
-              </Laptop>
-            </>
-          }
-        />
-        <Route
-          exact
-          path='/login'
-          element={
-            <Login setistoken={setIsToken} setuserimage={setUserImage} />
-          }
-        />
-        <Route exact path='/signup' element={<Signup />} />
-        <Route exact path='/findaccount' element={<FindAccount />} />
-        <Route exact path='/' element={<Main />} />
-        <Route
-          path='/detail/:id'
-          element={
-            <>
-              <PC>
-                <MiniNav />
+        <Routes>
+          <Route
+            exact
+            path='/login/loading'
+            element={
+              <SocialLogin
+                setistoken={setIsToken}
+                setuserimage={setUserImage}
+              />
+            }
+          />
+          <Route
+            exact
+            path='/search'
+            element={
+              <>
                 <Layout>
-                  <Detail />
+                  <Search />
                   <CompareBox />
                 </Layout>
-              </PC>
-              <Laptop>
-                <MiniNav />
-                <Layout>
-                  <LaptopDetail />
-                  <CompareBox />
-                </Layout>
-              </Laptop>
-            </>
-          }
-        />
-        <Route
-          path='/mypage'
-          element={
+              </>
+            }
+          />
+          <Route
+            exact
+            path='/compare'
+            element={
+              <>
+                <PC>
+                  <ComparePage />
+                </PC>
+                <Laptop>
+                  <LaptopCompare />
+                </Laptop>
+              </>
+            }
+          />
+          <Route
+            exact
+            path='/login'
+            element={
+              <Login setistoken={setIsToken} setuserimage={setUserImage} />
+            }
+          />
+          <Route exact path='/signup' element={<Signup />} />
+          <Route exact path='/findaccount' element={<FindAccount />} />
+          <Route exact path='/' element={<Main />} />
+          <Route
+            path='/detail/:id'
+            element={
+              <>
+                <PC>
+                  <MiniNav />
+                  <Layout>
+                    <Detail />
+                    <CompareBox />
+                  </Layout>
+                </PC>
+                <Laptop>
+                  <MiniNav />
+                  <Layout>
+                    <LaptopDetail />
+                    <CompareBox />
+                  </Layout>
+                </Laptop>
+              </>
+            }
+          />
+          <Route
+            path='/mypage'
+            element={
             <Layout>
               <User
                 setuserimage={setUserImage}
@@ -122,50 +131,54 @@ function App() {
               />
               <CompareBox />
             </Layout>
-          }
-        />
-        {/* <Route path='/spinner' element={<Spinner />} /> */}
-        <Route
-          path='/allergy'
-          element={
-            <>
-              <MiniNav />
-              <Layout>
-                <AllergySearch />
-              </Layout>
-            </>
-          }
-        />
-        <Route
-          path='/detail/:id/reviewform'
-          element={
-            <>
-              <MiniNav />
-              <Layout>
-                <AddReviews setistoken={setIsToken} />
-              </Layout>
-            </>
-          }
-        />
-        <Route
-          path='/detail/:medicineId/editform/:reviewId'
-          element={
-            <>
-              {/* <MiniNav /> */}
-              <Layout>
-                <ModifyReviews setistoken={setIsToken} />
-              </Layout>
-            </>
-          }
-        />
-        <Route
-          path='/detail/:id?tab=리뷰'
-          element={<Reviews setistoken={setIsToken} />}
-        />
-        <Route path='/event' element={<Event />} />
-      </Routes>
-      <Footer />
-      <ChatBox />
+            }
+          />
+          {/* <Route path='/spinner' element={<Spinner />} /> */}
+          <Route
+            path='/allergy'
+            element={
+              <>
+                <MiniNav />
+                <Layout>
+                  <AllergySearch />
+                </Layout>
+              </>
+            }
+          />
+          <Route
+            path='/detail/:id/reviewform'
+            element={
+              <>
+                <MiniNav />
+                <Layout>
+                  <AddReviews setistoken={setIsToken} />
+                </Layout>
+              </>
+            }
+          />
+          <Route
+            path='/detail/:medicineId/editform/:reviewId'
+            element={
+              <>
+                {/* <MiniNav /> */}
+                <Layout>
+                  <ModifyReviews setistoken={setIsToken} />
+                </Layout>
+              </>
+            }
+          />
+          <Route
+            path='/detail/:id?tab=리뷰'
+            element={<Reviews setistoken={setIsToken} />}
+          />
+          <Route path='/event' element={<Event />} />
+        </Routes>
+        <Footer />
+        <ChatBox />
+      </BrowserView>
+      <MobileView>
+        <Mobile />
+      </MobileView>
     </>
   );
 }
