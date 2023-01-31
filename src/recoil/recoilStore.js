@@ -5,6 +5,11 @@ export const nowRoute = atom({
   default: '',
 });
 
+export const searchWord = atom({
+  key: 'searchWord',
+  default: '',
+});
+
 export const compareBoxData = atom({
   key: 'compareBoxData',
   default: {

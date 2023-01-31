@@ -17,15 +17,17 @@ import LaptopCompare from './pages/Laptop/LaptopCompare';
 import AllergySearch from './pages/AllergySearch';
 import AddReviews from './pages/AddReviews';
 import ModifyReviews from './pages/ModifyReviews';
+import FindAccount from './pages/FindAccount';
+
 // 컴포넌트
 import Layout from './components/layout/Layout';
 import Header from './components/layout/Header';
 import CompareBox from './components/common/CompareBox';
-import FindAccount from './pages/FindAccount';
 import Reviews from './contents/Reviews';
 import MiniNav from './components/common/MiniNav';
 import ChatBox from './components/layout/ChatBox';
 import Mobile from './contents/Mobile';
+import Footer from './components/layout/Footer';
 import { useRecoilState } from 'recoil';
 import { nowRoute } from './recoil/recoilStore';
 // import Spinner from './components/common/Spinner';
@@ -40,6 +42,7 @@ function App() {
   useEffect(() => {
     setNowPage(location.pathname);
   }, []);
+
   return (
     <>
       <BrowserView>
@@ -120,16 +123,14 @@ function App() {
           <Route
             path='/mypage'
             element={
-              <>
-                <Layout>
-                  <User
-                    setuserimage={setUserImage}
-                    setistoken={setIsToken}
-                    istoken={isToken}
-                  />
-                  <CompareBox />
-                </Layout>
-              </>
+            <Layout>
+              <User
+                setuserimage={setUserImage}
+                setistoken={setIsToken}
+                istoken={isToken}
+              />
+              <CompareBox />
+            </Layout>
             }
           />
           {/* <Route path='/spinner' element={<Spinner />} /> */}
@@ -172,6 +173,7 @@ function App() {
           />
           <Route path='/event' element={<Event />} />
         </Routes>
+        <Footer />
         <ChatBox />
       </BrowserView>
       <MobileView>

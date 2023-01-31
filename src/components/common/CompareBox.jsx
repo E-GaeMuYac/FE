@@ -35,7 +35,6 @@ const ListCardComp = ({ list }) => {
     //페이지 이동
     navigate('/search');
   };
-
   return (
     <>
       {isFill ? (
@@ -43,7 +42,11 @@ const ListCardComp = ({ list }) => {
           <div className='cardImg'></div>
           <div className='cardContent'>
             <div className='listName'>{list.itemName}</div>
-            <div className='listSubContent'>{list.entpName}</div>
+            <ul className='listSubTag'>
+              {list.productType.map((list) => (
+                <li>{list}</li>
+              ))}
+            </ul>
             <div className='listSubContent'>{list.etcOtcCode}</div>
           </div>
           <div
@@ -383,6 +386,18 @@ const ListCard = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     margin-bottom: 18px;
+  }
+  .listSubTag {
+    display: flex;
+    gap: 4px;
+  }
+  .listSubTag li {
+    padding: 3.5px 6px;
+    background-color: #ebf0ff;
+    border-radius: 5px;
+    color: #3366ff;
+    font-weight: bold;
+    font-size: 13px;
   }
   .listSubContent {
     font-size: 14px;

@@ -744,7 +744,7 @@ const ComparePage = () => {
                           <span className='mainMaterialAmountIcon'>
                             해당 의약품에서 가장 중요한 성분 3가지를 뽑아
                             사용자에게 제공합니다. 제공되는 성분 3가지는 용량에
-                            상관없이{' '}
+                            상관없이
                             <sapn className='mainMaterialDesc'>
                               오직 중요순서로 기재됩니다.
                             </sapn>
@@ -896,7 +896,7 @@ const ComparePage = () => {
                           <span className='mainMaterialAmountIcon'>
                             해당 의약품에서 가장 중요한 성분 3가지를 뽑아
                             사용자에게 제공합니다. 제공되는 성분 3가지는 용량에
-                            상관없이{' '}
+                            상관없이
                             <sapn className='mainMaterialDesc'>
                               오직 중요순서로 기재됩니다.
                             </sapn>
@@ -1009,7 +1009,7 @@ const ComparePage = () => {
         <Wrap style={{ backgroundColor: '#f9faff' }}>
           <Layout>
             <NothingInBoxWrap>
-              <div className='title'>약국 비교함에 약을 담아 비교해보세요!</div>
+              <div className='title'>약품 비교함에 약을 담아 비교해보세요!</div>
               <div className='explainImage1'></div>
               <div className='explainImage2'></div>
             </NothingInBoxWrap>
