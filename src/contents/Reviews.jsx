@@ -581,6 +581,7 @@ const Description = styled.div`
 
 const DescSum = styled.div`
   font-size: 24px;
+  word-break: break-all;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -589,6 +590,7 @@ const DescSum = styled.div`
 
 const DescWhole = styled.div`
   font-size: 24px;
+  word-break: break-all;
 `;
 
 const MoreBtn = styled.button`
