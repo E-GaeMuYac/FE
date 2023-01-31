@@ -31,7 +31,7 @@ const ThirdSection = (props) => {
               </h1>
             </Content1>
           )}
-          {scrollPoint > 1000 && <Content2 />}
+          {scrollPoint > 850 && <Content2 />}
         </Laptop>
       </Wrapper>
     </Flex>

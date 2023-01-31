@@ -118,7 +118,7 @@ const FourthSection = (props) => {
                     </h1>
                   </div>
                   <p>
-                    약의 대해 궁금한 정보가 있다면 탭을 클릭해보세요.
+                    약에 대해 궁금한 정보가 있다면 탭을 클릭해보세요.
                     <br />
                     당신이 원하는 정보를 제공해드릴게요.
                   </p>
@@ -133,7 +133,7 @@ const FourthSection = (props) => {
           </ContentsWrap>
         </PC>
         <Laptop>
-          {scrollPoint > 1500 && (
+          {scrollPoint > 1200 && (
             <Content1>
               <h3>상세페이지</h3>
               <h2>
@@ -144,12 +144,12 @@ const FourthSection = (props) => {
             </Content1>
           )}
           <ContentsWrap>
-            {scrollPoint > 1700 && (
+            {scrollPoint > 1200 && (
               <AlignWrap>
                 <Content2 />
               </AlignWrap>
             )}
-            {scrollPoint > 1700 && (
+            {scrollPoint > 1300 && (
               <AlignWrap>
                 <Content3>
                   <div className='subTitle'>
@@ -169,7 +169,7 @@ const FourthSection = (props) => {
             )}
           </ContentsWrap>
           <ContentsWrap>
-            {scrollPoint > 2400 && (
+            {scrollPoint > 1600 && (
               <AlignWrap>
                 <Content4>
                   <div className='subTitle'>
@@ -191,19 +191,19 @@ const FourthSection = (props) => {
                 </Content4>
               </AlignWrap>
             )}
-            {scrollPoint > 2500 && (
+            {scrollPoint > 1900 && (
               <AlignWrap>
                 <Content5 />
               </AlignWrap>
             )}
           </ContentsWrap>
           <ContentsWrap>
-            {scrollPoint > 2900 && (
+            {scrollPoint > 2200 && (
               <AlignWrap>
                 <Content6 />
               </AlignWrap>
             )}
-            {scrollPoint > 2900 && (
+            {scrollPoint > 2400 && (
               <AlignWrap>
                 <Content7>
                   <div>
@@ -231,7 +231,7 @@ const FourthSection = (props) => {
             )}
           </ContentsWrap>
           <ContentsWrap>
-            {scrollPoint > 3400 && (
+            {scrollPoint > 2700 && (
               <AlignWrap>
                 <Content8>
                   <div className='subTitle'>
@@ -252,7 +252,7 @@ const FourthSection = (props) => {
                 </Content8>
               </AlignWrap>
             )}
-            {scrollPoint > 3500 && (
+            {scrollPoint > 2850 && (
               <AlignWrap>
                 <Content9 />
               </AlignWrap>
@@ -323,7 +323,7 @@ const ContentsWrap = styled.div`
 const Content1 = styled.div`
   @media screen and (max-width: 1700px) {
     margin-top: 0vh;
-    height: 200px;
+    height: 120px;
   }
   /* width: 100%; */
   height: 300px;

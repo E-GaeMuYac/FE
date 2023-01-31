@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
+
 //page
 import ComparePage from './pages/Compare';
 import Login from './pages/Login';

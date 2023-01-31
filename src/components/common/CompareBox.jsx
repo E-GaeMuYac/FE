@@ -344,6 +344,7 @@ const BoxContent = styled.div`
 const ListCard = styled.div`
   @media screen and (max-width: 1700px) {
     width: 48%;
+    height: 170px;
   }
   position: relative;
   width: 90%;
@@ -417,6 +418,9 @@ const ListCard = styled.div`
     margin-bottom: 10px;
   }
   .addComment {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+    }
     font-size: 18px;
     line-height: 26px;
     color: #242424;

@@ -37,7 +37,7 @@ const FifthSection = (props) => {
           )}
         </PC>
         <Laptop>
-          {scrollPoint > 3700 && (
+          {scrollPoint > 3150 && (
             <>
               <Content1>
                 <h3>비교하기</h3>
