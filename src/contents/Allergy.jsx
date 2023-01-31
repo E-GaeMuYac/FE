@@ -114,6 +114,9 @@ const Allergy = () => {
 };
 
 const Wrapper = styled.div`
+  @media screen and (max-width: 1700px) {
+    min-width: 1024px;
+  }
   width: 100%;
   padding-bottom: 80px;
 `;
@@ -132,6 +135,11 @@ const ModalBtnWrap = styled.div`
 `;
 
 const ModalOpenBtn = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 160px;
+    height: 44px;
+    font-size: 18px;
+  }
   width: 216px;
   height: 58px;
   border-radius: 10px;
@@ -143,6 +151,12 @@ const ModalOpenBtn = styled.div`
   align-items: center;
   justify-content: center;
   div {
+    @media screen and (max-width: 1700px) {
+      width: 26px;
+      height: 26px;
+      margin-top: 1px;
+      margin-left: 2px;
+    }
     background-image: url('/assets/image/add_btn_red.png');
     background-size: cover;
     width: 32px;
@@ -158,12 +172,18 @@ const Listsum = styled.div`
 `;
 
 const Title = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 18px;
+  }
   color: #242424;
   font-size: 24px;
   font-weight: bold;
 `;
 
 const Count = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 18px;
+  }
   color: #868686;
   font-size: 24px;
   font-weight: bold;
@@ -171,13 +191,17 @@ const Count = styled.span`
 `;
 
 const ListWrap = styled.div`
-  width: 1380px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 15px;
 `;
 
 const ResultList = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 70px;
+    padding: 20px;
+  }
   background-color: white;
   width: 100%;
   height: 120px;
@@ -191,12 +215,20 @@ const ResultList = styled.div`
 `;
 
 const PillTitle = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 18px;
+  }
   color: #242424;
   font-weight: bold;
   font-size: 24px;
 `;
 
 const MoreBtn = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 36px;
+    height: 36px;
+    right: 170px;
+  }
   background-image: url('/assets/image/arrow_down_big.png');
   background-size: cover;
   width: 50px;
@@ -206,6 +238,11 @@ const MoreBtn = styled.div`
 `;
 
 const CancelBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    width: 100px;
+    height: 38px;
+    font-size: 17px;
+  }
   width: 130px;
   height: 44px;
   border-radius: 10px;
@@ -217,13 +254,22 @@ const CancelBtn = styled.button`
 `;
 
 const MoreInfoWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    min-height: 170px;
+    max-height: 500px;
+  }
   width: 100%;
-  height: 316px;
+  min-height: 170px;
+  max-height: 500px;
   border-radius: 20px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
 `;
 
 const MoreInfoList = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 70px;
+    padding: 20px;
+  }
   width: 100%;
   height: 120px;
   border-top-left-radius: 20px;
@@ -236,9 +282,16 @@ const MoreInfoList = styled.div`
 `;
 
 const MoreInfoContent = styled.div`
+  @media screen and (max-width: 1700px) {
+    min-height: 100px;
+    max-height: 500px;
+    padding: 30px;
+    font-size: 18px;
+  }
   background-color: #f6f7fa;
   width: 100%;
-  height: 196px;
+  min-height: 100px;
+  max-height: 500px;
   box-sizing: border-box;
   padding: 40px;
   border-bottom-left-radius: 20px;
@@ -248,6 +301,11 @@ const MoreInfoContent = styled.div`
 `;
 
 const FoldBtn = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 36px;
+    height: 36px;
+    right: 170px;
+  }
   background-image: url('/assets/image/arrow_up_big.png');
   background-size: cover;
   width: 50px;

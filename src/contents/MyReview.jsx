@@ -287,6 +287,9 @@ const Wrapper = styled.div`
 `;
 
 const Contents = styled.div`
+  @media screen and (max-width: 1700px) {
+    padding: 30px 30px;
+  }
   width: 100%;
   border-radius: 23px;
   background-color: #f6f7fa;
@@ -296,6 +299,9 @@ const Contents = styled.div`
 `;
 
 const WrapContents = styled.div`
+  @media screen and (max-width: 1700px) {
+    padding: 0;
+  }
   width: 100%;
   padding: 21px 0;
   margin: auto;
@@ -368,11 +374,19 @@ const WrapContents = styled.div`
     display: flex;
     gap: 10px;
     .reviewBtn {
+      @media screen and (max-width: 1700px) {
+        width: 90px;
+        height: 34px;
+        font-size: 14px;
+      }
       width: 120px;
       height: 40px;
       border-radius: 8px;
       border: none;
       color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .modify {
       background-color: #868686;
@@ -399,6 +413,11 @@ const Image = styled.div`
 `;
 
 const Name = styled(Link)`
+  @media screen and (max-width: 1700px) {
+    font-size: 20px;
+    min-width: 220px;
+    max-width: 250px;
+  }
   min-width: 360px;
   max-width: 380px;
   margin: auto;
@@ -412,6 +431,12 @@ const Name = styled(Link)`
 
 const Categorize = styled.div`
   div {
+    @media screen and (max-width: 1700px) {
+      font-size: 14px;
+      min-width: 54px;
+      height: 30px;
+      padding: 0 5px;
+    }
     padding: 0 5px;
     min-width: 69px;
     height: 35px;
@@ -431,6 +456,10 @@ const Categorize = styled.div`
 `;
 
 const TopLabel = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 15px;
+    line-height: 22px;
+  }
   height: 24px;
   font-size: 16px;
   font-weight: 700;
@@ -441,6 +470,10 @@ const TopLabel = styled.div`
 `;
 
 const BottomLabel = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 15px;
+    line-height: 22px;
+  }
   height: 24px;
   font-size: 16px;
   font-weight: 700;
@@ -481,10 +514,16 @@ const ModifyArea = styled.textarea`
 `;
 
 const Description = styled.div`
+  @media screen and (max-width: 1700px) {
+    padding: 30px 0px 10px 8px;
+  }
   width: 100%;
 `;
 
 const DescSum = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 15px;
+  }
   font-size: 24px;
   width: 100%;
   height: 110px;
@@ -496,11 +535,18 @@ const DescSum = styled.div`
 `;
 
 const DescWhole = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 15px;
+  }
   font-size: 24px;
   word-break: break-all;
 `;
 
 const MoreBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
   background-color: #e7e7e7;
   appearance: none;
   margin: 15px 0;
@@ -514,6 +560,10 @@ const MoreBtn = styled.button`
 `;
 
 const FoldBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
   background-color: #e7e7e7;
   appearance: none;
   margin: 15px 0;
@@ -527,6 +577,10 @@ const FoldBtn = styled.button`
 `;
 
 const Exception = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 14px;
+    padding-bottom: 5px;
+  }
   width: 100%;
   font-size: 18px;
   font-weight: bold;
@@ -542,6 +596,10 @@ const Exception = styled.div`
 `;
 
 const Recommend = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 30px;
+    margin-top: 10px;
+  }
   height: 70px;
   display: flex;
   align-items: center;
@@ -549,6 +607,13 @@ const Recommend = styled.div`
 `;
 
 const LikeBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    min-width: 110px;
+    width: 110px;
+    max-width: 130px;
+    height: 30px;
+    font-size: 13px;
+  }
   width: 127px;
   height: 36px;
   border-radius: 87px;
@@ -565,6 +630,13 @@ const LikeBtn = styled.button`
 `;
 
 const DislikeBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    min-width: 110px;
+    width: 110px;
+    max-width: 130px;
+    height: 30px;
+    font-size: 13px;
+  }
   width: 127px;
   height: 36px;
   border-radius: 87px;
@@ -580,6 +652,9 @@ const DislikeBtn = styled.button`
 `;
 
 const DateWrited = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 14px;
+  }
   align-items: center;
   color: #868686;
   font-size: 18px;

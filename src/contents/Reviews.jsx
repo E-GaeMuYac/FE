@@ -5,6 +5,7 @@ import { AiFillLike, AiFillDislike } from 'react-icons/ai';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { userApi } from '../apis/apiInstance';
+import { Mobile, Laptop, PC } from '../query/useMediaQuery';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
@@ -313,7 +314,12 @@ const Reviews = (props) => {
               )}
             </Description>
             <Exception>
-              <IoIosWarning size='26' color='#FF772B' />
+              <PC>
+                <IoIosWarning size='26' color='#FF772B' />
+              </PC>
+              <Laptop>
+                <IoIosWarning size='20' color='#FF772B' />
+              </Laptop>
               <span>면책사항:</span>
               <div>의학적 또는 전문가의 조언이 아닌 사용자의 의견입니다.</div>
             </Exception>
@@ -363,6 +369,9 @@ const Reviews = (props) => {
 };
 
 const Wrapper = styled.div`
+  @media screen and (max-width: 1700px) {
+    min-width: 1024px;
+  }
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -370,6 +379,10 @@ const Wrapper = styled.div`
 `;
 
 const ReviewBtnWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    padding: 20px 30px;
+    min-height: 100px;
+  }
   background-color: #f6f7fa;
   width: 100%;
   min-height: 120px;
@@ -382,19 +395,33 @@ const ReviewBtnWrap = styled.div`
 `;
 
 const ReviewDesc = styled.div`
+  @media screen and (max-width: 1700px) {
+    line-height: 16px;
+  }
   width: 1070px;
   line-height: 20px;
   p {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+    }
     font-size: 20px;
   }
 
   span {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+    }
     font-size: 20px;
     font-weight: bold;
   }
 `;
 
 const ReviewpageBtn = styled.div`
+  @media screen and (max-width: 1700px) {
+    min-width: 95px;
+    height: 40px;
+    font-size: 17px;
+  }
   min-width: 130px;
   height: 44px;
   background-color: #242424;
@@ -407,6 +434,10 @@ const ReviewpageBtn = styled.div`
   cursor: pointer;
 `;
 const ReviewNav = styled.div`
+  @media screen and (max-width: 1700px) {
+    padding: 20px 30px;
+    min-height: 140px;
+  }
   background-color: #f6f7fa;
   width: 100%;
   min-height: 178px;
@@ -415,6 +446,10 @@ const ReviewNav = styled.div`
 `;
 
 const ReviewHeader = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 44px;
+    margin-bottom: 10px;
+  }
   width: 100%;
   height: 60px;
   display: flex;
@@ -422,10 +457,16 @@ const ReviewHeader = styled.div`
   align-items: center;
   position: relative;
   .title {
+    @media screen and (max-width: 1700px) {
+      font-size: 20px;
+    }
     font-size: 24px;
     font-weight: bold;
   }
   .sum {
+    @media screen and (max-width: 1700px) {
+      font-size: 20px;
+    }
     font-size: 24px;
     font-weight: bold;
     color: #3366ff;
@@ -433,6 +474,10 @@ const ReviewHeader = styled.div`
 `;
 
 const SortDefault = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 110px;
+    height: 36px;
+  }
   width: 130px;
   height: 44px;
   border-radius: 8px;
@@ -446,16 +491,28 @@ const SortDefault = styled.div`
 `;
 
 const SortName = styled.span`
+  @media screen and (max-width: 1700px) {
+    left: 20px;
+  }
   position: absolute;
   left: 30px;
 `;
 
 const Arrow = styled.span`
+  @media screen and (max-width: 1700px) {
+    right: 18px;
+    font-size: 12px;
+  }
   position: absolute;
   right: 10px;
 `;
 
 const DropOpen = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 110px;
+    height: 110px;
+    top: 4px;
+  }
   background-color: white;
   width: 130px;
   height: 132px;
@@ -466,6 +523,12 @@ const DropOpen = styled.div`
 `;
 
 const CreatedAt = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 110px;
+    height: 35px;
+    top: 38px;
+    /* background-color: aqua; */
+  }
   width: 130px;
   height: 44px;
   border-radius: 8px;
@@ -480,6 +543,12 @@ const CreatedAt = styled.div`
 `;
 
 const LikeCount = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 110px;
+    height: 35px;
+    top: 74px;
+    /* background-color: #d3c939; */
+  }
   width: 130px;
   height: 44px;
   border-radius: 8px;
@@ -494,6 +563,10 @@ const LikeCount = styled.div`
 `;
 
 const ReviewSorting = styled.div`
+  @media screen and (max-width: 1700px) {
+    min-height: 40px;
+    /* background-color: aqua; */
+  }
   width: 100%;
   min-height: 60px;
   display: flex;
@@ -503,6 +576,12 @@ const ReviewSorting = styled.div`
 `;
 
 const SortTag = styled.span`
+  @media screen and (max-width: 1700px) {
+    height: 32px;
+    min-width: 54px;
+    font-size: 14px;
+    font-weight: 600;
+  }
   background-color: ${(props) =>
     props.tag === props.pickTag ? '#3366FF' : '#D0D0D0'};
   color: ${(props) => (props.tag === props.pickTag ? 'white' : '#868686;')};
@@ -520,6 +599,9 @@ const SortTag = styled.span`
 `;
 
 const Contents = styled.div`
+  @media screen and (max-width: 1700px) {
+    padding: 20px 30px;
+  }
   width: 100%;
   border-radius: 23px;
   background-color: #f6f7fa;
@@ -529,6 +611,9 @@ const Contents = styled.div`
 `;
 
 const ReviewInfo = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 46px;
+  }
   width: 100%;
   height: 58px;
   display: flex;
@@ -540,12 +625,20 @@ const AccountBox = styled.div`
   display: flex;
   align-items: center;
   span {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+    }
     font-size: 20px;
     font-weight: bold;
   }
 `;
 
 const AccountBoxBg = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 44px;
+    height: 44px;
+    margin-left: 0;
+  }
   width: 52px;
   height: 52px;
   margin: 10px;
@@ -557,6 +650,10 @@ const AccountBoxBg = styled.div`
 `;
 
 const AccountBoxImg = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 36px;
+    height: 36px;
+  }
   background-image: ${({ imageUrl }) => `url(${imageUrl})`};
   background-size: cover;
   background-position: center;
@@ -568,6 +665,9 @@ const AccountBoxImg = styled.div`
 `;
 
 const DateWrited = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 14px;
+  }
   display: flex;
   align-items: center;
   color: #868686;
@@ -575,11 +675,18 @@ const DateWrited = styled.span`
 `;
 
 const Description = styled.div`
+  @media screen and (max-width: 1700px) {
+    padding: 30px 0px 10px 8px;
+  }
+  /* background-color: aqua; */
   width: 100%;
   padding-top: 20px;
 `;
 
 const DescSum = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 15px;
+  }
   font-size: 24px;
   word-break: break-all;
   display: -webkit-box;
@@ -589,11 +696,18 @@ const DescSum = styled.div`
 `;
 
 const DescWhole = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 15px;
+  }
   font-size: 24px;
   word-break: break-all;
 `;
 
 const MoreBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
   background-color: #e7e7e7;
   appearance: none;
   margin: 15px 0;
@@ -607,6 +721,10 @@ const MoreBtn = styled.button`
 `;
 
 const FoldBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
   background-color: #e7e7e7;
   appearance: none;
   margin: 15px 0;
@@ -620,6 +738,10 @@ const FoldBtn = styled.button`
 `;
 
 const Exception = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 14px;
+    padding-bottom: 5px;
+  }
   width: 100%;
   font-size: 18px;
   font-weight: bold;
@@ -635,6 +757,10 @@ const Exception = styled.div`
 `;
 
 const Recommend = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 40px;
+    margin-top: 10px;
+  }
   height: 70px;
   display: flex;
   align-items: center;
@@ -642,6 +768,13 @@ const Recommend = styled.div`
 `;
 
 const LikeBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    min-width: 110px;
+    width: 110px;
+    max-width: 130px;
+    height: 30px;
+    font-size: 13px;
+  }
   width: 127px;
   height: 36px;
   border-radius: 87px;
@@ -658,6 +791,13 @@ const LikeBtn = styled.button`
 `;
 
 const DislikeBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    min-width: 110px;
+    width: 110px;
+    max-width: 130px;
+    height: 30px;
+    font-size: 13px;
+  }
   width: 127px;
   height: 36px;
   border-radius: 87px;
@@ -673,6 +813,12 @@ const DislikeBtn = styled.button`
 `;
 
 const EditBtn = styled(Link)`
+  @media screen and (max-width: 1700px) {
+    width: 100px;
+    height: 30px;
+    font-size: 13px;
+    margin-top: 10px;
+  }
   width: 123px;
   height: 36px;
   border-radius: 87px;
@@ -684,6 +830,11 @@ const EditBtn = styled(Link)`
   justify-content: center;
   cursor: pointer;
   div {
+    @media screen and (max-width: 1700px) {
+      width: 20px;
+      height: 20px;
+      margin-right: 6px;
+    }
     background-image: url('/assets/image/닉네임수정아이콘.png');
     background-size: cover;
     width: 24px;
@@ -693,6 +844,12 @@ const EditBtn = styled(Link)`
 `;
 
 const ReportBtn = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 100px;
+    height: 30px;
+    font-size: 13px;
+    margin-top: 10px;
+  }
   width: 123px;
   height: 36px;
   border-radius: 87px;
@@ -703,6 +860,11 @@ const ReportBtn = styled.div`
   justify-content: center;
   cursor: pointer;
   div {
+    @media screen and (max-width: 1700px) {
+      width: 20px;
+      height: 20px;
+      margin-right: 6px;
+    }
     background-image: url('/assets/image/warnIcon.png');
     background-size: cover;
     width: 24px;

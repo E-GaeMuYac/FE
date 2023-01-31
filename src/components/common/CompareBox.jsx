@@ -375,7 +375,7 @@ const ListCard = styled.div`
     margin-right: 24px;
   }
   .listName {
-    @media screen and (max-width: 1440px) {
+    @media screen and (max-width: 1700px) {
       width: 65%;
     }
     font-size: 18px;

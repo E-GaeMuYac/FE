@@ -898,7 +898,6 @@ const WrapContents = styled.div`
     }
     .tooltipText {
       border-radius: 8px;
-      /* box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2); */
       background-color: rgba(0, 0, 0, 0.8);
       box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
       display: none;
@@ -909,9 +908,7 @@ const WrapContents = styled.div`
       padding: 13px;
       font-size: 15px;
       line-height: 21px;
-      /* color: #868686; */
       color: #ffffff;
-      /* background-color: #ffffff; */
       opacity: 1;
       z-index: 2;
       font-weight: 400;

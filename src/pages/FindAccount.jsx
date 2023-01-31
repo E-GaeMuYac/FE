@@ -44,6 +44,9 @@ const BackGround = styled.div`
 `;
 
 const Wrapper = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 590px;
+  }
   width: 800px;
   padding: 60px 0;
   display: flex;
@@ -54,6 +57,9 @@ const Wrapper = styled.div`
 `;
 
 const SignupWrapper = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 400px;
+  }
   width: 480px;
   display: flex;
   flex-direction: column;
@@ -69,8 +75,9 @@ const SignupWrapper = styled.div`
 
   .successs {
     input {
-      /* margin-top: 10px;
-      height: 50px; */
+      @media screen and (max-width: 1700px) {
+        width: 300px;
+      }
       width: 350px;
       border: none;
       border-bottom: 1px solid #3366ff;
@@ -85,8 +92,9 @@ const SignupWrapper = styled.div`
   }
   .errorr {
     input {
-      /* margin-top: 10px;
-      height: 50px; */
+      @media screen and (max-width: 1700px) {
+        width: 300px;
+      }
       width: 350px;
       border: none;
       border-bottom: 1px solid #919191;
@@ -131,22 +139,33 @@ const SignupInfo = styled.div`
 `;
 
 const PrimarySpan = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 27px;
+    margin-bottom: 5px;
+  }
   font-size: 32px;
   font-weight: 700;
   color: #242424;
 `;
 
 const SecondarySpan = styled.span`
+  @media screen and (max-width: 1700px) {
+    font-size: 14px;
+  }
   font-size: 15px;
   color: #868686;
 `;
 
 const BtnWrap = styled.div`
-  width: 480px;
+  width: 100%;
   display: flex;
 `;
 
 const FindIdBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    height: 50px;
+    font-size: 18px;
+  }
   width: 100%;
   height: 56px;
   font-size: 20px;
@@ -159,6 +178,10 @@ const FindIdBtn = styled.button`
 `;
 
 const FindPwBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    height: 50px;
+    font-size: 18px;
+  }
   width: 100%;
   height: 56px;
   font-size: 20px;

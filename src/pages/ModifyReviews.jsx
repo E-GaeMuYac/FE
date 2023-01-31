@@ -97,13 +97,13 @@ const ModifyReviews = (props) => {
                   <span className='tooltipText'>
                     의사 또는 치과의사의 지시와 감독에 따라 사용되어야 하는
                     의약품으로, 의사의 처방전에 의해서만 구입하여 사용할 수
-                    있다.
+                    있습니다.
                   </span>
                 ) : (
                   <span className='tooltipText'>
                     처방전 없이 약국에서 구입할 수 있는 의약품으로, 포장 용기에
                     기재된 설명대로 올바르게 복용한다면 비교적 안전하게 사용할
-                    수 있다.
+                    수 있습니다.
                   </span>
                 )}
               </div>
@@ -143,6 +143,9 @@ const ModifyReviews = (props) => {
 };
 
 const Wrapper = styled.div`
+  @media screen and (max-width: 1700px) {
+    min-width: 1024px;
+  }
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -151,6 +154,9 @@ const Wrapper = styled.div`
 `;
 
 const PageTitle = styled.h3`
+  @media screen and (max-width: 1700px) {
+    font-size: 26px;
+  }
   font-weight: bold;
 `;
 
@@ -177,8 +183,13 @@ const WrapContents = styled.div`
     right: 30px;
   }
   .etcOtcCodeDesc {
+    @media screen and (max-width: 1700px) {
+      width: 18px;
+      height: 18px;
+    }
     width: 20px;
     height: 20px;
+    position: relative;
     background-image: url('/assets/image/의약품목설명아이콘.png');
     background-size: cover;
     background-position: center;
@@ -189,11 +200,13 @@ const WrapContents = styled.div`
     }
     .tooltipText {
       border-radius: 8px;
-      background-color: rgba(0, 0, 0, 0.54);
+      background-color: rgba(0, 0, 0, 0.8);
       box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
       display: none;
       position: absolute;
-      max-width: 310px;
+      top: 30px;
+      left: -30px;
+      width: 310px;
       padding: 13px;
       font-size: 15px;
       line-height: 21px;
@@ -202,6 +215,18 @@ const WrapContents = styled.div`
       z-index: 2;
       font-weight: 400;
       font-size: 14px;
+    }
+    .tooltipText::after {
+      content: '';
+      width: 0px;
+      height: 0px;
+      border-bottom: 10px solid rgba(0, 0, 0, 0.8);
+      border-top: 10px solid transparent;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      position: absolute;
+      left: 36.5px;
+      top: -20px;
     }
   }
   .compareBox {
@@ -241,6 +266,11 @@ const Image = styled.div`
 `;
 
 const Name = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 20px;
+    min-width: 220px;
+    max-width: 250px;
+  }
   min-width: 360px;
   max-width: 380px;
   margin: auto;
@@ -252,6 +282,12 @@ const Name = styled.div`
 
 const Categorize = styled.div`
   div {
+    @media screen and (max-width: 1700px) {
+      font-size: 14px;
+      min-width: 54px;
+      height: 30px;
+      padding: 0 5px;
+    }
     padding: 0 5px;
     min-width: 69px;
     height: 35px;
@@ -271,6 +307,10 @@ const Categorize = styled.div`
 `;
 
 const TopLabel = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 15px;
+    line-height: 22px;
+  }
   height: 24px;
   font-size: 16px;
   font-weight: 700;
@@ -281,6 +321,10 @@ const TopLabel = styled.div`
 `;
 
 const BottomLabel = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 15px;
+    line-height: 22px;
+  }
   height: 24px;
   font-size: 16px;
   font-weight: 700;
@@ -293,6 +337,11 @@ const BottomLabel = styled.div`
 `;
 
 const ReviewGuide = styled.div`
+  @media screen and (max-width: 1700px) {
+    line-height: 14px;
+    padding: 20px 30px;
+    height: 87px;
+  }
   width: 100%;
   height: 120px;
   padding: 30px 60px;
@@ -300,10 +349,16 @@ const ReviewGuide = styled.div`
   background-color: #f6f7fa;
   line-height: 20px;
   p {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+    }
     font-size: 20px;
   }
 
   span {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+    }
     font-size: 20px;
     font-weight: bold;
     color: #ff392b;
@@ -311,6 +366,13 @@ const ReviewGuide = styled.div`
 `;
 
 const ContentBox = styled.div`
+  @media screen and (max-width: 1700px) {
+    padding: 30px 30px;
+    height: 400px;
+  }
+  @media screen and (min-width: 1701px) {
+    align-items: center;
+  }
   background-color: #f6f7fa;
   border-radius: 25px;
   border: 2px solid #e7e7e7;
@@ -324,6 +386,10 @@ const ContentBox = styled.div`
 `;
 
 const ReviewArea = styled.textarea`
+  @media screen and (max-width: 1700px) {
+    font-size: 16px;
+    height: 310px;
+  }
   width: 100%;
   height: 360px;
   background-color: #f6f7fa;
@@ -333,6 +399,10 @@ const ReviewArea = styled.textarea`
   font-size: 24px;
 
   ::placeholder {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+      white-space: pre-wrap;
+    }
     font-size: 24px;
   }
 
@@ -368,6 +438,11 @@ const SubmitBtnWrap = styled.div`
 `;
 
 const SubmitBtn = styled.button`
+  @media screen and (max-width: 1700px) {
+    width: 280px;
+    height: 50px;
+    font-size: 18px;
+  }
   width: 326px;
   height: 58px;
   background-color: ${(props) => (props.disabled ? '#c2d1ff' : '#3366FF')};
