@@ -45,12 +45,14 @@ const ChatBox = () => {
   const adminIdArr = process.env.REACT_APP_ADMIN_ID_ARR.split('|').map((i) =>
     Number(i)
   );
+  // console.log(process.env.REACT_APP_ADMIN_ID_ARR);
+  // console.log(userId);
   //로그인한 유저의 id가 관리자 배열에 포함될 경우 admin화
   useEffect(() => {
     if (adminIdArr.includes(userId)) {
       setIsAdmin(true);
     }
-  }, [userId]);
+  }, [userId, adminIdArr]);
 
   //소켓 연결
   useEffect(() => {
@@ -76,9 +78,6 @@ const ChatBox = () => {
   // 방 입장 시 안내 문구
   useEffect(() => {
     socket?.on('join', (content, link) => {
-      socket?.on('load', (chats) => {
-        setMessageList(chats);
-      });
       //챗 보내기
       if (content) {
         const hour =
@@ -106,20 +105,12 @@ const ChatBox = () => {
   // ---------------------------------------------------------------
   const chatTag = [
     {
-      tagName: '건의하기',
-      comment: '어떤 이메일로 건의하면 좋을까요?',
+      tagName: '키워드',
+      comment: '현재 인식되는 키워드가 어떤 것들이 있을까요?',
     },
     {
-      tagName: '개발자',
-      comment: '와우! 이 사이트를 어떤 개발자가 만들었죠?',
-    },
-    {
-      tagName: '상담',
+      tagName: '채팅상담',
       comment: '채팅으로 직접 상담받고싶어요!',
-    },
-    {
-      tagName: '설문조사',
-      comment: '설문조사에 참여하고싶은데 어디에 하면 되나요?',
     },
   ];
   //input에 채팅 작성
@@ -192,15 +183,45 @@ const ChatBox = () => {
 
   // 버튼 클릭 시 상담모드로 전환
   const callAdmin = () => {
+    alert('현재 작업 중인 기능입니다');
     setChatType('상담');
+    const hour =
+      new Date(Date.now()).getHours() >= 10
+        ? new Date(Date.now()).getHours()
+        : '0' + new Date(Date.now()).getHours();
+    const minute =
+      new Date(Date.now()).getMinutes() >= 10
+        ? new Date(Date.now()).getMinutes()
+        : '0' + new Date(Date.now()).getMinutes();
+    setMessageList((list) => [
+      ...list,
+      {
+        _id: Date.now(),
+        time: `${hour}:${minute}`,
+        writer: 'another',
+        message: '관리자를 초대하였습니다! 메세지를 보내주세요.',
+      },
+    ]);
   };
+  // 관리자 입장
   const adminJoinRoom = async (roomData) => {
     await socket.emit('adminJoin', roomData.room);
     setAdminUser(roomData.user);
     setAdminRoom(roomData.room);
+    setMessageList([]);
+  };
+  // 관리자 퇴장
+  const leaveAdmin = async () => {
+    await socket.emit('adminLeave', {
+      room: adminRoom,
+      user: adminUser,
+    });
+    setAdminUser('');
+    setAdminRoom('');
+    setMessageList([]);
   };
 
-  // 관리자 입장 문구 출력
+  // 관리자 입장, 퇴장 문구 출력
   useEffect(() => {
     socket?.on('adminJoin', (msg) => {
       const hour =
@@ -220,15 +241,20 @@ const ChatBox = () => {
           message: msg,
         },
       ]);
+      if (msg === '관리자가 나가셨습니다!') {
+        setChatType('챗봇');
+      }
     });
   }, [socket]);
+  // 관리자 채팅방 리스트 가져오기
   useEffect(() => {
     if (isAdmin) {
       socket?.on('getRooms', (data) => {
         setAdminChatList(data);
       });
     }
-  }, [socket, isAdmin]);
+  }, [socket, isAdmin, adminRoom]);
+  //관리자 채팅 받기
   useEffect(() => {
     socket?.on('adminReceive', (msg) => {
       const hour =
@@ -254,7 +280,9 @@ const ChatBox = () => {
   // ---------------------------------------------------------------
   return (
     <>
-      <ChatBoxOpenBtn onClick={OpenChatBox}></ChatBoxOpenBtn>
+      <ChatBoxOpenBtn
+        isOpenchatBox={isOpenchatBox}
+        onClick={OpenChatBox}></ChatBoxOpenBtn>
       {isOpenchatBox && (
         <ChatBoxWrap isOpenchatBox={isOpenchatBox}>
           {isAdmin && (
@@ -263,35 +291,57 @@ const ChatBox = () => {
                 <div className='title'>리스트</div>
               </div>
               <ul>
-                {adminChatList?.map((list) => (
-                  <li
-                    key={list._id}
-                    onClick={() => {
-                      adminJoinRoom(list);
-                    }}>
-                    {list.room}
-                  </li>
-                ))}
+                {adminChatList?.map((list) =>
+                  list.room === adminRoom ? (
+                    <li
+                      className='roomActive'
+                      key={list._id}
+                      onClick={() => {
+                        adminJoinRoom(list);
+                      }}>
+                      {list.room}
+                    </li>
+                  ) : (
+                    <li
+                      key={list._id}
+                      onClick={() => {
+                        adminJoinRoom(list);
+                      }}>
+                      {list.room}
+                    </li>
+                  )
+                )}
               </ul>
             </div>
           )}
           <div className='chattingZone'>
             <div className='chatHeader'>
-              <div className='title'>문의넛츠</div>
+              <div className='title'>땅콩매니저</div>
             </div>
-            <ChartBoxRoom isAdmin={isAdmin}>
-              {!isAdmin && (
+            <ChartBoxRoom isAdmin={isAdmin} adminRoom={adminRoom}>
+              {isAdmin && adminRoom ? (
                 <div className='roomTagWrap'>
-                  {chatTag.map((tag) => (
-                    <li
-                      key={tag.tagName}
-                      onClick={() => {
-                        sendFromUser(tag.comment);
-                      }}>
-                      {tag.tagName}
-                    </li>
-                  ))}
+                  <li
+                    onClick={() => {
+                      leaveAdmin();
+                    }}>
+                    관리자 나가기
+                  </li>
                 </div>
+              ) : (
+                !isAdmin && (
+                  <div className='roomTagWrap'>
+                    {chatTag.map((tag) => (
+                      <li
+                        key={tag.tagName}
+                        onClick={() => {
+                          sendFromUser(tag.comment);
+                        }}>
+                        {tag.tagName}
+                      </li>
+                    ))}
+                  </div>
+                )
               )}
               <ScrollToBottom className='room'>
                 <ul>
@@ -318,7 +368,7 @@ const ChatBox = () => {
                           </div>
                           <div className='messageTime'>{list.time}</div>
                         </li>
-                        {list.message.includes('상담') && (
+                        {list.message.includes('채팅 상담이 필요하신가요?') && (
                           <button onClick={callAdmin}>연결하기</button>
                         )}
                       </div>
@@ -360,6 +410,11 @@ const ChatBoxOpenBtn = styled.div`
   height: 50px;
   border-radius: 50px;
   background-color: #3366ff;
+  background-image: url('/assets/image/chatBot.png');
+  background-size: cover;
+  background-position: center;
+  box-shadow: ${({ isOpenchatBox }) =>
+    isOpenchatBox ? '0 0 10px 0 #3366ff' : '0 0 5px 0 #808080'};
   cursor: pointer;
 `;
 const ChatBoxWrap = styled.div`
@@ -417,6 +472,9 @@ const ChatBoxWrap = styled.div`
     cursor: pointer;
     border-bottom: 1px solid #d4d4d4;
   }
+  .roomActive {
+    background-color: #bab9f8;
+  }
 `;
 
 const ChartBoxRoom = styled.div`
@@ -443,7 +501,16 @@ const ChartBoxRoom = styled.div`
   }
   .room {
     width: 100%;
-    height: ${({ isAdmin }) => (isAdmin ? '300px' : '250px')};
+    height: ${({ adminRoom, isAdmin }) => {
+      if (isAdmin) {
+        if (adminRoom) {
+          return `250px`;
+        }
+        return `300px`;
+      } else if (!isAdmin) {
+        return `250px`;
+      }
+    }};
   }
   .room::-webkit-scrollbar {
     width: 10px;
