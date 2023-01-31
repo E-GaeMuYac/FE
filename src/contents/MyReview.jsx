@@ -253,7 +253,7 @@ const MyReviews = ({ userId }) => {
                 disLike={review.dislike}
                 onClick={() => handleDisLike(review.reviewId)}>
                 <AiFillDislike />
-                <div>도움 안돼요</div>
+                <div>도움 안돼요 {review.dislikeCount}</div>
               </DislikeBtn>
             </Recommend>
             <DateWrited>
@@ -527,6 +527,7 @@ const DescSum = styled.div`
   font-size: 24px;
   width: 100%;
   height: 110px;
+  word-break: break-all;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -538,6 +539,7 @@ const DescWhole = styled.div`
     font-size: 15px;
   }
   font-size: 24px;
+  word-break: break-all;
 `;
 
 const MoreBtn = styled.button`
@@ -618,6 +620,7 @@ const LikeBtn = styled.button`
   border: none;
   background-color: ${({ like }) => (like ? '#3366FF' : '#e7e7e7')};
   color: ${({ like }) => (like ? '#ffffff' : '#868686')};
+  font-size: 15px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -641,6 +644,7 @@ const DislikeBtn = styled.button`
   border: none;
   background-color: ${({ disLike }) => (disLike ? '#3366FF' : '#e7e7e7')};
   color: ${({ disLike }) => (disLike ? '#ffffff' : '#868686')};
+  font-size: 15px;
   display: flex;
   justify-content: center;
   align-items: center;

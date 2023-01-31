@@ -70,6 +70,10 @@ const Detail = () => {
 
   const medicineItem = objGraph;
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useLayoutEffect(() => {
     if (objGraph) {
       //그래프 초기화
