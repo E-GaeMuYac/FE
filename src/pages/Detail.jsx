@@ -627,7 +627,7 @@ const Detail = () => {
           </RightCardBox>
         </div>
       </TopSection>
-      <div style={{ marginBottom: '170px' }}>
+      <div style={{ marginBottom: '80px' }}>
         <TabBar location={location} query={query} />
         {query !== '리뷰' ? (
           <BottomSection>
