@@ -125,7 +125,7 @@ const Header = (props) => {
 
 const Wrap = styled.div`
   @media screen and (max-width: 1700px) {
-    height: 55px;
+    height: 60px;
   }
   width: 100%;
   height: 80px;
@@ -137,6 +137,7 @@ const HeaderWrapper = styled.div`
   }
   background-color: white;
   width: 100%;
+  min-width: 1024px;
   margin: 0 auto;
   height: 80px;
   display: flex;
