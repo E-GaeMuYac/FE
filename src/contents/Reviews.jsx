@@ -6,6 +6,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { userApi } from '../apis/apiInstance';
 import { Mobile, Laptop, PC } from '../query/useMediaQuery';
+import AddReviews from '../pages/AddReviews';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
@@ -176,20 +177,28 @@ const Reviews = (props) => {
   };
 
   const handleLike = async (id) => {
-    try {
-      await userApi.put(`/api/reviews/${id}/like`);
-      getReviews();
-    } catch (error) {
-      console.log(error);
+    if (token) {
+      try {
+        await userApi.put(`/api/reviews/${id}/like`);
+        getReviews();
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      alert('로그인 후 이용 가능합니다.');
     }
   };
 
   const handleDisLike = async (id) => {
-    try {
-      await userApi.put(`/api/reviews/${id}/dislike`);
-      getReviews();
-    } catch (error) {
-      console.log(error);
+    if (token) {
+      try {
+        await userApi.put(`/api/reviews/${id}/dislike`);
+        getReviews();
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      alert('로그인 후 이용 가능합니다.');
     }
   };
 
@@ -201,6 +210,16 @@ const Reviews = (props) => {
       setSortText('최신순');
     } else if (sort === 'likeCount') {
       setSortText('추천순');
+    }
+  };
+
+  const token = localStorage.getItem('accessToken');
+
+  const addReview = () => {
+    if (token) {
+      navigate(`/detail/${id}/reviewform`);
+    } else {
+      alert('로그인 후 이용 가능합니다.');
     }
   };
 
@@ -216,9 +235,7 @@ const Reviews = (props) => {
             리뷰는 안내 없이 즉시 삭제 처리됩니다.
           </span>
         </ReviewDesc>
-        <ReviewpageBtn onClick={() => navigate(`/detail/${id}/reviewform`)}>
-          리뷰 쓰기
-        </ReviewpageBtn>
+        <ReviewpageBtn onClick={addReview}>리뷰 쓰기</ReviewpageBtn>
       </ReviewBtnWrap>
       <ReviewNav>
         <ReviewHeader>
