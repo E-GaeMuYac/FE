@@ -162,6 +162,9 @@ const Content3 = styled.button`
   right: 0px; */
   animation: ${show} 2s ease-out forwards;
   opacity: 0;
+  :hover {
+    background-color: #1751ff;
+  }
 `;
 
 export default SixthSection;
