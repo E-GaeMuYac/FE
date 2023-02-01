@@ -128,7 +128,7 @@ const ContentImg = styled.div`
   /* justify-content: center; */
   /* margin-top: 150px; */
   opacity: 0;
-  animation: ${slide} 1s 0.5s ease-out forwards;
+  animation: ${show} 1s ease-out forwards;
 `;
 
 export default FirstSection;
