@@ -5,6 +5,40 @@ import styled from 'styled-components';
 import { api } from '../apis/apiInstance';
 import { postSignup } from '../query/signupQuery';
 import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+
+// const Timer = () => {
+//   const [min, setMin] = useState(3);
+//   const [sec, setSec] = useState(0);
+//   const time = useRef(180);
+//   const timerId = useRef(null);
+
+//   useEffect(() => {
+//     timerId.current = setInterval(()=>{
+//       setMin(parseInt(time.current / 60));
+//       setSec(time.current % 60);
+//       time.current -= 1;
+//     }, 1000);
+
+//     return () => clearInterval(timerId.current);
+//   },[]);
+
+//   useEffect(() => {
+//     // 만약 타임 아웃이 발생했을 경우
+//     if (time.current <=0) {
+//       console.log('타임아웃');
+//       clearInterval(timerId.current);
+//       // dispatch event
+//     }
+//   },[sec]
+//     );
+
+//     return (
+//       <div className='timer'>
+//         {min}:{sec}
+//       </div>
+//     )
+// }
 
 const Signup = () => {
   // 기본 input 상태값
@@ -37,11 +71,16 @@ const Signup = () => {
   // 이메일, 휴대폰번호 인증코드
   const [responseEmailCode, setResponseEmailCode] = useState();
   const [responsePhoneCode, setResponsePhoneCode] = useState();
-  const [errorEmailCode, setErrorEmailCode] = useState();
+  // const [errorEmailCode, setErrorEmailCode] = useState();
+  const [errorPhoneCode, setErrorPhoneCode] = useState();
+
+  // 이메일, 휴대폰번호 중복검사
+  const [errorEmail, setErrorEmail] = useState();
+  const [errorPhoneNumber, setErrorPhoneNumber] = useState();
 
   // 유효성 검사 통과 시 인증버튼 라벨 변경
   const [emailCodeBtnLabel, setEmailCodeBtnLabel] = useState('중복확인');
-  const [phoneCodebtnLabel, setPhoneCodebtnLabel] = useState('인증번호 전송');
+  const [phoneCodebtnLabel, setPhoneCodebtnLabel] = useState('중복확인');
 
   // 유효성 검사 통과 시 인증버튼 활성화
   const [emailCodeBtn, setEmailCodeBtn] = useState(false);
@@ -57,6 +96,12 @@ const Signup = () => {
   const [emailBtnColor, setEmailBtnColor] = useState('#8bc790');
   const [emailCodeBtnColor, setEmailCodeBtnColor] = useState('#8bc790');
 
+  const [sendEmail, setSendEmail] = useState(false);
+  const [timer, setTimer] = useState(180);
+
+  // useEffect(()=> {
+  //   if(send)
+  // })
   // 이메일 중복확인 api 호출 함수
   const getVerifyEmail = async (params) => {
     try {
@@ -65,10 +110,13 @@ const Signup = () => {
       );
       return data;
     } catch (error) {
-      if (error instanceof AxiosError)
-        // console.log(error.response?.status);
-        // console.log(error);
-        setErrorEmailCode(error.response?.status);
+      if (error instanceof AxiosError) {
+        const errMsgEmail = error.response?.data.errorMessage;
+        setErrorEmail(errMsgEmail);
+      }
+      // console.log(error.response?.status);
+      // console.log(error);
+      // setErrorEmailCode(error.response?.status);
     }
   };
 
@@ -158,8 +206,12 @@ const Signup = () => {
         // postSendEmailCode({ email: email });
         setEmailCode('');
         setEmailCodeConfirmMessage('');
-      } else if (errorEmailCode === 412) {
+      } else if (errorEmail === '중복인 유저가 있습니다.') {
         setEmailMessage('이미 존재하는 이메일입니다. 다시 시도해 주세요.');
+        setIsEmail(false);
+        setEmailCodeBtn(false);
+      } else if (errorEmail === '데이터 형식이 잘못되었습니다.') {
+        setEmailMessage('잘못된 형식입니다. 다시 시도해 주세요.');
         setIsEmail(false);
         setEmailCodeBtn(false);
       }
@@ -220,6 +272,62 @@ const Signup = () => {
     }
   };
 
+  // 휴대폰 번호 중복확인 api 호출 함수
+  const getVerifyPhone = async (params) => {
+    try {
+      const data = await api.get(
+        `/api/users/signup/phone?phoneNumber=${params.queryKey[1]}`
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errMsgPhoneNumber = error.response?.data.errorMessage;
+        setErrorPhoneNumber(errMsgPhoneNumber);
+      }
+      // console.log(error.response?.status);
+      //   console.log(error.response?.data.errorMessage);
+      // console.log(error);
+    }
+  };
+
+  // query hooks
+
+  // 휴대폰 번호 중복확인 query hook
+  const useGetVerifyPhoneQuery = (strPhoneNumber) => {
+    const { isSuccess, isError, isLoading, isFetching, data, error } = useQuery(
+      {
+        // query 키
+        queryKey: ['getVerifyPhone', strPhoneNumber],
+        // query 함수
+        queryFn: (params) => {
+          return getVerifyPhone(params);
+        },
+        // 자동 랜더링 삭제
+        // enabled: true,
+        // 자동 리랜더링 삭제
+        refetchOnWindowFocus: false,
+      }
+    );
+    if (isFetching) {
+      console.log('fetching...');
+    }
+    if (isLoading) {
+      console.log('loading...');
+    }
+    if (isError) {
+      console.log('error', error);
+    }
+    if (isSuccess) {
+      console.log('success', data);
+    }
+    return data;
+  };
+
+  const regExp = /[^0-9/]/g;
+  const strPhoneNumber = phoneNumber.replace(regExp, '');
+
+  const dataPhone = useGetVerifyPhoneQuery(strPhoneNumber);
+
   // 휴대폰 번호 입력
   const onChangePhoneNumber = (e) => {
     const phoneNumberRegExp = /^(\d{3})-(\d{3,4})-(\d{4})$/;
@@ -235,10 +343,12 @@ const Signup = () => {
       setPhoneNumberMessage('올바른 형식의 휴대폰 번호를 입력해 주세요.');
       setIsPhoneNumber(false);
       // setEmailBtnColor('#8bc790');
-      setPhoneCodebtnLabel('인증번호 전송');
+      // setPhoneCodebtnLabel('인증번호 전송');
+      setPhoneCodeBtn(false);
     } else {
-      setPhoneNumberMessage(' ');
-      setIsPhoneNumber(true);
+      setPhoneNumberMessage('휴대폰 번호 중복 확인이 필요합니다.');
+      setPhoneCodebtnLabel('중복확인');
+      setIsPhoneNumber(false);
       setPhoneCodeBtn(true);
       // setEmailCodeBtn(true);
       // setEmailBtnColor('#4fc759');
@@ -251,25 +361,66 @@ const Signup = () => {
         '/api/users/authentication/phone',
         { phoneNumber: payload.phoneNumber } //data(req.body)
       );
-      // console.log('인증번호 전송 성공', data);
+      console.log('인증번호 전송 성공', data);
       setResponsePhoneCode(data.data.code);
+      alert('인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.');
+      setReadOnlyPhoneCode(false);
+      setPhoneCodebtnLabel('인증번호 재전송');
+      setReadOnlyEmailCode(true);
+      setPhoneCode('');
     } catch (error) {
+      console.log(error.response?.status);
+      setErrorPhoneCode(error.response?.status);
+      if (error.response?.status === 429) {
+        alert('3분에 1번만 요청이 가능합니다.');
+        setIsPhoneCode(false);
+      }
       return error;
     }
   };
 
-  // 휴대폰 인증번호 전송 버튼
+  // 휴대폰 번호 중복확인 및 휴대폰 인증번호 전송 버튼
   const onClickIsSendPhoneCode = (e) => {
     const regExp = /[^0-9/]/g;
     const strPhoneNumber = phoneNumber.replace(regExp, '');
     // setPhoneNumber(strPhoneNumber);
     e.preventDefault();
-    alert('인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.');
-    setReadOnlyPhoneCode(false);
-    setPhoneCode('');
-    setPhoneCodebtnLabel('인증번호 재전송');
-    setReadOnlyEmailCode(true);
-    postSendPhoneCode({ phoneNumber: strPhoneNumber });
+    if (phoneCodebtnLabel === '중복확인') {
+      if (dataPhone?.status === 200) {
+        setPhoneNumberMessage(
+          '사용 가능한 휴대폰 번호입니다. 해당 번호를 인증해 주세요.'
+        );
+        setIsPhoneNumber(true);
+        setPhoneCodeBtn(true);
+        setPhoneCodebtnLabel('인증번호 전송');
+        setPhoneCode('');
+        setPhoneCodeConfirmMessage('');
+      } else if (errorPhoneNumber === '중복인 유저가 있습니다.') {
+        setPhoneNumberMessage('이미 존재하는 번호입니다. 다시 시도해 주세요.');
+        setIsPhoneNumber(false);
+        setPhoneCodeBtn(false);
+      } else if (errorPhoneNumber === '데이터 형식이 잘못되었습니다.') {
+        setPhoneNumberMessage('잘못된 형식입니다. 다시 시도해 주세요.');
+        setIsPhoneNumber(false);
+        setPhoneCodeBtn(false);
+      }
+    }
+    if (
+      phoneCodebtnLabel === '인증번호 전송' ||
+      phoneCodebtnLabel === '인증번호 재전송'
+    ) {
+      postSendPhoneCode({ phoneNumber: strPhoneNumber });
+      if (responsePhoneCode === 201) {
+        console.log(responsePhoneCode);
+        alert('인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.');
+        setReadOnlyPhoneCode(false);
+        setPhoneCodebtnLabel('인증번호 재전송');
+        setReadOnlyEmailCode(true);
+        setPhoneCode('');
+      } else {
+        console.log(responsePhoneCode);
+      }
+    }
   };
 
   // 휴대폰 인증번호 입력
@@ -297,11 +448,13 @@ const Signup = () => {
     if (Number(responsePhoneCode) === Number(phoneCode)) {
       alert('휴대폰 인증이 완료되었습니다.');
       setPhoneCodeConfirmMessage('인증 완료!');
+      setPhoneNumberMessage('');
       setPhoneCodeConfirmBtn(false);
       setReadOnlyPhoneCode(!readOnlyPhoneCode);
       setPhoneCodeBtn(false);
       setPhoneCodebtnLabel('인증번호 전송');
       setReadOnlyPhoneNumber(!readOnlyPhoneCode);
+      setIsPhoneCode(true);
     } else {
       setPhoneCodeConfirmMessage('인증번호가 틀렸습니다. 다시 입력해 주세요.');
       setIsPhoneCode(false);
@@ -414,6 +567,8 @@ const Signup = () => {
       alert('빈칸을 입력해 주세요!');
     } else if (emailMessage === '이메일 중복 확인이 필요합니다.') {
       alert('이메일 중복 확인이 필요합니다.');
+    } else if (phoneNumberMessage === '휴대폰 번호 중복 확인이 필요합니다.') {
+      alert('휴대폰 번호 중복 확인이 필요합니다.');
     } else if (
       !isEmail ||
       !isPhoneNumber ||
