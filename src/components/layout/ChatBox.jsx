@@ -49,6 +49,7 @@ const ChatBox = () => {
   useEffect(() => {
     if (adminIdArr.includes(userId)) {
       setIsAdmin(true);
+      setChatType('상담');
     }
   }, [userId, adminIdArr]);
 
@@ -57,20 +58,21 @@ const ChatBox = () => {
     setSocket(io.connect(process.env.REACT_APP_SOCKET_ENDPOINT));
   }, []);
 
-  //버튼 클릭 시 방에 입장
+  // 방에 바로 입장
+  useEffect(() => {
+    (async () => {
+      await socket?.emit('join', {
+        room: userId ? userId : null,
+      });
+    })();
+  }, [userId]);
+
+  //최소화 토글
   const OpenChatBox = async () => {
     if (!isOpenchatBox) {
       setIsOpenchatBox(true);
-      await socket.emit('join', {
-        room: userId ? userId : null,
-      });
-      if (isAdmin) {
-        setChatType('상담');
-      }
     } else if (isOpenchatBox) {
       setIsOpenchatBox(false);
-      setMessageList([]);
-      setChatType('챗봇');
     }
   };
   // 방 입장 시 안내 문구
@@ -209,7 +211,6 @@ const ChatBox = () => {
     await socket.emit('adminJoin', roomData.room);
     setAdminUser(roomData.user);
     setAdminRoom(roomData.room);
-    setChatType('상담');
     setMessageList([]);
   };
   // 관리자 퇴장
