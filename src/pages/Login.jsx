@@ -7,6 +7,7 @@ import { useCookies } from 'react-cookie';
 const Login = (props) => {
   const setIsToken = props.setistoken;
   const setUserImage = props.setuserimage;
+  const token = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(['rememberEmail']);
@@ -21,6 +22,13 @@ const Login = (props) => {
       setIsRemember(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      alert('이미 로그인이 되어있습니다.');
+      navigate('/');
+    }
+  });
 
   const idHandler = (e) => {
     setEmail(e.target.value);
