@@ -10,6 +10,11 @@ export const searchWord = atom({
   default: '',
 });
 
+export const isLogined = atom({
+  key: 'isLogined',
+  default: false,
+});
+
 export const compareBoxData = atom({
   key: 'compareBoxData',
   default: {
