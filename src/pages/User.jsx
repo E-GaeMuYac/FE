@@ -881,11 +881,12 @@ const NicknameInput = styled.div`
 
 const ProfileMsg = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 150px;
+    width: 260px;
     font-size: 16px;
-    margin-top: 40px;
+    margin-top: 35px;
+    /* background-color: aqua; */
   }
-  width: 250px;
+  width: 220px;
   height: 72px;
   margin-top: 38px;
   font-size: 18px;
@@ -895,10 +896,12 @@ const ProfileMsg = styled.div`
 
 const CalenderWrap = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 40%;
     margin-left: auto;
+    width: 100%;
+    margin-top: 5px;
   }
-  width: 40%;
+  /* background-color: aqua; */
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
