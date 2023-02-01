@@ -143,10 +143,6 @@ const Reviews = (props) => {
       setUserId(res.data.user.userId);
     } catch (e) {
       console.log(e);
-      alert('로그인 정보가 필요합니다.');
-      setIsToken(false);
-      localStorage.clear();
-      navigate('/login');
     }
   };
 

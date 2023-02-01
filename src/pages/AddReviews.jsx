@@ -24,12 +24,12 @@ const AddReviews = (props) => {
       setNickname(res.data.user.nickname);
     } catch (e) {
       console.log(e);
-      alert('로그인 정보가 필요합니다.');
-      setIsToken(false);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('nickname');
-      navigate('/login');
+      // alert('로그인 정보가 필요합니다.');
+      // setIsToken(false);
+      // localStorage.removeItem('accessToken');
+      // localStorage.removeItem('refreshToken');
+      // localStorage.removeItem('nickname');
+      // navigate('/login');
     }
   };
 

@@ -8,9 +8,8 @@ api.interceptors.response.use(
   function (config) {
     const accessToken = localStorage.getItem('accessToken');
 
-    if (!accessToken) {
-      const newAccessToken = config.headers.accesstoken;
-      localStorage.setItem('accessToken', newAccessToken);
+    if (!accessToken || accessToken === undefined) {
+      localStorage.clear();
     }
 
     return config;
@@ -39,9 +38,8 @@ userApi.interceptors.response.use(
   function (config) {
     const accessToken = localStorage.getItem('accessToken');
 
-    if (!accessToken) {
-      const newAccessToken = config.headers.accesstoken;
-      localStorage.setItem('accessToken', newAccessToken);
+    if (!accessToken || accessToken === undefined) {
+      localStorage.clear();
     }
 
     return config;
