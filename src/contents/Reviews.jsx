@@ -223,6 +223,10 @@ const Reviews = (props) => {
     }
   };
 
+  const handleReport = () => {
+    alert('구현중입니다! 😉');
+  };
+
   return (
     <Wrapper>
       <ReviewBtnWrap>
@@ -363,7 +367,7 @@ const Reviews = (props) => {
                   수정하기
                 </EditBtn>
               ) : (
-                <ReportBtn>
+                <ReportBtn onClick={handleReport}>
                   <div />
                   신고하기
                 </ReportBtn>
