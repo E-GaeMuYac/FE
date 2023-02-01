@@ -48,6 +48,7 @@ const Tabbar = styled.div`
 const NavWrap = styled.div`
   @media screen and (max-width: 1700px) {
     width: 600px;
+    margin-top: 40px;
   }
   width: 900px;
   margin-top: 80px;

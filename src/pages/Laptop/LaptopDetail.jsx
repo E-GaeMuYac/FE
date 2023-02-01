@@ -923,7 +923,7 @@ const WrapContents = styled.div`
       border-left: 4px solid transparent;
       border-right: 4px solid transparent;
       position: absolute;
-      left: 36.5px;
+      left: 35px;
       top: -20px;
     }
   }
@@ -1299,7 +1299,7 @@ const WarningAllergyTrue = styled.div`
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     position: absolute;
-    right: 29px;
+    right: 32px;
     top: -20px;
   }
 `;
@@ -1381,7 +1381,7 @@ const WarningAllergyFalse = styled.div`
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     position: absolute;
-    right: 29px;
+    right: 32px;
     top: -20px;
   }
 `;
@@ -1427,7 +1427,7 @@ const MatrialExplainWrap = styled.div`
   line-height: 34px;
   position: absolute;
   top: -55px;
-  left: -5px;
+  left: 10px;
   z-index: 1;
   color: white;
   text-align: center;

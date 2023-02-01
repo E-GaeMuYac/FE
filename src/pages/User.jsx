@@ -284,7 +284,7 @@ const User = (props) => {
         <ProfileWrap>
           <NicknameBox>
             {!isTextClicked ? (
-              <div style={{ display: 'flex' }}>
+              <div style={{ display: 'flex', height: '30px' }}>
                 <Nickname>{nickname ? `${nickname}님` : 'OOO님'}</Nickname>
                 <div className='wrapNickname'>
                   <button className='editNickname' onClick={changeNickname} />
@@ -306,18 +306,29 @@ const User = (props) => {
                 </button>
               </NicknameInput>
             )}
-            <ProfileMsg>
-              필너츠에 오신 것을
-              <br />
-              환영합니다!
-            </ProfileMsg>
+            <PC>
+              <ProfileMsg>
+                필너츠에 오신 것을
+                <br />
+                환영합니다!
+              </ProfileMsg>
+            </PC>
           </NicknameBox>
-          <CalenderWrap>
-            <div className='calendar'>
-              <span>출석일수</span>
-              <h1>{`${loginCount}일`}</h1>
-            </div>
-          </CalenderWrap>
+          <div style={{ display: 'flex', marginTop: 'auto' }}>
+            <Laptop>
+              <ProfileMsg>
+                필너츠에 오신 것을
+                <br />
+                환영합니다!
+              </ProfileMsg>
+            </Laptop>
+            <CalenderWrap>
+              <div className='calendar'>
+                <span>출석일수</span>
+                <h1>{`${loginCount}일`}</h1>
+              </div>
+            </CalenderWrap>
+          </div>
         </ProfileWrap>
         <BoxWrap>
           <Box>
@@ -368,6 +379,7 @@ const Wrapper = styled.div`
 const MyPageHeader = styled.div`
   @media screen and (max-width: 1700px) {
     margin-bottom: 20px;
+    min-width: 1024px;
   }
   width: 100%;
   margin-bottom: 53px;
@@ -609,6 +621,7 @@ const EmailBoxImg = styled.div`
 const MyPageWrap = styled.div`
   @media screen and (max-width: 1700px) {
     gap: 18px;
+    min-width: 1024px;
   }
   width: 100%;
   height: 225px;
@@ -744,7 +757,9 @@ const ProfileWrap = styled.div`
   @media screen and (max-width: 1700px) {
     width: 320px;
     height: 170px;
-    padding: 25px 28px;
+    padding: 20px 26px;
+    /* background-color: aqua; */
+    flex-direction: column;
   }
   background-color: #f6f7fa;
   width: 466px;
@@ -757,6 +772,11 @@ const ProfileWrap = styled.div`
 `;
 
 const NicknameBox = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 100%;
+    height: 35px;
+    padding-top: 5px;
+  }
   width: 60%;
   .wrapNickname {
     width: 42px;
@@ -802,12 +822,24 @@ const Nickname = styled.div`
 `;
 
 const NicknameInput = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 32px;
+    margin-top: 5px;
+    width: 100%;
+    background-color: white;
+    border-radius: 30px;
+  }
   height: 42px;
   display: flex;
   align-items: flex-end;
   position: relative;
 
   input {
+    @media screen and (max-width: 1700px) {
+      height: 32px;
+      width: 72%;
+      padding-left: 12px;
+    }
     width: 220px;
     height: 35px;
     border: none;
@@ -828,11 +860,19 @@ const NicknameInput = styled.div`
     cursor: pointer;
   }
   .x {
+    @media screen and (max-width: 1700px) {
+      top: 4px;
+      right: 5px;
+    }
     position: absolute;
     top: 11px;
     right: 35px;
   }
   .o {
+    @media screen and (max-width: 1700px) {
+      top: 4px;
+      right: 36px;
+    }
     position: absolute;
     top: 11px;
     right: 63px;
@@ -843,7 +883,7 @@ const ProfileMsg = styled.div`
   @media screen and (max-width: 1700px) {
     width: 150px;
     font-size: 16px;
-    margin-top: 26px;
+    margin-top: 40px;
   }
   width: 250px;
   height: 72px;
@@ -856,6 +896,7 @@ const ProfileMsg = styled.div`
 const CalenderWrap = styled.div`
   @media screen and (max-width: 1700px) {
     width: 40%;
+    margin-left: auto;
   }
   width: 40%;
   display: flex;
@@ -863,8 +904,9 @@ const CalenderWrap = styled.div`
   justify-content: flex-end;
   .calendar {
     @media screen and (max-width: 1700px) {
-      width: 102px;
-      height: 110px;
+      width: 80px;
+      height: 85px;
+      margin-top: 5px;
     }
     background-image: url('/assets/image/캘린더.png');
     background-size: cover;
@@ -877,7 +919,7 @@ const CalenderWrap = styled.div`
     flex-direction: column;
     span {
       @media screen and (max-width: 1700px) {
-        font-size: 14px;
+        font-size: 13px;
         margin-top: 34px;
       }
       margin-top: 40px;
@@ -887,7 +929,7 @@ const CalenderWrap = styled.div`
     }
     h1 {
       @media screen and (max-width: 1700px) {
-        font-size: 28px;
+        font-size: 24px;
       }
       font-size: 40px;
       font-weight: bold;

@@ -312,30 +312,49 @@ const ResponseBox = styled.div`
 `;
 
 const MessageBox = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 40px;
+    margin-top: 20px;
+  }
   width: 100%;
   height: 64px;
   display: flex;
   justify-content: center;
   align-items: center;
   span {
+    @media screen and (max-width: 1700px) {
+      font-size: 20px;
+    }
     font-size: 24px;
     font-weight: 600;
   }
 `;
 
 const EmailBox = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 60px;
+    /* background-color: aqua; */
+    margin-top: 00px;
+  }
   width: 100%;
   height: 64px;
   display: flex;
   justify-content: center;
   align-items: center;
   span {
+    @media screen and (max-width: 1700px) {
+      font-size: 20px;
+    }
     font-size: 30px;
     font-weight: bold;
   }
 `;
 
 const BackgroundUserImage = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 44px;
+    height: 44px;
+  }
   width: 56px;
   height: 56px;
   margin: 10px;
@@ -347,6 +366,10 @@ const BackgroundUserImage = styled.div`
 `;
 
 const ProfileImg = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 36px;
+    height: 36px;
+  }
   background-image: ${({ resImg }) => `url(${resImg})`};
   background-size: cover;
   background-position: center;
@@ -358,6 +381,9 @@ const ProfileImg = styled.div`
 `;
 
 const NavBtnWrapper = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin-top: 20px;
+  }
   width: 100%;
   margin-top: 40px;
   display: flex;
