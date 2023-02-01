@@ -65,7 +65,7 @@ const ChatBox = () => {
         room: userId ? userId : null,
       });
     })();
-  }, [userId]);
+  }, [socket, userId]);
 
   //최소화 토글
   const OpenChatBox = async () => {
@@ -77,10 +77,28 @@ const ChatBox = () => {
   };
   // 방 입장 시 안내 문구
   useEffect(() => {
+    socket?.on('load', (data) => {
+      let oldMessage = [];
+      for (let i = 0; i < data.length; i++) {
+        const time = data[i].createdAt.split('T')[1].slice(0, 5);
+        let writer = '';
+        if (data[i].admin) {
+          writer = 'other';
+        } else {
+          writer = nickname;
+        }
+        oldMessage.push({
+          _id: data[i]._id,
+          time: time,
+          writer: writer,
+          message: data[i].message,
+        });
+      }
+      setMessageList(oldMessage);
+    });
+  }, [socket, nickname]);
+  useEffect(() => {
     socket?.on('join', (content, link) => {
-      socket.on('load', (data) => {
-        console.log(data);
-      });
       //챗 보내기
       if (content) {
         const hour =
@@ -97,16 +115,13 @@ const ChatBox = () => {
           {
             _id: Date.now(),
             time: hour + ':' + minute,
-            writer: '관리자',
+            writer: 'another',
             message: content,
             link: link,
           },
         ]);
       }
     });
-    // socket?.on('load', (data) => {
-    //   console.log(data);
-    // });
   }, [socket]);
   // ---------------------------------------------------------------
   const chatTag = [
