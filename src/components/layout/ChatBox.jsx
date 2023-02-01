@@ -78,6 +78,9 @@ const ChatBox = () => {
   // 방 입장 시 안내 문구
   useEffect(() => {
     socket?.on('join', (content, link) => {
+      socket.on('load', (data) => {
+        console.log(data);
+      });
       //챗 보내기
       if (content) {
         const hour =
@@ -101,9 +104,9 @@ const ChatBox = () => {
         ]);
       }
     });
-    socket?.on('load', (data) => {
-      console.log(data);
-    });
+    // socket?.on('load', (data) => {
+    //   console.log(data);
+    // });
   }, [socket]);
   // ---------------------------------------------------------------
   const chatTag = [
