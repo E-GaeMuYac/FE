@@ -8,6 +8,7 @@ import { useGetSearchQuery } from '../query/searchQuery';
 import ProductList from '../components/common/productList';
 import { useRecoilState } from 'recoil';
 import { searchWord } from '../recoil/recoilStore';
+import { Navigate, useNavigate } from 'react-router';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
@@ -100,6 +101,7 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
 };
 
 const Search = () => {
+  const navigate = useNavigate();
   const [searhArr, setSearhArr] = useState([]);
 
   //약 검색 종류 데이터 모음
@@ -195,17 +197,21 @@ const Search = () => {
   }, [data]);
   // -----------------------------------------------------------------------------
   const TopSearchArr = [
-    '타이레놀500밀리그람',
-    '판콜에스내복액',
-    '판피린큐액',
-    '까스활명수큐액',
-    '탁센연질캡슐',
-    '콜대원코프큐시럽',
-    '텐텐츄정',
-    '케토톱플라스타',
-    '광동원탕',
-    '벤포벨에스정',
+    { name: '타이레놀정500밀리그람', id: 49132 },
+    { name: '판콜에스내복액', id: 2286 },
+    { name: '판피린큐액', id: 17060 },
+    { name: '까스활명수큐액', id: 2285 },
+    { name: '탁센연질캡슐', id: 18895 },
+    { name: '콜대원코프큐시럽', id: 48855 },
+    { name: '텐텐츄정', id: 17101 },
+    { name: '케토톱플라스타', id: 3449 },
+    { name: '광동원탕', id: 4010 },
+    { name: '벤포벨에스정', id: 50083 },
   ];
+
+  const topItemDetail = (id) => {
+    navigate(`/detail/${id}?tab=효능 효과`);
+  };
 
   // -----------------------------------------------------------------------------
   return (
@@ -316,8 +322,8 @@ const Search = () => {
           <div className='title'>인기 검색어</div>
           <ul className='desc'>
             {TopSearchArr.map((list) => (
-              <li key={list}>
-                {TopSearchArr.indexOf(list) + 1}. {list}
+              <li key={list.id} onClick={() => topItemDetail(list.id)}>
+                {TopSearchArr.indexOf(list) + 1}. {list.name}
               </li>
             ))}
           </ul>
@@ -748,6 +754,7 @@ const TopSearchWrap = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    cursor: pointer;
   }
 `;
 
