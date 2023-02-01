@@ -88,6 +88,7 @@ const Header = (props) => {
     navigate('/mypage?tab=내가 찜한 의약품');
   };
 
+  const token = localStorage.getItem('accessToken');
   // ---------------------------------------------------------------------
 
   return (
@@ -100,7 +101,7 @@ const Header = (props) => {
               <Nav key={page.pageName} page={page} />
             ))}
           </CategoryBox>
-          {!isToken ? (
+          {!token ? (
             <SignBox>
               <LoginBtn to='/login'>로그인</LoginBtn>
               <SignupBtn to='/signup'>회원가입</SignupBtn>
