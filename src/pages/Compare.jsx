@@ -100,7 +100,7 @@ const ComparePage = () => {
   useEffect(() => {
     if (!localStorage.getItem('refreshToken')) {
       alert('로그인 시 이용 가능합니다.');
-      navigate('/');
+      navigate('/login');
     }
   }, []);
 

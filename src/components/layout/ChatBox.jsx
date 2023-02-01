@@ -204,7 +204,6 @@ const ChatBox = () => {
 
   // 버튼 클릭 시 상담모드로 전환
   const callAdmin = () => {
-    alert('현재 작업 중인 기능입니다');
     setChatType('상담');
     const hour =
       new Date(Date.now()).getHours() >= 10
@@ -356,7 +355,10 @@ const ChatBox = () => {
             <div className='chatHeader'>
               <div className='title'>땅콩매니저</div>
             </div>
-            <ChartBoxRoom isAdmin={isAdmin} adminRoom={adminRoom}>
+            <ChartBoxRoom
+              isAdmin={isAdmin}
+              adminRoom={adminRoom}
+              chatType={chatType}>
               {isAdmin && adminRoom ? (
                 <div className='roomTagWrap'>
                   <li
@@ -367,7 +369,8 @@ const ChatBox = () => {
                   </li>
                 </div>
               ) : (
-                !isAdmin && (
+                !isAdmin &&
+                chatType === '챗봇' && (
                   <div className='roomTagWrap'>
                     {chatTag.map((tag) => (
                       <li
@@ -539,14 +542,17 @@ const ChartBoxRoom = styled.div`
   }
   .room {
     width: 100%;
-    height: ${({ adminRoom, isAdmin }) => {
+    height: ${({ adminRoom, isAdmin, chatType }) => {
       if (isAdmin) {
         if (adminRoom) {
           return `250px`;
         }
         return `300px`;
       } else if (!isAdmin) {
-        return `250px`;
+        if (chatType === '챗봇') {
+          return `250px`;
+        }
+        return `300px`;
       }
     }};
   }
