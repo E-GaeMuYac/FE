@@ -116,6 +116,7 @@ const Allergy = () => {
 const Wrapper = styled.div`
   @media screen and (max-width: 1700px) {
     min-width: 1024px;
+    padding-bottom: 0px;
   }
   width: 100%;
   padding-bottom: 80px;
@@ -136,9 +137,9 @@ const ModalBtnWrap = styled.div`
 
 const ModalOpenBtn = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 160px;
-    height: 44px;
-    font-size: 18px;
+    width: 145px;
+    height: 40px;
+    font-size: 16px;
   }
   width: 216px;
   height: 58px;
@@ -315,11 +316,18 @@ const FoldBtn = styled.div`
 `;
 
 const NoneListWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    padding: 20px 0px 60px 0;
+  }
   width: 100%;
   padding: 30px 0px 100px 0;
 `;
 
 const NoneBtnWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    padding: 35px;
+    height: 200px;
+  }
   width: 100%;
   height: 328px;
   padding: 60px;
@@ -330,6 +338,9 @@ const NoneBtnWrap = styled.div`
   justify-content: space-around;
   flex-direction: column;
   span {
+    @media screen and (max-width: 1700px) {
+      font-size: 20px;
+    }
     font-size: 24px;
     color: #868686;
     font-weight: bold;
@@ -341,6 +352,9 @@ const GuideWrap = styled.div`
 `;
 
 const GuideComment = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin-top: 80px;
+  }
   width: 100%;
   margin-top: 150px;
   display: flex;
@@ -348,11 +362,17 @@ const GuideComment = styled.div`
   align-items: center;
   justify-content: center;
   h2 {
+    @media screen and (max-width: 1700px) {
+      font-size: 28px;
+    }
     color: #242424;
     font-size: 36px;
     font-weight: bold;
   }
   span {
+    @media screen and (max-width: 1700px) {
+      font-size: 18px;
+    }
     color: #868686;
     font-size: 24px;
     font-weight: bold;
@@ -360,6 +380,11 @@ const GuideComment = styled.div`
 `;
 
 const ExampleTitle = styled.div`
+  @media screen and (max-width: 1700px) {
+    padding: 30px 0 0 30px;
+    margin: 0;
+    font-size: 18px;
+  }
   width: 100%;
   margin: 60px 0 0 40px;
   color: #868686;
@@ -371,20 +396,30 @@ const ExampleBox = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  gap: 20px;
+  justify-content: space-between;
+  gap: 10px;
 `;
 
 const FirstCard = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 70%;
+    height: 400px;
+  }
   background-image: url('/assets/image/example_1.png');
   background-size: contain;
+  background-repeat: no-repeat;
   width: 930px;
   height: 485px;
 `;
 
 const SecondCard = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 30%;
+    height: 372px;
+  }
   background-image: url('/assets/image/example_2.png');
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
   width: 380px;
   height: 485px;
 `;

@@ -16,18 +16,20 @@ const Footer = () => {
 
   return (
     <Wrapper>
-      <Nav>
-        {navArr.map((nav) => (
-          <NavName key={nav.navName} onClick={() => pageChange(nav)}>
-            {nav.navName}
-          </NavName>
-        ))}
-      </Nav>
-      <Copyright>@Copyright 2023. Pillnuts All rights reserved.</Copyright>
-      <LogoBox>
-        <Mfds />
-        <Kogl />
-      </LogoBox>
+      <ContentsWrap>
+        <Nav>
+          {navArr.map((nav) => (
+            <NavName key={nav.navName} onClick={() => pageChange(nav)}>
+              {nav.navName}
+            </NavName>
+          ))}
+        </Nav>
+        <Copyright>@Copyright 2023. Pillnuts All rights reserved.</Copyright>
+        <LogoBox>
+          <Mfds />
+          <Kogl />
+        </LogoBox>
+      </ContentsWrap>
     </Wrapper>
   );
 };
@@ -40,6 +42,16 @@ const Wrapper = styled.div`
   align-items: center;
   flex-direction: column;
   padding: 40px 0;
+`;
+
+const ContentsWrap = styled.div`
+  width: 1024px;
+  height: 230px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  align-items: center;
 `;
 
 const Nav = styled.div`

@@ -700,9 +700,23 @@ const PagenationWrap = styled.div`
   }
 `;
 const TopSearchWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 400px;
+  }
   width: 520px;
-  margin: 144px auto;
+  height: 70vh;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* margin: 144px auto; */
   .title {
+    @media screen and (max-width: 1700px) {
+      font-size: 20px;
+      line-height: 32px;
+    }
+    width: 100%;
     font-size: 24px;
     line-height: 35px;
     color: #242424;
@@ -712,6 +726,11 @@ const TopSearchWrap = styled.div`
     margin-bottom: 24px;
   }
   .desc {
+    @media screen and (max-width: 1700px) {
+      height: 210px;
+      gap: 15px;
+    }
+    width: 100%;
     height: 245px;
     display: flex;
     flex-direction: column;
@@ -719,6 +738,10 @@ const TopSearchWrap = styled.div`
     gap: 25px;
   }
   .desc li {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+      width: 200px;
+    }
     font-size: 20px;
     line-height: 29px;
     width: 251px;

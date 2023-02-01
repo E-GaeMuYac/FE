@@ -1591,7 +1591,7 @@ const SubWrap = styled.div`
       border-left: 4px solid transparent;
       border-right: 4px solid transparent;
       position: absolute;
-      right: 60px;
+      right: 59px;
       top: -20px;
     }
     .mainMaterialDesc {
@@ -1658,13 +1658,13 @@ const NothingInBoxWrap = styled.div`
 `;
 const MatrialExplainWrap = styled.div`
   display: ${({ Active }) => (Active ? 'block' : 'none')};
-  width: 257px;
+  width: 259px;
   background-color: rgba(0, 0, 0, 0.54);
   padding: 29px 24px 16px;
   border-radius: 24px;
   line-height: 34px;
   position: absolute;
-  left: 36px;
+  left: 6px;
   z-index: 1;
   color: white;
   /* top: ${({ BoxY }) => `${BoxY - 15}px`}; */
@@ -1769,7 +1769,7 @@ const WarningAllergyTrue = styled.div`
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     position: absolute;
-    right: 42px;
+    right: 40px;
     top: -20px;
   }
 `;
@@ -1850,7 +1850,7 @@ const WarningAllergyFalse = styled.div`
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     position: absolute;
-    right: 42px;
+    right: 41px;
     top: -20px;
   }
 `;

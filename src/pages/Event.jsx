@@ -14,10 +14,10 @@ const Event = () => {
 };
 const Wrap = styled.div`
   @media screen and (min-width: 2560px) {
-    height: 94.4vh;
+    height: 94.5vh;
   }
   @media screen and (max-width: 1700px) {
-    height: 94.4vh;
+    height: 94.5vh;
   }
   width: 100%;
   min-width: 1024px;
