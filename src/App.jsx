@@ -32,6 +32,7 @@ import { useRecoilState } from 'recoil';
 import { nowRoute } from './recoil/recoilStore';
 // import Spinner from './components/common/Spinner';
 import { Laptop, PC } from './query/useMediaQuery';
+import { auto } from '@popperjs/core';
 
 function App() {
   const [isToken, setIsToken] = useState('');
@@ -41,7 +42,11 @@ function App() {
 
   useEffect(() => {
     setNowPage(location.pathname);
-  }, []);
+  }, [location]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [nowPage]);
 
   return (
     <>
@@ -123,14 +128,14 @@ function App() {
           <Route
             path='/mypage'
             element={
-            <Layout>
-              <User
-                setuserimage={setUserImage}
-                setistoken={setIsToken}
-                istoken={isToken}
-              />
-              <CompareBox />
-            </Layout>
+              <Layout>
+                <User
+                  setuserimage={setUserImage}
+                  setistoken={setIsToken}
+                  istoken={isToken}
+                />
+                <CompareBox />
+              </Layout>
             }
           />
           {/* <Route path='/spinner' element={<Spinner />} /> */}

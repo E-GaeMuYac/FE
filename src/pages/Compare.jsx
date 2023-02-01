@@ -104,10 +104,6 @@ const ComparePage = () => {
     }
   }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const { refetch, isLoading, data } = useGetVersusQuery(
     comparePillIdA,
     comparePillIdB

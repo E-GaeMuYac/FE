@@ -120,10 +120,6 @@ const Search = () => {
 
   const [searchLength, setSearchLength] = useState(0);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const searchSortRemove = () => {
     setIsOpenSearchSort(false);
   };
