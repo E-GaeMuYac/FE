@@ -23,11 +23,16 @@ const Event = () => {
 };
 const Wrap = styled.div`
   width: 100%;
+  /* min-width: 1440px; */
   min-width: 1024px;
   background-color: #3366ff;
 `;
 const EventImg = styled.div`
   @media screen and (max-width: 1700px) {
+    min-width: 1024px;
+    min-height: 700px;
+    /* width: 1440px;
+    height: 1040px; */
     width: 1024px;
     height: 700px;
   }
@@ -61,7 +66,7 @@ const EventImg = styled.div`
   }
   button {
     @media screen and (max-width: 1700px) {
-      top: 90%;
+      top: 89%;
       width: 280px;
       height: 50px;
       font-size: 20px;
