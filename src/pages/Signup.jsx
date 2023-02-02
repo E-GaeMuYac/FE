@@ -308,18 +308,18 @@ const Signup = () => {
         refetchOnWindowFocus: false,
       }
     );
-    if (isFetching) {
-      console.log('fetching...');
-    }
-    if (isLoading) {
-      console.log('loading...');
-    }
-    if (isError) {
-      console.log('error', error);
-    }
-    if (isSuccess) {
-      console.log('success', data);
-    }
+    // if (isFetching) {
+    //   console.log('fetching...');
+    // }
+    // if (isLoading) {
+    //   console.log('loading...');
+    // }
+    // if (isError) {
+    //   console.log('error', error);
+    // }
+    // if (isSuccess) {
+    //   console.log('success', data);
+    // }
     return data;
   };
 
@@ -361,7 +361,7 @@ const Signup = () => {
         '/api/users/authentication/phone',
         { phoneNumber: payload.phoneNumber } //data(req.body)
       );
-      console.log('인증번호 전송 성공', data);
+      // console.log('인증번호 전송 성공', data);
       setResponsePhoneCode(data.data.code);
       alert('인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.');
       setReadOnlyPhoneCode(false);
@@ -369,7 +369,7 @@ const Signup = () => {
       setReadOnlyEmailCode(true);
       setPhoneCode('');
     } catch (error) {
-      console.log(error.response?.status);
+      // console.log(error.response?.status);
       setErrorPhoneCode(error.response?.status);
       if (error.response?.status === 429) {
         alert('3분에 1번만 요청이 가능합니다.');
@@ -411,14 +411,14 @@ const Signup = () => {
     ) {
       postSendPhoneCode({ phoneNumber: strPhoneNumber });
       if (responsePhoneCode === 201) {
-        console.log(responsePhoneCode);
+        // console.log(responsePhoneCode);
         alert('인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.');
         setReadOnlyPhoneCode(false);
         setPhoneCodebtnLabel('인증번호 재전송');
         setReadOnlyEmailCode(true);
         setPhoneCode('');
       } else {
-        console.log(responsePhoneCode);
+        // console.log(responsePhoneCode);
       }
     }
   };

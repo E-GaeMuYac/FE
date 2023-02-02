@@ -145,7 +145,7 @@ const Detail = () => {
             centerX: am5.percent(-22.5),
             y: am5.percent(-4),
             legendValueText: '[{fill}]{category}',
-            legendLabelText: `[bold {fill}]{value.formatNumber('#.#')}mg`,
+            legendLabelText: `[bold {fill}]{value.formatNumber('#.##')}mg`,
             // legendValueText: objGraph.materialName[i].allergy
             //   ? '[#FF392B]{category}'
             //   : '[{fill}]{category}',
