@@ -19,7 +19,6 @@ import Reviews from '../../contents/Reviews';
 
 const BottomContents = ({ medicineInfo, query }) => {
   const [ContentDesc, setContentDesc] = useState('');
-  console.log(medicineInfo);
   useEffect(() => {
     switch (query) {
       case '용법 용량':
@@ -145,7 +144,7 @@ const Detail = () => {
             centerX: am5.percent(-22.5),
             y: am5.percent(-4),
             legendValueText: '[{fill}]{category}',
-            legendLabelText: `[bold {fill}]{value.formatNumber('#.#')}mg`,
+            legendLabelText: `[bold {fill}]{value.formatNumber('#.##')}mg`,
             // legendValueText: objGraph.materialName[i].allergy
             //   ? '[#FF392B]{category}'
             //   : '[{fill}]{category}',
@@ -167,6 +166,8 @@ const Detail = () => {
           strokeWidth: 2,
           strokeOpacity: 0,
         });
+
+        // console.log(objGraph.materialName[0]?.allergy);
 
         series
           .get('colors')
