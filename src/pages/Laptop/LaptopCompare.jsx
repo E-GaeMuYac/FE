@@ -168,6 +168,9 @@ const LaptopCompare = () => {
     }
   }, [versusList, query]);
 
+  const [legendHeightA, setLegendHeightA] = useState(0);
+  const [legendHeightB, setLegendHeightB] = useState(0);
+
   //그래프에 들어갈 배열 생성
   useLayoutEffect(() => {
     //그래프 초기화
@@ -416,7 +419,9 @@ const LaptopCompare = () => {
           legend.itemContainers.template.events.on('pointerout', (e) => {
             setMaterialAExplainActive(false);
           });
-
+          legend.events.on('boundschanged', function () {
+            setLegendHeightA(`${legend.height() + 30}px`);
+          });
           //마커 동그랗게 변경
           legend.markerRectangles.template.setAll({
             cornerRadiusTL: 10,
@@ -462,6 +467,9 @@ const LaptopCompare = () => {
           });
           legend2.itemContainers.template.events.on('pointerout', (e) => {
             setMaterialBExplainActive(false);
+          });
+          legend2.events.on('boundschanged', function () {
+            setLegendHeightB(`${legend2.height() + 30}px`);
           });
           //마커 크기 변경
           legend.markers.template.setAll({
@@ -654,7 +662,9 @@ const LaptopCompare = () => {
                           )}
                         </div>
                         <div className='legendBox'>
-                          <div id='legenddiv'></div>
+                          <Legenddiv
+                            height={legendHeightA}
+                            id='legenddiv'></Legenddiv>
                         </div>
                       </div>
                     </div>
@@ -804,7 +814,9 @@ const LaptopCompare = () => {
                           )}
                         </div>
                         <div className='legendBox2'>
-                          <div id='legenddiv2'></div>
+                          <Legenddiv
+                            height={legendHeightB}
+                            id='legenddiv2'></Legenddiv>
                         </div>
                       </div>
                     </div>
@@ -1320,14 +1332,6 @@ const SubWrap = styled.div`
     height: 300px;
     margin-bottom: 30px;
   }
-  #legenddiv {
-    width: 100%;
-    height: 1000px;
-  }
-  #legenddiv2 {
-    width: 100%;
-    height: 1000px;
-  }
   .versusContentMaterialWrap {
     width: 100%;
     height: 400px;
@@ -1771,6 +1775,11 @@ const WarningAllergyFalse = styled.div`
     right: 41px;
     top: -20px;
   }
+`;
+
+const Legenddiv = styled.div`
+  width: 100%;
+  height: ${({ height }) => (height ? height : '100%')};
 `;
 
 export default LaptopCompare;
