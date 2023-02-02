@@ -5,7 +5,6 @@ import { api, userApi } from '../apis/apiInstance';
 import { useCookies } from 'react-cookie';
 
 const Login = (props) => {
-  const setIsToken = props.setistoken;
   const setUserImage = props.setuserimage;
   const token = localStorage.getItem('accessToken');
 
@@ -25,7 +24,6 @@ const Login = (props) => {
 
   useEffect(() => {
     if (token) {
-      alert('이미 로그인이 되어있습니다.');
       navigate('/');
     }
   });
@@ -62,13 +60,11 @@ const Login = (props) => {
         email,
         password,
       });
-      setIsToken(true);
       const accesstoken = res.headers.accesstoken;
       const refreshtoken = res.headers.refreshtoken;
       localStorage.setItem('accessToken', accesstoken);
       localStorage.setItem('refreshToken', refreshtoken);
-      alert(res.data.msg);
-      GetProfile();
+      getProfile();
       navigate('/');
     } catch (e) {
       console.log(e);
@@ -76,7 +72,7 @@ const Login = (props) => {
     }
   };
 
-  const GetProfile = async () => {
+  const getProfile = async () => {
     try {
       const res = await userApi.get('api/users/find');
       setUserImage(res.data.user.imageUrl);

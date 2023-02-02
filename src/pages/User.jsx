@@ -27,38 +27,33 @@ const User = (props) => {
   const [delPassword, setDelPassword] = useState('');
   const [isShow, setIsShow] = useState(false);
   const [loginType, setLoginType] = useState('');
-  const [userId, setUserId] = useState('');
   const setUserImage = props.setuserimage;
-  const setIsToken = props.setistoken;
 
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
   }).tab;
 
   useEffect(() => {
-    GetProfile();
-    UserMessage();
+    getProfile();
+    userMessage();
   }, []);
 
-  const GetProfile = async () => {
+  const getProfile = async () => {
     try {
       const res = await userApi.get('api/users/find');
       setNickname(res.data.user.nickname);
       setLoginCount(res.data.user.loginCount);
       setImageUrl(res.data.user.imageUrl);
       setLoginType(res.data.user.loginType);
-      setUserId(res.data.user.userId);
       setEmail(res.data.user.email);
     } catch (e) {
       console.log(e);
       alert('로그인 정보가 필요합니다.');
-      setIsToken(false);
-      localStorage.clear();
       navigate('/login');
     }
   };
 
-  const UserMessage = async () => {
+  const userMessage = async () => {
     try {
       const res = await api.get('api/posts');
       setServiceMsg(res.data.post);
@@ -176,10 +171,7 @@ const User = (props) => {
           },
           withCredentials: true,
         });
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('nickname');
-        setIsToken(false);
+        localStorage.clear();
         alert('회원탈퇴가 완료되었습니다.');
         navigate('/');
       } catch (e) {

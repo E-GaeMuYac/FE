@@ -5,8 +5,7 @@ import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { userApi } from '../apis/apiInstance';
 
-const ModifyReviews = (props) => {
-  const setIsToken = props.setIsToken;
+const ModifyReviews = () => {
   const navigate = useNavigate();
   const { medicineId, reviewId } = useParams();
   const [medicineItem, setMedicineItem] = useState({});
@@ -16,7 +15,7 @@ const ModifyReviews = (props) => {
   useEffect(() => {
     getMedicine();
     getReviews();
-    GetProfile();
+    getProfile();
   }, []);
 
   const getCurrentContent = (reviewList) => {
@@ -26,7 +25,7 @@ const ModifyReviews = (props) => {
     setContent(review.review);
   };
 
-  const GetProfile = async () => {
+  const getProfile = async () => {
     try {
       const res = await userApi.get('api/users/find');
       setNickname(res.data.user.nickname);

@@ -4,24 +4,20 @@ import { userApi } from '../apis/apiInstance';
 
 const SocialLogin = (props) => {
   const navigation = useNavigate();
-  const setIsToken = props.setistoken;
   const setUserImage = props.setuserimage;
   const [searchParams, setSearchParams] = useSearchParams();
   const accesstoken = searchParams.get('accesstoken');
   const refreshtoken = searchParams.get('refreshtoken');
-  const nickname = searchParams.get('nickname');
 
   useEffect(() => {
     localStorage.setItem('accessToken', accesstoken);
     localStorage.setItem('refreshToken', refreshtoken);
-    localStorage.setItem('nickname', nickname);
 
-    setIsToken(true);
-    GetProfile();
+    getProfile();
     navigation('/');
   }, []);
 
-  const GetProfile = async () => {
+  const getProfile = async () => {
     try {
       const res = await userApi.get('api/users/find');
       setUserImage(res.data.user.imageUrl);
