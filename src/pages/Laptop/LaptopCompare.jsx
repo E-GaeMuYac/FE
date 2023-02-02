@@ -847,7 +847,7 @@ const LaptopCompare = () => {
                         </MatrialExplainWrap>
                         <div className='legendTitle'>
                           유효성분 함량
-                          {allergy2 ? (
+                          {/* {allergy2 ? (
                             <WarningAllergyTrue>
                               <span>알레르기 주의</span>
                               <div className='allergyTrueIcon'>
@@ -868,7 +868,7 @@ const LaptopCompare = () => {
                                 </span>
                               </div>
                             </WarningAllergyFalse>
-                          )}
+                          )} */}
                         </div>
                         <div className='legendBox2'>
                           <div id='legenddiv2'></div>

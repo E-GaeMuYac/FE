@@ -168,6 +168,8 @@ const Detail = () => {
           strokeOpacity: 0,
         });
 
+        // console.log(objGraph.materialName[0]?.allergy);
+
         series
           .get('colors')
           .set('colors', [

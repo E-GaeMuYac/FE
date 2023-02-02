@@ -770,7 +770,7 @@ const ComparePage = () => {
                         </MatrialExplainWrap>
                         <div className='legendTitle'>
                           유효성분 함량
-                          {allergy1 ? (
+                          {/* {allergy1 ? (
                             <WarningAllergyTrue>
                               <span>알레르기 주의</span>
                               <div className='allergyTrueIcon'>
@@ -791,7 +791,7 @@ const ComparePage = () => {
                                 </span>
                               </div>
                             </WarningAllergyFalse>
-                          )}
+                          )} */}
                         </div>
                         <div className='legendBox'>
                           <div id='legenddiv'></div>
@@ -920,7 +920,7 @@ const ComparePage = () => {
                         </MatrialExplainWrap>
                         <div className='legendTitle'>
                           유효성분 함량
-                          {allergy2 ? (
+                          {/* {allergy2 ? (
                             <WarningAllergyTrue>
                               <span>알레르기 주의</span>
                               <div className='allergyTrueIcon'>
@@ -941,7 +941,7 @@ const ComparePage = () => {
                                 </span>
                               </div>
                             </WarningAllergyFalse>
-                          )}
+                          )} */}
                         </div>
                         <div className='legendBox'>
                           <div id='legenddiv2'></div>
