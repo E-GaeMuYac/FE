@@ -6,8 +6,8 @@ import { useGetSearchQuery } from '../query/searchQuery';
 
 //component
 import ProductList from '../components/common/productList';
-import { useRecoilState } from 'recoil';
-import { searchWord } from '../recoil/recoilStore';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { nowRoute, searchWord } from '../recoil/recoilStore';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);

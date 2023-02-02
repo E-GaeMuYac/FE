@@ -177,6 +177,8 @@ const ComparePage = () => {
         const newMedicineData = {
           material: versusList[0].materialName[i].material,
           explain: versusList[0].materialName[i].설명,
+          medicineA: 0,
+          medicineB: 0,
         };
         graphData.push(newMedicineData);
       }
@@ -185,6 +187,8 @@ const ComparePage = () => {
         const newMedicineData = {
           material: versusList[1].materialName[i].material,
           explain: versusList[1].materialName[i].설명,
+          medicineA: 0,
+          medicineB: 0,
         };
         graphData.push(newMedicineData);
       }

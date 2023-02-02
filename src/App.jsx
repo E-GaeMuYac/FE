@@ -25,7 +25,7 @@ import Reviews from './contents/Reviews';
 import MiniNav from './components/common/MiniNav';
 import ChatBox from './components/layout/ChatBox';
 import { useRecoilState } from 'recoil';
-import { nowRoute } from './recoil/recoilStore';
+import { nowRoute, searchWord } from './recoil/recoilStore';
 // import Spinner from './components/common/Spinner';
 import { Mobile, Laptop, PC } from './query/useMediaQuery';
 
@@ -37,7 +37,16 @@ function App() {
 
   useEffect(() => {
     setNowPage(location.pathname);
-  }, []);
+  }, [location]);
+
+  // const [searchedWord, setSearchedWord] = useRecoilState(searchWord);
+  // useEffect(() => {
+  //   if (!nowPage.includes('/detail') || !nowPage.includes('/search')) {
+  //     console.log(nowPage);
+  //     setSearchedWord('');
+  //   }
+  // }, [nowPage]);
+
   return (
     <>
       <Header
