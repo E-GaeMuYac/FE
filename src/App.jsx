@@ -32,7 +32,6 @@ import { useRecoilState } from 'recoil';
 import { nowRoute, searchWord } from './recoil/recoilStore';
 // import Spinner from './components/common/Spinner';
 import { Laptop, PC } from './query/useMediaQuery';
-import { auto } from '@popperjs/core';
 
 function App() {
   const [isToken, setIsToken] = useState('');
@@ -44,13 +43,13 @@ function App() {
     setNowPage(location.pathname);
   }, [location]);
 
-  // const [searchedWord, setSearchedWord] = useRecoilState(searchWord);
-  // useEffect(() => {
-  //   if (!nowPage.includes('/detail') || !nowPage.includes('/search')) {
-  //     console.log(nowPage);
-  //     setSearchedWord('');
-  //   }
-  // }, [nowPage]);
+  const [searchedWord, setSearchedWord] = useRecoilState(searchWord);
+  useEffect(() => {
+    if (!nowPage.includes('detail') && !nowPage.includes('search')) {
+      setSearchedWord('');
+    }
+  }, [nowPage]);
+
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [nowPage]);
