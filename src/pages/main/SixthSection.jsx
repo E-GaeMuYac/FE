@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { Mobile, Laptop, PC } from '../../query/useMediaQuery';
 
@@ -19,7 +20,7 @@ const SixthSection = (props) => {
             </Content1> */}
               {/* <Content1 /> */}
               <Content2 />
-              <Content3>지금 체험해보기</Content3>
+              <Content3 to='/search'>지금 체험해보기</Content3>
             </div>
           )}
         </PC>
@@ -35,7 +36,7 @@ const SixthSection = (props) => {
             </Content1> */}
               {/* <Content1 /> */}
               <Content2 />
-              <Content3>지금 체험해보기</Content3>
+              <Content3 to='/search'>지금 체험해보기</Content3>
             </div>
           )}
         </Laptop>
@@ -139,7 +140,7 @@ const Content2 = styled.div`
   opacity: 0;
 `;
 
-const Content3 = styled.button`
+const Content3 = styled(Link)`
   @media screen and (max-width: 1700px) {
     width: 270px;
     height: 58px;
@@ -155,13 +156,20 @@ const Content3 = styled.button`
   border-radius: 12px;
   font-weight: 700;
   font-size: 28px;
-  color: #ffffff;
+  color: #ffffff !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   /* margin: 70px 0 100px 0; */
   /* position: absolute;
   top: 110px;
   right: 0px; */
   animation: ${show} 2s ease-out forwards;
   opacity: 0;
+  :hover {
+    background-color: #1751ff;
+  }
 `;
 
 export default SixthSection;

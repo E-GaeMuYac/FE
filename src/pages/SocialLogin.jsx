@@ -19,8 +19,6 @@ const SocialLogin = (props) => {
     setIsToken(true);
     GetProfile();
     navigation('/');
-    const accessToken = localStorage.getItem('accessToken');
-    console.log(accessToken);
   }, []);
 
   const GetProfile = async () => {

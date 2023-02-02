@@ -16,8 +16,8 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
     let newArr = [];
     let count = 1;
     newArr.push(count);
-    for (let i = 0; i < searchLength; i++) {
-      if ((i + 1) % 5 === 0) {
+    for (let i = 1; i < searchLength; i++) {
+      if (i % 5 === 0) {
         count += 1;
         newArr.push(count);
       }
@@ -253,7 +253,7 @@ const MyReviews = ({ userId }) => {
                 disLike={review.dislike}
                 onClick={() => handleDisLike(review.reviewId)}>
                 <AiFillDislike />
-                <div>도움 안돼요</div>
+                <div>도움 안돼요 {review.dislikeCount}</div>
               </DislikeBtn>
             </Recommend>
             <DateWrited>
@@ -620,6 +620,7 @@ const LikeBtn = styled.button`
   border: none;
   background-color: ${({ like }) => (like ? '#3366FF' : '#e7e7e7')};
   color: ${({ like }) => (like ? '#ffffff' : '#868686')};
+  font-size: 15px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -643,6 +644,7 @@ const DislikeBtn = styled.button`
   border: none;
   background-color: ${({ disLike }) => (disLike ? '#3366FF' : '#e7e7e7')};
   color: ${({ disLike }) => (disLike ? '#ffffff' : '#868686')};
+  font-size: 15px;
   display: flex;
   justify-content: center;
   align-items: center;

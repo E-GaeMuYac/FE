@@ -24,12 +24,12 @@ const AddReviews = (props) => {
       setNickname(res.data.user.nickname);
     } catch (e) {
       console.log(e);
-      alert('로그인 정보가 필요합니다.');
-      setIsToken(false);
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('nickname');
-      navigate('/login');
+      // alert('로그인 정보가 필요합니다.');
+      // setIsToken(false);
+      // localStorage.removeItem('accessToken');
+      // localStorage.removeItem('refreshToken');
+      // localStorage.removeItem('nickname');
+      // navigate('/login');
     }
   };
 
@@ -106,7 +106,7 @@ const AddReviews = (props) => {
         <ReviewArea
           maxLength={1000}
           onChange={handleInput}
-          placeholder='작성팁을 참고해 리뷰를 작성해 주시면 다른 사용자분들에게 더 도움이 될거에요!&#13;&#10;1) 의약품 섭취 전 어떤 증상이 있었나요?&#13;&#10;2)  섭취 후 어떤 개선 효과가 있었나요?&#13;&#10;3)  섭취 후 부작용이 있었나요?&#13;&#10;이 박스를 클릭해 리뷰 작성을 시작해주세요!'></ReviewArea>
+          placeholder='작성팁을 참고해 리뷰를 작성해 주시면 다른 사용자분들에게 더 도움이 될거에요!&#13;&#10;1)  의약품 섭취 전 어떤 증상이 있었나요?&#13;&#10;2)  섭취 후 어떤 개선 효과가 있었나요?&#13;&#10;3)  섭취 후 부작용이 있었나요?&#13;&#10;이 박스를 클릭해 리뷰 작성을 시작해주세요!'></ReviewArea>
         <CountText count={content.length}>
           {content.length}자 / 최소 10글자
         </CountText>

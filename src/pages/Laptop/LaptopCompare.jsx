@@ -307,7 +307,52 @@ const LaptopCompare = () => {
                 : am5.color(0xadc8ff),
               versusList[0].materialName[8]?.allergy
                 ? am5.color(0xff392b)
-                : am5.color(0xd6e4ff),
+                : am5.color(0x13097a),
+              versusList[0].materialName[9]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x1d1093),
+              versusList[0].materialName[10]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x2b19b7),
+              versusList[0].materialName[11]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x3c25db),
+              versusList[0].materialName[12]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x5033ff),
+              versusList[0].materialName[13]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x7e66ff),
+              versusList[0].materialName[14]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x9984ff),
+              versusList[0].materialName[15]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0xbcadff),
+              versusList[0].materialName[16]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x0b2d78),
+              versusList[0].materialName[17]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x124092),
+              versusList[0].materialName[18]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x1d5cb5),
+              versusList[0].materialName[19]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x2a7bd8),
+              versusList[0].materialName[20]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x3a9efc),
+              versusList[0].materialName[21]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x6bbdfd),
+              versusList[0].materialName[22]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x88d1fe),
+              versusList[0].materialName[23]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0xb0e4fe),
             ]);
           // series
           //   .get('colors')
@@ -412,7 +457,52 @@ const LaptopCompare = () => {
                 : am5.color(0xadc8ff),
               versusList[1].materialName[8]?.allergy
                 ? am5.color(0xff392b)
-                : am5.color(0xd6e4ff),
+                : am5.color(0x13097a),
+              versusList[1].materialName[9]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x1d1093),
+              versusList[1].materialName[10]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x2b19b7),
+              versusList[1].materialName[11]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x3c25db),
+              versusList[1].materialName[12]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x5033ff),
+              versusList[1].materialName[13]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x7e66ff),
+              versusList[1].materialName[14]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x9984ff),
+              versusList[1].materialName[15]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0xbcadff),
+              versusList[1].materialName[16]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x0b2d78),
+              versusList[1].materialName[17]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x124092),
+              versusList[1].materialName[18]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x1d5cb5),
+              versusList[1].materialName[19]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x2a7bd8),
+              versusList[1].materialName[20]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x3a9efc),
+              versusList[1].materialName[21]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x6bbdfd),
+              versusList[1].materialName[22]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0x88d1fe),
+              versusList[1].materialName[23]?.allergy
+                ? am5.color(0xff392b)
+                : am5.color(0xb0e4fe),
             ]);
           // series2
           //   .get('colors')
@@ -1027,7 +1117,9 @@ const LaptopCompare = () => {
 
 const Wrap = styled.div`
   width: 100%;
-  /* height: 100vh; */
+  @media screen and (max-width: 1700px) {
+    min-width: 1024px;
+  }
 `;
 const MainWrap = styled.div`
   width: 100%;
@@ -1591,7 +1683,7 @@ const SubWrap = styled.div`
       border-left: 4px solid transparent;
       border-right: 4px solid transparent;
       position: absolute;
-      right: 60px;
+      right: 59px;
       top: -20px;
     }
     .mainMaterialDesc {
@@ -1658,13 +1750,13 @@ const NothingInBoxWrap = styled.div`
 `;
 const MatrialExplainWrap = styled.div`
   display: ${({ Active }) => (Active ? 'block' : 'none')};
-  width: 257px;
+  width: 259px;
   background-color: rgba(0, 0, 0, 0.54);
   padding: 29px 24px 16px;
   border-radius: 24px;
   line-height: 34px;
   position: absolute;
-  left: 36px;
+  left: 6px;
   z-index: 1;
   color: white;
   /* top: ${({ BoxY }) => `${BoxY - 15}px`}; */
@@ -1769,7 +1861,7 @@ const WarningAllergyTrue = styled.div`
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     position: absolute;
-    right: 42px;
+    right: 40px;
     top: -20px;
   }
 `;
@@ -1850,7 +1942,7 @@ const WarningAllergyFalse = styled.div`
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     position: absolute;
-    right: 42px;
+    right: 41px;
     top: -20px;
   }
 `;

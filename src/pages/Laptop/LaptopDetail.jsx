@@ -197,7 +197,52 @@ const Detail = () => {
               : am5.color(0xadc8ff),
             objGraph.materialName[8]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0xd6e4ff),
+              : am5.color(0x13097a),
+            objGraph.materialName[9]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x1d1093),
+            objGraph.materialName[10]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x2b19b7),
+            objGraph.materialName[11]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x3c25db),
+            objGraph.materialName[12]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x5033ff),
+            objGraph.materialName[13]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x7e66ff),
+            objGraph.materialName[14]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x9984ff),
+            objGraph.materialName[15]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0xbcadff),
+            objGraph.materialName[16]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x0b2d78),
+            objGraph.materialName[17]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x124092),
+            objGraph.materialName[18]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x1d5cb5),
+            objGraph.materialName[19]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x2a7bd8),
+            objGraph.materialName[20]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x3a9efc),
+            objGraph.materialName[21]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x6bbdfd),
+            objGraph.materialName[22]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x88d1fe),
+            objGraph.materialName[23]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0xb0e4fe),
           ]);
 
         // series
@@ -622,7 +667,7 @@ const Detail = () => {
           </RightCardBox>
         </div>
       </TopSection>
-      <div style={{ marginBottom: '150px' }}>
+      <div style={{ marginBottom: '60px' }}>
         <TabBar location={location} query={query} />
         {query !== '리뷰' ? (
           <BottomSection>
@@ -923,7 +968,7 @@ const WrapContents = styled.div`
       border-left: 4px solid transparent;
       border-right: 4px solid transparent;
       position: absolute;
-      left: 36.5px;
+      left: 35px;
       top: -20px;
     }
   }
@@ -1299,7 +1344,7 @@ const WarningAllergyTrue = styled.div`
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     position: absolute;
-    right: 29px;
+    right: 32px;
     top: -20px;
   }
 `;
@@ -1381,7 +1426,7 @@ const WarningAllergyFalse = styled.div`
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     position: absolute;
-    right: 29px;
+    right: 32px;
     top: -20px;
   }
 `;
@@ -1427,7 +1472,7 @@ const MatrialExplainWrap = styled.div`
   line-height: 34px;
   position: absolute;
   top: -55px;
-  left: -5px;
+  left: 10px;
   z-index: 1;
   color: white;
   text-align: center;

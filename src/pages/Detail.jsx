@@ -70,10 +70,6 @@ const Detail = () => {
 
   const medicineItem = objGraph;
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   useLayoutEffect(() => {
     if (objGraph) {
       //그래프 초기화
@@ -201,7 +197,52 @@ const Detail = () => {
               : am5.color(0xadc8ff),
             objGraph.materialName[8]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0xd6e4ff),
+              : am5.color(0x13097a),
+            objGraph.materialName[9]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x1d1093),
+            objGraph.materialName[10]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x2b19b7),
+            objGraph.materialName[11]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x3c25db),
+            objGraph.materialName[12]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x5033ff),
+            objGraph.materialName[13]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x7e66ff),
+            objGraph.materialName[14]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x9984ff),
+            objGraph.materialName[15]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0xbcadff),
+            objGraph.materialName[16]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x0b2d78),
+            objGraph.materialName[17]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x124092),
+            objGraph.materialName[18]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x1d5cb5),
+            objGraph.materialName[19]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x2a7bd8),
+            objGraph.materialName[20]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x3a9efc),
+            objGraph.materialName[21]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x6bbdfd),
+            objGraph.materialName[22]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0x88d1fe),
+            objGraph.materialName[23]?.allergy
+              ? am5.color(0xff392b)
+              : am5.color(0xb0e4fe),
           ]);
 
         // series
@@ -627,7 +668,7 @@ const Detail = () => {
           </RightCardBox>
         </div>
       </TopSection>
-      <div style={{ marginBottom: '170px' }}>
+      <div style={{ marginBottom: '80px' }}>
         <TabBar location={location} query={query} />
         {query !== '리뷰' ? (
           <BottomSection>

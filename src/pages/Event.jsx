@@ -1,35 +1,88 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 const Event = () => {
   return (
     <Wrap>
-      <EventImg />
+      <EventImg>
+        <button
+          onClick={() =>
+            window.open(
+              'https://docs.google.com/forms/d/e/1FAIpQLSecVl62mf888KCfZ7RpNJ6gyEKiCLWoDGKbPpE7SPy4wPW2WQ/viewform'
+            )
+          }>
+          설문조사 작성하기
+        </button>
+      </EventImg>
     </Wrap>
   );
 };
 const Wrap = styled.div`
-  @media screen and (min-width: 2560px) {
-    height: 94.4vh;
-  }
-  @media screen and (max-width: 1700px) {
-    height: 94.4vh;
-  }
   width: 100%;
+  /* min-width: 1440px; */
   min-width: 1024px;
-  height: 1200px;
-  min-height: 900px;
-  max-height: 170vh;
   background-color: #3366ff;
 `;
 const EventImg = styled.div`
-  width: 100%;
-  max-height: 1440px;
+  @media screen and (max-width: 1700px) {
+    min-width: 1024px;
+    min-height: 700px;
+    /* width: 1440px;
+    height: 1040px; */
+    width: 1024px;
+    height: 700px;
+  }
+  position: relative;
+  margin: auto;
+  width: 1920px;
   height: 100%;
+  max-height: 1373px;
+  height: 139.83vw;
+
   background-image: url('/assets/image/이벤트페이지.png');
   background-position: top;
   background-repeat: no-repeat;
   background-size: contain;
+  div {
+    /* position: absolute;
+    bottom: 0;
+    margin: auto; */
+    z-index: 999;
+    width: 420px;
+    height: 80px;
+    margin: auto;
+    background-image: url('/assets/image/설문조사이동.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* calc (이미지 높이 ÷ 이미지 가로 × 100 %) */
+    /* max-height: 80px;
+    height: 5.25vw;
+    border-radius: 12px; */
+  }
+  button {
+    @media screen and (max-width: 1700px) {
+      top: 89%;
+      width: 280px;
+      height: 50px;
+      font-size: 20px;
+    }
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 420px;
+    height: 80px;
+    font-weight: 700;
+    font-size: 28px;
+    color: #ffffff;
+    border: 0;
+    border-radius: 12px;
+    background-color: #242424;
+  }
 `;
 
 export default Event;

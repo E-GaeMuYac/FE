@@ -79,7 +79,6 @@ const Header = (props) => {
   // ---------------------------------------------------------------------
 
   const pageArr = [
-    { pageName: 'ABOUT', pathName: '/' },
     { pageName: '검색하기', pathName: '/search' },
     { pageName: '비교하기', pathName: '/compare' },
     { pageName: '이벤트', pathName: '/event' },
@@ -89,6 +88,7 @@ const Header = (props) => {
     navigate('/mypage?tab=내가 찜한 의약품');
   };
 
+  const token = localStorage.getItem('accessToken');
   // ---------------------------------------------------------------------
 
   return (
@@ -101,7 +101,7 @@ const Header = (props) => {
               <Nav key={page.pageName} page={page} />
             ))}
           </CategoryBox>
-          {!isToken ? (
+          {!token ? (
             <SignBox>
               <LoginBtn to='/login'>로그인</LoginBtn>
               <SignupBtn to='/signup'>회원가입</SignupBtn>
@@ -125,7 +125,7 @@ const Header = (props) => {
 
 const Wrap = styled.div`
   @media screen and (max-width: 1700px) {
-    height: 55px;
+    height: 60px;
   }
   width: 100%;
   height: 80px;
@@ -134,10 +134,10 @@ const Wrap = styled.div`
 const HeaderWrapper = styled.div`
   @media screen and (max-width: 1700px) {
     height: 60px;
-    min-width: 1024px;
   }
   background-color: white;
   width: 100%;
+  min-width: 1024px;
   margin: 0 auto;
   height: 80px;
   display: flex;

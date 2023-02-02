@@ -14,8 +14,8 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
     let newArr = [];
     let count = 1;
     newArr.push(count);
-    for (let i = 0; i < searchLength; i++) {
-      if ((i + 1) % 5 === 0) {
+    for (let i = 1; i < searchLength; i++) {
+      if (i % 5 === 0) {
         count += 1;
         newArr.push(count);
       }
@@ -171,7 +171,7 @@ const AllergySearch = () => {
   };
 
   //자동완성 리스트에서 1개 선택 시
-  const pickSingleValue = async (e) => {
+  const pickSingleValue = (e) => {
     setKeyword(e.target.innerText);
     setNowPageNum(1);
   };
@@ -239,7 +239,24 @@ const AllergySearch = () => {
             />
           </ListWrap>
         </>
-      ) : null}
+      ) : (
+        <GuideWrap>
+          <GuideBox>
+            <GuideTop>
+              <button type='button' onClick={pickSingleValue}>
+                아세트아미노펜
+              </button>
+              <div />
+              <h3>
+                알레르기 등록 후에
+                <br />
+                <span>게보린</span>을 검색해보세요!
+              </h3>
+            </GuideTop>
+            <GuideBottom>테스트를 위한 가이드입니다!</GuideBottom>
+          </GuideBox>
+        </GuideWrap>
+      )}
     </Wrapper>
   );
 };
@@ -426,6 +443,60 @@ const SearchSum = styled.span`
   color: #868686;
   font-weight: bold;
   font-size: 20px;
+`;
+
+const GuideWrap = styled.div`
+  width: 860px;
+  height: 70vh;
+  display: flex;
+  align-items: center;
+`;
+const GuideBox = styled.div`
+  width: 100%;
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const GuideTop = styled.div`
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  button {
+    width: 144px;
+    height: 43px;
+    border-radius: 40px;
+    background-color: #f6f7fa;
+    font-size: 16px;
+    font-weight: medium;
+    border: none;
+  }
+
+  div {
+    width: 229px;
+    height: 24px;
+    background-image: url('/assets/image/LongArrow.png');
+    background-size: cover;
+  }
+
+  h3 {
+    font-size: 35px;
+  }
+
+  span {
+    color: #3366ff;
+    font-weight: bold;
+  }
+`;
+
+const GuideBottom = styled.span`
+  font-size: 16px;
+  color: #868686;
 `;
 
 const PagenationWrap = styled.div`
