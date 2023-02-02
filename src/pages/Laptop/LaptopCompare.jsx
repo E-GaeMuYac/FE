@@ -1185,7 +1185,7 @@ const SubWrap = styled.div`
   .legendBox {
     width: 260px;
     height: 294px;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   .legendBox::-webkit-scrollbar {
     width: 15px;
