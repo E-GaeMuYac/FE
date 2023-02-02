@@ -73,7 +73,7 @@ const Wrap = styled.div`
   width: 100%;
   height: 40px;
   margin-bottom: 16px;
-  border-bottom: 1px solid #d9d9d9;
+  border-bottom: 2px solid #d9d9d9;
   ul {
     @media screen and (max-width: 1700px) {
       gap: 2px;
@@ -111,7 +111,8 @@ const TabName = styled.li`
     height: 3px;
     position: absolute;
     left: 0;
-    bottom: 0;
+    bottom: -2px;
+    border-radius: 3px;
     background-color: #3366ff;
   }`
       : null}
