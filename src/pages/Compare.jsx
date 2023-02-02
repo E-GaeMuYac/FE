@@ -182,8 +182,8 @@ const ComparePage = () => {
         };
         if (versusList[0].materialName[i].allergy) {
           newMedicineData['columnSettings'] = {
-            fill: am5.color(0xc4ad83),
-            stoke: am5.color(0xff392b),
+            fill: am5.color(0xff392b),
+            strokeOpacity: 0,
           };
         }
         graphData.push(newMedicineData);
@@ -199,7 +199,7 @@ const ComparePage = () => {
         if (versusList[1].materialName[i].allergy) {
           newMedicineData['columnSettings'] = {
             fill: am5.color(0xff392b),
-            stoke: am5.color(0xff392b),
+            strokeOpacity: 0,
           };
         }
 
