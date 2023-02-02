@@ -40,16 +40,8 @@ const Header = (props) => {
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
-    loginCheck();
+    getProfile();
   }, []);
-
-  const loginCheck = () => {
-    const refreshToken = localStorage.getItem('refreshToken');
-    const accessToken = localStorage.getItem('accessToken');
-    if (refreshToken || accessToken) {
-      getProfile();
-    }
-  };
 
   const getProfile = async () => {
     try {
@@ -64,8 +56,7 @@ const Header = (props) => {
 
   const logoutHandler = async () => {
     try {
-      const res = await userApi.put('api/users/logout');
-      alert(res.data.message);
+      await userApi.put('api/users/logout');
       localStorage.clear();
       navigate('/login');
     } catch (e) {
