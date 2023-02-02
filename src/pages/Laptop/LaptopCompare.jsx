@@ -178,7 +178,15 @@ const LaptopCompare = () => {
         const newMedicineData = {
           material: versusList[0].materialName[i].material,
           explain: versusList[0].materialName[i].설명,
+          medicineA: 0,
+          medicineB: 0,
         };
+        if (versusList[0].materialName[i].allergy) {
+          newMedicineData['columnSettings'] = {
+            fill: am5.color(0xc4ad83),
+            stoke: am5.color(0xff392b),
+          };
+        }
         graphData.push(newMedicineData);
       }
       //두 번째 약
@@ -186,7 +194,16 @@ const LaptopCompare = () => {
         const newMedicineData = {
           material: versusList[1].materialName[i].material,
           explain: versusList[1].materialName[i].설명,
+          medicineA: 0,
+          medicineB: 0,
         };
+        if (versusList[1].materialName[i].allergy) {
+          newMedicineData['columnSettings'] = {
+            fill: am5.color(0xff392b),
+            stoke: am5.color(0xff392b),
+          };
+        }
+
         graphData.push(newMedicineData);
       }
       //중복 제거
@@ -269,92 +286,12 @@ const LaptopCompare = () => {
               tooltip: tootip,
               legendValueText: '[{fill}]{category}',
               legendLabelText: `[bold {fill}]{value.formatNumber('#.#')}mg`,
-              // legendValueText: versusList[0].materialName[i].allergy
-              //   ? '[#FF392B]{category}'
-              //   : '{category}',
-              // legendLabelText: versusList[0].materialName[i].allergy
-              //   ? `[bold #FF392B]{value.formatNumber('#.#')}mg`
-              //   : '[bold {fill}]{value}mg',
             })
           );
+          series.slices.template.setAll({
+            templateField: 'columnSettings',
+          });
           //색상 지정
-          // series
-          //   .get('colors')
-          //   .set('colors', [
-          //     versusList[0].materialName[0]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x091a7a),
-          //     versusList[0].materialName[1]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x102693),
-          //     versusList[0].materialName[2]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x1939b7),
-          //     versusList[0].materialName[3]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x254edb),
-          //     versusList[0].materialName[4]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x3366ff),
-          //     versusList[0].materialName[5]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x6690ff),
-          //     versusList[0].materialName[6]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x84a9ff),
-          //     versusList[0].materialName[7]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0xadc8ff),
-          //     versusList[0].materialName[8]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x13097a),
-          //     versusList[0].materialName[9]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x1d1093),
-          //     versusList[0].materialName[10]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x2b19b7),
-          //     versusList[0].materialName[11]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x3c25db),
-          //     versusList[0].materialName[12]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x5033ff),
-          //     versusList[0].materialName[13]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x7e66ff),
-          //     versusList[0].materialName[14]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x9984ff),
-          //     versusList[0].materialName[15]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0xbcadff),
-          //     versusList[0].materialName[16]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x0b2d78),
-          //     versusList[0].materialName[17]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x124092),
-          //     versusList[0].materialName[18]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x1d5cb5),
-          //     versusList[0].materialName[19]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x2a7bd8),
-          //     versusList[0].materialName[20]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x3a9efc),
-          //     versusList[0].materialName[21]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x6bbdfd),
-          //     versusList[0].materialName[22]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0x88d1fe),
-          //     versusList[0].materialName[23]?.allergy
-          //       ? am5.color(0xff392b)
-          //       : am5.color(0xb0e4fe),
-          //   ]);
-
           series
             .get('colors')
             .set('colors', [
@@ -403,17 +340,11 @@ const LaptopCompare = () => {
               tooltip: tootip,
               legendValueText: '[{fill}]{category}',
               legendLabelText: `[bold {fill}]{value.formatNumber('#.#')}mg`,
-              // legendValueText: versusList[0].materialName[i].allergy
-              //   ? '[#FF392B]{category}'
-              //   : '{category}',
-              // legendLabelText: versusList[0].materialName[i].allergy
-              //   ? `[bold #FF392B]{value.formatNumber('#.#')}mg`
-              //   : '[bold {fill}]{value}mg',
             })
           );
 
           //색상 지정
-          series
+          series2
             .get('colors')
             .set('colors', [
               am5.color(0x091a7a),
@@ -436,7 +367,9 @@ const LaptopCompare = () => {
               am5.color(0x88d1fe),
               am5.color(0xb0e4fe),
             ]);
-
+          series2.slices.template.setAll({
+            templateField: 'columnSettings',
+          });
           series2.data.setAll(graphData);
 
           //ticks, 라벨 제거
