@@ -29,7 +29,7 @@ import ChatBox from './components/layout/ChatBox';
 import Mobile from './contents/Mobile';
 import Footer from './components/layout/Footer';
 import { useRecoilState } from 'recoil';
-import { nowRoute } from './recoil/recoilStore';
+import { nowRoute, searchWord } from './recoil/recoilStore';
 // import Spinner from './components/common/Spinner';
 import { Laptop, PC } from './query/useMediaQuery';
 import { auto } from '@popperjs/core';
@@ -44,9 +44,19 @@ function App() {
     setNowPage(location.pathname);
   }, [location]);
 
+<<<<<<< HEAD
+  // const [searchedWord, setSearchedWord] = useRecoilState(searchWord);
+  // useEffect(() => {
+  //   if (!nowPage.includes('/detail') || !nowPage.includes('/search')) {
+  //     console.log(nowPage);
+  //     setSearchedWord('');
+  //   }
+  // }, [nowPage]);
+=======
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [nowPage]);
+>>>>>>> 999ba315c612f40f7ca18b221b1fed2ff70aa972
 
   return (
     <>
