@@ -56,8 +56,7 @@ const Header = (props) => {
 
   const logoutHandler = async () => {
     try {
-      const res = await userApi.put('api/users/logout');
-      alert(res.data.message);
+      await userApi.put('api/users/logout');
       localStorage.clear();
       navigate('/login');
     } catch (e) {
