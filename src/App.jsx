@@ -34,7 +34,6 @@ import { nowRoute, searchWord } from './recoil/recoilStore';
 import { Laptop, PC } from './query/useMediaQuery';
 
 function App() {
-  const [isToken, setIsToken] = useState('');
   const [userImage, setUserImage] = useState('');
   const location = useLocation();
   const [nowPage, setNowPage] = useRecoilState(nowRoute);
@@ -57,22 +56,12 @@ function App() {
   return (
     <>
       <BrowserView>
-        <Header
-          istoken={isToken}
-          setistoken={setIsToken}
-          userimage={userImage}
-          setuserimage={setUserImage}
-        />
+        <Header userimage={userImage} setuserimage={setUserImage} />
         <Routes>
           <Route
             exact
             path='/login/loading'
-            element={
-              <SocialLogin
-                setistoken={setIsToken}
-                setuserimage={setUserImage}
-              />
-            }
+            element={<SocialLogin setuserimage={setUserImage} />}
           />
           <Route
             exact
@@ -103,9 +92,7 @@ function App() {
           <Route
             exact
             path='/login'
-            element={
-              <Login setistoken={setIsToken} setuserimage={setUserImage} />
-            }
+            element={<Login setuserimage={setUserImage} />}
           />
           <Route exact path='/signup' element={<Signup />} />
           <Route exact path='/findaccount' element={<FindAccount />} />
@@ -135,11 +122,7 @@ function App() {
             path='/mypage'
             element={
               <Layout>
-                <User
-                  setuserimage={setUserImage}
-                  setistoken={setIsToken}
-                  istoken={isToken}
-                />
+                <User setuserimage={setUserImage} />
                 <CompareBox />
               </Layout>
             }
@@ -162,7 +145,7 @@ function App() {
               <>
                 <MiniNav />
                 <Layout>
-                  <AddReviews setistoken={setIsToken} />
+                  <AddReviews />
                 </Layout>
               </>
             }
@@ -173,15 +156,12 @@ function App() {
               <>
                 {/* <MiniNav /> */}
                 <Layout>
-                  <ModifyReviews setistoken={setIsToken} />
+                  <ModifyReviews />
                 </Layout>
               </>
             }
           />
-          <Route
-            path='/detail/:id?tab=리뷰'
-            element={<Reviews setistoken={setIsToken} />}
-          />
+          <Route path='/detail/:id?tab=리뷰' element={<Reviews />} />
           <Route path='/event' element={<Event />} />
         </Routes>
         <Footer />

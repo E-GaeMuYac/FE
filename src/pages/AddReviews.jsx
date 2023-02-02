@@ -5,8 +5,7 @@ import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { userApi } from '../apis/apiInstance';
 
-const AddReviews = (props) => {
-  const setIsToken = props.setIsToken;
+const AddReviews = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [medicineItem, setMedicineItem] = useState({});
@@ -15,21 +14,15 @@ const AddReviews = (props) => {
 
   useEffect(() => {
     getMedicine();
-    GetProfile();
+    getProfile();
   }, []);
 
-  const GetProfile = async () => {
+  const getProfile = async () => {
     try {
       const res = await userApi.get('api/users/find');
       setNickname(res.data.user.nickname);
     } catch (e) {
       console.log(e);
-      // alert('로그인 정보가 필요합니다.');
-      // setIsToken(false);
-      // localStorage.removeItem('accessToken');
-      // localStorage.removeItem('refreshToken');
-      // localStorage.removeItem('nickname');
-      // navigate('/login');
     }
   };
 

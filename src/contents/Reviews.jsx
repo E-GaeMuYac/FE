@@ -98,8 +98,10 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   );
 };
 
-const Reviews = (props) => {
+const Reviews = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem('accessToken');
+
   const [moreShow, setMoreShow] = useState(0);
   const [reviewArr, setReviewArr] = useState([]);
   const [nickname, setNickname] = useState('');
@@ -109,7 +111,6 @@ const Reviews = (props) => {
   const [sortText, setSortText] = useState('최신순');
   const [pickTag, setpickTag] = useState('전체보기');
   const [openDrop, setOpenDrop] = useState(false);
-  const setIsToken = props.setIsToken;
   const { id } = useParams();
 
   //현재페이지
@@ -134,10 +135,10 @@ const Reviews = (props) => {
 
   useEffect(() => {
     getReviews();
-    GetProfile();
+    getProfile();
   }, [nowPageNum, pickTag, sort]);
 
-  const GetProfile = async () => {
+  const getProfile = async () => {
     try {
       const res = await userApi.get('api/users/find');
       setNickname(res.data.user.nickname);
@@ -212,8 +213,6 @@ const Reviews = (props) => {
       setSortText('추천순');
     }
   };
-
-  const token = localStorage.getItem('accessToken');
 
   const addReview = () => {
     if (token) {

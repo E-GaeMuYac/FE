@@ -35,11 +35,9 @@ const Nav = ({ page }) => {
 const Header = (props) => {
   const navigate = useNavigate();
 
-  const isToken = props.istoken;
-  const setIsToken = props.setistoken;
-
   const userImage = props.userimage;
   const setUserImage = props.setuserimage;
+  const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
     loginCheck();
@@ -49,12 +47,11 @@ const Header = (props) => {
     const refreshToken = localStorage.getItem('refreshToken');
     const accessToken = localStorage.getItem('accessToken');
     if (refreshToken || accessToken) {
-      GetProfile();
-      setIsToken(true);
+      getProfile();
     }
   };
 
-  const GetProfile = async () => {
+  const getProfile = async () => {
     try {
       const res = await userApi.get('api/users/find');
       setUserImage(res.data.user.imageUrl);
@@ -70,7 +67,6 @@ const Header = (props) => {
       const res = await userApi.put('api/users/logout');
       alert(res.data.message);
       localStorage.clear();
-      setIsToken(false);
       navigate('/login');
     } catch (e) {
       console.log(e);
@@ -88,7 +84,6 @@ const Header = (props) => {
     navigate('/mypage?tab=내가 찜한 의약품');
   };
 
-  const token = localStorage.getItem('accessToken');
   // ---------------------------------------------------------------------
 
   return (
