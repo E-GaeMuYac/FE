@@ -44,7 +44,6 @@ function App() {
     setNowPage(location.pathname);
   }, [location]);
 
-<<<<<<< HEAD
   // const [searchedWord, setSearchedWord] = useRecoilState(searchWord);
   // useEffect(() => {
   //   if (!nowPage.includes('/detail') || !nowPage.includes('/search')) {
@@ -52,11 +51,9 @@ function App() {
   //     setSearchedWord('');
   //   }
   // }, [nowPage]);
-=======
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [nowPage]);
->>>>>>> 999ba315c612f40f7ca18b221b1fed2ff70aa972
 
   return (
     <>
