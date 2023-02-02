@@ -20,8 +20,8 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
     let newArr = [];
     let count = 1;
     newArr.push(count);
-    for (let i = 0; i < searchLength; i++) {
-      if ((i + 1) % 20 === 0) {
+    for (let i = 1; i < searchLength; i++) {
+      if (i % 20 === 0) {
         count += 1;
         newArr.push(count);
       }
