@@ -154,6 +154,7 @@ const Reviews = () => {
         const res = await userApi.get(
           `/api/reviews?medicineId=${id}&page=${nowPageNum}&pageSize=5&order=${sort}`
         );
+        console.log(res);
         setReviewArr(res.data.reviewList);
         setSearchLength(res.data.totalReview);
       } catch (error) {
@@ -356,7 +357,7 @@ const Reviews = () => {
                   disLike={review.dislike}
                   onClick={() => handleDisLike(review.reviewId)}>
                   <AiFillDislike />
-                  <div>도움 안돼요</div>
+                  <div>도움 안돼요 {review.dislikeCount}</div>
                 </DislikeBtn>
               </Recommend>
               {review.userId === userId ? (

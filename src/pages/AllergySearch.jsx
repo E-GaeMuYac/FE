@@ -357,7 +357,6 @@ const SearchBtn = styled.button`
   justify-content: center;
   border: none;
   border-radius: 210px;
-  box-shadow: -2px 2px 2px rgba(0, 0, 0, 0.15);
   position: absolute;
   right: 0;
   top: 0;
@@ -383,7 +382,7 @@ const SearchIcon = styled.div`
   }
   width: 37px;
   height: 37px;
-  background-image: url(/assets/image/searchIcon.png);
+  background-image: url(/assets/image/SearchIcon.png);
   background-size: cover;
   background-position: center;
 `;
