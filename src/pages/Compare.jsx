@@ -591,7 +591,7 @@ const ComparePage = () => {
                     <div id='chartdiv'></div>
                     <div className='graphNameWrap'>
                       <div className='graphNameBox'>
-                        <div className='graphName'>
+                        <div className='graphName1'>
                           {versusList[0].itemName}
                         </div>
                         <div className='totalAmountWrap A'>
@@ -608,7 +608,7 @@ const ComparePage = () => {
                         </div>
                       </div>
                       <div className='graphNameBox'>
-                        <div className='graphName'>
+                        <div className='graphName2'>
                           {versusList[1].itemName}
                         </div>
                         <div className='totalAmountWrap B'>
@@ -677,7 +677,7 @@ const ComparePage = () => {
                           <span className='mainMaterialAmountIcon'>
                             해당 의약품에서 가장 중요한 성분 3가지를 뽑아
                             사용자에게 제공합니다. 제공되는 성분 3가지는 용량에
-                            상관없이
+                            상관없이{' '}
                             <sapn className='mainMaterialDesc'>
                               오직 중요순서로 기재됩니다.
                             </sapn>
@@ -831,7 +831,7 @@ const ComparePage = () => {
                           <span className='mainMaterialAmountIcon'>
                             해당 의약품에서 가장 중요한 성분 3가지를 뽑아
                             사용자에게 제공합니다. 제공되는 성분 3가지는 용량에
-                            상관없이
+                            상관없이{' '}
                             <sapn className='mainMaterialDesc'>
                               오직 중요순서로 기재됩니다.
                             </sapn>
@@ -1128,7 +1128,7 @@ const SubWrap = styled.div`
     font-size: 30px;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1172,10 +1172,24 @@ const SubWrap = styled.div`
   .graphNameBox {
     width: 155px;
   }
-  .graphName {
+  .graphName1 {
     padding: 6px 10px;
     white-space: normal;
-    background-color: #c2d2ff;
+    background-color: #a9beff;
+    word-break: break-all;
+    border-radius: 10px;
+    color: #242424;
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .graphName2 {
+    padding: 6px 10px;
+    white-space: normal;
+    /* background-color: #a798ff; */
+    background-color: #7e66ff;
     word-break: break-all;
     border-radius: 10px;
     color: #242424;
@@ -1220,7 +1234,8 @@ const SubWrap = styled.div`
     padding: 12px 10px;
     color: white;
     border-radius: 8px;
-    background-color: rgba(0, 0, 0, 0.65);
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(11.5px);
     word-break: break-all;
   }
   .totalAmountWrap.A .totalAmountDesc {
@@ -1275,7 +1290,7 @@ const SubWrap = styled.div`
   }
   .versusContentMaterialWrap ul li {
     font-size: 20px;
-    height: 68px;
+    height: 80px;
     display: flex;
     align-items: center;
   }
@@ -1405,15 +1420,13 @@ const SubWrap = styled.div`
       right: -50px;
       text-align: center;
       width: 256px;
-      padding: 12px;
-      font-size: 14px;
-      line-height: 22px;
+      padding: 12px 10px;
+      font-size: 15px;
+      line-height: 24px;
       font-weight: 350;
       color: #ffffff;
       opacity: 1;
       z-index: 2;
-      font-weight: 400;
-      font-size: 14px;
       word-break: break-all;
       text-align: left;
     }
@@ -1433,6 +1446,7 @@ const SubWrap = styled.div`
       color: #82a1ff;
       font-weight: 700;
       font-size: 15px;
+      line-height: 24px;
     }
   }
 `;
@@ -1492,9 +1506,11 @@ const NothingInBoxWrap = styled.div`
 const MatrialExplainWrap = styled.div`
   display: ${({ Active }) => (Active ? 'block' : 'none')};
   width: 338px;
-  background-color: rgba(0, 0, 0, 0.54);
-  padding: 29px 24px 16px;
-  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(11.5px);
+  /* padding: 29px 24px 16px;0 */
+  padding: 15px 30px 20px 30px;
+  border-radius: 15px;
   line-height: 34px;
   position: absolute;
   left: 0px;
@@ -1505,15 +1521,18 @@ const MatrialExplainWrap = styled.div`
 
   backdrop-filter: blur(5px);
   .title {
+    margin-top: 20px;
     font-size: 24px;
     margin-bottom: 15px;
     display: flex;
     align-items: center;
     color: #87a5ff;
-    font-weight: bold;
+    font-weight: 700;
     min-height: 65px;
+    /* margin-left: 6px; */
   }
   .title span {
+    /* width: 300px; */
     width: 90px;
     font-size: 18px;
     margin-right: 6px;
@@ -1522,6 +1541,7 @@ const MatrialExplainWrap = styled.div`
   }
   .desc {
     font-size: 16px;
+    font-weight: 400;
     line-height: 34px;
   }
 `;
@@ -1540,10 +1560,8 @@ const WarningAllergyTrue = styled.div`
   justify-content: center;
   margin-left: 8px;
   color: #ff392b;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 20px;
   .allergyTrueIcon {
+    margin-top: 2px;
     margin-left: 6px;
     width: 20px;
     height: 20px;
@@ -1553,7 +1571,9 @@ const WarningAllergyTrue = styled.div`
     display: inline-block;
   }
   span {
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 20px;
   }
   :hover .allergyAmountIcon {
     display: block;
@@ -1569,8 +1589,8 @@ const WarningAllergyTrue = styled.div`
     text-align: center;
     width: 256px;
     padding: 12px;
-    font-size: 14px;
-    line-height: 22px;
+    font-size: 15px;
+    line-height: 24px;
     font-weight: 350;
     color: #ffffff;
     opacity: 1;
@@ -1608,10 +1628,8 @@ const WarningAllergyFalse = styled.div`
   justify-content: center;
   margin-left: 8px;
   color: #03935b;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 20px;
   .allergyFalseIcon {
+    margin-top: 2px;
     margin-left: 6px;
     width: 20px;
     height: 20px;
@@ -1621,7 +1639,9 @@ const WarningAllergyFalse = styled.div`
     display: inline-block;
   }
   span {
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 20px;
   }
   :hover .allergyAmountIcon {
     display: block;
@@ -1637,8 +1657,8 @@ const WarningAllergyFalse = styled.div`
     text-align: center;
     width: 256px;
     padding: 12px;
-    font-size: 14px;
-    line-height: 22px;
+    font-size: 15px;
+    line-height: 24px;
     font-weight: 350;
     color: #ffffff;
     opacity: 1;

@@ -37,8 +37,11 @@ const FourthSection = (props) => {
                       성분 비율을 한눈에!
                     </h1>
                   </div>
-                  <p>약 설명서에 적혀있는 성분들 읽기에 너무 작지 않나요?</p>
-                  <p>이제 필너츠에서 성분 비율까지 명확하게 확인하세요!</p>
+                  <p>
+                    약 설명서에 적혀있는 성분들 읽기에 너무 작지 않나요?
+                    <br />
+                    이제 필너츠에서 성분 비율까지 명확하게 확인하세요!
+                  </p>
                 </Content3>
               </AlignWrap>
             )}
@@ -58,7 +61,7 @@ const FourthSection = (props) => {
                     </h1>
                   </div>
                   <p>마이페이지에 알러지 성분을 등록하세요!</p>
-                  <p>
+                  <p style={{ marginBottom: 0 }}>
                     약에 대한 정보 조회시 알레르기를 유발하는 성분이
                     <br />
                     있다면 알려드릴게요!
@@ -96,7 +99,7 @@ const FourthSection = (props) => {
                     <br />
                     중요순서로 3개를 뽑아 정보를 제공합니다.
                   </p>
-                  <p>
+                  <p style={{ marginBottom: 0 }}>
                     성분 함량이 가장 많다고 해서 가장 중요한 성분이
                     <br />
                     아닐 수 있으니 꼭 주요 유효성분을 확인해주세요!
@@ -165,7 +168,9 @@ const FourthSection = (props) => {
                     </h1>
                   </div>
                   <p>약 설명서에 적혀있는 성분들 읽기에 너무 작지 않나요?</p>
-                  <p>이제 필너츠에서 성분 비율까지 명확하게 확인하세요!</p>
+                  <p style={{ marginBottom: 0 }}>
+                    이제 필너츠에서 성분 비율까지 명확하게 확인하세요!
+                  </p>
                 </Content3>
               </AlignWrap>
             )}
@@ -185,7 +190,7 @@ const FourthSection = (props) => {
                     </h1>
                   </div>
                   <p>마이페이지에 알러지 성분을 등록하세요!</p>
-                  <p>
+                  <p style={{ marginBottom: 0 }}>
                     약에 대한 정보 조회시 알레르기를 유발하는 성분이
                     <br />
                     있다면 알려드릴게요!
@@ -223,7 +228,7 @@ const FourthSection = (props) => {
                     <br />
                     중요순서로 3개를 뽑아 정보를 제공합니다.
                   </p>
-                  <p>
+                  <p style={{ marginBottom: 0 }}>
                     성분 함량이 가장 많다고 해서 가장 중요한 성분이
                     <br />
                     아닐 수 있으니 꼭 주요 유효성분을 확인해주세요!
@@ -288,12 +293,12 @@ const Wrapper = styled.div`
     span {
       @media screen and (max-width: 1700px) {
         font-size: 15px;
-        padding: 3px 10px;
+        padding: 2.5px 10px;
       }
       background-color: #ebf0ff;
       border-radius: 8px;
       color: #3366ff;
-      padding: 3px 12px;
+      padding: 2.5px 10px;
       font-weight: 700;
       font-size: 20px;
     }
@@ -413,7 +418,8 @@ const Content3 = styled.div`
       line-height: 25px;
     }
     font-size: 22px;
-    font-weight: 600;
+    line-height: 36px;
+    font-weight: 500;
     color: #868686;
   }
 `;
@@ -445,8 +451,12 @@ const Content4 = styled.div`
       font-size: 18px;
       line-height: 25px;
     }
+    @media screen and (min-width: 1701px) {
+      margin-bottom: 24px;
+    }
     font-size: 22px;
-    font-weight: 600;
+    line-height: 36px;
+    font-weight: 500;
     color: #868686;
   }
 `;
@@ -511,8 +521,12 @@ const Content7 = styled.div`
       font-size: 18px;
       line-height: 25px;
     }
+    @media screen and (min-width: 1701px) {
+      margin-bottom: 24px;
+    }
     font-size: 22px;
-    font-weight: 600;
+    line-height: 36px;
+    font-weight: 500;
     color: #868686;
   }
 `;
@@ -544,7 +558,8 @@ const Content8 = styled.div`
       line-height: 25px;
     }
     font-size: 22px;
-    font-weight: 600;
+    line-height: 36px;
+    font-weight: 500;
     color: #868686;
   }
 `;

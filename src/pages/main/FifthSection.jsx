@@ -25,10 +25,13 @@ const FifthSection = (props) => {
               </Content1>
               <Content2>
                 <CardWrap>
-                  <Card1 />
-                  <Card2 />
-                  <DottedLine1 />
-                  <DottedLine2 />
+                  <Card1>
+                    <DottedLine1 />
+                  </Card1>
+
+                  <Card2>
+                    <DottedLine2 />
+                  </Card2>
                 </CardWrap>
 
                 <Tab />
@@ -54,10 +57,13 @@ const FifthSection = (props) => {
               </Content1>
               <Content2>
                 <CardWrap>
-                  <Card1 />
-                  <Card2 />
-                  <DottedLine1 />
-                  <DottedLine2 />
+                  <Card1>
+                    <DottedLine1 />
+                  </Card1>
+
+                  <Card2>
+                    <DottedLine2 />
+                  </Card2>
                 </CardWrap>
 
                 <Tab />
@@ -153,10 +159,11 @@ const Content1 = styled.div`
   p {
     @media screen and (max-width: 1700px) {
       font-size: 18px;
-      line-height: 40px;
+      line-height: 34px;
     }
     font-size: 22px;
-    font-weight: 600;
+    line-height: 36px;
+    font-weight: 500;
     color: #868686;
     text-align: center;
     margin-top: 32px;
@@ -179,13 +186,16 @@ const CardWrap = styled.div`
   @media screen and (max-width: 1700px) {
     width: 65%;
     margin: 0px auto 0 auto;
+    gap: 160px;
   }
-  width: 51%;
+  width: 100%;
+  gap: 234px;
   /* height: 485px; */
   display: flex;
-  justify-content: space-between;
-  margin: 100px auto 0 auto;
-  position: relative;
+  /* justify-content: space-between; */
+  justify-content: center;
+  margin: 100px auto auto auto;
+  /* position: relative; */
   /* position: absolute;
   top: 490px;
   left: 410px; */
@@ -193,28 +203,76 @@ const CardWrap = styled.div`
 
 const Card1 = styled.div`
   @media screen and (max-width: 1700px) {
-    background-size: 95%;
+    /* background-size: 95%; */
+    background-size: contain;
+    width: 190px;
+    height: 210px;
   }
+  position: relative;
   background-image: url('/assets/image/약정보카드.png');
   background-size: cover;
   background-repeat: no-repeat;
   width: 280px;
   height: 312px;
   opacity: 0;
+  z-index: 998;
   animation: ${flicker} 1.5s 1s ease-out forwards;
 `;
 
 const Card2 = styled.div`
   @media screen and (max-width: 1700px) {
-    background-size: 95%;
+    /* background-size: 95%; */
+    background-size: contain;
+    width: 190px;
+    height: 210px;
   }
+  position: relative;
   background-image: url('/assets/image/약정보카드2.png');
   background-size: cover;
   background-repeat: no-repeat;
   width: 280px;
   height: 312px;
   opacity: 0;
+  z-index: 998;
   animation: ${flicker} 1.5s 1s ease-out forwards;
+`;
+
+const DottedLine1 = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 5.5px;
+    height: 127px;
+    top: 182px;
+    left: 115px;
+  }
+  background-image: url('/assets/image/점선1.png');
+  background-size: cover;
+  width: 8px;
+  height: 167px;
+  position: absolute;
+  top: 270px;
+  left: 170px;
+  opacity: 0;
+  z-index: 999;
+  animation: ${fadein} 1s 2.5s ease-in forwards;
+`;
+
+const DottedLine2 = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 5.5px;
+    height: 127px;
+    top: 182px;
+    right: 90px;
+  }
+  background-image: url('/assets/image/점선1.png');
+  background-size: cover;
+  width: 8px;
+  height: 167px;
+  position: absolute;
+  top: 270px;
+  right: 133px;
+  opacity: 0;
+  z-index: 999;
+  animation: ${fadein} 1s 2.5s ease-in forwards;
 `;
 
 const Tab = styled.div`
@@ -231,6 +289,7 @@ const Tab = styled.div`
     justify-content: center;
     margin: auto;
     height: 250px;
+
     /* overflow: hidden; */
   }
   background-image: url('/assets/image/비교함.png');
@@ -239,7 +298,7 @@ const Tab = styled.div`
   background-repeat: no-repeat;
   width: 1498px;
   height: 331px;
-
+  z-index: 1;
   /* max-height: 331px;
   height: 22.096vw; */
   display: flex;
@@ -250,41 +309,4 @@ const Tab = styled.div`
   animation: ${slide} 1s 1.5s ease-in forwards;
 `;
 
-const DottedLine1 = styled.div`
-  @media screen and (max-width: 1700px) {
-    width: 9px;
-    height: 160px;
-    top: 255px;
-    left: 162px;
-  }
-  background-image: url('/assets/image/점선1.png');
-  background-size: cover;
-  width: 11px;
-  height: 223px;
-  position: absolute;
-  top: 270px;
-  left: 169px;
-  opacity: 0;
-  z-index: 999;
-  animation: ${fadein} 1s 2.5s ease-in forwards;
-`;
-
-const DottedLine2 = styled.div`
-  @media screen and (max-width: 1700px) {
-    width: 6x;
-    height: 160px;
-    top: 255px;
-    right: 143px;
-  }
-  background-image: url('/assets/image/점선1.png');
-  background-size: cover;
-  width: 10px;
-  height: 223px;
-  position: absolute;
-  top: 270px;
-  right: 133px;
-  opacity: 0;
-  z-index: 999;
-  animation: ${fadein} 1s 2.5s ease-in forwards;
-`;
 export default FifthSection;
