@@ -347,11 +347,9 @@ const SearchInput = styled.input`
 
 const SearchBtn = styled.button`
   @media screen and (max-width: 1700px) {
-    width: 110px;
-    height: 50px;
+    padding: 10px 20px 11px 20px;
   }
-  width: 130px;
-  height: 65px;
+  padding: 13px 24px 14px 24px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -361,17 +359,16 @@ const SearchBtn = styled.button`
   right: 0;
   top: 0;
   cursor: pointer;
-  background: linear-gradient(to left, #3366ff, #6690ff);
+  background: linear-gradient(0deg, #3366ff 0%, #6690ff 100%);
+  border: 1.4px solid #5e86ff;
   span {
     @media screen and (max-width: 1700px) {
       font-size: 18px;
-      margin-top: -2px;
     }
     font-size: 24px;
     font-weight: 500;
     color: #ffffff;
     margin-left: 5px;
-    margin-top: -3px;
   }
 `;
 
@@ -380,8 +377,8 @@ const SearchIcon = styled.div`
     width: 26px;
     height: 26px;
   }
-  width: 37px;
-  height: 37px;
+  width: 32px;
+  height: 32px;
   background-image: url(/assets/image/SearchIcon.png);
   background-size: cover;
   background-position: center;
