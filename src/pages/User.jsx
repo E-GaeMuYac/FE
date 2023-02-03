@@ -857,8 +857,8 @@ const NicknameInput = styled.div`
       right: 5px;
     }
     position: absolute;
-    top: 11px;
-    right: 35px;
+    top: 12px;
+    right: 15px;
   }
   .o {
     @media screen and (max-width: 1700px) {
@@ -866,8 +866,8 @@ const NicknameInput = styled.div`
       right: 36px;
     }
     position: absolute;
-    top: 11px;
-    right: 63px;
+    top: 12px;
+    right: 45px;
   }
 `;
 
@@ -902,6 +902,7 @@ const CalenderWrap = styled.div`
       width: 80px;
       height: 85px;
       margin-top: 5px;
+      margin-left: 0;
     }
     background-image: url('/assets/image/캘린더.png');
     background-size: cover;
@@ -912,6 +913,7 @@ const CalenderWrap = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin-left: 20px;
     span {
       @media screen and (max-width: 1700px) {
         font-size: 13px;
@@ -960,24 +962,29 @@ const EventBox = styled(Link)`
       font-size: 14px;
       top: 56px;
       left: 32px;
+      line-height: 20px;
+      margin-top: 10px;
+      text-align: left;
     }
     position: absolute;
     font-size: 18px;
-    font-weight: bold;
-    top: 110px;
-    left: 22px;
-    line-height: 24px;
+    font-weight: 500;
+    top: 100px;
+    left: 32px;
+    line-height: 30px;
+    text-align: center;
   }
   span {
     @media screen and (max-width: 1700px) {
       font-size: 15px;
+      font-weight: 700;
     }
     color: #ff8365;
     font-weight: 900;
   }
   .image {
     @media screen and (max-width: 1700px) {
-      top: 50px;
+      top: 45px;
       left: 136px;
       width: 70px;
       height: 100px;
@@ -988,7 +995,7 @@ const EventBox = styled(Link)`
     background-size: cover;
     background-position: center;
     position: absolute;
-    top: 70px;
+    top: 60px;
     left: 213px;
   }
 `;

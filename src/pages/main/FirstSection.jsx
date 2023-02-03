@@ -72,8 +72,8 @@ const MainContentShow = styled.h1`
   }
   @media screen and (max-width: 1920px) {
     padding-bottom: 0vh;
-    font-size: 54px;
-    line-height: 70px;
+    font-size: 56px;
+    line-height: 81px;
   }
   span {
     color: #3366ff;
@@ -85,6 +85,7 @@ const MainContentShow = styled.h1`
   text-align: center;
   animation: ${show} 1s ease-out forwards;
   padding-bottom: 5vh;
+  color: #242424;
 `;
 
 const ImgWrap = styled.div`
@@ -98,8 +99,9 @@ const ImgWrap = styled.div`
 
 const ContentImg = styled.div`
   @media screen and (max-width: 1700px) {
-    background-size: 65% !important;
     background-position: top;
+    width: 748.15px;
+    max-height: 486.85px;
   }
   @media screen and (max-width: 1920px) {
     background-size: 85%;
