@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router';
 
 import styled from 'styled-components';
 
-import { useGetSearchQuery } from '../query/searchQuery';
+import { useGetRemmendQuery, useGetSearchQuery } from '../query/searchQuery';
+
+import { useRecoilState } from 'recoil';
+import { searchWord } from '../recoil/recoilStore';
 
 //component
 import ProductList from '../components/common/productList';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { nowRoute, searchWord } from '../recoil/recoilStore';
-import { Navigate, useNavigate } from 'react-router';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
@@ -113,6 +114,7 @@ const Search = () => {
   //약 검색 input 용 데이터모음
   const [searchedWord, setSearchedWord] = useRecoilState(searchWord);
   const [inputValue, setInputValue] = useState(searchedWord);
+  const [recommendedValue, setRecommendedValue] = useState(searchedWord);
   //inputValue 초기화 버튼 활성화 유무
   const [isActiveDeleteBtn, setIsActiveDeleteBtn] = useState(false);
   //페이지네이션
@@ -144,13 +146,21 @@ const Search = () => {
     setIsFocusedInput(true);
   };
   const focusOutInput = () => {
-    setIsFocusedInput(false);
+    setTimeout(() => {
+      setIsFocusedInput(false);
+    }, 100);
   };
-
   // input에 글을 적을 때마다 실시간으로 저장
-  const changeInputValue = ({ target: { value } }) => {
+  const changeInputValue = useCallback(({ target: { value } }) => {
     setInputValue(value);
-  };
+  }, []);
+
+  useEffect(() => {
+    const setRecommended = setTimeout(() => {
+      setRecommendedValue(inputValue);
+    }, 300);
+    return () => clearTimeout(setRecommended);
+  }, [inputValue]);
   // input에 적은 글 삭제
   const deleteSearchValue = () => {
     setInputValue('');
@@ -173,10 +183,11 @@ const Search = () => {
   );
 
   //서치 시작
-  const doingSearch = () => {
-    if (inputValue.trim()) {
+  const doingSearch = (value) => {
+    setInputValue(value);
+    if (value.trim()) {
       // 결과 창 단어 교체
-      setSearchedWord(inputValue);
+      setSearchedWord(value);
       setNowPageNum(1);
       if (searchKinds === '약 이름') {
         setSearchKindsCode('itemName');
@@ -235,6 +246,21 @@ const Search = () => {
   };
 
   // -----------------------------------------------------------------------------
+  const [recommendArr, setRecommendArr] = useState([]);
+  const recommendWord = useGetRemmendQuery(
+    'itemName',
+    recommendedValue,
+    1,
+    20
+  ).data;
+  useEffect(() => {
+    if (searchKinds !== '약 이름') {
+      setRecommendArr([]);
+    } else if (recommendWord && isFocusedInput) {
+      setRecommendArr(recommendWord.data.data.slice(0, 8));
+    }
+  }, [recommendedValue, recommendWord, isFocusedInput, searchKinds]);
+  // -----------------------------------------------------------------------------
   return (
     <Wrap>
       <SearchBarWrap
@@ -284,7 +310,7 @@ const Search = () => {
             }
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                doingSearch();
+                doingSearch(inputValue);
               }
             }}
           />
@@ -296,6 +322,21 @@ const Search = () => {
             <div className='searchBtnText'>검색</div>
           </div>
         </div>
+        {isFocusedInput && recommendedValue && recommendArr.length > 0 ? (
+          <ul className='recommendBox'>
+            {recommendArr.map((list) => {
+              return (
+                <li
+                  key={list.medicineId}
+                  onClick={() => {
+                    doingSearch(list.itemName);
+                  }}>
+                  {list.itemName}
+                </li>
+              );
+            })}
+          </ul>
+        ) : null}
       </SearchBarWrap>
       <LatestSearchWrap>
         {/* <div className='title'>최근검색어</div>
@@ -373,6 +414,7 @@ const SearchBarWrap = styled.div`
   align-items: center;
   justify-content: center;
   gap: 15px;
+  position: relative;
   font-family: 'NanumSquare', sans-serif;
   .searchBar {
     @media screen and (max-width: 1700px) {
@@ -380,6 +422,7 @@ const SearchBarWrap = styled.div`
       height: 50px;
     }
     max-width: 860px;
+    height: 65px;
     width: 60%;
     ${({ isFocusedInput }) =>
       isFocusedInput
@@ -395,6 +438,7 @@ const SearchBarWrap = styled.div`
     border-radius: 60px;
     display: flex;
     position: relative;
+    z-index: 100;
   }
   .searchSortWrap {
     @media screen and (max-width: 1700px) {
@@ -407,14 +451,14 @@ const SearchBarWrap = styled.div`
       isFocusedInput
         ? `
     background-color: #F6F7FA;
-    border: 2px solid #ffffff;
+    border: 3px solid #ffffff;
     `
         : `
     background-color: white;
-    border: 2px solid #f6f7fa;
+    border: 3px solid #f6f7fa;
     `}
     width: 150px;
-    height: 62px;
+    height: 65px;
     margin-right: 10px;
     font-size: 24px;
     font-weight: bold;
@@ -426,17 +470,17 @@ const SearchBarWrap = styled.div`
       width: 130px;
     }
     width: 150px;
-    height: 58px;
+    height: 65px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 4px;
     cursor: pointer;
   }
   .searchSortList {
     @media screen and (max-width: 1700px) {
       font-size: 18px;
-      width: 149px;
+      width: 150px;
       height: 90px;
       gap: 10px;
       width: 130px;
@@ -445,10 +489,10 @@ const SearchBarWrap = styled.div`
     }
     display: ${({ isOpenSearchSort }) => (isOpenSearchSort ? 'flex' : 'none')};
     position: absolute;
-    left: -2px;
-    top: -2px;
-    width: 150px;
-    padding: 11px 16px;
+    left: -3px;
+    top: -2.5px;
+    width: 152px;
+    padding: 14px 16px;
     margin: 0;
     flex-direction: column;
     gap: 14px;
@@ -456,27 +500,27 @@ const SearchBarWrap = styled.div`
       isFocusedInput
         ? `
     background-color: #F6F7FA;
-    border: 2px solid #ffffff;
+    border: 3px solid #ffffff;
     `
         : `
     background-color: white;
-    border: 2px solid #f6f7fa;
+    border: 3px solid #f6f7fa;
     `}
     border-radius: 32px;
   }
   .searchSortList li {
-    display: flex;
-    gap: 6px;
     color: #868686;
     cursor: pointer;
-    margin-left: 2px;
+    margin-left: 4px;
     @media screen and (max-width: 1700px) {
-      gap: 8px;
-      margin-left: 8.5px;
+      gap: 4px;
+      margin-left: 10.5px;
       margin-top: 2.5px;
     }
   }
   .searchSortList li.choice {
+    display: flex;
+    gap: 4px;
     color: #242424;
     /* margin-top: 1px; */
     @media screen and (max-width: 1700px) {
@@ -511,6 +555,7 @@ const SearchBarWrap = styled.div`
       font-size: 16px;
     }
     width: 475px;
+    height: 65px;
     font-size: 20px;
     font-weight: bold;
     line-height: 100%;
@@ -558,7 +603,7 @@ const SearchBarWrap = styled.div`
     top: 0;
     right: 0;
     width: 125px;
-    height: 62px;
+    height: 65px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -585,6 +630,28 @@ const SearchBarWrap = styled.div`
     }
     font-size: 24px;
     color: #ffffff;
+  }
+  .recommendBox {
+    @media screen and (max-width: 1700px) {
+      width: 70%;
+    }
+    max-width: 860px;
+    width: 60%;
+    padding: 51px 0 20px;
+    position: absolute;
+    left: 50%;
+    top: 25px;
+    transform: translateX(-50%);
+    background-color: #f6f7fa;
+    box-shadow: 2px 2px 10px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 0 0 10px 10px;
+    z-index: 50;
+  }
+  .recommendBox li {
+    height: 50px;
+    padding: 12px 40px;
+    cursor: pointer;
+    font-size: 18px;
   }
 `;
 const LatestSearchWrap = styled.div`
