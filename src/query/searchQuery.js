@@ -30,3 +30,18 @@ export const useGetSearchQuery = (type, value, page, pageSize) => {
   });
   return { refetch, data };
 };
+
+export const useGetRemmendQuery = (type, value, page, pageSize) => {
+  const { data } = useQuery({
+    // query 키
+    queryKey: ['getSearchData', type, value, page, pageSize],
+    // query 함수
+    queryFn: (params) => getSearchData(params),
+    enabled: !!value,
+    //에러 확인
+    onError: () => {
+      console.error('Error');
+    },
+  });
+  return { data };
+};
