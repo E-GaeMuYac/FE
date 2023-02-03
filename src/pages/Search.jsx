@@ -114,7 +114,7 @@ const Search = () => {
   //약 검색 input 용 데이터모음
   const [searchedWord, setSearchedWord] = useRecoilState(searchWord);
   const [inputValue, setInputValue] = useState(searchedWord);
-  const [recommendedValue, setRecommendedValue] = useState(searchedWord);
+  const [recommendedValue, setRecommendedValue] = useState('');
   //inputValue 초기화 버튼 활성화 유무
   const [isActiveDeleteBtn, setIsActiveDeleteBtn] = useState(false);
   //페이지네이션
@@ -318,7 +318,11 @@ const Search = () => {
           <div
             className='deleteSearchInputValueBtn'
             onClick={deleteSearchValue}></div>
-          <div className='searchBtnWrap' onClick={doingSearch}>
+          <div
+            className='searchBtnWrap'
+            onClick={() => {
+              doingSearch(inputValue);
+            }}>
             <div className='searchBtn'></div>
             <div className='searchBtnText'>검색</div>
           </div>
