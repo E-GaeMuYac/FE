@@ -352,7 +352,6 @@ const ListCard = styled.div`
   position: relative;
   width: 90%;
   height: 186px;
-  border: 1px solid #d0d0d0;
   border-radius: 20px;
   padding: 48px 24px;
   display: flex;
@@ -360,19 +359,25 @@ const ListCard = styled.div`
   cursor: pointer;
   ${({ isFill }) =>
     isFill
-      ? null
-      : `background-color: #E7E7E7; justify-content: center; flex-direction: column;`}
+      ? `
+      background-color: #ffffff;
+      box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
+    `
+      : `background-color: #E7E7E7;
+      justify-content: center;
+      flex-direction: column;`}
   .cardImg {
     @media screen and (max-width: 1700px) {
       min-width: 150px;
     }
     width: 160px;
-    height: 100%;
+    height: 86px;
     background-image: ${({ image }) =>
       image ? `url(${image})` : `url('/assets/image/PillDefaultImg.png')`};
-    background-size: contain;
-    background-position: center;
+    background-size: 110%;
+    background-position: 50% 0%;
     margin-right: 24px;
+    border-radius: 8px;
   }
   .listName {
     @media screen and (max-width: 1700px) {
@@ -385,24 +390,24 @@ const ListCard = styled.div`
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
   }
   .listSubTag {
     display: flex;
     gap: 4px;
+    margin-bottom: 8px;
   }
   .listSubTag li {
     padding: 3.5px 6px;
     background-color: #ebf0ff;
     border-radius: 5px;
     color: #3366ff;
-    font-weight: bold;
+    font-weight: 500;
     font-size: 13px;
   }
   .listSubContent {
     font-size: 14px;
     line-height: 24px;
-    font-weight: bold;
     color: #868686;
     width: 250px;
     white-space: nowrap;
@@ -438,7 +443,7 @@ const ListCard = styled.div`
     }
     font-size: 18px;
     line-height: 26px;
-    color: #242424;
+    color: #868686;
     font-weight: bold;
   }
 `;
