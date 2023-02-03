@@ -867,7 +867,7 @@ const TopSearchWrap = styled.div`
           height: 245px;
           gap: 25px;
           `
-        : `gap: 1px 14px;`}
+        : `gap: 18px 14px;`}
     flex-wrap: wrap;
   }
   .desc li {
