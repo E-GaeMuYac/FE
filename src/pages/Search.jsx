@@ -113,12 +113,14 @@ const Search = () => {
   //약 검색 input 용 데이터모음
   const [searchedWord, setSearchedWord] = useRecoilState(searchWord);
   const [inputValue, setInputValue] = useState(searchedWord);
-
+  //inputValue 초기화 버튼 활성화 유무
   const [isActiveDeleteBtn, setIsActiveDeleteBtn] = useState(false);
-
+  //페이지네이션
   const [nowPageNum, setNowPageNum] = useState(1);
-
+  //서치 결과 길이
   const [searchLength, setSearchLength] = useState(0);
+
+  const [isFocusedInput, setIsFocusedInput] = useState(false);
 
   const searchSortRemove = () => {
     setIsOpenSearchSort(false);
@@ -136,6 +138,13 @@ const Search = () => {
 
     setSearchKinds(name);
     searchSortRemove();
+  };
+
+  const focusedInput = () => {
+    setIsFocusedInput(true);
+  };
+  const focusOutInput = () => {
+    setIsFocusedInput(false);
   };
 
   // input에 글을 적을 때마다 실시간으로 저장
@@ -230,7 +239,8 @@ const Search = () => {
     <Wrap>
       <SearchBarWrap
         isOpenSearchSort={isOpenSearchSort}
-        isActiveDeleteBtn={isActiveDeleteBtn}>
+        isActiveDeleteBtn={isActiveDeleteBtn}
+        isFocusedInput={isFocusedInput}>
         <div className='searchBar'>
           <div className='searchSortWrap'>
             <div className='searchSortHeaderWrap' onClick={searchSortOpen}>
@@ -265,6 +275,8 @@ const Search = () => {
             className='searchinput'
             value={inputValue}
             onChange={changeInputValue}
+            onFocus={focusedInput}
+            onBlur={focusOutInput}
             placeholder={
               searchKinds === '약 이름'
                 ? '약 이름을 검색해보세요!'
@@ -369,9 +381,17 @@ const SearchBarWrap = styled.div`
     }
     max-width: 860px;
     width: 60%;
-    border: 1px solid #f6f7fa;
-    background-color: #f6f7fa;
-    border: none;
+    ${({ isFocusedInput }) =>
+      isFocusedInput
+        ? `
+        border: 1px solid #ffffff;
+        background-color: #ffffff;
+        box-shadow: 0 1px 8px 0px rgba(0, 0, 0, 0.15);
+        `
+        : `
+          border: 1px solid #f6f7fa;
+          background-color: #f6f7fa;
+        `}
     border-radius: 60px;
     display: flex;
     position: relative;
@@ -383,8 +403,16 @@ const SearchBarWrap = styled.div`
       width: 130px;
     }
     border-radius: 32px;
+    ${({ isFocusedInput }) =>
+      isFocusedInput
+        ? `
+    background-color: #F6F7FA;
+    border: 2px solid #ffffff;
+    `
+        : `
     background-color: white;
     border: 2px solid #f6f7fa;
+    `}
     width: 150px;
     height: 62px;
     margin-right: 10px;
@@ -420,17 +448,21 @@ const SearchBarWrap = styled.div`
     left: -2px;
     top: -2px;
     width: 150px;
-    /* width: 158px;
-    height: 110px;
-    justify-content: center;
-    list-style: none; */
     padding: 11px 16px;
     margin: 0;
     flex-direction: column;
     gap: 14px;
+    ${({ isFocusedInput }) =>
+      isFocusedInput
+        ? `
+    background-color: #F6F7FA;
+    border: 2px solid #ffffff;
+    `
+        : `
     background-color: white;
-    border-radius: 32px;
     border: 2px solid #f6f7fa;
+    `}
+    border-radius: 32px;
   }
   .searchSortList li {
     display: flex;
