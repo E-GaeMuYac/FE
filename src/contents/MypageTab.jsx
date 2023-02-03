@@ -19,9 +19,12 @@ const Tab = ({ tab, location, query }) => {
   }, [tab, query]);
 
   return (
-    <NavTap isClicked={isClicked} onClick={tabChange}>
-      {tab}
-    </NavTap>
+    <TapWrap>
+      <NavTap isClicked={isClicked} onClick={tabChange}>
+        {tab}
+      </NavTap>
+      <TapBoder isClicked={isClicked} />
+    </TapWrap>
   );
 };
 
@@ -36,23 +39,35 @@ const MypageTab = ({ query }) => {
           <Tab key={tab} tab={tab} location={location} query={query} />
         ))}
       </NavWrap>
+      <UnderLine />
     </Tabbar>
   );
 };
 
 const Tabbar = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: 85px;
+  }
   width: 100%;
-  border-bottom: 3px solid #e7e7e7;
+  height: 145px;
+  position: relative;
 `;
 
 const NavWrap = styled.div`
   @media screen and (max-width: 1700px) {
     width: 600px;
-    margin-top: 40px;
   }
   width: 900px;
-  margin-top: 80px;
   display: flex;
+  position: absolute;
+  bottom: 0;
+  z-index: 3;
+`;
+
+const TapWrap = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 const NavTap = styled.button`
@@ -62,13 +77,31 @@ const NavTap = styled.button`
   }
   width: 100%;
   height: 60px;
-  font-size: 26px;
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: ${({ isClicked }) => (isClicked ? 'bold' : '500')};
   border: none;
   background-color: white;
-  border-bottom: ${({ isClicked }) =>
-    isClicked ? '4px solid #3366FF' : 'none'};
   color: ${({ isClicked }) => (isClicked ? '#3366FF' : '#868686')};
 `;
 
+const TapBoder = styled.div`
+  @media screen and (max-width: 1700px) {
+    height: ${({ isClicked }) => (isClicked ? '4px' : 'none')};
+  }
+  width: 100%;
+  height: ${({ isClicked }) => (isClicked ? '5px' : 'none')};
+  background-color: ${({ isClicked }) => (isClicked ? '#3366FF' : '#e7e7e7')};
+  border-radius: 3px;
+`;
+
+const UnderLine = styled.div`
+  @media screen and (max-width: 1700px) {
+    border-bottom: 2px solid #e7e7e7;
+  }
+  width: 100%;
+  height: 80px;
+  border-bottom: 3px solid #e7e7e7;
+  position: absolute;
+  bottom: 0;
+`;
 export default MypageTab;
