@@ -224,14 +224,14 @@ const MyReviews = ({ userId }) => {
               <LikeBtn
                 like={review.like}
                 onClick={() => handleLike(review.reviewId)}>
-                <AiFillLike />
-                <div>도움 돼요 {review.likeCount}</div>
+                <div />
+                도움 돼요
               </LikeBtn>
               <DislikeBtn
                 disLike={review.dislike}
                 onClick={() => handleDisLike(review.reviewId)}>
-                <AiFillDislike />
-                <div>도움 안돼요</div>
+                <div />
+                도움 안돼요
               </DislikeBtn>
             </Recommend>
             <DateWrited>
@@ -424,13 +424,9 @@ const Categorize = styled.div`
   div {
     @media screen and (max-width: 1700px) {
       font-size: 14px;
-      min-width: 54px;
-      height: 30px;
-      padding: 0 5px;
+      padding: 8px 10px;
     }
-    padding: 0 5px;
-    min-width: 69px;
-    height: 35px;
+    padding: 10px 12px;
     background: #ebf0ff;
     color: #3366ff;
     font-size: 16px;
@@ -448,13 +444,13 @@ const Categorize = styled.div`
 
 const TopLabel = styled.div`
   @media screen and (max-width: 1700px) {
-    font-size: 15px;
+    font-size: 16px;
     line-height: 40px;
   }
   height: 34px;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 400;
-  line-height: 40px;
+  line-height: 42px;
   color: #868686;
   margin-bottom: 10px;
   text-align: left;
@@ -462,11 +458,11 @@ const TopLabel = styled.div`
 
 const BottomLabel = styled.div`
   @media screen and (max-width: 1700px) {
-    font-size: 15px;
+    font-size: 16px;
     line-height: 24px;
   }
   height: 30px;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 400;
   line-height: 24px;
   color: #868686;
@@ -598,48 +594,66 @@ const Recommend = styled.div`
 
 const LikeBtn = styled.button`
   @media screen and (max-width: 1700px) {
-    min-width: 110px;
-    width: 110px;
-    max-width: 130px;
-    height: 30px;
+    padding: 5px 14px;
     font-size: 13px;
   }
-  width: 127px;
-  height: 36px;
+  padding: 6.5px 15px;
   border-radius: 87px;
   border: none;
   background-color: ${({ like }) => (like ? '#3366FF' : '#e7e7e7')};
   color: ${({ like }) => (like ? '#ffffff' : '#868686')};
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: ${({ like }) => (like ? '400' : '350')};
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   div {
-    text-indent: 5px;
+    @media screen and (max-width: 1700px) {
+      width: 20px;
+      height: 20px;
+      margin-right: 4px;
+    }
+    background-image: ${({ like }) =>
+      like
+        ? `url('/assets/image/ThumbsUp2.png')`
+        : `url('/assets/image/ThumbsUp1.png')`};
+    background-size: cover;
+    width: 24px;
+    height: 24px;
+    margin-right: 6px;
   }
 `;
 
 const DislikeBtn = styled.button`
   @media screen and (max-width: 1700px) {
-    min-width: 110px;
-    width: 110px;
-    max-width: 130px;
-    height: 30px;
+    padding: 5px 14px;
     font-size: 13px;
   }
-  width: 127px;
-  height: 36px;
+  padding: 6.5px 15px;
   border-radius: 87px;
   border: none;
   background-color: ${({ disLike }) => (disLike ? '#3366FF' : '#e7e7e7')};
   color: ${({ disLike }) => (disLike ? '#ffffff' : '#868686')};
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: ${({ disLike }) => (disLike ? '400' : '350')};
   display: flex;
   justify-content: center;
   align-items: center;
   div {
-    text-indent: 5px;
+    @media screen and (max-width: 1700px) {
+      width: 20px;
+      height: 20px;
+      margin-right: 4px;
+    }
+    background-image: ${({ disLike }) =>
+      disLike
+        ? `url('/assets/image/ThumbsDown2.png')`
+        : `url('/assets/image/ThumbsDown1.png')`};
+    background-size: cover;
+    width: 24px;
+    height: 24px;
+    margin-right: 6px;
   }
 `;
 
