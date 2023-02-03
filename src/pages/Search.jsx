@@ -161,6 +161,7 @@ const Search = () => {
     }, 300);
     return () => clearTimeout(setRecommended);
   }, [inputValue]);
+
   // input에 적은 글 삭제
   const deleteSearchValue = () => {
     setInputValue('');
@@ -251,13 +252,13 @@ const Search = () => {
     'itemName',
     recommendedValue,
     1,
-    20
+    8
   ).data;
   useEffect(() => {
     if (searchKinds !== '약 이름') {
       setRecommendArr([]);
     } else if (recommendWord && isFocusedInput) {
-      setRecommendArr(recommendWord.data.data.slice(0, 8));
+      setRecommendArr(recommendWord.data.data);
     }
   }, [recommendedValue, recommendWord, isFocusedInput, searchKinds]);
   // -----------------------------------------------------------------------------
