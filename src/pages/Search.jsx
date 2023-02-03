@@ -827,13 +827,12 @@ const TopSearchWrap = styled.div`
     width: 400px;
   }
   width: 520px;
-  height: 70vh;
+  height: 316px;
   margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  /* margin: 144px auto; */
+  margin: 144px auto;
   .title {
     @media screen and (max-width: 1700px) {
       font-size: 20px;
@@ -868,7 +867,7 @@ const TopSearchWrap = styled.div`
           height: 245px;
           gap: 25px;
           `
-        : `gap: 18px 14px;`}
+        : `gap: 1px 14px;`}
     flex-wrap: wrap;
   }
   .desc li {
@@ -890,6 +889,7 @@ const TopSearchWrap = styled.div`
         : `
           background-color: #E7E7E7;
           padding: 6.5px 15px;
+          height: 34px;
           border-radius: 20px;
           font-size: 16px;
           line-height: 23px;
