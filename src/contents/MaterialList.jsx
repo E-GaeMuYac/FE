@@ -102,7 +102,7 @@ const PillTitle = styled.span`
     font-size: 18px;
   }
   color: #242424;
-  font-weight: bold;
+  font-weight: 500;
   font-size: 24px;
 `;
 
