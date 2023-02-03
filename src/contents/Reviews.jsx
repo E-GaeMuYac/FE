@@ -350,14 +350,14 @@ const Reviews = () => {
                 <LikeBtn
                   like={review.like}
                   onClick={() => handleLike(review.reviewId)}>
-                  <AiFillLike />
-                  <div>도움 돼요 {review.likeCount}</div>
+                  <div />
+                  도움 돼요
                 </LikeBtn>
                 <DislikeBtn
                   disLike={review.dislike}
                   onClick={() => handleDisLike(review.reviewId)}>
-                  <AiFillDislike />
-                  <div>도움 안돼요 {review.dislikeCount}</div>
+                  <div />
+                  도움 안돼요
                 </DislikeBtn>
               </Recommend>
               {review.userId === userId ? (
@@ -582,7 +582,6 @@ const LikeCount = styled.div`
 const ReviewSorting = styled.div`
   @media screen and (max-width: 1700px) {
     min-height: 40px;
-    /* background-color: aqua; */
   }
   width: 100%;
   min-height: 60px;
@@ -594,21 +593,18 @@ const ReviewSorting = styled.div`
 
 const SortTag = styled.span`
   @media screen and (max-width: 1700px) {
-    height: 32px;
-    min-width: 54px;
+    padding: 8px 12px;
     font-size: 14px;
     font-weight: 600;
   }
   background-color: ${(props) =>
     props.tag === props.pickTag ? '#3366FF' : '#D0D0D0'};
   color: ${(props) => (props.tag === props.pickTag ? 'white' : '#868686;')};
-  min-width: 64px;
-  height: 46px;
-  padding: 0 10px;
+  padding: 10px 15px;
   border-radius: 87px;
   box-sizing: border-box;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: ${(props) => (props.tag === props.pickTag ? 500 : 400)};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -678,7 +674,6 @@ const AccountBoxImg = styled.div`
   height: 42px;
   border: none;
   border-radius: 50%;
-  cursor: pointer;
 `;
 
 const DateWrited = styled.span`
@@ -732,7 +727,7 @@ const MoreBtn = styled.button`
   border-radius: 8px;
   border: none;
   color: #3366ff;
-  font-weight: bold;
+  font-weight: 500;
   font-size: 20px;
   cursor: pointer;
 `;
@@ -749,7 +744,7 @@ const FoldBtn = styled.button`
   border-radius: 8px;
   border: none;
   color: #3366ff;
-  font-weight: bold;
+  font-weight: 500;
   font-size: 20px;
   cursor: pointer;
 `;
@@ -761,7 +756,7 @@ const Exception = styled.div`
   }
   width: 100%;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 500;
   display: flex;
   padding: 10px 0;
   span {
@@ -786,61 +781,80 @@ const Recommend = styled.div`
 
 const LikeBtn = styled.button`
   @media screen and (max-width: 1700px) {
-    min-width: 110px;
-    width: 110px;
-    max-width: 130px;
-    height: 30px;
+    padding: 5px 14px;
     font-size: 13px;
   }
-  width: 127px;
-  height: 36px;
+  padding: 6.5px 15px;
   border-radius: 87px;
   border: none;
   background-color: ${({ like }) => (like ? '#3366FF' : '#e7e7e7')};
   color: ${({ like }) => (like ? '#ffffff' : '#868686')};
+  font-size: 16px;
+  font-weight: ${({ like }) => (like ? '400' : '350')};
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   div {
-    text-indent: 5px;
+    @media screen and (max-width: 1700px) {
+      width: 20px;
+      height: 20px;
+      margin-right: 4px;
+    }
+    background-image: ${({ like }) =>
+      like
+        ? `url('/assets/image/ThumbsUp2.png')`
+        : `url('/assets/image/ThumbsUp1.png')`};
+    background-size: cover;
+    width: 24px;
+    height: 24px;
+    margin-right: 6px;
   }
 `;
 
 const DislikeBtn = styled.button`
   @media screen and (max-width: 1700px) {
-    min-width: 110px;
-    width: 110px;
-    max-width: 130px;
-    height: 30px;
+    padding: 5px 14px;
     font-size: 13px;
   }
-  width: 127px;
-  height: 36px;
+  padding: 6.5px 15px;
   border-radius: 87px;
   border: none;
   background-color: ${({ disLike }) => (disLike ? '#3366FF' : '#e7e7e7')};
   color: ${({ disLike }) => (disLike ? '#ffffff' : '#868686')};
+  font-size: 16px;
+  font-weight: ${({ disLike }) => (disLike ? '400' : '350')};
   display: flex;
   justify-content: center;
   align-items: center;
   div {
-    text-indent: 5px;
+    @media screen and (max-width: 1700px) {
+      width: 20px;
+      height: 20px;
+      margin-right: 4px;
+    }
+    background-image: ${({ disLike }) =>
+      disLike
+        ? `url('/assets/image/ThumbsDown2.png')`
+        : `url('/assets/image/ThumbsDown1.png')`};
+    background-size: cover;
+    width: 24px;
+    height: 24px;
+    margin-right: 6px;
   }
 `;
 
 const EditBtn = styled(Link)`
   @media screen and (max-width: 1700px) {
-    width: 100px;
-    height: 30px;
+    padding: 5px 14px;
     font-size: 13px;
     margin-top: 10px;
   }
-  width: 123px;
-  height: 36px;
+  padding: 6.5px 15px;
   border-radius: 87px;
   background-color: #868686;
   color: white !important;
+  font-weight: 350;
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -862,16 +876,15 @@ const EditBtn = styled(Link)`
 
 const ReportBtn = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 100px;
-    height: 30px;
+    padding: 5px 14px;
     font-size: 13px;
     margin-top: 10px;
   }
-  width: 123px;
-  height: 36px;
+  padding: 6.5px 15px;
+  line-height: 23px;
   border-radius: 87px;
-  background-color: #ffd3ce;
-  color: #ff392b;
+  background-color: #e7e7e7;
+  color: #868686;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -880,13 +893,13 @@ const ReportBtn = styled.div`
     @media screen and (max-width: 1700px) {
       width: 20px;
       height: 20px;
-      margin-right: 6px;
+      margin-right: 4px;
     }
-    background-image: url('/assets/image/warnIcon.png');
+    background-image: url('/assets/image/report.png');
     background-size: cover;
     width: 24px;
     height: 24px;
-    margin-right: 10px;
+    margin-right: 6px;
   }
 `;
 
