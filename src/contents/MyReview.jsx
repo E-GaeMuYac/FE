@@ -157,7 +157,7 @@ const MyReviews = ({ userId }) => {
         <Contents key={review.reviewId}>
           <WrapContents>
             <Image imgUrl={review?.itemImage} />
-            <div style={{ marginRight: '20px' }}>
+            <div className='firstWrap'>
               <Name to={`/detail/${review.medicineId}?tab=효능 효과`}>
                 {review?.itemName}
               </Name>
@@ -169,24 +169,7 @@ const MyReviews = ({ userId }) => {
             </div>
             <div className='labelWrap'>
               <TopLabel>{review?.entpName}</TopLabel>
-              <BottomLabel>
-                {review?.etcOtcCode}
-                <div className='etcOtcCodeDesc'>
-                  {review?.etcOtcCode === '전문의약품' ? (
-                    <span className='tooltipText'>
-                      의사 또는 치과의사의 지시와 감독에 따라 사용되어야 하는
-                      의약품으로, 의사의 처방전에 의해서만 구입하여 사용할 수
-                      있다.
-                    </span>
-                  ) : (
-                    <span className='tooltipText'>
-                      처방전 없이 약국에서 구입할 수 있는 의약품으로, 포장
-                      용기에 기재된 설명대로 올바르게 복용한다면 비교적 안전하게
-                      사용할 수 있다.
-                    </span>
-                  )}
-                </div>
-              </BottomLabel>
+              <BottomLabel>{review?.etcOtcCode}</BottomLabel>
             </div>
             <div className='buttonWrap'>
               <Link
@@ -231,11 +214,6 @@ const MyReviews = ({ userId }) => {
               </DescWhole>
             )}
           </Description>
-          <Exception>
-            <IoIosWarning size='26' color='#FF772B' />
-            <span>면책사항:</span>
-            <div>의학적 또는 전문가의 조언이 아닌 사용자의 의견입니다.</div>
-          </Exception>
           <div
             style={{
               display: 'flex',
@@ -253,7 +231,7 @@ const MyReviews = ({ userId }) => {
                 disLike={review.dislike}
                 onClick={() => handleDisLike(review.reviewId)}>
                 <AiFillDislike />
-                <div>도움 안돼요 {review.dislikeCount}</div>
+                <div>도움 안돼요</div>
               </DislikeBtn>
             </Recommend>
             <DateWrited>
@@ -307,15 +285,30 @@ const WrapContents = styled.div`
   margin: auto;
   align-items: center;
   display: flex;
-  position: relative;
+  /* justify-content: space-between; */
+
+  .firstWrap {
+    @media screen and (max-width: 1700px) {
+      min-width: 280px;
+    }
+    width: 350px;
+    height: 85px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-right: 30px;
+  }
   .labelWrap {
-    justify-content: center;
-    text-align: left;
+    @media screen and (max-width: 1700px) {
+      min-width: 265px;
+    }
+    display: flex;
+    width: 300px;
+    height: 85px;
+    flex-direction: column;
   }
   .boxWrap {
     display: flex;
-    position: absolute;
-    right: 30px;
   }
   .etcOtcCodeDesc {
     width: 20px;
@@ -369,10 +362,13 @@ const WrapContents = styled.div`
     }
   }
   .buttonWrap {
-    position: absolute;
-    right: 0;
     display: flex;
-    gap: 10px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+    width: 390px;
+    height: 85px;
+
     .reviewBtn {
       @media screen and (max-width: 1700px) {
         width: 90px;
@@ -384,9 +380,6 @@ const WrapContents = styled.div`
       border-radius: 8px;
       border: none;
       color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     .modify {
       background-color: #868686;
@@ -403,6 +396,7 @@ const WrapContents = styled.div`
 
 const Image = styled.div`
   width: 160px;
+  min-width: 150px;
   height: 85px;
   border-radius: 8px;
   background-image: ${({ imgUrl }) =>
@@ -415,18 +409,15 @@ const Image = styled.div`
 const Name = styled(Link)`
   @media screen and (max-width: 1700px) {
     font-size: 20px;
-    min-width: 220px;
-    max-width: 250px;
+    width: 308px;
   }
-  min-width: 360px;
-  max-width: 380px;
-  margin: auto;
+  width: 350px;
+  height: 33px;
   color: black !important;
   text-decoration: none;
   font-size: 24px;
   font-weight: 700;
   line-height: 35px;
-  justify-content: center;
 `;
 
 const Categorize = styled.div`
@@ -445,7 +436,7 @@ const Categorize = styled.div`
     font-size: 16px;
     justify-content: center;
     align-items: center;
-    font-weight: 700;
+    font-weight: 500;
     line-height: 20px;
     border-radius: 8px;
     display: flex;
@@ -458,12 +449,12 @@ const Categorize = styled.div`
 const TopLabel = styled.div`
   @media screen and (max-width: 1700px) {
     font-size: 15px;
-    line-height: 22px;
+    line-height: 40px;
   }
-  height: 24px;
+  height: 34px;
   font-size: 16px;
-  font-weight: 700;
-  line-height: 24px;
+  font-weight: 400;
+  line-height: 40px;
   color: #868686;
   margin-bottom: 10px;
   text-align: left;
@@ -472,11 +463,11 @@ const TopLabel = styled.div`
 const BottomLabel = styled.div`
   @media screen and (max-width: 1700px) {
     font-size: 15px;
-    line-height: 22px;
+    line-height: 24px;
   }
-  height: 24px;
+  height: 30px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 24px;
   color: #868686;
   display: flex;
@@ -526,7 +517,6 @@ const DescSum = styled.div`
   }
   font-size: 24px;
   width: 100%;
-  height: 110px;
   word-break: break-all;
   display: -webkit-box;
   -webkit-line-clamp: 3;
