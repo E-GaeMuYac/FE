@@ -190,20 +190,20 @@ const AllergySearch = () => {
       </Header>
       <Wrap>
         <InputWrap>
-          <SearchInput
-            placeholder='알레르기 성분을 검색하여 등록해보세요!'
-            value={inputValue}
-            onChange={handleChange}
-            onKeyDown={handleEnter}
-          />
-          <BtnWrap>
+          <div className='wrap'>
+            <SearchInput
+              placeholder='알레르기 성분을 검색하여 등록해보세요!'
+              value={inputValue}
+              onChange={handleChange}
+              onKeyDown={handleEnter}
+            />
             <SearchBtn type='button' onClick={handleClick}>
               <SearchIcon />
               <span>검색</span>
             </SearchBtn>
-          </BtnWrap>
+          </div>
           {inputValue ? (
-            <AutoResult>
+            <AutoResult text={inputValue}>
               {autoValueList ? (
                 autoValueList.map((autoValue) => (
                   <SingleResult onClick={pickSingleValue}>
@@ -308,25 +308,33 @@ const InputWrap = styled.div`
   display: flex;
   justify-content: center;
   background-color: #ffffff;
-  z-index: 9998;
+  z-index: 9999;
   position: relative;
+
+  .wrap {
+    position: relative;
+    z-index: 9999;
+  }
 `;
 
 const SearchInput = styled.input`
   @media screen and (max-width: 1700px) {
     height: 50px;
     font-size: 16px;
+    width: 670px;
   }
-  width: 730px;
+  width: 860px;
   height: 65px;
   outline: none;
   border: none;
-  border-top-left-radius: 163px;
-  border-bottom-left-radius: 163px;
-  background-color: #ffffff;
-  box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.15);
-  z-index: 9999;
+  border-radius: 163px;
   text-indent: 30px;
+  background-color: #f6f7fa;
+
+  &:focus {
+    box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.15);
+    background-color: white;
+  }
 
   ::placeholder {
     @media screen and (max-width: 1700px) {
@@ -335,18 +343,6 @@ const SearchInput = styled.input`
     color: #b7b7b7;
     font-size: 24px;
   }
-`;
-
-const BtnWrap = styled.div`
-  @media screen and (max-width: 1700px) {
-    width: 110px;
-    height: 50px;
-  }
-  width: 130px;
-  height: 65px;
-  background-color: white;
-  border-bottom-right-radius: 210px;
-  z-index: 9999;
 `;
 
 const SearchBtn = styled.button`
@@ -362,7 +358,9 @@ const SearchBtn = styled.button`
   border: none;
   border-radius: 210px;
   box-shadow: -2px 2px 2px rgba(0, 0, 0, 0.15);
-  z-index: 9999;
+  position: absolute;
+  right: 0;
+  top: 0;
   cursor: pointer;
   background: linear-gradient(to left, #3366ff, #6690ff);
   span {
@@ -371,6 +369,7 @@ const SearchBtn = styled.button`
       margin-top: -2px;
     }
     font-size: 24px;
+    font-weight: 500;
     color: #ffffff;
     margin-left: 5px;
     margin-top: -3px;
@@ -384,14 +383,14 @@ const SearchIcon = styled.div`
   }
   width: 37px;
   height: 37px;
-  background-image: url(/assets/image/icon_search2.png);
+  background-image: url(/assets/image/searchIcon.png);
   background-size: cover;
   background-position: center;
 `;
 
 const AutoResult = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 100%;
+    width: 670px;
     height: 360px;
     padding: 30px 35px;
   }
@@ -399,11 +398,12 @@ const AutoResult = styled.div`
   width: 860px;
   height: 470px;
   position: absolute;
-  top: 40px;
+  top: 30px;
   border-bottom-right-radius: 33px;
   border-bottom-left-radius: 33px;
   box-sizing: border-box;
   padding: 50px 40px 30px 40px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
 `;
 
 const SingleResult = styled.div`

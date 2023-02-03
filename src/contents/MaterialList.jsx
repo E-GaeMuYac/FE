@@ -119,7 +119,7 @@ const SelectBtn = styled.button`
   background-color: #ffecea;
   color: #ff392b;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 500;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -153,6 +153,7 @@ const MoreBtn = styled.div`
   height: 50px;
   position: absolute;
   right: 230px;
+  cursor: pointer;
 `;
 
 const MoreInfoWrap = styled.div`
@@ -214,6 +215,7 @@ const FoldBtn = styled.div`
   height: 50px;
   position: absolute;
   right: 230px;
+  cursor: pointer;
 `;
 
 export default MaterialList;
