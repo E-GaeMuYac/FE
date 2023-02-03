@@ -194,7 +194,8 @@ const MyReviews = ({ userId }) => {
                     onClick={() => {
                       setMoreShow(review.reviewId);
                     }}>
-                    리뷰 자세히 보기 ▼
+                    리뷰 자세히 보기
+                    <div />
                   </MoreBtn>
                 </>
               ) : (
@@ -204,7 +205,8 @@ const MyReviews = ({ userId }) => {
                     onClick={() => {
                       setMoreShow(false);
                     }}>
-                    접기 ▲
+                    접기
+                    <div />
                   </FoldBtn>
                 </>
               )
@@ -532,52 +534,69 @@ const MoreBtn = styled.button`
   @media screen and (max-width: 1700px) {
     font-size: 14px;
     margin-bottom: 10px;
+    padding: 2px 8px;
+    gap: 3px;
   }
   background-color: #e7e7e7;
   appearance: none;
   margin: 15px 0;
-  padding: 5px 10px;
+  padding: 3px 12px;
   border-radius: 8px;
   border: none;
   color: #3366ff;
-  font-weight: bold;
+  font-weight: 500;
   font-size: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
   cursor: pointer;
+
+  div {
+    @media screen and (max-width: 1700px) {
+      width: 22px;
+      height: 22px;
+    }
+    background-image: url('/assets/image/moreArrow.png');
+    background-size: cover;
+    width: 26px;
+    height: 26px;
+  }
 `;
 
 const FoldBtn = styled.button`
   @media screen and (max-width: 1700px) {
     font-size: 14px;
     margin-bottom: 10px;
+    padding: 2px 8px;
+    gap: 3px;
   }
   background-color: #e7e7e7;
   appearance: none;
   margin: 15px 0;
-  padding: 5px 10px;
+  padding: 3px 12px;
   border-radius: 8px;
   border: none;
   color: #3366ff;
-  font-weight: bold;
+  font-weight: 500;
   font-size: 20px;
-  cursor: pointer;
-`;
-
-const Exception = styled.div`
-  @media screen and (max-width: 1700px) {
-    font-size: 14px;
-    padding-bottom: 5px;
-  }
-  width: 100%;
-  font-size: 18px;
-  font-weight: bold;
   display: flex;
-  padding: 10px 0;
-  span {
-    color: #ff772b;
-  }
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+
   div {
-    color: #868686;
-    text-indent: 5px;
+    @media screen and (max-width: 1700px) {
+      width: 22px;
+      height: 22px;
+    }
+    background-image: url('/assets/image/foldArrow.png');
+    background-size: cover;
+    width: 26px;
+    height: 26px;
   }
 `;
 
