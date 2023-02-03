@@ -251,7 +251,7 @@ const Reviews = () => {
             <DropOpen>
               <SortDefault onClick={() => setOpenDrop(false)}>
                 <SortName>{sortText}</SortName>
-                <Arrow>▲</Arrow>
+                <UpArrow />
               </SortDefault>
               <CreatedAt onClick={() => handleDropdown('updatedAt')}>
                 최신순
@@ -263,7 +263,7 @@ const Reviews = () => {
           ) : (
             <SortDefault onClick={() => setOpenDrop(true)}>
               <SortName>{sortText}</SortName>
-              <Arrow>▼</Arrow>
+              <DownArrow />
             </SortDefault>
           )}
         </ReviewHeader>
@@ -310,7 +310,8 @@ const Reviews = () => {
                       onClick={() => {
                         setMoreShow(review.reviewId);
                       }}>
-                      리뷰 자세히 보기 ▼
+                      리뷰 자세히 보기
+                      <div />
                     </MoreBtn>
                   </>
                 ) : (
@@ -320,7 +321,8 @@ const Reviews = () => {
                       onClick={() => {
                         setMoreShow(false);
                       }}>
-                      접기 ▲
+                      접기
+                      <div />
                     </FoldBtn>
                   </>
                 )
@@ -422,6 +424,7 @@ const ReviewDesc = styled.div`
       font-size: 16px;
     }
     font-size: 20px;
+    font-weight: 350;
   }
 
   span {
@@ -429,7 +432,7 @@ const ReviewDesc = styled.div`
       font-size: 16px;
     }
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 500;
   }
 `;
 
@@ -515,11 +518,32 @@ const SortName = styled.span`
   left: 30px;
 `;
 
-const Arrow = styled.span`
+const UpArrow = styled.span`
   @media screen and (max-width: 1700px) {
-    right: 18px;
-    font-size: 12px;
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    right: 10px;
   }
+  background-image: url('/assets/image/sortArrowUp.png');
+  background-size: cover;
+  width: 26px;
+  height: 26px;
+  position: absolute;
+  right: 10px;
+`;
+
+const DownArrow = styled.span`
+  @media screen and (max-width: 1700px) {
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    right: 10px;
+  }
+  background-image: url('/assets/image/sortArrowDown.png');
+  background-size: cover;
+  width: 26px;
+  height: 26px;
   position: absolute;
   right: 10px;
 `;
@@ -544,7 +568,6 @@ const CreatedAt = styled.div`
     width: 110px;
     height: 35px;
     top: 38px;
-    /* background-color: aqua; */
   }
   width: 130px;
   height: 44px;
@@ -595,7 +618,6 @@ const SortTag = styled.span`
   @media screen and (max-width: 1700px) {
     padding: 8px 12px;
     font-size: 14px;
-    font-weight: 600;
   }
   background-color: ${(props) =>
     props.tag === props.pickTag ? '#3366FF' : '#D0D0D0'};
@@ -688,16 +710,15 @@ const DateWrited = styled.span`
 
 const Description = styled.div`
   @media screen and (max-width: 1700px) {
-    padding: 30px 0px 10px 8px;
+    padding: 20px 0px 5px 0px;
   }
-  /* background-color: aqua; */
   width: 100%;
   padding-top: 20px;
 `;
 
 const DescSum = styled.div`
   @media screen and (max-width: 1700px) {
-    font-size: 15px;
+    font-size: 18px;
   }
   font-size: 24px;
   word-break: break-all;
@@ -709,7 +730,7 @@ const DescSum = styled.div`
 
 const DescWhole = styled.div`
   @media screen and (max-width: 1700px) {
-    font-size: 15px;
+    font-size: 18px;
   }
   font-size: 24px;
   word-break: break-all;
@@ -719,34 +740,70 @@ const MoreBtn = styled.button`
   @media screen and (max-width: 1700px) {
     font-size: 14px;
     margin-bottom: 10px;
+    padding: 2px 8px;
+    gap: 3px;
   }
   background-color: #e7e7e7;
   appearance: none;
   margin: 15px 0;
-  padding: 5px 10px;
+  padding: 3px 12px;
   border-radius: 8px;
   border: none;
   color: #3366ff;
   font-weight: 500;
   font-size: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
   cursor: pointer;
+
+  div {
+    @media screen and (max-width: 1700px) {
+      width: 22px;
+      height: 22px;
+    }
+    background-image: url('/assets/image/moreArrow.png');
+    background-size: cover;
+    width: 26px;
+    height: 26px;
+  }
 `;
 
 const FoldBtn = styled.button`
   @media screen and (max-width: 1700px) {
     font-size: 14px;
     margin-bottom: 10px;
+    padding: 2px 8px;
+    gap: 3px;
   }
   background-color: #e7e7e7;
   appearance: none;
   margin: 15px 0;
-  padding: 5px 10px;
+  padding: 3px 12px;
   border-radius: 8px;
   border: none;
   color: #3366ff;
   font-weight: 500;
   font-size: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
   cursor: pointer;
+
+  div {
+    @media screen and (max-width: 1700px) {
+      width: 22px;
+      height: 22px;
+    }
+    background-image: url('/assets/image/foldArrow.png');
+    background-size: cover;
+    width: 26px;
+    height: 26px;
+  }
 `;
 
 const Exception = styled.div`
