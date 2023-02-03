@@ -204,6 +204,22 @@ const Search = () => {
     { name: '광동원탕', id: 4010 },
     { name: '벤포벨에스정', id: 50083 },
   ];
+  const TopSearchKind = [
+    '진통제',
+    '해열제',
+    '소염제',
+    '항히스타민제',
+    '정신신경용제',
+    '수렴제',
+    '진양제',
+  ];
+
+  const topItemSearch = (list) => {
+    setSearchedWord(list);
+    setInputValue(list);
+    setNowPageNum(1);
+    setSearchKindsCode('productType');
+  };
 
   const topItemDetail = (id) => {
     navigate(`/detail/${id}?tab=효능 효과`);
@@ -263,11 +279,6 @@ const Search = () => {
           <div
             className='deleteSearchInputValueBtn'
             onClick={deleteSearchValue}></div>
-          {/* <div className='deleteSearchInputValue'>
-            <div
-              className='deleteSearchInputValueBtn'
-              onClick={deleteSearchValue}></div>
-          </div> */}
           <div className='searchBtnWrap' onClick={doingSearch}>
             <div className='searchBtn'></div>
             <div className='searchBtnText'>검색</div>
@@ -314,14 +325,20 @@ const Search = () => {
           />
         </SearchResultWrap>
       ) : (
-        <TopSearchWrap>
+        <TopSearchWrap searchKinds={searchKinds}>
           <div className='title'>인기 검색어</div>
           <ul className='desc'>
-            {TopSearchArr.map((list) => (
-              <li key={list.id} onClick={() => topItemDetail(list.id)}>
-                {TopSearchArr.indexOf(list) + 1}. {list.name}
-              </li>
-            ))}
+            {searchKinds === '약 이름'
+              ? TopSearchArr.map((list) => (
+                  <li key={list.id} onClick={() => topItemDetail(list.id)}>
+                    {TopSearchArr.indexOf(list) + 1}. {list.name}
+                  </li>
+                ))
+              : TopSearchKind.map((list) => (
+                  <li key={list} onClick={() => topItemSearch(list)}>
+                    {list}
+                  </li>
+                ))}
           </ul>
         </TopSearchWrap>
       )}
@@ -729,27 +746,50 @@ const TopSearchWrap = styled.div`
   }
   .desc {
     @media screen and (max-width: 1700px) {
-      height: 210px;
-      gap: 15px;
+      ${({ searchKinds }) =>
+        searchKinds === '약 이름'
+          ? `
+          height: 210px;
+          gap: 15px;
+          `
+          : `gap: 18px 14px;`}
     }
     width: 100%;
-    height: 245px;
+
     display: flex;
-    flex-direction: column;
+    ${({ searchKinds }) =>
+      searchKinds === '약 이름'
+        ? `
+          flex-direction: column;
+          height: 245px;
+          gap: 25px;
+          `
+        : `gap: 18px 14px;`}
     flex-wrap: wrap;
-    gap: 25px;
   }
   .desc li {
     @media screen and (max-width: 1700px) {
       font-size: 16px;
-      width: 200px;
+      width: ${({ searchKinds }) =>
+        searchKinds === '약 이름' ? '200px' : 'auto'};
     }
-    font-size: 20px;
-    line-height: 29px;
-    width: 251px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    ${({ searchKinds }) =>
+      searchKinds === '약 이름'
+        ? `
+          width: 251px;
+          white-space: nowrap;
+          font-size: 20px;
+          line-height: 29px;
+          overflow: hidden;
+          text-overflow: ellipsis; 
+          `
+        : `
+          background-color: #E7E7E7;
+          padding: 6.5px 15px;
+          border-radius: 20px;
+          font-size: 16px;
+          line-height: 23px;
+          `}
     cursor: pointer;
   }
 `;
