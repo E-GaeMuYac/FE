@@ -140,6 +140,7 @@ const ModalOpenBtn = styled.div`
     width: 145px;
     height: 40px;
     font-size: 16px;
+    gap: 2px;
   }
   width: 216px;
   height: 58px;
@@ -147,10 +148,11 @@ const ModalOpenBtn = styled.div`
   background-color: #ffecea;
   color: #ff392b;
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 500;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 4px;
   div {
     @media screen and (max-width: 1700px) {
       width: 26px;
@@ -188,7 +190,7 @@ const Count = styled.span`
   color: #868686;
   font-size: 24px;
   font-weight: bold;
-  text-indent: 10px;
+  text-indent: 20px;
 `;
 
 const ListWrap = styled.div`
@@ -220,7 +222,7 @@ const PillTitle = styled.span`
     font-size: 18px;
   }
   color: #242424;
-  font-weight: bold;
+  font-weight: 500;
   font-size: 24px;
 `;
 
@@ -236,6 +238,7 @@ const MoreBtn = styled.div`
   height: 50px;
   position: absolute;
   right: 230px;
+  cursor: pointer;
 `;
 
 const CancelBtn = styled.button`
@@ -251,7 +254,7 @@ const CancelBtn = styled.button`
   background-color: #ff392b;
   color: #ffffff;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 500;
 `;
 
 const MoreInfoWrap = styled.div`
@@ -299,6 +302,7 @@ const MoreInfoContent = styled.div`
   border-bottom-right-radius: 20px;
   color: #242424;
   font-size: 24px;
+  font-weight: 350px;
 `;
 
 const FoldBtn = styled.div`
@@ -313,6 +317,7 @@ const FoldBtn = styled.div`
   height: 50px;
   position: absolute;
   right: 230px;
+  cursor: pointer;
 `;
 
 const NoneListWrap = styled.div`
@@ -343,7 +348,7 @@ const NoneBtnWrap = styled.div`
     }
     font-size: 24px;
     color: #868686;
-    font-weight: bold;
+    font-weight: 500;
   }
 `;
 
@@ -367,29 +372,31 @@ const GuideComment = styled.div`
     }
     color: #242424;
     font-size: 36px;
-    font-weight: bold;
+    font-weight: 700;
   }
   span {
     @media screen and (max-width: 1700px) {
       font-size: 18px;
+      line-height: 48px;
     }
     color: #868686;
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 500;
+    line-height: 58px;
   }
 `;
 
 const ExampleTitle = styled.div`
   @media screen and (max-width: 1700px) {
-    padding: 30px 0 0 30px;
+    padding: 30px 0 5px 5px;
     margin: 0;
     font-size: 18px;
   }
   width: 100%;
-  margin: 60px 0 0 40px;
+  margin: 60px 0 10px 10px;
   color: #868686;
   font-size: 20px;
-  font-weight: bold;
+  font-weight: 500;
 `;
 
 const ExampleBox = styled.div`
@@ -405,7 +412,7 @@ const FirstCard = styled.div`
     width: 70%;
     height: 400px;
   }
-  background-image: url('/assets/image/example_1.png');
+  background-image: url('/assets/image/allergyGuide1.png');
   background-size: contain;
   background-repeat: no-repeat;
   width: 930px;
@@ -417,7 +424,7 @@ const SecondCard = styled.div`
     width: 30%;
     height: 372px;
   }
-  background-image: url('/assets/image/example_2.png');
+  background-image: url('/assets/image/allergyGuide2.png');
   background-size: contain;
   background-repeat: no-repeat;
   width: 380px;
