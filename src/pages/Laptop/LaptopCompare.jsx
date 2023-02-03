@@ -396,12 +396,16 @@ const LaptopCompare = () => {
             maxWidth: 100,
             marginRight: 10,
             fontSize: 17,
+            fontWeight: 500,
+            fontFamily: 'Noto Sans KR',
           });
           legend.valueLabels.template.setAll({
             minWidth: 120,
             maxWidth: 120,
             marginRight: 10,
             fontSize: 16,
+            fontWeight: 500,
+            fontFamily: 'Noto Sans KR',
             // 오버사이즈 시 처리.
             // truncate : 말줄임, none: 겹침, wrap: 줄바꿈, fit: 딱맞게 폰트사이즈 조절
             oversizedBehavior: 'truncate',
@@ -446,12 +450,16 @@ const LaptopCompare = () => {
             maxWidth: 100,
             marginRight: 10,
             fontSize: 17,
+            fontWeight: 500,
+            fontFamily: 'Noto Sans KR',
           });
           legend2.valueLabels.template.setAll({
             minWidth: 120,
             maxWidth: 120,
             marginRight: 10,
             fontSize: 16,
+            fontWeight: 500,
+            fontFamily: 'Noto Sans KR',
             // 오버사이즈 시 처리.
             // truncate : 말줄임, none: 겹침, wrap: 줄바꿈, fit: 딱맞게 폰트사이즈 조절
             oversizedBehavior: 'truncate',
@@ -997,7 +1005,7 @@ const VersusCardWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid #d0d0d0;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
   border-radius: 25px;
   .cardImg {
     @media screen and (max-width: 1700px) {
@@ -1046,7 +1054,6 @@ const VersusCardWrap = styled.div`
       line-height: 20px;
     }
     width: 120px;
-    font-weight: bold;
     font-size: 15px;
     line-height: 22px;
     color: #868686;
@@ -1070,14 +1077,13 @@ const VersusCardWrap = styled.div`
   .cardContentTag {
     @media screen and (max-width: 1700px) {
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 500;
       margin-bottom: 10px;
     }
     padding: 5px 7px;
     background-color: #ebf0ff;
     color: #3366ff;
     border-radius: 5px;
-    font-weight: bold;
     margin-bottom: 18px;
     text-align: center;
   }

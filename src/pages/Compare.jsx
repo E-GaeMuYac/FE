@@ -391,12 +391,16 @@ const ComparePage = () => {
             maxWidth: 100,
             marginRight: 10,
             fontSize: 18,
+            fontWeight: 500,
+            fontFamily: 'Noto Sans KR',
           });
           legend.valueLabels.template.setAll({
             minWidth: 130,
             maxWidth: 130,
             marginRight: 10,
             fontSize: 18,
+            fontWeight: 500,
+            fontFamily: 'Noto Sans KR',
             // 오버사이즈 시 처리.
             // truncate : 말줄임, none: 겹침, wrap: 줄바꿈, fit: 딱맞게 폰트사이즈 조절
             oversizedBehavior: 'truncate',
@@ -440,12 +444,16 @@ const ComparePage = () => {
             maxWidth: 100,
             marginRight: 10,
             fontSize: 18,
+            fontWeight: 500,
+            fontFamily: 'Noto Sans KR',
           });
           legend2.valueLabels.template.setAll({
             minWidth: 130,
             maxWidth: 130,
             marginRight: 10,
             fontSize: 18,
+            fontWeight: 500,
+            fontFamily: 'Noto Sans KR',
             // 오버사이즈 시 처리.
             // truncate : 말줄임, none: 겹침, wrap: 줄바꿈, fit: 딱맞게 폰트사이즈 조절
             oversizedBehavior: 'truncate',
@@ -985,7 +993,7 @@ const VersusCardWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  border: 1px solid #d0d0d0;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
   border-radius: 25px;
   .cardImg {
     width: 256px;
@@ -1014,7 +1022,6 @@ const VersusCardWrap = styled.div`
   }
   .cardContentDesc {
     width: 120px;
-    font-weight: bold;
     font-size: 15px;
     line-height: 22px;
     color: #868686;
@@ -1037,7 +1044,7 @@ const VersusCardWrap = styled.div`
     background-color: #ebf0ff;
     color: #3366ff;
     border-radius: 5px;
-    font-weight: bold;
+    font-size: 14px;
     margin-bottom: 18px;
   }
   .cardBtnWrap {
@@ -1069,10 +1076,11 @@ const VersusCardWrap = styled.div`
     width: 210px;
     height: 38px;
     background-color: #3366ff;
+    box-shadow: 0 1px 6px 0px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     color: #ffffff;
     border: none;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 20px;
     cursor: pointer;
   }
