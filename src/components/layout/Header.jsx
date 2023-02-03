@@ -301,7 +301,7 @@ const LogoutBtn = styled.button`
     font-size: 13px;
     font-weight: 500;
   }
-  background-color: #3366ff;
+  background-color: #242424;
   width: 100px;
   height: 39px;
   display: flex;
