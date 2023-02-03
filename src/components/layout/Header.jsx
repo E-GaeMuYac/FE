@@ -210,7 +210,7 @@ const LoginBtn = styled(Link)`
     width: 80px;
     height: 34px;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 500;
   }
   background-color: #3366ff;
   width: 100px;
@@ -220,7 +220,7 @@ const LoginBtn = styled(Link)`
   align-items: center;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 500;
   color: white !important;
   border: none;
   border-radius: 8px;
@@ -232,7 +232,7 @@ const SignupBtn = styled(Link)`
     width: 80px;
     height: 34px;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 500;
   }
   background-color: #ebf0ff;
   width: 100px;
@@ -242,7 +242,7 @@ const SignupBtn = styled(Link)`
   align-items: center;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 700;
   color: #3366ff !important;
   border: none;
   border-radius: 8px;
@@ -299,7 +299,7 @@ const LogoutBtn = styled.button`
     width: 80px;
     height: 34px;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 500;
   }
   background-color: #3366ff;
   width: 100px;
@@ -309,7 +309,7 @@ const LogoutBtn = styled.button`
   align-items: center;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
   color: white;
   border: none;
   border-radius: 8px;
