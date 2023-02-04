@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { api, userApi } from '../apis/apiInstance';
+import { api } from '../apis/apiInstance';
 import { useCookies } from 'react-cookie';
 
-const Login = (props) => {
-  const setUserImage = props.setuserimage;
+const Login = () => {
   const token = localStorage.getItem('accessToken');
 
   const navigate = useNavigate();
@@ -64,20 +63,10 @@ const Login = (props) => {
       const refreshtoken = res.headers.refreshtoken;
       localStorage.setItem('accessToken', accesstoken);
       localStorage.setItem('refreshToken', refreshtoken);
-      getProfile();
       navigate('/');
     } catch (e) {
       console.log(e);
       alert('로그인에 실패하였습니다.');
-    }
-  };
-
-  const getProfile = async () => {
-    try {
-      const res = await userApi.get('api/users/find');
-      setUserImage(res.data.user.imageUrl);
-    } catch (e) {
-      console.log(e);
     }
   };
 

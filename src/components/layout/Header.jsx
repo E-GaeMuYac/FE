@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { userApi } from '../../apis/apiInstance';
+import { useRecoilState } from 'recoil';
+import { userInfoState } from '../../recoil/recoilStore';
+import { useGetProfile } from '../../query/userQuery';
 
 const Nav = ({ page }) => {
   const location = useLocation();
@@ -32,27 +35,27 @@ const Nav = ({ page }) => {
   );
 };
 
-const Header = (props) => {
+const Header = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem('refreshToken');
 
-  const userImage = props.userimage;
-  const setUserImage = props.setuserimage;
-  const token = localStorage.getItem('accessToken');
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const userData = useGetProfile(token).data;
 
   useEffect(() => {
-    getProfile();
-  }, []);
-
-  const getProfile = async () => {
-    try {
-      const res = await userApi.get('api/users/find');
-      setUserImage(res.data.user.imageUrl);
-    } catch (e) {
-      console.error(e);
-      localStorage.clear();
-      navigate('/login');
+    if (token) {
+      if (userData) {
+        setUserInfo({
+          email: userData.data.user.email,
+          imageUrl: userData.data.user.imageUrl,
+          loginCount: userData.data.user.loginCount,
+          loginType: userData.data.user.loginType,
+          nickname: userData.data.user.nickname,
+          userId: userData.data.user.userId,
+        });
+      }
     }
-  };
+  }, [userData]);
 
   const logoutHandler = async () => {
     try {
@@ -96,7 +99,7 @@ const Header = (props) => {
             <SignBox>
               <BackgroundMypageBtn onClick={goToMypage}>
                 <div className='myinfoImg'>
-                  <MypageBtn props={userImage} />
+                  <MypageBtn props={userInfo.imageUrl} />
                 </div>
                 <div className='mypage'>마이페이지</div>
               </BackgroundMypageBtn>
