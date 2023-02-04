@@ -43,7 +43,7 @@ import { useEffect } from 'react';
 const Signup = () => {
   // 기본 input 상태값
   const [email, setEmail] = useState('');
-  const [emailCode, setEmailCode] = useState('');
+  // const [emailCode, setEmailCode] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneCode, setPhoneCode] = useState('');
   const [password, setPassword] = useState('');
@@ -52,7 +52,7 @@ const Signup = () => {
 
   // 유효성 검사 문구
   const [emailMessage, setEmailMessage] = useState('');
-  const [emailCodeConfirmMessage, setEmailCodeConfirmMessage] = useState('');
+  // const [emailCodeConfirmMessage, setEmailCodeConfirmMessage] = useState('');
   const [phoneNumberMessage, setPhoneNumberMessage] = useState('');
   const [phoneCodeConfirmMessage, setPhoneCodeConfirmMessage] = useState('');
   const [passwordMessage, setPasswordMessage] = useState('');
@@ -61,7 +61,7 @@ const Signup = () => {
 
   // input 양식 유효성 검사 통과 여부(에 따라 문구 색상 등 지정)
   const [isEmail, setIsEmail] = useState(false);
-  const [isEmailCode, setIsEmailCode] = useState(false);
+  // const [isEmailCode, setIsEmailCode] = useState(false);
   const [isPassword, setIsPassword] = useState(false);
   const [isPasswordConfirm, setIsPasswordConfirm] = useState(false);
   const [isPhoneNumber, setIsPhoneNumber] = useState(false);
@@ -83,7 +83,7 @@ const Signup = () => {
   const [phoneCodebtnLabel, setPhoneCodebtnLabel] = useState('중복확인');
 
   // 유효성 검사 통과 시 인증버튼 활성화
-  const [emailCodeBtn, setEmailCodeBtn] = useState(false);
+  const [emailCheckBtn, setEmailCheckBtn] = useState(false);
   const [emailCodeConfirmBtn, setEmailCodeConfirmBtn] = useState(false);
   const [phoneCodeBtn, setPhoneCodeBtn] = useState(false);
   const [phoneCodeConfirmBtn, setPhoneCodeConfirmBtn] = useState(false);
@@ -169,108 +169,56 @@ const Signup = () => {
       setIsEmail(false);
       // setEmailBtnColor('#8bc790');
       // setEmailCodeBtnLabel('인증번호 전송');
-      setEmailCodeBtn(false);
+      // setEmailCodeBtn(false);
     } else {
       setEmailMessage('이메일 중복 확인이 필요합니다.');
       setEmailCodeBtnLabel('중복확인');
       setIsEmail(false);
-      setEmailCodeBtn(true);
+      setEmailCheckBtn(true);
+      // setEmailCodeBtn(true);
       // setEmailBtnColor('#4fc759');
     }
   };
 
   // 이메일 인증번호 전송 api 호출 함수
-  const postSendEmailCode = async (payload) => {
-    try {
-      const data = await api.post(
-        `/api/users/authentication/email`,
-        { email: payload.email } //data(req.body));
-      );
-      // console.log('인증번호 전송 성공', data);
-      // console.log('인증번호', data.data.body.code);
-      setResponseEmailCode(data.data.body.code);
-    } catch (error) {
-      return error;
-    }
-  };
+  // const postSendEmailCode = async (payload) => {
+  //   try {
+  //     const data = await api.post(
+  //       `/api/users/authentication/email`,
+  //       { email: payload.email } //data(req.body));
+  //     );
+  //     // console.log('인증번호 전송 성공', data);
+  //     // console.log('인증번호', data.data.body.code);
+  //     setResponseEmailCode(data.data.body.code);
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
   // 이메일 중복확인 및 인증번호 전송 버튼
   const onClickIsSendEmailCode = (e) => {
     e.preventDefault();
     if (emailCodeBtnLabel === '중복확인') {
-      setEmailCodeBtn(true);
+      // setEmailCodeBtn(true);
       if (data?.status === 200) {
-        setEmailMessage('사용 가능한 이메일입니다. 이메일을 인증해 주세요.');
+        setEmailMessage('사용 가능한 이메일입니다.');
         setIsEmail(true);
-        setEmailCodeBtn(true);
-        setEmailCodeBtnLabel('인증번호 전송');
+        setEmailCheckBtn(false);
+        // setEmailCodeBtn(true);
+        // setEmailCodeBtnLabel('인증번호 전송');
         // alert('인증번호가 전송되었습니다. 이메일을 확인해 주세요.');
         // postSendEmailCode({ email: email });
-        setEmailCode('');
-        setEmailCodeConfirmMessage('');
+        // setEmailCode('');
+        // setEmailCodeConfirmMessage('');
       } else if (errorEmail === '중복인 유저가 있습니다.') {
         setEmailMessage('이미 존재하는 이메일입니다. 다시 시도해 주세요.');
         setIsEmail(false);
-        setEmailCodeBtn(false);
+        // setEmailCodeBtn(false);
       } else if (errorEmail === '데이터 형식이 잘못되었습니다.') {
         setEmailMessage('잘못된 형식입니다. 다시 시도해 주세요.');
         setIsEmail(false);
-        setEmailCodeBtn(false);
+        // setEmailCodeBtn(false);
       }
-    }
-    if (
-      emailCodeBtnLabel === '인증번호 전송' ||
-      emailCodeBtnLabel === '인증번호 재전송'
-    ) {
-      alert('인증번호가 전송되었습니다. 이메일을 확인해 주세요.');
-      postSendEmailCode({ email: email });
-      setEmailCodeBtnLabel('인증번호 재전송');
-      setReadOnlyEmailCode(false);
-      // setEmailCode('');
-      // setEmailCodeConfirmMessage('');
-    }
-  };
-
-  // 이메일 인증번호 입력
-  const onChangeEmailCodeConfirm = (e) => {
-    const emailCodeRegExp = /[0-9]{6}$/g;
-    const emailCodeCurrent = e.target.value;
-    setEmailCode(emailCodeCurrent);
-
-    if (!emailCodeRegExp.test(emailCodeCurrent)) {
-      setEmailCodeConfirmMessage('인증번호 숫자 6자리를 입력해 주세요.');
-      setIsEmailCode(false);
-      setEmailCodeConfirmBtn(false);
-      // setEmailCodeBtnColor('#8bc790');
-      setEmailCode(emailCodeCurrent);
-    } else {
-      setEmailCodeConfirmMessage('');
-      setIsEmailCode(true);
-      setEmailCodeConfirmBtn(true);
-      // setEmailCodeBtnColor('#4fc759');
-    }
-  };
-
-  // 이메일 인증번호 입력 후 인증번호 확인 버튼
-  const onClickIsConfirmEmailCode = (e) => {
-    if (Number(responseEmailCode) === Number(emailCode)) {
-      alert('이메일 인증이 완료되었습니다.');
-      // setEmailCode('');
-      setEmailCodeConfirmMessage('인증 완료!');
-      setEmailCodeConfirmBtn(false);
-      setReadOnlyEmailCode(!readOnlyEmailCode);
-      setEmailCodeBtn(false);
-      setEmailCodeBtnLabel('중복확인');
-      setEmailMessage('');
-    } else {
-      setEmailCodeConfirmMessage('인증번호가 틀렸습니다. 다시 입력해 주세요.');
-      setIsEmailCode(false);
-    }
-    if (!responseEmailCode) {
-      setEmailCodeConfirmMessage(
-        '전송된 인증번호가 없습니다. 인증번호를 전송해주세요.'
-      );
-      setIsEmailCode(false);
     }
   };
 
@@ -439,7 +387,7 @@ const Signup = () => {
       setPhoneCode(PhoneCodeCurrent);
     } else {
       setPhoneCodeConfirmMessage('');
-      setIsPhoneCode(true);
+      setIsPhoneCode(false);
       setPhoneCodeConfirmBtn(true);
       // setEmailCodeBtnColor('#4fc759');
     }
@@ -553,6 +501,26 @@ const Signup = () => {
     }
   };
 
+  useEffect(() => {
+    if (
+      isEmail &&
+      isPhoneNumber &&
+      isPhoneCode &&
+      isPassword &&
+      isPasswordConfirm &&
+      isNickname
+    ) {
+      setDisabledSubmit(false);
+    }
+  }, [
+    isEmail,
+    isPhoneNumber,
+    isPhoneCode,
+    isPassword,
+    isPasswordConfirm,
+    isNickname,
+  ]);
+
   // 회원가입 폼 Submit
   const navigate = useNavigate();
 
@@ -576,13 +544,15 @@ const Signup = () => {
       !isPhoneNumber ||
       !isPassword ||
       !isPasswordConfirm ||
-      !isEmailCode ||
+      // !isEmailCode ||
       !isPhoneCode
     ) {
       alert('조건에 맞게 입력해 주세요!');
-    } else if (emailCodeConfirmMessage !== '인증 완료!') {
-      alert('이메일을 인증해 주세요!');
-    } else if (phoneCodeConfirmMessage !== '인증 완료!') {
+    }
+    // else if (emailCodeConfirmMessage !== '인증 완료!') {
+    //   alert('이메일을 인증해 주세요!');
+    // }
+    else if (phoneCodeConfirmMessage !== '인증 완료!') {
       alert('휴대폰 인증번호를 확인해 주세요!');
     } else {
       postSignup({
@@ -593,7 +563,6 @@ const Signup = () => {
         phoneNumber: strPhoneNumber,
       });
       navigate('/login');
-      setDisabledSubmit(false);
       alert('회원가입 완료!\npillnuts에 오신 것을 환영합니다 :)');
     }
   };
@@ -628,10 +597,10 @@ const Signup = () => {
               <label htmlFor='floatingInput'>이메일</label>
             </div>
 
-            {/* 이메일 인증번호 전송 버튼 */}
+            {/* 이메일 중복확인 버튼 OOO 이메일 인증번호 전송 버튼 XXX*/}
             <ButtonSt
               className={`${isEmail ? 'successBtn' : 'errorrBtn'}`}
-              disabled={!emailCodeBtn}
+              disabled={!emailCheckBtn}
               // style={{
               //   backgroundColor: `${emailBtnColor}`,
               // }}
@@ -650,7 +619,7 @@ const Signup = () => {
           </FormBox>
 
           {/* 이메일 인증번호 입력 */}
-          <CombinedForm>
+          {/* <CombinedForm>
             <div
               className={`form-floating mb-3 ${
                 isEmailCode ? 'successs' : 'errorr'
@@ -665,10 +634,10 @@ const Signup = () => {
                 placeholder='이메일 인증번호'
               />
               <label htmlFor='floatingInput'>이메일 인증번호</label>
-            </div>
+            </div> */}
 
-            {/* 이메일 인증번호 입력 후 인증확인 버튼 */}
-            <ButtonSt
+          {/* 이메일 인증번호 입력 후 인증확인 버튼 */}
+          {/* <ButtonSt
               disabled={!emailCodeConfirmBtn}
               // style={{
               //   backgroundColor: `${emailCodeBtnColor}`,
@@ -676,16 +645,16 @@ const Signup = () => {
               onClick={onClickIsConfirmEmailCode}>
               인증번호 확인
             </ButtonSt>
-          </CombinedForm>
+          </CombinedForm> */}
 
           {/* 이메일 인증번호 입력 유효성 검사 문구 */}
-          <FormBox>
+          {/* <FormBox>
             {emailCode.length > 0 && (
               <span className={`message ${isEmailCode ? 'success' : 'error'}`}>
                 {emailCodeConfirmMessage}
               </span>
             )}
-          </FormBox>
+          </FormBox> */}
 
           {/* 휴대폰 번호 입력 */}
           <CombinedForm>
