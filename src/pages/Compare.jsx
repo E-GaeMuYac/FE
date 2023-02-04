@@ -45,40 +45,42 @@ const VersusContent = ({ medicineInfo, query }) => {
   return <div className='versusContentWrap'>{versusContentDesc}</div>;
 };
 
-const VersusCard = ({ info }) => {
+const VersusCard = ({ info, type }) => {
   const navigate = useNavigate();
   const gotoDetail = (id) => {
     navigate(`/detail/${id}?tab=효능 효과`);
   };
   return (
-    <VersusCardWrap image={info.itemImage}>
-      <div className='cardImg'></div>
-      <div className='cardName'>{info.itemName}</div>
-      <div className='cardContentDescWrap'>
-        <div className='cardContentDesc' style={{ textAlign: 'right' }}>
-          {info.etcOtcCode}
-        </div>
-        <hr />
-        <div className='cardContentDesc'>{info.entpName}</div>
-      </div>
-      <div className='cardContentTagWrap'>
-        {info.productType.map((tag) => (
-          <div key={tag} className='cardContentTag'>
-            {tag}
+    <VersusCardWrap image={info.itemImage} type={type}>
+      <div className='card'>
+        <div className='cardImg'></div>
+        <div className='cardName'>{info.itemName}</div>
+        <div className='cardContentDescWrap'>
+          <div className='cardContentDesc' style={{ textAlign: 'right' }}>
+            {info.etcOtcCode}
           </div>
-        ))}
+          <hr />
+          <div className='cardContentDesc'>{info.entpName}</div>
+        </div>
+        <div className='cardContentTagWrap'>
+          {info.productType.map((tag) => (
+            <div key={tag} className='cardContentTag'>
+              {tag}
+            </div>
+          ))}
+        </div>
+        <div className='cardBtnWrap'>
+          <LikeItBtn id={info.medicineId} dibs={info.dibs} />
+          <button
+            className='goToDetailBtn'
+            onClick={() => {
+              gotoDetail(info.medicineId);
+            }}>
+            이 약품만 보러가기
+          </button>
+        </div>
       </div>
-
-      <div className='cardBtnWrap'>
-        <LikeItBtn id={info.medicineId} dibs={info.dibs} />
-        <button
-          className='goToDetailBtn'
-          onClick={() => {
-            gotoDetail(info.medicineId);
-          }}>
-          이 약품만 보러가기
-        </button>
-      </div>
+      <div className='characterImg'></div>
     </VersusCardWrap>
   );
 };
@@ -576,9 +578,8 @@ const ComparePage = () => {
             <MainWrap>
               <div className='title'>선택한 약품 비교하기</div>
               <div className='versus'>
-                <VersusCard info={versusList[0]} />
-                <div className='versusImage'></div>
-                <VersusCard info={versusList[1]} />
+                <VersusCard info={versusList[0]} type='A' />
+                <VersusCard info={versusList[1]} type='B' />
               </div>
             </MainWrap>
             <TabBar location={location} query={query} />
@@ -591,7 +592,7 @@ const ComparePage = () => {
                     <div id='chartdiv'></div>
                     <div className='graphNameWrap'>
                       <div className='graphNameBox'>
-                        <div className='graphName1'>
+                        <div className='graphName A'>
                           {versusList[0].itemName}
                         </div>
                         <div className='totalAmountWrap A'>
@@ -608,7 +609,7 @@ const ComparePage = () => {
                         </div>
                       </div>
                       <div className='graphNameBox'>
-                        <div className='graphName2'>
+                        <div className='graphName B'>
                           {versusList[1].itemName}
                         </div>
                         <div className='totalAmountWrap B'>
@@ -978,23 +979,22 @@ const MainWrap = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-around;
+    gap: 20px;
     align-items: center;
-  }
-  .versusImage {
-    width: 238px;
-    height: 161px;
-    background-image: url('/assets/image/versusImg.png');
-    background-size: cover;
-    background-position: center;
   }
 `;
 const VersusCardWrap = styled.div`
-  width: 324px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
-  border-radius: 25px;
+  position: relative;
+  .card {
+    width: 324px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 25px;
+    background-color: #ffffff;
+    z-index: 5;
+  }
   .cardImg {
     width: 256px;
     height: 110px;
@@ -1053,25 +1053,6 @@ const VersusCardWrap = styled.div`
     gap: 14px;
     margin-bottom: 30px;
   }
-  .likeBtn {
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    border: none;
-    box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.2);
-    background-color: white;
-    cursor: pointer;
-  }
-  .likeBtnImg {
-    width: 26px;
-    height: 26px;
-    background-image: url('/assets/image/icon_heart1.png');
-    background-size: cover;
-    background-position: center;
-  }
   .goToDetailBtn {
     width: 210px;
     height: 38px;
@@ -1083,6 +1064,28 @@ const VersusCardWrap = styled.div`
     font-size: 15px;
     line-height: 20px;
     cursor: pointer;
+  }
+  .characterImg {
+    position: absolute;
+    bottom: 0;
+    ${({ type }) =>
+      type === 'A'
+        ? `
+    background-image : url("/assets/image/versusCharacterA.png");
+    background-size: cover;
+    background-position: center;
+    width: 188px;
+    height: 176px;
+    left: -150px;
+    `
+        : `
+    background-image : url("/assets/image/versusCharacterB.png");
+    background-size: cover;
+    background-position: center;
+    width: 137px;
+    height: 239px;
+    right: -120px;
+    `}
   }
 `;
 const SubWrap = styled.div`
@@ -1172,10 +1175,9 @@ const SubWrap = styled.div`
   .graphNameBox {
     width: 155px;
   }
-  .graphName1 {
+  .graphName {
     padding: 6px 10px;
     white-space: normal;
-    background-color: #a9beff;
     word-break: break-all;
     border-radius: 10px;
     color: #242424;
@@ -1185,19 +1187,11 @@ const SubWrap = styled.div`
     text-align: center;
     margin-bottom: 10px;
   }
-  .graphName2 {
-    padding: 6px 10px;
-    white-space: normal;
-    /* background-color: #a798ff; */
+  .graphName.A {
+    background-color: #a9beff;
+  }
+  .graphName.B {
     background-color: #7e66ff;
-    word-break: break-all;
-    border-radius: 10px;
-    color: #242424;
-    font-size: 15px;
-    line-height: 22px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 10px;
   }
   .totalAmountWrap {
     display: flex;
