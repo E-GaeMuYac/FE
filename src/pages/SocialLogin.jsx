@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import Spinner from '../components/common/Spinner';
 
 const SocialLogin = () => {
   const navigation = useNavigate();
@@ -14,7 +15,11 @@ const SocialLogin = () => {
     navigation('/');
   }, []);
 
-  return <div>로그인중</div>;
+  return (
+    <div>
+      <Spinner />
+    </div>
+  );
 };
 
 export default SocialLogin;

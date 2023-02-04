@@ -30,7 +30,6 @@ import Mobile from './contents/Mobile';
 import Footer from './components/layout/Footer';
 import { useRecoilState } from 'recoil';
 import { nowRoute, searchWord } from './recoil/recoilStore';
-// import Spinner from './components/common/Spinner';
 import { Laptop, PC } from './query/useMediaQuery';
 
 function App() {
@@ -118,7 +117,6 @@ function App() {
               </Layout>
             }
           />
-          {/* <Route path='/spinner' element={<Spinner />} /> */}
           <Route
             path='/allergy'
             element={
@@ -145,7 +143,6 @@ function App() {
             path='/detail/:medicineId/editform/:reviewId'
             element={
               <>
-                {/* <MiniNav /> */}
                 <Layout>
                   <ModifyReviews />
                 </Layout>
