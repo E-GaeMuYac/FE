@@ -1,85 +1,62 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IoMdSettings } from 'react-icons/io';
-import { api, userApi } from '../apis/apiInstance';
+import { userApi } from '../apis/apiInstance';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import MypageTab from '../contents/MypageTab';
 import qs from 'qs';
 import MyLikeList from '../contents/MyLikeList';
 import Allergy from '../contents/Allergy';
 import MyReviews from '../contents/MyReview';
 
-import { Mobile, Laptop, PC } from '../query/useMediaQuery';
+//쿼리임포트
+import {
+  useDefaultImage,
+  useDeleteAccount,
+  useEditNickname,
+  useGetPresignedUrl,
+  useGetTips,
+  usePutS3Upload,
+} from '../query/userQuery';
 
-const User = (props) => {
+import { Laptop, PC } from '../query/useMediaQuery';
+import { useRecoilState } from 'recoil';
+import { userInfoState } from '../recoil/recoilStore';
+//수정시작ㄱ
+
+const User = () => {
   const navigate = useNavigate();
   const [isTextClicked, setIsTextClicked] = useState(false);
   const [isFileClicked, setIsFileClicked] = useState(false);
-  const [nickname, setNickname] = useState('');
-  const [email, setEmail] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [loginCount, setLoginCount] = useState('');
   const [prevImg, setPrevImg] = useState('');
+  const [prevOpen, setPrevOpen] = useState(false);
   const [newImg, setNewImg] = useState();
-  const [newNickname, setNewNickname] = useState(nickname);
   const [serviceMsg, setServiceMsg] = useState('');
   const [delPassword, setDelPassword] = useState('');
   const [isShow, setIsShow] = useState(false);
-  const [loginType, setLoginType] = useState('');
-  const setUserImage = props.setuserimage;
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
   }).tab;
 
+  const tipsData = useGetTips().data;
+
   useEffect(() => {
-    getProfile();
-    userMessage();
-  }, []);
-
-  const getProfile = async () => {
-    try {
-      const res = await userApi.get('api/users/find');
-      setNickname(res.data.user.nickname);
-      setLoginCount(res.data.user.loginCount);
-      setImageUrl(res.data.user.imageUrl);
-      setLoginType(res.data.user.loginType);
-      setEmail(res.data.user.email);
-    } catch (e) {
-      console.log(e);
-      alert('로그인 정보가 필요합니다.');
-      navigate('/login');
+    if (tipsData) {
+      setServiceMsg(tipsData.data.post);
     }
-  };
-
-  const userMessage = async () => {
-    try {
-      const res = await api.get('api/posts');
-      setServiceMsg(res.data.post);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  }, [tipsData]);
 
   const changeNickname = () => {
     setIsTextClicked(true);
   };
 
-  const changesDone = () => {
-    modifyNickname({ nickname: newNickname });
-  };
+  const mutateNickname = useEditNickname(userInfo.nickname);
 
-  const modifyNickname = async (payload) => {
-    try {
-      const res = await userApi.put('api/users/update/nickname', payload);
-      setIsTextClicked(false);
-      setNickname(payload.nickname);
-      alert(res.data.message);
-    } catch (e) {
-      console.log(e);
-      alert('정보 수정에 실패하였습니다.');
-    }
+  const modifyNickname = () => {
+    mutateNickname.mutate(userInfo.nickname);
+    setIsTextClicked(false);
   };
 
   const imageInput = (e) => {
@@ -98,6 +75,7 @@ const User = (props) => {
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         setPrevImg(reader.result);
+        setPrevOpen(true);
       };
       setNewImg(file);
       setIsFileClicked(true);
@@ -105,40 +83,25 @@ const User = (props) => {
   };
 
   const nickInput = (e) => {
-    setNewNickname(e.target.value);
+    setUserInfo({ ...userInfo, nickname: e.target.value });
   };
 
-  //서버에서 presigned url 받아옴
-  const modifyImage = async () => {
-    try {
-      const res = await userApi.put('/api/users/update/image', {
-        filename: newImg.name,
-      });
-      const presignedUrl = res.data.presignedUrl;
-      setIsFileClicked(false);
-      S3Upload(presignedUrl);
-    } catch (e) {
-      console.log(e);
-    }
+  // 서버에서 presigned url 받아온 후 s3에 업로드
+
+  const { mutateAsync: presignedUrlData } = useGetPresignedUrl();
+  const s3Upload = usePutS3Upload();
+
+  const modifyImageHandler = async () => {
+    const presignedUrl = await presignedUrlData(newImg);
+    s3Upload.mutate({ presignedUrl: presignedUrl.data.presignedUrl, newImg });
+    setIsFileClicked(false);
+    setPrevOpen(false);
   };
-  //presigned url로 이미지 보내기
-  const S3Upload = async (presignedUrl) => {
-    try {
-      await axios.put(presignedUrl, newImg);
-      alert('이미지 수정이 완료되었습니다.');
-      setUserImage(prevImg);
-    } catch (e) {
-      alert(e);
-    }
-  };
+
+  const mutateDefaultImg = useDefaultImage();
 
   const defaultImgHandler = async () => {
-    try {
-      await userApi.put('/api/users/update/image');
-      window.location.reload('/mypage');
-    } catch (e) {
-      console.log(e);
-    }
+    mutateDefaultImg.mutate();
   };
 
   const cancelChange = () => {
@@ -147,12 +110,12 @@ const User = (props) => {
 
   const cancelImgChange = () => {
     setIsFileClicked(false);
-    setPrevImg(imageUrl);
+    setPrevImg(userInfo.imageUrl);
   };
 
   const sortLoginType = async () => {
     try {
-      if (loginType !== 'Local') {
+      if (userInfo.loginType !== 'Local') {
         await deleteAccount();
       } else {
         setIsShow(true);
@@ -162,22 +125,15 @@ const User = (props) => {
     }
   };
 
+  const mutateDelAccount = useDeleteAccount();
+
   const deleteAccount = async (password) => {
     if (window.confirm('정말 탈퇴하시겠습니까?😢')) {
-      try {
-        await userApi.delete('/api/users/delete', {
-          data: {
-            password,
-          },
-          withCredentials: true,
-        });
-        localStorage.clear();
-        alert('회원탈퇴가 완료되었습니다.');
-        navigate('/');
-      } catch (e) {
-        alert('비밀번호를 알맞게 입력해주세요.');
-      }
+      mutateDelAccount.mutate(password);
     }
+    localStorage.clear();
+    alert('회원탈퇴가 완료되었습니다.');
+    navigate('/');
   };
 
   return (
@@ -194,9 +150,9 @@ const User = (props) => {
               </SignupInfo>
               <EmailBox>
                 <EmailBoxBg>
-                  <EmailBoxImg imageUrl={imageUrl} />
+                  <EmailBoxImg imageUrl={userInfo.imageUrl} />
                 </EmailBoxBg>
-                <span>{email}</span>
+                <span>{userInfo.email}</span>
               </EmailBox>
               <div className='form-floating form-width'>
                 <input
@@ -238,32 +194,54 @@ const User = (props) => {
       <MyPageWrap>
         <ProfileImg>
           <BackgroundUserImage>
-            <UserImage userImg={imageUrl} prevImg={prevImg}>
-              <label htmlFor='file-input'>
-                <IoMdSettings
-                  style={{
-                    position: 'absolute',
-                    top: 4,
-                    right: 4,
-                    color: 'white',
-                  }}
-                  size='30'
+            {prevOpen ? (
+              <PrevImage prevImg={prevImg}>
+                <label htmlFor='file-input'>
+                  <IoMdSettings
+                    style={{
+                      position: 'absolute',
+                      top: 4,
+                      right: 4,
+                      color: 'white',
+                    }}
+                    size='30'
+                  />
+                </label>
+                <input
+                  id='file-input'
+                  type='file'
+                  accept='image/*'
+                  onChange={imageInput}
                 />
-              </label>
-              <input
-                id='file-input'
-                type='file'
-                accept='image/*'
-                onChange={imageInput}
-              />
-            </UserImage>
+              </PrevImage>
+            ) : (
+              <UserImage userImg={userInfo.imageUrl}>
+                <label htmlFor='file-input'>
+                  <IoMdSettings
+                    style={{
+                      position: 'absolute',
+                      top: 4,
+                      right: 4,
+                      color: 'white',
+                    }}
+                    size='30'
+                  />
+                </label>
+                <input
+                  id='file-input'
+                  type='file'
+                  accept='image/*'
+                  onChange={imageInput}
+                />
+              </UserImage>
+            )}
           </BackgroundUserImage>
           {isFileClicked ? (
             <ModifyBtnBox>
               <CancelBtn type='button' onClick={cancelImgChange}>
                 취소
               </CancelBtn>
-              <FinishBtn type='button' onClick={modifyImage}>
+              <FinishBtn type='button' onClick={modifyImageHandler}>
                 변경완료
               </FinishBtn>
             </ModifyBtnBox>
@@ -277,7 +255,9 @@ const User = (props) => {
           <NicknameBox>
             {!isTextClicked ? (
               <div style={{ display: 'flex', height: '30px' }}>
-                <Nickname>{nickname ? `${nickname}님` : 'OOO님'}</Nickname>
+                <Nickname>
+                  {userInfo.nickname ? `${userInfo.nickname}님` : 'OOO님'}
+                </Nickname>
                 <div className='wrapNickname'>
                   <button className='editNickname' onClick={changeNickname} />
                 </div>
@@ -286,11 +266,11 @@ const User = (props) => {
               <NicknameInput>
                 <input
                   type='text'
-                  defaultValue={nickname}
+                  defaultValue={userInfo.nickname}
                   onChange={nickInput}
                   maxLength={20}
                 />
-                <button className='o' onClick={changesDone}>
+                <button className='o' onClick={modifyNickname}>
                   O
                 </button>
                 <button className='x' onClick={cancelChange}>
@@ -317,7 +297,7 @@ const User = (props) => {
             <CalenderWrap>
               <div className='calendar'>
                 <span>출석일수</span>
-                <h1>{`${loginCount}일`}</h1>
+                <h1>{`${userInfo.loginCount}일`}</h1>
               </div>
             </CalenderWrap>
           </div>
@@ -654,12 +634,41 @@ const UserImage = styled.div`
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  background-image: ${(props) =>
-    props.prevImg
-      ? `url(${props.prevImg})`
-      : props.userImg
-      ? `url(${props.userImg})`
-      : null};
+  background-image: ${({ userImg }) => `url(${userImg})`};
+  background-size: cover;
+  background-position: center;
+  position: relative;
+
+  label {
+    @media screen and (max-width: 1700px) {
+      top: 76px;
+      left: 84px;
+    }
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    position: absolute;
+    top: 110px;
+    left: 120px;
+    background-color: #868686;
+    cursor: pointer;
+  }
+  input {
+    display: none;
+  }
+`;
+
+const PrevImage = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 108px;
+    height: 108px;
+    margin: 11px 11px;
+  }
+  margin: 15px 15px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-image: ${({ prevImg }) => `url(${prevImg})`};
   background-size: cover;
   background-position: center;
   position: relative;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { BrowserView, MobileView } from 'react-device-detect';
 
@@ -34,7 +34,6 @@ import { nowRoute, searchWord } from './recoil/recoilStore';
 import { Laptop, PC } from './query/useMediaQuery';
 
 function App() {
-  const [userImage, setUserImage] = useState('');
   const location = useLocation();
   const [nowPage, setNowPage] = useRecoilState(nowRoute);
 
@@ -56,13 +55,9 @@ function App() {
   return (
     <>
       <BrowserView>
-        <Header userimage={userImage} setuserimage={setUserImage} />
+        <Header />
         <Routes>
-          <Route
-            exact
-            path='/login/loading'
-            element={<SocialLogin setuserimage={setUserImage} />}
-          />
+          <Route exact path='/login/loading' element={<SocialLogin />} />
           <Route
             exact
             path='/search'
@@ -89,11 +84,7 @@ function App() {
               </>
             }
           />
-          <Route
-            exact
-            path='/login'
-            element={<Login setuserimage={setUserImage} />}
-          />
+          <Route exact path='/login' element={<Login />} />
           <Route exact path='/signup' element={<Signup />} />
           <Route exact path='/findaccount' element={<FindAccount />} />
           <Route exact path='/' element={<Main />} />
@@ -122,7 +113,7 @@ function App() {
             path='/mypage'
             element={
               <Layout>
-                <User setuserimage={setUserImage} />
+                <User />
                 <CompareBox />
               </Layout>
             }
