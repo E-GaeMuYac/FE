@@ -1110,20 +1110,6 @@ const VersusCardWrap = styled.div`
     cursor: pointer;
   }
   .characterImg {
-    @media screen and (max-width: 1700px) {
-      ${({ type }) =>
-        type === 'A'
-          ? `
-    width: 141px;
-    height: 132px;
-    left: -112.5px;
-    `
-          : `
-    width: 102.75px;
-    height: 179.25px;
-    right: -90px;
-    `}
-    }
     position: absolute;
     bottom: 0;
     ${({ type }) =>
@@ -1132,17 +1118,17 @@ const VersusCardWrap = styled.div`
     background-image : url("/assets/image/versusCharacterA.png");
     background-size: cover;
     background-position: center;
-    width: 188px;
-    height: 176px;
-    left: -150px;
+    width: 141px;
+    height: 132px;
+    left: -112.5px;
     `
         : `
     background-image : url("/assets/image/versusCharacterB.png");
     background-size: cover;
     background-position: center;
-    width: 137px;
-    height: 239px;
-    right: -120px;
+    width: 102.75px;
+    height: 179.25px;
+    right: -90px;
     `}
   }
 `;
