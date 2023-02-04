@@ -34,7 +34,7 @@ export const compareBoxData = atom({
   key: 'compareBoxData',
   default: {
     length: 0,
-    isOpen: 'close',
+    isOpen: 'hide',
     arr: [
       {
         medicineId: 1,

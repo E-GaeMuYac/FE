@@ -90,7 +90,7 @@ const CompareBox = () => {
 
   //페이지를 이동하면 자동으로 클로즈
   useEffect(() => {
-    setCompareData({ ...compareData, isOpen: 'close' });
+    setCompareData({ ...compareData, isOpen: 'hide' });
   }, [nowPage]);
 
   // onclick시 기능
@@ -107,7 +107,7 @@ const CompareBox = () => {
         break;
     }
   };
-  //onclick시 버튼 삭제
+  //onclick시 숨김 모드
   const closeBox = () => {
     setCompareData({ ...compareData, isOpen: 'hide' });
   };
@@ -126,7 +126,7 @@ const CompareBox = () => {
         ? { medicineId: compareData.arr.indexOf(list) + 1, itemName: 'null' }
         : list
     );
-    setCompareData({ ...compareData, arr: allDeletedArr, isOpen: 'close' });
+    setCompareData({ ...compareData, arr: allDeletedArr, isOpen: 'hide' });
   };
 
   return (
