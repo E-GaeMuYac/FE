@@ -44,7 +44,7 @@ const ListCardComp = ({ list }) => {
             <div className='listName'>{list.itemName}</div>
             <ul className='listSubTag'>
               {list.productType.map((list) => (
-                <li>{list}</li>
+                <li key={list}>{list}</li>
               ))}
             </ul>
             <div className='listSubContent'>{list.etcOtcCode}</div>
