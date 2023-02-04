@@ -54,9 +54,11 @@ function App() {
   return (
     <>
       <BrowserView>
-        <Header />
         <Routes>
           <Route exact path='/login/loading' element={<SocialLogin />} />
+        </Routes>
+        <Header />
+        <Routes>
           <Route
             exact
             path='/search'
