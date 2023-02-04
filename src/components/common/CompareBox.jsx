@@ -165,6 +165,18 @@ const CompareBox = () => {
 };
 
 const Wrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    bottom: ${({ isOpen }) => {
+      switch (isOpen) {
+        case 'open':
+          return 0;
+        case 'close':
+          return '-222px';
+        case 'hide':
+          return '-288px';
+      }
+    }};
+  }
   position: fixed;
   left: 0;
   bottom: ${({ isOpen }) => {
