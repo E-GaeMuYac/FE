@@ -590,19 +590,22 @@ const ButtonSt = styled.button`
   @media screen and (max-width: 1700px) {
     width: 100px;
     font-size: 12px;
-    margin-top: auto;
   }
+  margin-top: auto;
   width: 125px;
   height: 35px;
   border: none;
   border-radius: 50px;
   margin-left: 5px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: ${(props) => (props.disabled ? '' : '#868686;')};
+  background-color: ${(props) => (props.disabled ? '' : '#f6f7fa')};
+  /* color: #868686;
+  background: #f6f7fa; */
   :active {
-    box-shadow: 0px 0px 0 rgb(0, 0, 0, 0.3);
-    background-color: #bebebe !important;
+    /* box-shadow: 0px 0px 0 rgb(0, 0, 0, 0.3); */
+    /* background-color: #bebebe !important; */
   }
 `;
 

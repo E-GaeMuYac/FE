@@ -246,35 +246,7 @@ const Detail = () => {
               : am5.color(0xb0e4fe),
           ]);
 
-        // series
-        //   .get('colors')
-        //   .set(
-        //     'colors',
-        //     objGraph.materialName[i].allergy
-        //       ? [
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //           am5.color(0xff392b),
-        //         ]
-        //       : [
+        //        [
         //           am5.color(0x091a7a),
         //           am5.color(0x102693),
         //           am5.color(0x1939b7),
@@ -342,7 +314,7 @@ const Detail = () => {
           marginRight: 10,
           // marginLeft: 60,
           fontSize: 17,
-          lineHeight: 1.5,
+          lineHeight: 1.7,
           minWidth: 65,
           // height: 30,
           //centerY: 0, // if we want labels to be top-aligned
@@ -354,7 +326,9 @@ const Detail = () => {
           maxWidth: 150,
           minWidth: 150,
           fontSize: 16,
-          lineHeight: 1.5,
+          fontFamily: 'Noto Sans KR',
+          fontWeight: 500,
+          lineHeight: 1.7,
           oversizedBehavior: 'truncate',
         });
 
@@ -399,14 +373,37 @@ const Detail = () => {
   const [compareData, setCompareData] = useRecoilState(compareBoxData);
 
   const putInToCompareBox = (list) => {
+    let count = 0;
+
     for (let i = 0; i < compareData.arr.length; i++) {
       if (compareData.arr[i].itemName === 'null') {
         let newArr = [...compareData.arr];
         newArr[i] = list;
-        setCompareData({ ...compareData, arr: newArr });
+        // setCompareData({ ...compareData, arr: newArr });
+        // break;
+        if (compareData.length === 1) {
+          setCompareData({ ...compareData, arr: newArr, isOpen: 'open' });
+        } else {
+          setCompareData({ ...compareData, arr: newArr });
+        }
+
         break;
+      } else {
+        count++;
+      }
+      if (count === 2) {
+        alert('비교함이 가득 찼습니다.');
       }
     }
+  };
+
+  const putOutToCompareBox = (id) => {
+    let deletedArr = compareData.arr.map((list) =>
+      list.medicineId === id
+        ? { medicineId: compareData.arr.indexOf(list) + 1, itemName: 'null' }
+        : list
+    );
+    setCompareData({ ...compareData, arr: deletedArr });
   };
 
   //주요 성분 총량
@@ -476,12 +473,18 @@ const Detail = () => {
               </Picked>
               {medicineItem?.medicineId === compareData.arr[0].medicineId ||
               medicineItem?.medicineId === compareData.arr[1].medicineId ? (
-                <div className='compareBox'>비교함 담기</div>
+                <div
+                  className='compareBox'
+                  onClick={() => {
+                    putOutToCompareBox(medicineItem?.medicineId);
+                  }}>
+                  비교함 담기 취소
+                </div>
               ) : (
                 <button
                   className='compareBox active'
                   onClick={() => {
-                    putInToCompareBox(objGraph);
+                    putInToCompareBox(medicineItem);
                   }}>
                   비교함 담기
                 </button>
@@ -595,8 +598,8 @@ const Detail = () => {
                     <div className='graphTop3List' key={list.material}>
                       <div
                         style={{
-                          width: '120px',
-                          height: '120px',
+                          width: '80px',
+                          height: '80px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -630,8 +633,8 @@ const Detail = () => {
                     <div className='graphTop3List' key={list.material}>
                       <div
                         style={{
-                          width: '120px',
-                          height: '120px',
+                          width: '80px',
+                          height: '80px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -697,10 +700,14 @@ const BottomSection = styled.div`
   }
   width: 1024px;
   height: 325px;
-  border-radius: 23px;
-  background-color: #ebebeb;
+  border-radius: 25px;
+  background-color: #f6f7fa;
+  color: #242424;
   display: flex;
   padding: 34px 30px;
+  font-weight: 350;
+  font-size: 17px;
+  line-height: 33px;
   #legenddiv {
     display: flex;
     margin: auto;
@@ -713,6 +720,7 @@ const BottomSection = styled.div`
 
 const CardBox = styled.div`
   width: 100%;
+  min-height: 127px;
   margin: auto;
   border-radius: 25px;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
@@ -779,27 +787,21 @@ const TotalAmount = styled.div`
   }
   .totalAmountIcon {
     border-radius: 8px;
-    /* box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2); */
     background-color: rgba(0, 0, 0, 0.8);
-    /* box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2); */
+    backdrop-filter: blur(11.5px);
     display: none;
     position: absolute;
     top: 32px;
-    right: -25px;
+    right: -15px;
     text-align: center;
-    min-width: 150px;
+    min-width: 120px;
     max-width: 177px;
-    padding: 12px;
-    font-size: 14px;
+    padding: 10px;
+    font-size: 13px;
     line-height: 22px;
     font-weight: 350;
-    /* color: #868686; */
-    color: #ffffff;
-    /* background-color: #ffffff; */
+    color: #f0f0f0;
     opacity: 1;
-    /* z-index: 2; */
-    font-weight: 400;
-    font-size: 14px;
     word-break: break-all;
     text-align: left;
   }
@@ -812,7 +814,7 @@ const TotalAmount = styled.div`
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     position: absolute;
-    right: 44px;
+    right: 33px;
     top: -20px;
   }
 `;
@@ -820,7 +822,7 @@ const TotalAmount = styled.div`
 const RightCardBox = styled.div`
   width: 307px;
   height: 400px;
-  padding: 40px;
+  padding: 40px 20px 40px 15px;
   border-radius: 25px;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
   .graphTop3 {
@@ -872,14 +874,13 @@ const RightCardBox = styled.div`
     line-height: 41px;
     font-weight: bold;
     display: flex;
-    /* margin-right: 5px; */
     justify-content: center;
   }
   .ContentMaterialNameAllergyTrue {
     @media screen and (max-width: 1700px) {
       font-size: 18px;
     }
-    width: 180px;
+    width: 184px;
     font-size: 20px;
     white-space: normal;
     overflow: hidden;
@@ -887,16 +888,15 @@ const RightCardBox = styled.div`
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    margin-top: 3px;
-    margin-left: 20px;
     color: #ff3c26;
     text-align: center;
+    margin-left: 7px;
   }
   .ContentMaterialNameAllergyFalse {
     @media screen and (max-width: 1700px) {
       font-size: 18px;
     }
-    width: 180px;
+    width: 184px;
     font-size: 20px;
     white-space: normal;
     overflow: hidden;
@@ -904,9 +904,8 @@ const RightCardBox = styled.div`
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    margin-top: 3px;
-    margin-left: 20px;
     text-align: center;
+    margin-left: 7px;
   }
 `;
 
@@ -926,54 +925,6 @@ const WrapContents = styled.div`
     position: absolute;
     right: 30px;
   }
-  .etcOtcCodeDesc {
-    @media screen and (max-width: 1700px) {
-      width: 18px;
-      height: 18px;
-    }
-    width: 20px;
-    height: 20px;
-    position: relative;
-    background-image: url('/assets/image/의약품목설명아이콘.png');
-    background-size: cover;
-    background-position: center;
-    margin-left: 5px;
-    display: inline-block;
-    :hover .tooltipText {
-      display: block;
-    }
-    .tooltipText {
-      border-radius: 8px;
-      background-color: rgba(0, 0, 0, 0.8);
-      box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
-      display: none;
-      position: absolute;
-      top: 30px;
-      left: -30px;
-      width: 310px;
-      padding: 13px;
-      font-size: 15px;
-      line-height: 21px;
-      color: #ffffff;
-      opacity: 1;
-      z-index: 2;
-      font-weight: 400;
-      font-size: 14px;
-    }
-    .tooltipText::after {
-      content: '';
-      width: 0px;
-      height: 0px;
-      border-bottom: 10px solid rgba(0, 0, 0, 0.8);
-      border-top: 10px solid transparent;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      position: absolute;
-      left: 35px;
-      top: -20px;
-    }
-  }
-
   .compareBox {
     @media screen and (max-width: 1700px) {
       width: 250px;
@@ -1009,7 +960,6 @@ const GraphTop3 = styled.div`
   height: 300px;
   margin-top: 0px;
   margin-left: 0px;
-  /* background-color: #84a9ff; */
   .top1AllergyFalse {
     width: 80px;
     height: 80px;
@@ -1107,12 +1057,11 @@ const TopLabel = styled.div`
     font-size: 15px;
     line-height: 22px;
   }
-  height: 24px;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 24px;
   color: #868686;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   text-align: left;
 `;
 
@@ -1121,16 +1070,58 @@ const BottomLabel = styled.div`
     font-size: 15px;
     line-height: 22px;
   }
-  height: 24px;
-  font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 24px;
   color: #868686;
   display: flex;
   align-items: center;
-  /* justify-content: center; */
-  margin-top: 10px;
   text-align: left;
+  .etcOtcCodeDesc {
+    @media screen and (max-width: 1700px) {
+      width: 18px;
+      height: 18px;
+    }
+    width: 20px;
+    height: 20px;
+    position: relative;
+    background-image: url('/assets/image/의약품목설명아이콘.png');
+    background-size: cover;
+    background-position: center;
+    margin-left: 5px;
+    display: inline-block;
+    :hover .tooltipText {
+      display: block;
+    }
+    .tooltipText {
+      border-radius: 8px;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(11.5px);
+      display: none;
+      position: absolute;
+      top: 30px;
+      left: -30px;
+      width: 310px;
+      padding: 13px;
+      font-size: 14px;
+      line-height: 21px;
+      color: #ffffff;
+      opacity: 1;
+      z-index: 2;
+      font-weight: 350;
+    }
+    .tooltipText::after {
+      content: '';
+      width: 0px;
+      height: 0px;
+      border-bottom: 10px solid rgba(0, 0, 0, 0.8);
+      border-top: 10px solid transparent;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      position: absolute;
+      left: 35px;
+      top: -20px;
+    }
+  }
 `;
 
 const Categorize = styled.div`
@@ -1149,7 +1140,7 @@ const Categorize = styled.div`
     font-size: 16px;
     justify-content: center;
     align-items: center;
-    font-weight: 700;
+    font-weight: 500;
     line-height: 20px;
     border-radius: 8px;
     display: flex;
@@ -1227,21 +1218,18 @@ const GraphLabel = styled.div`
       backdrop-filter: blur(11.5px);
       display: none;
       position: absolute;
-      top: 40px;
-      right: -50px;
+      top: 35px;
+      right: -51px;
       text-align: center;
       width: 256px;
       padding: 12px;
       font-size: 14px;
       line-height: 22px;
       font-weight: 350;
-      /* color: #868686; */
-      color: #ffffff;
-      /* background-color: #ffffff; */
+      font-family: 'Noto Sans KR';
+      color: #f0f0f0;
       opacity: 1;
       z-index: 2;
-      font-weight: 400;
-      font-size: 14px;
       word-break: break-all;
       text-align: left;
     }
@@ -1287,9 +1275,6 @@ const WarningAllergyTrue = styled.div`
   justify-content: center;
   margin-left: 8px;
   color: #ff392b;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 20px;
   .allergyTrueIcon {
     @media screen and (max-width: 1700px) {
       width: 18px;
@@ -1297,6 +1282,7 @@ const WarningAllergyTrue = styled.div`
       margin-top: 1px;
       margin-left: 4px;
     }
+    margin-top: 2px;
     margin-left: 6px;
     width: 20px;
     height: 20px;
@@ -1306,7 +1292,9 @@ const WarningAllergyTrue = styled.div`
     display: inline-block;
   }
   span {
+    font-weight: 700;
     font-size: 16px;
+    line-height: 20px;
   }
   :hover .allergyAmountIcon {
     display: block;
@@ -1322,7 +1310,7 @@ const WarningAllergyTrue = styled.div`
     right: 14px;
     text-align: center;
     width: 256px;
-    padding: 12px;
+    padding: 12px 10px;
     font-size: 14px;
     line-height: 22px;
     font-weight: 350;
@@ -1331,8 +1319,6 @@ const WarningAllergyTrue = styled.div`
     /* background-color: #ffffff; */
     opacity: 1;
     z-index: 2;
-    font-weight: 400;
-    font-size: 14px;
     word-break: break-all;
     text-align: left;
   }
@@ -1369,9 +1355,6 @@ const WarningAllergyFalse = styled.div`
   justify-content: center;
   margin-left: 8px;
   color: #03935b;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 20px;
   .allergyFalseIcon {
     @media screen and (max-width: 1700px) {
       width: 18px;
@@ -1379,6 +1362,7 @@ const WarningAllergyFalse = styled.div`
       margin-top: 1px;
       margin-left: 4px;
     }
+    margin-top: 2px;
     margin-left: 6px;
     width: 20px;
     height: 20px;
@@ -1388,7 +1372,9 @@ const WarningAllergyFalse = styled.div`
     display: inline-block;
   }
   span {
+    font-weight: 700;
     font-size: 16px;
+    line-height: 20px;
   }
   :hover .allergyAmountIcon {
     display: block;
@@ -1404,7 +1390,7 @@ const WarningAllergyFalse = styled.div`
     right: 14px;
     text-align: center;
     width: 256px;
-    padding: 12px;
+    padding: 12px 10px;
     font-size: 14px;
     line-height: 22px;
     font-weight: 350;
@@ -1413,8 +1399,6 @@ const WarningAllergyFalse = styled.div`
     /* background-color: #ffffff; */
     opacity: 1;
     z-index: 2;
-    font-weight: 400;
-    font-size: 14px;
     word-break: break-all;
     text-align: left;
   }
@@ -1457,6 +1441,7 @@ const ScrollBar = styled.div`
   }
   ::-webkit-scrollbar-thumb {
     background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
   }
 `;
@@ -1465,9 +1450,8 @@ const MatrialExplainWrap = styled.div`
   display: ${({ Active }) => (Active ? 'block' : 'none')};
   width: 293px;
   min-height: 50px;
-  background-color: rgba(0, 0, 0, 0.65);
+  background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(11.5px);
-  box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
   padding: 15px 30px 20px 30px;
   border-radius: 15px;
   line-height: 34px;
@@ -1479,24 +1463,24 @@ const MatrialExplainWrap = styled.div`
   text-align: center;
   backdrop-filter: blur(5px);
   .title {
-    font-size: 18px;
+    font-size: 15px;
     margin-top: 15px;
     margin-bottom: 25px;
     text-align: left;
     font-weight: 500;
-    font-size: 16px;
-    line-height: 34px;
+    line-height: 30px;
     color: #f0f0f0;
     span {
       margin-left: 6px;
-      font-size: 22px;
+      font-size: 17px;
       font-weight: 700;
-      line-height: 35px;
       color: #82a1ff;
     }
   }
   .desc {
     font-size: 15px;
+    line-height: 30px;
+    font-weight: 350;
     text-align: left;
   }
 `;

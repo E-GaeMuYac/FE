@@ -797,7 +797,13 @@ const LaptopCompare = () => {
                           </div>
                           <div className='desc'>{materialExplainDesc}</div>
                         </MatrialExplainWrap>
-                        <div className='legendTitle'>
+                        <div
+                          className='legendTitle'
+                          style={{
+                            marginLeft: 'auto',
+                            justifyContent: 'right',
+                            display: 'flex',
+                          }}>
                           유효성분 함량
                           {allergy2 ? (
                             <WarningAllergyTrue>
@@ -1182,7 +1188,7 @@ const SubWrap = styled.div`
     font-size: 25px;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1243,7 +1249,7 @@ const SubWrap = styled.div`
   .graphNameBox {
     width: 140px;
   }
-  .graphName {
+  .graphName1 {
     @media screen and (max-width: 1700px) {
       padding: 7px 10px;
     }
@@ -1304,12 +1310,13 @@ const SubWrap = styled.div`
       padding: 8px;
     }
     position: absolute;
-    top: 35px;
+    top: 30px;
     max-width: 177px;
     padding: 12px 10px;
     color: white;
     border-radius: 8px;
-    background-color: rgba(0, 0, 0, 0.65);
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(11.5px);
     word-break: break-all;
   }
   .totalAmountWrap.A .totalAmountDesc {
@@ -1338,7 +1345,7 @@ const SubWrap = styled.div`
     right: 19px;
   }
   .totalAmountWrap.B .totalAmountDesc::after {
-    left: 81px;
+    left: 71px;
   }
   #chartdiv {
     width: 430px;
@@ -1364,7 +1371,7 @@ const SubWrap = styled.div`
   }
   .versusContentMaterialWrap ul li {
     font-size: 20px;
-    height: 68px;
+    height: 80px;
     display: flex;
     align-items: center;
   }
@@ -1505,15 +1512,13 @@ const SubWrap = styled.div`
       right: -50px;
       text-align: center;
       width: 256px;
-      padding: 12px;
+      padding: 12px 10px;
       font-size: 14px;
       line-height: 22px;
       font-weight: 350;
       color: #ffffff;
       opacity: 1;
       z-index: 2;
-      font-weight: 400;
-      font-size: 14px;
       word-break: break-all;
       text-align: left;
     }
@@ -1594,12 +1599,14 @@ const NothingInBoxWrap = styled.div`
 const MatrialExplainWrap = styled.div`
   display: ${({ Active }) => (Active ? 'block' : 'none')};
   width: 259px;
-  background-color: rgba(0, 0, 0, 0.54);
-  padding: 29px 24px 16px;
-  border-radius: 24px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(11.5px);
+  padding: 15px 30px 20px 30px;
+  /* padding: 29px 24px 16px; */
+  border-radius: 15px;
   line-height: 34px;
   position: absolute;
-  left: 6px;
+  left: 2px;
   z-index: 1;
   color: white;
   /* top: ${({ BoxY }) => `${BoxY - 15}px`}; */
@@ -1607,13 +1614,15 @@ const MatrialExplainWrap = styled.div`
 
   backdrop-filter: blur(5px);
   .title {
+    margin-top: 15px;
     font-size: 20px;
     margin-bottom: 15px;
     display: flex;
     /* align-items: center; */
     color: #87a5ff;
-    font-weight: bold;
+    font-weight: 700;
     min-height: 65px;
+    /* margin-left: 6px; */
   }
   .title span {
     min-width: 56px;
@@ -1625,12 +1634,13 @@ const MatrialExplainWrap = styled.div`
   .desc {
     font-size: 16px;
     line-height: 34px;
+    font-weight: 400;
   }
 `;
 
 const WarningAllergyTrue = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 128px;
+    width: 120px;
     height: 30px;
   }
   width: 140px;
@@ -1646,9 +1656,6 @@ const WarningAllergyTrue = styled.div`
   justify-content: center;
   margin-left: 8px;
   color: #ff392b;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 20px;
   .allergyTrueIcon {
     @media screen and (max-width: 1700px) {
       width: 18px;
@@ -1668,7 +1675,9 @@ const WarningAllergyTrue = styled.div`
     @media screen and (max-width: 1700px) {
       font-size: 15px;
     }
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 20px;
   }
   :hover .allergyAmountIcon {
     display: block;
@@ -1711,8 +1720,9 @@ const WarningAllergyTrue = styled.div`
 
 const WarningAllergyFalse = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 128px;
+    width: 120px;
     height: 30px;
+    margin-left: 6px;
   }
   width: 140px;
   height: 34px;
@@ -1727,9 +1737,6 @@ const WarningAllergyFalse = styled.div`
   justify-content: center;
   margin-left: 8px;
   color: #03935b;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 20px;
   .allergyFalseIcon {
     @media screen and (max-width: 1700px) {
       width: 18px;
@@ -1749,7 +1756,9 @@ const WarningAllergyFalse = styled.div`
     @media screen and (max-width: 1700px) {
       font-size: 15px;
     }
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 20px;
   }
   :hover .allergyAmountIcon {
     display: block;

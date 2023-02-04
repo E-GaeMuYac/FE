@@ -12,24 +12,24 @@ const MiniNav = () => {
       {currentLocation === '/allergy' && (
         <>
           <LinkNav to='/mypage'>마이페이지</LinkNav>
-          <SpanNav>▶</SpanNav>
+          <SpanNav />
           <LinkNav to='/allergy'>알레르기 등록</LinkNav>
         </>
       )}
       {currentLocation.includes('/reviewform') && (
         <>
           <LinkNav to='/search'>검색하기</LinkNav>
-          <SpanNav>▶</SpanNav>
-          <LinkNav to={`/detail/${id}`}>상세 페이지</LinkNav>
-          <SpanNav>▶</SpanNav>
+          <SpanNav />
+          <LinkNav to={`/detail/${id}?tab=효능 효과`}>상세 페이지</LinkNav>
+          <SpanNav />
           <LinkNav to={`/detail/${id}/reviewform`}>리뷰 작성하기</LinkNav>
         </>
       )}
       {currentLocation === `/detail/${id}` && (
         <>
           <LinkNav to='/search'>검색하기</LinkNav>
-          <SpanNav>▶</SpanNav>
-          <LinkNav to={`/detail/${id}`}>상세 페이지</LinkNav>
+          <SpanNav />
+          <LinkNav to={`/detail/${id}?tab=효능 효과`}>상세 페이지</LinkNav>
         </>
       )}
     </Wrapper>
@@ -37,10 +37,6 @@ const MiniNav = () => {
 };
 
 const Wrapper = styled.div`
-  @media screen and (max-width: 1700px) {
-    padding-top: 5px;
-    font-size: 15px;
-  }
   width: 100%;
   min-width: 1024px;
   height: 38px;
@@ -52,17 +48,17 @@ const Wrapper = styled.div`
 
 const LinkNav = styled(Link)`
   color: #868686 !important;
-  font-weight: bold;
+  font-weight: 500;
+  font-size: 15px;
   margin: 0 5px;
   text-decoration: none;
 `;
 
-const SpanNav = styled.span`
-  color: #868686;
-  font-weight: bold;
-  margin: 0 5px;
-  display: flex;
-  align-items: center;
+const SpanNav = styled.div`
+  background-image: url('/assets/image/miniNavArrow.png');
+  background-size: cover;
+  width: 20px;
+  height: 20px;
 `;
 
 export default MiniNav;

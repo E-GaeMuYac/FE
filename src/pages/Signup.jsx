@@ -93,6 +93,8 @@ const Signup = () => {
   const [readOnlyPhoneNumber, setReadOnlyPhoneNumber] = useState(false);
   const [readOnlyPhoneCode, setReadOnlyPhoneCode] = useState(true);
 
+  const [disabledSubmit, setDisabledSubmit] = useState(true);
+
   const [emailBtnColor, setEmailBtnColor] = useState('#8bc790');
   const [emailCodeBtnColor, setEmailCodeBtnColor] = useState('#8bc790');
 
@@ -591,6 +593,7 @@ const Signup = () => {
         phoneNumber: strPhoneNumber,
       });
       navigate('/login');
+      setDisabledSubmit(false);
       alert('회원가입 완료!\npillnuts에 오신 것을 환영합니다 :)');
     }
   };
@@ -845,7 +848,10 @@ const Signup = () => {
           </FormBox>
           <NavBtnWrapper>
             <NavBackBtn to='/'>뒤로</NavBackBtn>
-            <NavSubmitBtn type='submit' onClick={onSubmitHandler}>
+            <NavSubmitBtn
+              disabled={disabledSubmit}
+              type='submit'
+              onClick={onSubmitHandler}>
               가입하기
             </NavSubmitBtn>
           </NavBtnWrapper>
@@ -1019,20 +1025,20 @@ const ButtonSt = styled.button`
   @media screen and (max-width: 1700px) {
     width: 100px;
     font-size: 12px;
-    margin-top: auto;
   }
+  margin-top: auto;
   width: 125px;
   height: 35px;
   border: none;
   border-radius: 50px;
   margin-left: 5px;
-  margin-top: auto;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: ${(props) => (props.disabled ? '' : '#868686;')};
+  background-color: ${(props) => (props.disabled ? '' : '#f6f7fa')};
   :active {
-    box-shadow: 0px 0px 0 rgb(0, 0, 0, 0.3);
-    background-color: #bebebe !important;
+    /* box-shadow: 0px 0px 0 rgb(0, 0, 0, 0.3);
+    background-color: #bebebe !important; */
   }
 `;
 
@@ -1069,13 +1075,11 @@ const NavSubmitBtn = styled.button`
   height: 44px;
   border: none;
   border-radius: 50px;
-  background-color: #e7e7e7;
-  cursor: pointer;
-  background-color: #3366ff;
+  background-color: ${(props) => (props.disabled ? '#c2d1ff' : '#3366FF')};
   color: #ffffff;
   :active {
-    background-color: #1d51ee;
-    color: #ffffff;
+    /* background-color: #1d51ee;
+    color: #ffffff; */
   }
 `;
 export default Signup;

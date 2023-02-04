@@ -98,8 +98,10 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   );
 };
 
-const Reviews = (props) => {
+const Reviews = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem('accessToken');
+
   const [moreShow, setMoreShow] = useState(0);
   const [reviewArr, setReviewArr] = useState([]);
   const [nickname, setNickname] = useState('');
@@ -109,7 +111,6 @@ const Reviews = (props) => {
   const [sortText, setSortText] = useState('최신순');
   const [pickTag, setpickTag] = useState('전체보기');
   const [openDrop, setOpenDrop] = useState(false);
-  const setIsToken = props.setIsToken;
   const { id } = useParams();
 
   //현재페이지
@@ -134,10 +135,10 @@ const Reviews = (props) => {
 
   useEffect(() => {
     getReviews();
-    GetProfile();
+    getProfile();
   }, [nowPageNum, pickTag, sort]);
 
-  const GetProfile = async () => {
+  const getProfile = async () => {
     try {
       const res = await userApi.get('api/users/find');
       setNickname(res.data.user.nickname);
@@ -153,6 +154,7 @@ const Reviews = (props) => {
         const res = await userApi.get(
           `/api/reviews?medicineId=${id}&page=${nowPageNum}&pageSize=5&order=${sort}`
         );
+        console.log(res);
         setReviewArr(res.data.reviewList);
         setSearchLength(res.data.totalReview);
       } catch (error) {
@@ -213,8 +215,6 @@ const Reviews = (props) => {
     }
   };
 
-  const token = localStorage.getItem('accessToken');
-
   const addReview = () => {
     if (token) {
       navigate(`/detail/${id}/reviewform`);
@@ -251,7 +251,7 @@ const Reviews = (props) => {
             <DropOpen>
               <SortDefault onClick={() => setOpenDrop(false)}>
                 <SortName>{sortText}</SortName>
-                <Arrow>▲</Arrow>
+                <UpArrow />
               </SortDefault>
               <CreatedAt onClick={() => handleDropdown('updatedAt')}>
                 최신순
@@ -263,7 +263,7 @@ const Reviews = (props) => {
           ) : (
             <SortDefault onClick={() => setOpenDrop(true)}>
               <SortName>{sortText}</SortName>
-              <Arrow>▼</Arrow>
+              <DownArrow />
             </SortDefault>
           )}
         </ReviewHeader>
@@ -310,7 +310,8 @@ const Reviews = (props) => {
                       onClick={() => {
                         setMoreShow(review.reviewId);
                       }}>
-                      리뷰 자세히 보기 ▼
+                      리뷰 자세히 보기
+                      <div />
                     </MoreBtn>
                   </>
                 ) : (
@@ -320,7 +321,8 @@ const Reviews = (props) => {
                       onClick={() => {
                         setMoreShow(false);
                       }}>
-                      접기 ▲
+                      접기
+                      <div />
                     </FoldBtn>
                   </>
                 )
@@ -350,14 +352,14 @@ const Reviews = (props) => {
                 <LikeBtn
                   like={review.like}
                   onClick={() => handleLike(review.reviewId)}>
-                  <AiFillLike />
-                  <div>도움 돼요 {review.likeCount}</div>
+                  <div />
+                  도움 돼요
                 </LikeBtn>
                 <DislikeBtn
                   disLike={review.dislike}
                   onClick={() => handleDisLike(review.reviewId)}>
-                  <AiFillDislike />
-                  <div>도움 안돼요</div>
+                  <div />
+                  도움 안돼요
                 </DislikeBtn>
               </Recommend>
               {review.userId === userId ? (
@@ -422,6 +424,7 @@ const ReviewDesc = styled.div`
       font-size: 16px;
     }
     font-size: 20px;
+    font-weight: 350;
   }
 
   span {
@@ -429,7 +432,7 @@ const ReviewDesc = styled.div`
       font-size: 16px;
     }
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 500;
   }
 `;
 
@@ -515,11 +518,32 @@ const SortName = styled.span`
   left: 30px;
 `;
 
-const Arrow = styled.span`
+const UpArrow = styled.span`
   @media screen and (max-width: 1700px) {
-    right: 18px;
-    font-size: 12px;
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    right: 10px;
   }
+  background-image: url('/assets/image/sortArrowUp.png');
+  background-size: cover;
+  width: 26px;
+  height: 26px;
+  position: absolute;
+  right: 10px;
+`;
+
+const DownArrow = styled.span`
+  @media screen and (max-width: 1700px) {
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    right: 10px;
+  }
+  background-image: url('/assets/image/sortArrowDown.png');
+  background-size: cover;
+  width: 26px;
+  height: 26px;
   position: absolute;
   right: 10px;
 `;
@@ -544,7 +568,6 @@ const CreatedAt = styled.div`
     width: 110px;
     height: 35px;
     top: 38px;
-    /* background-color: aqua; */
   }
   width: 130px;
   height: 44px;
@@ -582,7 +605,6 @@ const LikeCount = styled.div`
 const ReviewSorting = styled.div`
   @media screen and (max-width: 1700px) {
     min-height: 40px;
-    /* background-color: aqua; */
   }
   width: 100%;
   min-height: 60px;
@@ -594,21 +616,17 @@ const ReviewSorting = styled.div`
 
 const SortTag = styled.span`
   @media screen and (max-width: 1700px) {
-    height: 32px;
-    min-width: 54px;
+    padding: 8px 12px;
     font-size: 14px;
-    font-weight: 600;
   }
   background-color: ${(props) =>
     props.tag === props.pickTag ? '#3366FF' : '#D0D0D0'};
   color: ${(props) => (props.tag === props.pickTag ? 'white' : '#868686;')};
-  min-width: 64px;
-  height: 46px;
-  padding: 0 10px;
+  padding: 10px 15px;
   border-radius: 87px;
   box-sizing: border-box;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: ${(props) => (props.tag === props.pickTag ? 500 : 400)};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -678,7 +696,6 @@ const AccountBoxImg = styled.div`
   height: 42px;
   border: none;
   border-radius: 50%;
-  cursor: pointer;
 `;
 
 const DateWrited = styled.span`
@@ -693,16 +710,15 @@ const DateWrited = styled.span`
 
 const Description = styled.div`
   @media screen and (max-width: 1700px) {
-    padding: 30px 0px 10px 8px;
+    padding: 20px 0px 5px 0px;
   }
-  /* background-color: aqua; */
   width: 100%;
   padding-top: 20px;
 `;
 
 const DescSum = styled.div`
   @media screen and (max-width: 1700px) {
-    font-size: 15px;
+    font-size: 18px;
   }
   font-size: 24px;
   word-break: break-all;
@@ -714,7 +730,7 @@ const DescSum = styled.div`
 
 const DescWhole = styled.div`
   @media screen and (max-width: 1700px) {
-    font-size: 15px;
+    font-size: 18px;
   }
   font-size: 24px;
   word-break: break-all;
@@ -724,34 +740,70 @@ const MoreBtn = styled.button`
   @media screen and (max-width: 1700px) {
     font-size: 14px;
     margin-bottom: 10px;
+    padding: 2px 8px;
+    gap: 3px;
   }
   background-color: #e7e7e7;
   appearance: none;
   margin: 15px 0;
-  padding: 5px 10px;
+  padding: 3px 12px;
   border-radius: 8px;
   border: none;
   color: #3366ff;
-  font-weight: bold;
+  font-weight: 500;
   font-size: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
   cursor: pointer;
+
+  div {
+    @media screen and (max-width: 1700px) {
+      width: 22px;
+      height: 22px;
+    }
+    background-image: url('/assets/image/moreArrow.png');
+    background-size: cover;
+    width: 26px;
+    height: 26px;
+  }
 `;
 
 const FoldBtn = styled.button`
   @media screen and (max-width: 1700px) {
     font-size: 14px;
     margin-bottom: 10px;
+    padding: 2px 8px;
+    gap: 3px;
   }
   background-color: #e7e7e7;
   appearance: none;
   margin: 15px 0;
-  padding: 5px 10px;
+  padding: 3px 12px;
   border-radius: 8px;
   border: none;
   color: #3366ff;
-  font-weight: bold;
+  font-weight: 500;
   font-size: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
   cursor: pointer;
+
+  div {
+    @media screen and (max-width: 1700px) {
+      width: 22px;
+      height: 22px;
+    }
+    background-image: url('/assets/image/foldArrow.png');
+    background-size: cover;
+    width: 26px;
+    height: 26px;
+  }
 `;
 
 const Exception = styled.div`
@@ -761,7 +813,7 @@ const Exception = styled.div`
   }
   width: 100%;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 500;
   display: flex;
   padding: 10px 0;
   span {
@@ -786,61 +838,80 @@ const Recommend = styled.div`
 
 const LikeBtn = styled.button`
   @media screen and (max-width: 1700px) {
-    min-width: 110px;
-    width: 110px;
-    max-width: 130px;
-    height: 30px;
+    padding: 5px 14px;
     font-size: 13px;
   }
-  width: 127px;
-  height: 36px;
+  padding: 6.5px 15px;
   border-radius: 87px;
   border: none;
   background-color: ${({ like }) => (like ? '#3366FF' : '#e7e7e7')};
   color: ${({ like }) => (like ? '#ffffff' : '#868686')};
+  font-size: 16px;
+  font-weight: ${({ like }) => (like ? '400' : '350')};
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   div {
-    text-indent: 5px;
+    @media screen and (max-width: 1700px) {
+      width: 20px;
+      height: 20px;
+      margin-right: 4px;
+    }
+    background-image: ${({ like }) =>
+      like
+        ? `url('/assets/image/ThumbsUp2.png')`
+        : `url('/assets/image/ThumbsUp1.png')`};
+    background-size: cover;
+    width: 24px;
+    height: 24px;
+    margin-right: 6px;
   }
 `;
 
 const DislikeBtn = styled.button`
   @media screen and (max-width: 1700px) {
-    min-width: 110px;
-    width: 110px;
-    max-width: 130px;
-    height: 30px;
+    padding: 5px 14px;
     font-size: 13px;
   }
-  width: 127px;
-  height: 36px;
+  padding: 6.5px 15px;
   border-radius: 87px;
   border: none;
   background-color: ${({ disLike }) => (disLike ? '#3366FF' : '#e7e7e7')};
   color: ${({ disLike }) => (disLike ? '#ffffff' : '#868686')};
+  font-size: 16px;
+  font-weight: ${({ disLike }) => (disLike ? '400' : '350')};
   display: flex;
   justify-content: center;
   align-items: center;
   div {
-    text-indent: 5px;
+    @media screen and (max-width: 1700px) {
+      width: 20px;
+      height: 20px;
+      margin-right: 4px;
+    }
+    background-image: ${({ disLike }) =>
+      disLike
+        ? `url('/assets/image/ThumbsDown2.png')`
+        : `url('/assets/image/ThumbsDown1.png')`};
+    background-size: cover;
+    width: 24px;
+    height: 24px;
+    margin-right: 6px;
   }
 `;
 
 const EditBtn = styled(Link)`
   @media screen and (max-width: 1700px) {
-    width: 100px;
-    height: 30px;
+    padding: 5px 14px;
     font-size: 13px;
     margin-top: 10px;
   }
-  width: 123px;
-  height: 36px;
+  padding: 6.5px 15px;
   border-radius: 87px;
   background-color: #868686;
   color: white !important;
+  font-weight: 350;
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -862,16 +933,15 @@ const EditBtn = styled(Link)`
 
 const ReportBtn = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 100px;
-    height: 30px;
+    padding: 5px 14px;
     font-size: 13px;
     margin-top: 10px;
   }
-  width: 123px;
-  height: 36px;
+  padding: 6.5px 15px;
+  line-height: 23px;
   border-radius: 87px;
-  background-color: #ffd3ce;
-  color: #ff392b;
+  background-color: #e7e7e7;
+  color: #868686;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -880,13 +950,13 @@ const ReportBtn = styled.div`
     @media screen and (max-width: 1700px) {
       width: 20px;
       height: 20px;
-      margin-right: 6px;
+      margin-right: 4px;
     }
-    background-image: url('/assets/image/warnIcon.png');
+    background-image: url('/assets/image/report.png');
     background-size: cover;
     width: 24px;
     height: 24px;
-    margin-right: 10px;
+    margin-right: 6px;
   }
 `;
 

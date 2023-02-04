@@ -48,3 +48,15 @@ export const compareBoxData = atom({
   },
   effects: [localStorageEffect('compareBoxData')],
 });
+
+export const userInfoState = atom({
+  key: 'userInfo',
+  default: {
+    email: '',
+    imageUrl: '',
+    loginCount: 0,
+    loginType: '',
+    nickname: '',
+    userId: 0,
+  },
+});

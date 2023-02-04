@@ -10,10 +10,20 @@ const Spinner = () => {
 };
 
 const Wrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    margin-top: 220px;
+  }
+  background-color: transparent;
   width: 100%;
-  height: 1080px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: auto;
+  z-index: 9999;
   display: flex;
-  align-items: center;
+  margin-top: 270px;
   justify-content: center;
 `;
 
@@ -30,8 +40,12 @@ const shake = keyframes`
   `;
 
 const Box = styled.div`
-  width: 659px;
-  height: 526px;
+  @media screen and (max-width: 1700px) {
+    width: 294px;
+    height: 235px;
+  }
+  width: 368px;
+  height: 294px;
   background-image: url('/assets/image/spinner.png');
   background-size: cover;
   background-position: center;

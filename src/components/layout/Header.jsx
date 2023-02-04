@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { userApi } from '../../apis/apiInstance';
+import { useRecoilState } from 'recoil';
+import { userInfoState } from '../../recoil/recoilStore';
+import { useGetProfile } from '../../query/userQuery';
 
 const Nav = ({ page }) => {
   const location = useLocation();
@@ -32,45 +35,32 @@ const Nav = ({ page }) => {
   );
 };
 
-const Header = (props) => {
+const Header = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem('refreshToken');
 
-  const isToken = props.istoken;
-  const setIsToken = props.setistoken;
-
-  const userImage = props.userimage;
-  const setUserImage = props.setuserimage;
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const userData = useGetProfile(token).data;
 
   useEffect(() => {
-    loginCheck();
-  }, []);
-
-  const loginCheck = () => {
-    const refreshToken = localStorage.getItem('refreshToken');
-    const accessToken = localStorage.getItem('accessToken');
-    if (refreshToken || accessToken) {
-      GetProfile();
-      setIsToken(true);
+    if (token) {
+      if (userData) {
+        setUserInfo({
+          email: userData.data.user.email,
+          imageUrl: userData.data.user.imageUrl,
+          loginCount: userData.data.user.loginCount,
+          loginType: userData.data.user.loginType,
+          nickname: userData.data.user.nickname,
+          userId: userData.data.user.userId,
+        });
+      }
     }
-  };
-
-  const GetProfile = async () => {
-    try {
-      const res = await userApi.get('api/users/find');
-      setUserImage(res.data.user.imageUrl);
-    } catch (e) {
-      console.error(e);
-      localStorage.clear();
-      navigate('/login');
-    }
-  };
+  }, [userData]);
 
   const logoutHandler = async () => {
     try {
-      const res = await userApi.put('api/users/logout');
-      alert(res.data.message);
+      await userApi.put('api/users/logout');
       localStorage.clear();
-      setIsToken(false);
       navigate('/login');
     } catch (e) {
       console.log(e);
@@ -88,7 +78,6 @@ const Header = (props) => {
     navigate('/mypage?tab=내가 찜한 의약품');
   };
 
-  const token = localStorage.getItem('accessToken');
   // ---------------------------------------------------------------------
 
   return (
@@ -110,7 +99,7 @@ const Header = (props) => {
             <SignBox>
               <BackgroundMypageBtn onClick={goToMypage}>
                 <div className='myinfoImg'>
-                  <MypageBtn props={userImage} />
+                  <MypageBtn props={userInfo.imageUrl} />
                 </div>
                 <div className='mypage'>마이페이지</div>
               </BackgroundMypageBtn>
@@ -224,7 +213,7 @@ const LoginBtn = styled(Link)`
     width: 80px;
     height: 34px;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 500;
   }
   background-color: #3366ff;
   width: 100px;
@@ -234,7 +223,7 @@ const LoginBtn = styled(Link)`
   align-items: center;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 500;
   color: white !important;
   border: none;
   border-radius: 8px;
@@ -246,7 +235,7 @@ const SignupBtn = styled(Link)`
     width: 80px;
     height: 34px;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 500;
   }
   background-color: #ebf0ff;
   width: 100px;
@@ -256,7 +245,7 @@ const SignupBtn = styled(Link)`
   align-items: center;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 700;
   color: #3366ff !important;
   border: none;
   border-radius: 8px;
@@ -313,9 +302,9 @@ const LogoutBtn = styled.button`
     width: 80px;
     height: 34px;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 500;
   }
-  background-color: #3366ff;
+  background-color: #242424;
   width: 100px;
   height: 39px;
   display: flex;
@@ -323,7 +312,7 @@ const LogoutBtn = styled.button`
   align-items: center;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
   color: white;
   border: none;
   border-radius: 8px;
