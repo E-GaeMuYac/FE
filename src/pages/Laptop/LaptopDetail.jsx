@@ -143,14 +143,8 @@ const Detail = () => {
             categoryField: 'material',
             centerX: am5.percent(-22.5),
             y: am5.percent(-4),
-            legendValueText: '[{fill}]{category}',
-            legendLabelText: `[bold {fill}]{value.formatNumber('#.##')}mg`,
-            // legendValueText: objGraph.materialName[i].allergy
-            //   ? '[#FF392B]{category}'
-            //   : '[{fill}]{category}',
-            // legendLabelText: objGraph.materialName[i].allergy
-            //   ? `[bold #FF392B]{value.formatNumber('#.#')}mg`
-            //   : `[bold {fill}]{value.formatNumber('#.#')}mg`,
+            legendValueText: '{category}',
+            legendLabelText: `{value.formatNumber('#.##')}mg`,
           })
         );
 
@@ -174,90 +168,65 @@ const Detail = () => {
           .set('colors', [
             objGraph.materialName[0]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x091a7a),
+              : am5.color('#3366FF'),
             objGraph.materialName[1]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x102693),
+              : am5.color('#102693'),
             objGraph.materialName[2]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x1939b7),
+              : am5.color('#1939B7'),
             objGraph.materialName[3]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x254edb),
+              : am5.color('#6690FF'),
             objGraph.materialName[4]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x3366ff),
+              : am5.color('#091A7A'),
             objGraph.materialName[5]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x6690ff),
+              : am5.color('#7433FF'),
             objGraph.materialName[6]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x84a9ff),
+              : am5.color('#2D1093'),
             objGraph.materialName[7]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0xadc8ff),
+              : am5.color('#4119B7'),
             objGraph.materialName[8]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x13097a),
+              : am5.color('#9B66FF'),
             objGraph.materialName[9]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x1d1093),
+              : am5.color('#1E097A'),
             objGraph.materialName[10]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x2b19b7),
+              : am5.color('#00CFA5'),
             objGraph.materialName[11]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x3c25db),
+              : am5.color('#006E78'),
             objGraph.materialName[12]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x5033ff),
+              : am5.color('#009593'),
             objGraph.materialName[13]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x7e66ff),
+              : am5.color('#38E2AF'),
             objGraph.materialName[14]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x9984ff),
+              : am5.color('#005163'),
             objGraph.materialName[15]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0xbcadff),
+              : am5.color('#5598FC'),
             objGraph.materialName[16]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x0b2d78),
+              : am5.color('#1B3C92'),
             objGraph.materialName[17]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x124092),
+              : am5.color('#2A57B5'),
             objGraph.materialName[18]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x1d5cb5),
+              : am5.color('#7FB6FD'),
             objGraph.materialName[19]?.allergy
               ? am5.color(0xff392b)
-              : am5.color(0x2a7bd8),
-            objGraph.materialName[20]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color(0x3a9efc),
-            objGraph.materialName[21]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color(0x6bbdfd),
-            objGraph.materialName[22]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color(0x88d1fe),
-            objGraph.materialName[23]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color(0xb0e4fe),
+              : am5.color('#102978'),
           ]);
-
-        //        [
-        //           am5.color(0x091a7a),
-        //           am5.color(0x102693),
-        //           am5.color(0x1939b7),
-        //           am5.color(0x254edb),
-        //           am5.color(0x3366ff),
-        //           am5.color(0x6690ff),
-        //           am5.color(0x84a9ff),
-        //           am5.color(0xadc8ff),
-        //           am5.color(0xd6e4ff),
-        //         ]
-        //   );
 
         // 그래프 마우스 오버 시 툴팁
         series.slices.template.set(
@@ -313,7 +282,10 @@ const Detail = () => {
           // minWidth: 80,
           marginRight: 10,
           // marginLeft: 60,
-          fontSize: 17,
+          fontSize: 16,
+          fontFamily: 'Noto Sans KR',
+          fill: '#242424',
+          fontWeight: 500,
           lineHeight: 1.7,
           minWidth: 65,
           // height: 30,
@@ -327,6 +299,7 @@ const Detail = () => {
           minWidth: 150,
           fontSize: 16,
           fontFamily: 'Noto Sans KR',
+          fill: '#242424',
           fontWeight: 500,
           lineHeight: 1.7,
           oversizedBehavior: 'truncate',

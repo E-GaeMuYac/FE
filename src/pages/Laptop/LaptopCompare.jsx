@@ -289,8 +289,8 @@ const LaptopCompare = () => {
               endAngle: -270,
 
               tooltip: tootip,
-              legendValueText: '[{fill}]{category}',
-              legendLabelText: `[bold {fill}]{value.formatNumber('#.#')}mg`,
+              legendValueText: '{category}',
+              legendLabelText: `{value.formatNumber('#.#')}mg`,
             })
           );
           series.slices.template.setAll({
@@ -301,28 +301,25 @@ const LaptopCompare = () => {
             .get('colors')
             .set('colors', [
               am5.color('#3366FF'),
-              am5.color('#84A9FF'),
-              am5.color('#254EDB'),
-              am5.color('#6690FF'),
+              am5.color('#102693'),
               am5.color('#1939B7'),
-              am5.color('#84A9FF'),
+              am5.color('#6690FF'),
+              am5.color('#091A7A'),
               am5.color('#7433FF'),
-              am5.color('#B384FF'),
-              am5.color('#5925DB'),
+              am5.color('#2D1093'),
+              am5.color('#4119B7'),
               am5.color('#9B66FF'),
-              am5.color('#9B66FF'),
+              am5.color('#1E097A'),
               am5.color('#00CFA5'),
-              am5.color('#60F0B7'),
-              am5.color('#00B29E'),
-              am5.color('#38E2AF'),
+              am5.color('#006E78'),
               am5.color('#009593'),
-              am5.color('#60F0B7'),
+              am5.color('#38E2AF'),
+              am5.color('#005163'),
               am5.color('#5598FC'),
-              am5.color('#99C9FE'),
-              am5.color('#3E75D8'),
-              am5.color('#7FB6FD'),
+              am5.color('#1B3C92'),
               am5.color('#2A57B5'),
-              am5.color('#99C9FE'),
+              am5.color('#7FB6FD'),
+              am5.color('#102978'),
             ]);
 
           series.data.setAll(graphData);
@@ -347,8 +344,8 @@ const LaptopCompare = () => {
               startAngle: -90,
               endAngle: 90,
               tooltip: tootip,
-              legendValueText: '[{fill}]{category}',
-              legendLabelText: `[bold {fill}]{value.formatNumber('#.#')}mg`,
+              legendValueText: '{category}',
+              legendLabelText: `{value.formatNumber('#.#')}mg`,
             })
           );
 
@@ -357,28 +354,25 @@ const LaptopCompare = () => {
             .get('colors')
             .set('colors', [
               am5.color('#3366FF'),
-              am5.color('#84A9FF'),
-              am5.color('#254EDB'),
-              am5.color('#6690FF'),
+              am5.color('#102693'),
               am5.color('#1939B7'),
-              am5.color('#84A9FF'),
+              am5.color('#6690FF'),
+              am5.color('#091A7A'),
               am5.color('#7433FF'),
-              am5.color('#B384FF'),
-              am5.color('#5925DB'),
+              am5.color('#2D1093'),
+              am5.color('#4119B7'),
               am5.color('#9B66FF'),
-              am5.color('#9B66FF'),
+              am5.color('#1E097A'),
               am5.color('#00CFA5'),
-              am5.color('#60F0B7'),
-              am5.color('#00B29E'),
-              am5.color('#38E2AF'),
+              am5.color('#006E78'),
               am5.color('#009593'),
-              am5.color('#60F0B7'),
+              am5.color('#38E2AF'),
+              am5.color('#005163'),
               am5.color('#5598FC'),
-              am5.color('#99C9FE'),
-              am5.color('#3E75D8'),
-              am5.color('#7FB6FD'),
+              am5.color('#1B3C92'),
               am5.color('#2A57B5'),
-              am5.color('#99C9FE'),
+              am5.color('#7FB6FD'),
+              am5.color('#102978'),
             ]);
           series2.slices.template.setAll({
             templateField: 'columnSettings',
@@ -1261,7 +1255,7 @@ const SubWrap = styled.div`
   .graphNameBox {
     width: 140px;
   }
-  .graphName1 {
+  .graphName {
     @media screen and (max-width: 1700px) {
       padding: 7px 10px;
     }
