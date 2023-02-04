@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-const Tab = ({ list, query, location }) => {
+const Tab = ({ list, query, location, totalCount }) => {
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
 
@@ -19,13 +19,21 @@ const Tab = ({ list, query, location }) => {
   }, [list, query]);
 
   return (
-    <TabName isActive={isActive} onClick={changeTab}>
-      {list}
-    </TabName>
+    <>
+      {list === '리뷰' ? (
+        <TabName isActive={isActive} onClick={changeTab}>
+          {list}({totalCount})
+        </TabName>
+      ) : (
+        <TabName isActive={isActive} onClick={changeTab}>
+          {list}
+        </TabName>
+      )}
+    </>
   );
 };
 
-const TabBar = ({ location, query }) => {
+const TabBar = ({ location, query, totalCount }) => {
   const [tabList, setTabList] = useState([
     '카테고리1',
     '카테고리2',
@@ -58,7 +66,13 @@ const TabBar = ({ location, query }) => {
     <Wrap>
       <ul>
         {tabList.map((list) => (
-          <Tab key={list} location={location} list={list} query={query} />
+          <Tab
+            key={list}
+            location={location}
+            list={list}
+            query={query}
+            totalCount={totalCount}
+          />
         ))}
       </ul>
     </Wrap>
@@ -75,24 +89,20 @@ const Wrap = styled.div`
   margin-bottom: 16px;
   border-bottom: 2px solid #d9d9d9;
   ul {
-    @media screen and (max-width: 1700px) {
-      gap: 2px;
-    }
     padding: 0px;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     list-style: none;
-    gap: 30px;
   }
 `;
 const TabName = styled.li`
   @media screen and (max-width: 1700px) {
     font-size: 16px;
-    width: 100px;
+    width: 120px;
   }
-  width: 100px;
+  width: 140px;
   height: 100%;
   display: flex;
   align-items: center;
@@ -105,9 +115,11 @@ const TabName = styled.li`
 
   ${({ isActive }) =>
     isActive
-      ? `&::after {
+      ? `&::after {@media screen and (max-width: 1700px) {
+    width: 120px;
+  }
     content: '';
-    width: 100px;
+    width: 140px;
     height: 3px;
     position: absolute;
     left: 0;
