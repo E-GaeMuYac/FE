@@ -159,7 +159,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   background-color: white;
-  box-shadow: 2px 2px 32px #bdbcbc;
+  box-shadow: 2px 2px 32px rgba(10, 32, 98, 0.15);
   border-radius: 40px;
 `;
 
@@ -173,6 +173,7 @@ const LoginWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `;
 
 const LogoWrapper = styled.div`
@@ -253,6 +254,15 @@ const SaveId = styled.div`
   margin-top: 30px;
   display: flex;
   align-items: center;
+
+  label {
+    @media screen and (max-width: 1700px) {
+      font-size: 14px;
+    }
+    font-size: 16px;
+    color: #868686;
+    font-weight: 400;
+  }
 `;
 
 const CheckBox = styled.input`
@@ -263,9 +273,9 @@ const CheckBox = styled.input`
   appearance: none;
   width: 25px;
   height: 25px;
-  margin: 8px;
+  margin-right: 8px;
   display: inline-block;
-  border: 3px solid #bcbcbc;
+  border: 2px solid #bcbcbc;
   border-radius: 3px;
   cursor: pointer;
 
@@ -286,16 +296,18 @@ const CheckBox = styled.input`
 
 const ManageAccount = styled.div`
   @media screen and (max-width: 1700px) {
-    margin-top: 5px;
+    top: 298px;
   }
   display: flex;
   flex-direction: row;
-  margin-top: 30px;
+  position: absolute;
+  top: 465px;
+  left: 0;
 `;
 
 const SignUp = styled(Link)`
   @media screen and (max-width: 1700px) {
-    font-size: 15px;
+    font-size: 14px;
   }
   width: 90px;
   border-right: 2px solid #eaeaea;
@@ -306,7 +318,8 @@ const SignUp = styled(Link)`
 
 const FindAccount = styled(Link)`
   @media screen and (max-width: 1700px) {
-    font-size: 15px;
+    font-size: 14px;
+    margin-left: 30px;
   }
   margin-left: 28px;
   font-size: 16px;
@@ -316,11 +329,11 @@ const FindAccount = styled(Link)`
 
 const SocialLogin = styled.div`
   @media screen and (max-width: 1700px) {
-    margin-top: 12px;
+    margin-top: 55px;
   }
   width: 100%;
   height: 150px;
-  margin-top: 30px;
+  margin-top: 80px;
   display: flex;
   flex-direction: column;
 `;

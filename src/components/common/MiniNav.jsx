@@ -11,7 +11,7 @@ const MiniNav = () => {
     <Wrapper>
       {currentLocation === '/allergy' && (
         <>
-          <LinkNav to='/mypage'>마이페이지</LinkNav>
+          <LinkNav to='/mypage?tab=나의 알레르기'>마이페이지</LinkNav>
           <SpanNav />
           <LinkNav to='/allergy'>알레르기 등록</LinkNav>
         </>

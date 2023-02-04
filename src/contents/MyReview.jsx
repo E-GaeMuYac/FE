@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { IoIosWarning } from 'react-icons/io';
-import { AiFillLike, AiFillDislike } from 'react-icons/ai';
 import { useEffect } from 'react';
 import { userApi } from '../apis/apiInstance';
 import { Link } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { userInfoState } from '../recoil/recoilStore';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
@@ -96,7 +96,9 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   );
 };
 
-const MyReviews = ({ userId }) => {
+const MyReviews = () => {
+  const userId = useRecoilValue(userInfoState).userId;
+  console.log(userId);
   const [moreShow, setMoreShow] = useState(0);
   const [myReviewArr, setMyReviewArr] = useState([]);
   const [searchLength, setSearchLength] = useState(0);
@@ -106,16 +108,18 @@ const MyReviews = ({ userId }) => {
 
   useEffect(() => {
     getMyReviews();
-  }, [nowPageNum]);
+  }, [userId, nowPageNum]);
 
   const getMyReviews = async () => {
+    console.log(userId);
+    console.log(nowPageNum);
     try {
       const res = await userApi.get(
         `/api/reviews/myreview?userId=${userId}&page=${nowPageNum}&pageSize=5`
       );
+      console.log(res);
       setSearchLength(res.data.totalReview);
       setMyReviewArr(res.data.reviewList);
-      setSearchLength(res.data.totalReview);
     } catch (error) {
       console.log(error);
     }
@@ -233,7 +237,7 @@ const MyReviews = ({ userId }) => {
                 disLike={review.dislike}
                 onClick={() => handleDisLike(review.reviewId)}>
                 <div />
-                도움 안돼요
+                도움 안돼요 {review.dislikeCount}
               </DislikeBtn>
             </Recommend>
             <DateWrited>
@@ -287,7 +291,6 @@ const WrapContents = styled.div`
   margin: auto;
   align-items: center;
   display: flex;
-  /* justify-content: space-between; */
 
   .firstWrap {
     @media screen and (max-width: 1700px) {
@@ -391,7 +394,7 @@ const WrapContents = styled.div`
       justify-content: center;
     }
     .delete {
-      background-color: red;
+      background-color: #242424;
     }
   }
 `;

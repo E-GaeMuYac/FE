@@ -215,7 +215,7 @@ const LoginBtn = styled(Link)`
     font-size: 13px;
     font-weight: 500;
   }
-  background-color: #3366ff;
+  background-color: #ebf0ff;
   width: 100px;
   height: 39px;
   display: flex;
@@ -223,8 +223,8 @@ const LoginBtn = styled(Link)`
   align-items: center;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 500;
-  color: white !important;
+  font-weight: 700;
+  color: #3366ff !important;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -237,7 +237,7 @@ const SignupBtn = styled(Link)`
     font-size: 13px;
     font-weight: 500;
   }
-  background-color: #ebf0ff;
+  background-color: #3366ff;
   width: 100px;
   height: 39px;
   display: flex;
@@ -245,8 +245,8 @@ const SignupBtn = styled(Link)`
   align-items: center;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 700;
-  color: #3366ff !important;
+  font-weight: 500;
+  color: white !important;
   border: none;
   border-radius: 8px;
   cursor: pointer;
