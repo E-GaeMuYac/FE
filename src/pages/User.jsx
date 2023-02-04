@@ -369,14 +369,16 @@ const MyPageHeader = styled.div`
   button {
     @media screen and (max-width: 1700px) {
       font-size: 14px;
+      padding: 4px 20px;
     }
-    width: 100px;
-    height: 30px;
+    padding: 5px 22px;
+    line-height: 21px;
     border: none;
     border-radius: 50px;
-    background-color: #242424;
+    background-color: #868686;
     color: #f0f0f0;
     font-size: 15px;
+    font-weight: 350;
   }
   .deleteAccount {
     position: relative;
@@ -387,6 +389,7 @@ const MyPageHeader = styled.div`
       margin: 25px 10px 10px 10px;
     }
     span {
+      background-color: pink;
       font-size: 18px;
       margin: auto;
     }
@@ -401,11 +404,6 @@ const MyPageHeader = styled.div`
       margin-top: 15px;
       margin-bottom: 3px;
       padding: 0 10px;
-    }
-    button {
-      border: none;
-      border-radius: 50px;
-      width: 90px;
     }
   }
 `;

@@ -154,7 +154,6 @@ const Reviews = () => {
         const res = await userApi.get(
           `/api/reviews?medicineId=${id}&page=${nowPageNum}&pageSize=5&order=${sort}`
         );
-        console.log(res);
         setReviewArr(res.data.reviewList);
         setSearchLength(res.data.totalReview);
       } catch (error) {
@@ -334,10 +333,10 @@ const Reviews = () => {
             </Description>
             <Exception>
               <PC>
-                <IoIosWarning size='26' color='#FF772B' />
+                <IoIosWarning size='25' color='#868686' />
               </PC>
               <Laptop>
-                <IoIosWarning size='20' color='#FF772B' />
+                <IoIosWarning size='19' color='#868686' />
               </Laptop>
               <span>면책사항:</span>
               <div>의학적 또는 전문가의 조언이 아닌 사용자의 의견입니다.</div>
@@ -353,7 +352,7 @@ const Reviews = () => {
                   like={review.like}
                   onClick={() => handleLike(review.reviewId)}>
                   <div />
-                  도움 돼요
+                  도움 돼요 {review.likeCount}
                 </LikeBtn>
                 <DislikeBtn
                   disLike={review.dislike}
@@ -817,7 +816,7 @@ const Exception = styled.div`
   display: flex;
   padding: 10px 0;
   span {
-    color: #ff772b;
+    color: #868686;
   }
   div {
     color: #868686;
