@@ -382,7 +382,7 @@ const Detail = () => {
         if (compareData.length === 1) {
           setCompareData({ ...compareData, arr: newArr, isOpen: 'open' });
         } else {
-          setCompareData({ ...compareData, arr: newArr });
+          setCompareData({ ...compareData, arr: newArr, isOpen: 'close' });
         }
 
         break;
