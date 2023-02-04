@@ -4,7 +4,7 @@ import qs from 'qs';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { compareBoxData } from '../../recoil/recoilStore';
-
+import { userApi } from '../../apis/apiInstance';
 import { useGetDetailQuery } from '../../query/detailQuery';
 
 // 그래프 라이브러리
@@ -357,8 +357,22 @@ const Detail = () => {
     }
   }, [objGraph]);
 
+  const [totalCount, setTotalCount] = useState(0);
   const medicineId = param.id;
   const data = useGetDetailQuery(medicineId);
+
+  useEffect(() => {
+    getReviewCount();
+  }, []);
+
+  const getReviewCount = async () => {
+    try {
+      const res = await userApi.get(`/api/reviews?medicineId=${medicineId}`);
+      setTotalCount(res.data.totalReview);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // console.log(data);
 
@@ -672,7 +686,7 @@ const Detail = () => {
         </div>
       </TopSection>
       <div style={{ marginBottom: '60px' }}>
-        <TabBar location={location} query={query} />
+        <TabBar location={location} query={query} totalCount={totalCount} />
         {query !== '리뷰' ? (
           <BottomSection>
             <BottomContents medicineInfo={medicineItem} query={query} />
