@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { useEffect } from 'react';
 import { userApi } from '../apis/apiInstance';
 import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
-import { userInfoState } from '../recoil/recoilStore';
+import { useRecoilValue, useRecoilState } from 'recoil';
+import { userInfoState, confirmModalState } from '../recoil/recoilStore';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
@@ -98,7 +98,7 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
 
 const MyReviews = () => {
   const userId = useRecoilValue(userInfoState).userId;
-  console.log(userId);
+  const [aboutConfirm, setAboutConfirm] = useRecoilState(confirmModalState);
   const [moreShow, setMoreShow] = useState(0);
   const [myReviewArr, setMyReviewArr] = useState([]);
   const [searchLength, setSearchLength] = useState(0);
@@ -111,29 +111,48 @@ const MyReviews = () => {
   }, [userId, nowPageNum]);
 
   const getMyReviews = async () => {
-    console.log(userId);
-    console.log(nowPageNum);
     try {
       const res = await userApi.get(
         `/api/reviews/myreview?userId=${userId}&page=${nowPageNum}&pageSize=5`
       );
-      console.log(res);
       setSearchLength(res.data.totalReview);
       setMyReviewArr(res.data.reviewList);
+      console.log(res);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const deleteReview = async (id) => {
-    if (window.confirm('리뷰를 삭제하시겠습니까?')) {
-      try {
-        const res = await userApi.delete(`/api/reviews/${id}`);
-        alert(res.data.message);
-        getMyReviews();
-      } catch (error) {
-        console.log(error);
+  const deleteConfirm = async (reviewId) => {
+    setAboutConfirm({
+      msg: '리뷰를 삭제하시겠습니까?',
+      btn: ['취소하기', '삭제하기'],
+      isOpen: true,
+      reviewId,
+    });
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      if (aboutConfirm.isApprove === true) {
+        deleteReview();
       }
+    }
+    fetchData();
+  }, [aboutConfirm]);
+
+  const deleteReview = async () => {
+    try {
+      await userApi.delete(`/api/reviews/${aboutConfirm.reviewId}`);
+      getMyReviews();
+      setAboutConfirm({
+        msg: '',
+        btn: [],
+        isOpen: false,
+        isApprove: false,
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -183,7 +202,7 @@ const MyReviews = () => {
               </Link>
               <button
                 className='reviewBtn delete'
-                onClick={() => deleteReview(review.reviewId)}>
+                onClick={() => deleteConfirm(review.reviewId)}>
                 삭제하기
               </button>
             </div>

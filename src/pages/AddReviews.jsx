@@ -41,8 +41,7 @@ const AddReviews = () => {
 
   const submitReview = async () => {
     try {
-      const res = await userApi.post(`/api/reviews/${id}`, { review: content });
-      alert(res.data.message);
+      await userApi.post(`/api/reviews/${id}`, { review: content });
       navigate(-1);
     } catch (error) {
       console.log(error);

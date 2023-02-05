@@ -76,9 +76,6 @@ export const useEditNickname = () => {
     onSuccess: () => {
       queryClient.invalidateQueries('getProfile');
     },
-    onError: () => {
-      alert('정보 수정에 실패하였습니다.');
-    },
   });
 };
 
@@ -89,9 +86,6 @@ export const useDefaultImage = () => {
     mutationFn: defaultImage,
     onSuccess: () => {
       queryClient.invalidateQueries('getProfile');
-    },
-    onError: () => {
-      alert('정보 수정에 실패하였습니다.');
     },
   });
 };
@@ -110,9 +104,6 @@ export const usePutS3Upload = () => {
     mutationFn: putS3Upload,
     onSuccess: () => {
       queryClient.invalidateQueries('getProfile');
-    },
-    onError: () => {
-      alert('정보 수정에 실패하였습니다.');
     },
   });
 };

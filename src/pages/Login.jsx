@@ -74,7 +74,11 @@ const Login = () => {
       navigate('/');
     } catch (e) {
       console.log(e);
-      alert('로그인에 실패하였습니다.');
+      setAboutAlert({
+        msg: '로그인에 실패하였습니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
     }
   };
 

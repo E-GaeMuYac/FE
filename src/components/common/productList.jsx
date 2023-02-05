@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { compareBoxData } from '../../recoil/recoilStore';
+import { compareBoxData, alertModalState } from '../../recoil/recoilStore';
 import LikeItBtn from './LikeItBtn';
 
 const ProductList = ({ list }) => {
   const navigate = useNavigate();
   const [compareData, setCompareData] = useRecoilState(compareBoxData);
+  const setAboutAlert = useSetRecoilState(alertModalState);
 
   const goToDetail = (id) => {
     navigate(`/detail/${id}?tab=효능 효과`);
@@ -30,7 +31,11 @@ const ProductList = ({ list }) => {
         count++;
       }
       if (count === 2) {
-        alert('비교함이 가득 찼습니다.');
+        setAboutAlert({
+          msg: '비교함이 가득 찼습니다.',
+          btn: '확인하기',
+          isOpen: true,
+        });
       }
     }
   };
