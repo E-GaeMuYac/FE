@@ -901,6 +901,7 @@ const MainWrap = styled.div`
 `;
 const VersusCardWrap = styled.div`
   position: relative;
+
   .card {
     @media screen and (max-width: 1700px) {
       width: 280px;
@@ -1043,7 +1044,7 @@ const VersusCardWrap = styled.div`
 `;
 const SubWrap = styled.div`
   width: 100%;
-  margin-bottom: 60px;
+  margin: 30px 0px 60px;
   .content {
     width: 100%;
     display: flex;
@@ -1059,7 +1060,7 @@ const SubWrap = styled.div`
     width: 100%;
     background-color: #f6f7fa;
     border-radius: 25px;
-    padding: 30px 30px 35px;
+    padding: 30px 30px 130px;
     white-space: pre-wrap;
     word-break: break-all;
     min-height: 530px;
