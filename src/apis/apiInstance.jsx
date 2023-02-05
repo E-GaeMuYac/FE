@@ -17,6 +17,10 @@ api.interceptors.response.use(
   function (response) {
     if (response.response.data.errorMessage === '로그아웃 된 유저입니다.') {
       localStorage.clear();
+    } else if (
+      response.response.data.errorMessage === '로그인이 유효하지 않습니다.'
+    ) {
+      localStorage.clear();
     }
     return response;
   }
@@ -48,6 +52,10 @@ userApi.interceptors.response.use(
   },
   function (response) {
     if (response.response.data.errorMessage === '로그아웃 된 유저입니다.') {
+      localStorage.clear();
+    } else if (
+      response.response.data.errorMessage === '로그인이 유효하지 않습니다.'
+    ) {
       localStorage.clear();
     }
     return response;
