@@ -210,7 +210,7 @@ const Wrap = styled.div`
     top: 0;
     width: 100%;
     height: 100%;
-    box-shadow: 0 0 24px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 24px 1px rgba(10, 32, 98, 0.15);
     z-index: 2;
     background-color: white;
   }
@@ -225,7 +225,7 @@ const Wrap = styled.div`
     width: 72px;
     height: 55px;
     background-color: #ffffff;
-    box-shadow: 0px 0px 30px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px -2px 30px 0px rgba(10, 32, 98, 0.15);
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -310,17 +310,17 @@ const BoxTop = styled.div`
   }
   .goToCompareBtn {
     @media screen and (max-width: 1700px) {
-      font-size: 15px;
       width: 136px;
       height: 38px;
     }
     width: 170px;
     height: 40px;
     background-color: ${({ isArrLength }) =>
-      isArrLength === 2 ? '#242424' : '#B7B7B7'};
+      isArrLength === 2 ? '#3366ff' : '#B7B7B7'};
     border-radius: 38px;
     border: none;
     color: white;
+    font-size: 14px;
     cursor: ${({ isArrLength }) => (isArrLength === 2 ? 'pointer' : 'auto')};
     font-weight: bold;
   }
@@ -368,16 +368,16 @@ const ListCard = styled.div`
   padding: 48px 24px;
   display: flex;
   align-items: center;
-  cursor: pointer;
   ${({ isFill }) =>
     isFill
       ? `
       background-color: #ffffff;
-      box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
+      box-shadow: 0 0 8px 0 rgba(10, 32, 98, 0.2);
     `
       : `background-color: #E7E7E7;
       justify-content: center;
-      flex-direction: column;`}
+      flex-direction: column;
+      cursor: pointer;`}
   .cardImg {
     @media screen and (max-width: 1700px) {
       min-width: 150px;
@@ -416,6 +416,7 @@ const ListCard = styled.div`
     color: #3366ff;
     font-weight: 500;
     font-size: 13px;
+    line-height: 19px;
   }
   .listSubContent {
     font-size: 14px;
