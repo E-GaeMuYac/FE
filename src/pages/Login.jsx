@@ -3,9 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { api } from '../apis/apiInstance';
 import { useCookies } from 'react-cookie';
+import AlertModal from '../components/common/AlertModal';
+import { useRecoilState } from 'recoil';
+import { alertModalState } from '../recoil/recoilStore';
 
 const Login = () => {
   const token = localStorage.getItem('accessToken');
+  const [aboutAlert, setAboutAlert] = useRecoilState(alertModalState);
 
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(['rememberEmail']);
@@ -47,7 +51,11 @@ const Login = () => {
   const loginHandler = (e) => {
     e.preventDefault();
     if (email === '' || password === '') {
-      alert('아이디와 비밀번호를 모두 입력하세요!');
+      setAboutAlert({
+        msg: '아이디와 비밀번호를 모두 입력하세요!',
+        btn: '확인하기',
+        isOpen: true,
+      });
     } else {
       normalLogin({ email, password });
     }
@@ -87,6 +95,7 @@ const Login = () => {
 
   return (
     <div>
+      {aboutAlert.isOpen && <AlertModal />}
       <BackGround>
         <Wrapper>
           <LoginWrapper>

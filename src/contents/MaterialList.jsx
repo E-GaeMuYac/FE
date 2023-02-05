@@ -10,8 +10,6 @@ const MaterialList = (props) => {
   const toggleMaterial = async (materialId) => {
     try {
       const res = await userApi.put(`/api/allergies/${materialId}`);
-      console.log(res);
-      alert(res.data.msg);
       if (res.data.msg === '알러지 등록에 성공하였습니다.') {
         setIsToggle(true);
       } else {
@@ -138,7 +136,7 @@ const CancelBtn = styled.button`
   background-color: #242424;
   color: #ffffff;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 500;
 `;
 
 const MoreBtn = styled.div`
