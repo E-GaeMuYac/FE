@@ -1325,7 +1325,6 @@ const NothingInBoxWrap = styled.div`
     text-align: center;
     margin-bottom: 58px;
     @media screen and (max-width: 1700px) {
-      /* margin-bottom: 40px; */
       font-size: 35px;
     }
     @media screen and (min-width: 2560px) {
@@ -1340,8 +1339,6 @@ const NothingInBoxWrap = styled.div`
     background-position: center;
     margin-bottom: 55px;
     @media screen and (max-width: 1700px) {
-      /* background-size: 100%;
-      background-repeat: no-repeat; */
       margin-bottom: 0px;
       height: 200px;
     }
@@ -1356,8 +1353,6 @@ const NothingInBoxWrap = styled.div`
     background-size: cover;
     background-position: center;
     @media screen and (max-width: 1700px) {
-      /* background-size: 100%;
-      background-repeat: no-repeat; */
       height: 340px;
     }
   }
