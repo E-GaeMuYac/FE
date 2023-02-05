@@ -366,12 +366,11 @@ const Detail = () => {
       if (compareData.arr[i].itemName === 'null') {
         let newArr = [...compareData.arr];
         newArr[i] = list;
-        // setCompareData({ ...compareData, arr: newArr });
         // break;
         if (compareData.length === 1) {
           setCompareData({ ...compareData, arr: newArr, isOpen: 'open' });
         } else {
-          setCompareData({ ...compareData, arr: newArr });
+          setCompareData({ ...compareData, arr: newArr, isOpen: 'close' });
         }
 
         break;
