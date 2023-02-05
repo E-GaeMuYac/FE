@@ -281,7 +281,7 @@ const ComparePage = () => {
 
               radius: am5.percent(90),
               innerRadius: am5.percent(50),
-              centerX: 40,
+              centerX: 65,
               startAngle: -90,
               endAngle: -270,
 
@@ -336,7 +336,7 @@ const ComparePage = () => {
 
               radius: am5.percent(90),
               innerRadius: am5.percent(50),
-              centerX: -40,
+              centerX: -65,
               startAngle: -90,
               endAngle: 90,
               tooltip: tootip,
@@ -696,9 +696,9 @@ const ComparePage = () => {
                             해당 의약품에서 가장 중요한 성분 3가지를 뽑아
                             사용자에게 제공합니다. 제공되는 성분 3가지는 용량에
                             상관없이{' '}
-                            <sapn className='mainMaterialDesc'>
+                            <span className='mainMaterialDesc'>
                               오직 중요순서로 기재됩니다.
-                            </sapn>
+                            </span>
                           </span>
                         </div>
                       </div>
@@ -794,9 +794,9 @@ const ComparePage = () => {
                             해당 의약품에서 가장 중요한 성분 3가지를 뽑아
                             사용자에게 제공합니다. 제공되는 성분 3가지는 용량에
                             상관없이{' '}
-                            <sapn className='mainMaterialDesc'>
+                            <span className='mainMaterialDesc'>
                               오직 중요순서로 기재됩니다.
-                            </sapn>
+                            </span>
                           </span>
                         </div>
                       </div>
@@ -1034,9 +1034,10 @@ const SubWrap = styled.div`
   .legendTitle {
     color: #242424;
     font-size: 30px;
+    line-height: 43px;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 38px;
+    margin-bottom: 27px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1074,7 +1075,7 @@ const SubWrap = styled.div`
   .graphNameWrap {
     width: 430px;
     display: flex;
-    gap: 81px;
+    gap: 130px;
     justify-content: center;
   }
   .graphNameBox {
@@ -1172,6 +1173,7 @@ const SubWrap = styled.div`
   }
   .versusContentMaterialWrap {
     width: 100%;
+    height: 400px;
     padding: 30px 50px 35px;
     background-color: white;
     border-radius: 25px;
@@ -1184,7 +1186,9 @@ const SubWrap = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 30px;
+    height: 270px;
   }
   .versusContentMaterialWrap ul li {
     width: 100%;
