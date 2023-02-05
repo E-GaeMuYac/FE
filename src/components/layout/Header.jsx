@@ -93,7 +93,6 @@ const Header = () => {
           {!token ? (
             <SignBox>
               <LoginBtn to='/login'>로그인</LoginBtn>
-              <SignupBtn to='/signup'>회원가입</SignupBtn>
             </SignBox>
           ) : (
             <SignBox>
@@ -198,10 +197,8 @@ const StyledLink = styled.div`
 `;
 
 const SignBox = styled.div`
-  /* width: 25%; */
   height: 100%;
   display: flex;
-  /* justify-content: right; */
   gap: 18px;
   align-items: center;
   position: absolute;
@@ -209,28 +206,6 @@ const SignBox = styled.div`
 `;
 
 const LoginBtn = styled(Link)`
-  @media screen and (max-width: 1700px) {
-    width: 80px;
-    height: 34px;
-    font-size: 13px;
-    font-weight: 500;
-  }
-  background-color: #ebf0ff;
-  width: 100px;
-  height: 39px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: 700;
-  color: #3366ff !important;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-`;
-
-const SignupBtn = styled(Link)`
   @media screen and (max-width: 1700px) {
     width: 80px;
     height: 34px;
@@ -251,6 +226,7 @@ const SignupBtn = styled(Link)`
   border-radius: 8px;
   cursor: pointer;
 `;
+
 const BackgroundMypageBtn = styled.div`
   @media screen and (max-width: 1700px) {
     height: 44px;

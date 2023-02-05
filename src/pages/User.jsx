@@ -143,7 +143,6 @@ const User = () => {
       if (aboutConfirm.isApprove === true && aboutConfirm.delPassword) {
         await mutateDelAccount(aboutConfirm.delPassword);
         localStorage.clear();
-        alert('회원탈퇴가 완료되었습니다.');
         navigate('/');
       }
     }
