@@ -700,9 +700,9 @@ const LaptopCompare = () => {
                             해당 의약품에서 가장 중요한 성분 3가지를 뽑아
                             사용자에게 제공합니다. 제공되는 성분 3가지는 용량에
                             상관없이{' '}
-                            <sapn className='mainMaterialDesc'>
+                            <span className='mainMaterialDesc'>
                               오직 중요순서로 기재됩니다.
-                            </sapn>
+                            </span>
                           </span>
                         </div>
                       </div>
@@ -804,9 +804,9 @@ const LaptopCompare = () => {
                             해당 의약품에서 가장 중요한 성분 3가지를 뽑아
                             사용자에게 제공합니다. 제공되는 성분 3가지는 용량에
                             상관없이{' '}
-                            <sapn className='mainMaterialDesc'>
+                            <span className='mainMaterialDesc'>
                               오직 중요순서로 기재됩니다.
-                            </sapn>
+                            </span>
                           </span>
                         </div>
                       </div>
