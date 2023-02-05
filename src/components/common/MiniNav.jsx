@@ -40,7 +40,7 @@ const Wrapper = styled.div`
   width: 100%;
   min-width: 1024px;
   height: 38px;
-  background-color: #f0f0f0;
+  background-color: #edeff5;
   display: flex;
   align-items: center;
   justify-content: center;

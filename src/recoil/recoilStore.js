@@ -60,3 +60,22 @@ export const userInfoState = atom({
     userId: 0,
   },
 });
+
+export const alertModalState = atom({
+  key: 'alertModal',
+  default: {
+    msg: '',
+    btn: '',
+    isOpen: false,
+  },
+});
+
+export const confirmModalState = atom({
+  key: 'confirmModal',
+  default: {
+    msg: '',
+    btn: [],
+    isOpen: false,
+    isApprove: false,
+  },
+});
