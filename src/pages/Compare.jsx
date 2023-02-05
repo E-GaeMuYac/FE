@@ -1184,7 +1184,6 @@ const SubWrap = styled.div`
     margin: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     gap: 30px;
     height: 270px;

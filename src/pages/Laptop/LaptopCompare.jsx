@@ -1071,7 +1071,7 @@ const SubWrap = styled.div`
     display: flex;
     justify-content: space-between;
     gap: 114px;
-    margin-bottom: 78px;
+    margin: 21px 0 78px;
   }
   .materialPercent {
     font-size: 24px;
@@ -1269,7 +1269,6 @@ const SubWrap = styled.div`
     margin: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     gap: 30px;
     height: 270px;
