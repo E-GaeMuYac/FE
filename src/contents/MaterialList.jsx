@@ -92,7 +92,7 @@ const ResultList = styled.div`
   justify-content: space-between;
   padding: 40px;
   position: relative;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 2px 2px 10px 2px rgba(10, 32, 98, 0.15);
 `;
 
 const PillTitle = styled.span`
@@ -163,7 +163,7 @@ const MoreInfoWrap = styled.div`
   min-height: 170px;
   max-height: 500px;
   border-radius: 20px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 2px 2px 10px 2px rgba(10, 32, 98, 0.15);
 `;
 
 const MoreInfoList = styled.div`
