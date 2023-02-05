@@ -1047,6 +1047,10 @@ const Box = styled.div`
     border-radius: 24px;
     color: #2649d8;
     cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-use-select: none;
+    user-select: none;
 
     h1 {
       @media screen and (max-width: 1700px) {
