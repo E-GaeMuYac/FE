@@ -3,7 +3,7 @@ import { useLocation, useParams } from 'react-router';
 import qs from 'qs';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { compareBoxData } from '../../recoil/recoilStore';
+import { compareBoxData, alertModalState } from '../../recoil/recoilStore';
 import { userApi } from '../../apis/apiInstance';
 import { useGetDetailQuery } from '../../query/detailQuery';
 
@@ -16,6 +16,7 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import TabBar from '../../components/common/Tabbar';
 import LikeItBtn from '../../components/common/LikeItBtn';
 import Reviews from '../../contents/Reviews';
+import AlertModal from '../../components/common/AlertModal';
 
 const BottomContents = ({ medicineInfo, query }) => {
   const [ContentDesc, setContentDesc] = useState('');
@@ -52,6 +53,7 @@ const BottomContents = ({ medicineInfo, query }) => {
 };
 
 const Detail = () => {
+  const [aboutAlert, setAboutAlert] = useRecoilState(alertModalState);
   const param = useParams();
   let graphData = [];
   let allergyDataArray = [];
@@ -379,7 +381,11 @@ const Detail = () => {
         count++;
       }
       if (count === 2) {
-        alert('비교함이 가득 찼습니다.');
+        setAboutAlert({
+          msg: '비교함이 가득 찼습니다.',
+          btn: '확인하기',
+          isOpen: true,
+        });
       }
     }
   };
@@ -418,6 +424,7 @@ const Detail = () => {
 
   return (
     <>
+      {aboutAlert.isOpen && <AlertModal />}
       <TopSection>
         <CardBox>
           <WrapContents>

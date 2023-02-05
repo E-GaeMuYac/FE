@@ -59,10 +59,9 @@ const ModifyReviews = () => {
 
   const submitmodify = async () => {
     try {
-      const res = await userApi.put(`/api/reviews/${reviewId}`, {
+      await userApi.put(`/api/reviews/${reviewId}`, {
         review: content,
       });
-      alert(res.data.message);
       navigate(-1);
     } catch (error) {
       console.log(error);

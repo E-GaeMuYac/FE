@@ -13,13 +13,13 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 
-import { useRecoilValue } from 'recoil';
-// import { compareBoxData } from '../../recoil/recoilStore';
-import { compareBoxData } from '../../recoil/recoilStore';
+import { useRecoilValue, useRecoilState } from 'recoil';
+import { compareBoxData, alertModalState } from '../../recoil/recoilStore';
 
 import { useGetVersusQuery } from '../../query/versusQuery';
 import LikeItBtn from '../../components/common/LikeItBtn';
 import Layout from '../../components/layout/Layout';
+import AlertModal from '../../components/common/AlertModal';
 
 const VersusContent = ({ medicineInfo, query }) => {
   // ------------------------------------------------------------
@@ -87,6 +87,7 @@ const VersusCard = ({ info, type }) => {
 };
 
 const LaptopCompare = () => {
+  const [aboutAlert, setAboutAlert] = useRecoilState(alertModalState);
   const location = useLocation().pathname;
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
@@ -102,7 +103,11 @@ const LaptopCompare = () => {
 
   useEffect(() => {
     if (!localStorage.getItem('refreshToken')) {
-      alert('로그인 시 이용 가능합니다.');
+      setAboutAlert({
+        msg: '로그인 후 이용 가능합니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
       navigate('/');
     }
   }, []);
@@ -587,6 +592,7 @@ const LaptopCompare = () => {
 
   return (
     <>
+      {aboutAlert.isOpen && <AlertModal />}
       {versusList.length === 2 ? (
         <Wrap>
           <Layout>

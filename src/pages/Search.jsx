@@ -5,11 +5,12 @@ import styled from 'styled-components';
 
 import { useGetRemmendQuery, useGetSearchQuery } from '../query/searchQuery';
 
-import { useRecoilState } from 'recoil';
-import { searchWord } from '../recoil/recoilStore';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { searchWord, alertModalState } from '../recoil/recoilStore';
 
 //component
 import ProductList from '../components/common/productList';
+import AlertModal from '../components/common/AlertModal';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
@@ -102,6 +103,7 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
 };
 
 const Search = () => {
+  const aboutAlert = useRecoilValue(alertModalState);
   const navigate = useNavigate();
   const [searhArr, setSearhArr] = useState([]);
 
@@ -264,6 +266,7 @@ const Search = () => {
   // -----------------------------------------------------------------------------
   return (
     <Wrap>
+      {aboutAlert.isOpen && <AlertModal />}
       <SearchBarWrap
         isOpenSearchSort={isOpenSearchSort}
         isActiveDeleteBtn={isActiveDeleteBtn}

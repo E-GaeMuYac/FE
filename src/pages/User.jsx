@@ -20,9 +20,12 @@ import {
 
 import { Laptop, PC } from '../query/useMediaQuery';
 import { useRecoilState } from 'recoil';
-import { confirmModalState, userInfoState } from '../recoil/recoilStore';
+import {
+  confirmModalState,
+  alertModalState,
+  userInfoState,
+} from '../recoil/recoilStore';
 import AlertModal from '../components/common/AlertModal';
-//수정시작ㄱ
 
 const User = () => {
   const navigate = useNavigate();
@@ -36,6 +39,7 @@ const User = () => {
   const [isShow, setIsShow] = useState(false);
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [aboutConfirm, setAboutConfirm] = useRecoilState(confirmModalState);
+  const [aboutAlert, setAboutAlert] = useRecoilState(alertModalState);
 
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
@@ -66,10 +70,18 @@ const User = () => {
     const sizeLimit = 3 * 1024 * 1024;
 
     if (file.size > sizeLimit) {
-      alert('업로드 가능한 최대 용량은 3MB입니다.');
+      setAboutAlert({
+        msg: '업로드 가능한 최대 용량은 3MB입니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
       e.target.value = '';
     } else if (!file.type.includes('image')) {
-      alert('이미지 파일만 업로드 가능합니다.');
+      setAboutAlert({
+        msg: '이미지 파일만 업로드 가능합니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
       e.target.value = '';
     } else {
       const reader = new FileReader();
@@ -151,7 +163,7 @@ const User = () => {
 
   return (
     <Wrapper>
-      {aboutConfirm.isOpen && <AlertModal />}
+      {(aboutConfirm.isOpen || aboutAlert.isOpen) && <AlertModal />}
       {isShow && (
         <ModalBackground>
           <Modal>
