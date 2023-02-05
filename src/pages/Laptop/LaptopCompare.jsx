@@ -1060,7 +1060,7 @@ const SubWrap = styled.div`
     width: 100%;
     background-color: #f6f7fa;
     border-radius: 25px;
-    padding: 30px 30px 35px;
+    padding: 30px 30px 130px;
     white-space: pre-wrap;
     word-break: break-all;
     min-height: 530px;

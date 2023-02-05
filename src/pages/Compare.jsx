@@ -1007,7 +1007,7 @@ const SubWrap = styled.div`
     width: 100%;
     background-color: #f6f7fa;
     border-radius: 25px;
-    padding: 70px 40px;
+    padding: 34px 40px 130px;
     white-space: pre-wrap;
     word-break: break-all;
     min-height: 530px;
@@ -1018,7 +1018,7 @@ const SubWrap = styled.div`
     display: flex;
     justify-content: space-between;
     gap: 114px;
-    margin-bottom: 78px;
+    margin: 21px 0 78px;
   }
   .materialPercent {
     font-size: 24px;
@@ -1177,7 +1177,6 @@ const SubWrap = styled.div`
     padding: 30px 50px 35px;
     background-color: white;
     border-radius: 25px;
-    margin-bottom: 61px;
   }
   .versusContentMaterialWrap ul {
     list-style: none;
