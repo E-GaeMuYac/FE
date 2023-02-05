@@ -995,7 +995,7 @@ const VersusCardWrap = styled.div`
 `;
 const SubWrap = styled.div`
   width: 100%;
-  margin-bottom: 100px;
+  margin: 30px 0px 100px;
   .content {
     width: 100%;
     display: flex;
