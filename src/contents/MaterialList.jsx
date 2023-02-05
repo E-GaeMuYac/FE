@@ -136,7 +136,7 @@ const CancelBtn = styled.button`
   background-color: #242424;
   color: #ffffff;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 400;
 `;
 
 const MoreBtn = styled.div`
