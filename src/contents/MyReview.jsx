@@ -117,7 +117,6 @@ const MyReviews = () => {
       );
       setSearchLength(res.data.totalReview);
       setMyReviewArr(res.data.reviewList);
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -194,18 +193,29 @@ const MyReviews = () => {
               <TopLabel>{review?.entpName}</TopLabel>
               <BottomLabel>{review?.etcOtcCode}</BottomLabel>
             </div>
-            <div className='buttonWrap'>
-              <Link
-                to={`/detail/${review.medicineId}/editform/${review.reviewId}`}
-                className='reviewBtn modify'>
-                수정하기
-              </Link>
-              <button
-                className='reviewBtn delete'
-                onClick={() => deleteConfirm(review.reviewId)}>
-                삭제하기
-              </button>
-            </div>
+            {review.report.length > 4 ? (
+              <div className='warningWrap'>
+                <div className='warningBox'>
+                  <div className='icon' />
+                  <div className='content'>
+                    신고가 누적되어 관리자가 확인 중인 리뷰입니다.
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className='buttonWrap'>
+                <Link
+                  to={`/detail/${review.medicineId}/editform/${review.reviewId}`}
+                  className='reviewBtn modify'>
+                  수정하기
+                </Link>
+                <button
+                  className='reviewBtn delete'
+                  onClick={() => deleteConfirm(review.reviewId)}>
+                  삭제하기
+                </button>
+              </div>
+            )}
           </WrapContents>
           <Description>
             {review.review.length > 260 ? (
@@ -414,6 +424,53 @@ const WrapContents = styled.div`
     }
     .delete {
       background-color: #242424;
+    }
+  }
+  .warningWrap {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 390px;
+    height: 85px;
+
+    .warningBox {
+      @media screen and (max-width: 1700px) {
+        padding: 10px 8px;
+      }
+      border-radius: 10px;
+      border: 2px solid #ff8880;
+      background-color: #ffecea;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+
+      .icon {
+        @media screen and (max-width: 1700px) {
+          width: 35px;
+          height: 35px;
+        }
+        background-image: url('/assets/image/RedWarn.png');
+        background-size: cover;
+        width: 44px;
+        height: 44px;
+      }
+
+      .content {
+        @media screen and (max-width: 1700px) {
+          width: 150px;
+          height: 40px;
+          font-size: 13px;
+          line-height: 20px;
+        }
+        width: 173px;
+        height: 46px;
+        font-weight: 500;
+        font-size: 15px;
+        line-height: 23px;
+        color: #ff392b;
+      }
     }
   }
 `;
