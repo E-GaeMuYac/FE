@@ -21,7 +21,9 @@ const FourthSection = (props) => {
           <ContentsWrap>
             {scrollPoint > 2300 && (
               <AlignWrap>
-                <Content2 />
+                <Content2>
+                  <Content2Tooltip />
+                </Content2>
               </AlignWrap>
             )}
             {scrollPoint > 2400 && (
@@ -69,19 +71,21 @@ const FourthSection = (props) => {
                 </Content4>
               </AlignWrap>
             )}
-            {scrollPoint > 3200 && (
+            {scrollPoint > 3300 && (
               <AlignWrap>
-                <Content5 />
+                <Content5>
+                  <Content5Tooltip />
+                </Content5>
               </AlignWrap>
             )}
           </ContentsWrap>
           <ContentsWrap>
             {scrollPoint > 3900 && (
               <AlignWrap>
-                <Content6 />
+                <Content6 style={{ marginLeft: '30px' }} />
               </AlignWrap>
             )}
-            {scrollPoint > 4000 && (
+            {scrollPoint > 3900 && (
               <AlignWrap>
                 <Content7>
                   <div>
@@ -89,9 +93,9 @@ const FourthSection = (props) => {
                       <span>중요 성분 확인</span>
                     </div>
                     <h1>
-                      주요 유효성분
+                      제일 유의해서
                       <br />
-                      3개 제공
+                      봐야할 성분들이에요!
                     </h1>
                   </div>
                   <p>
@@ -130,7 +134,7 @@ const FourthSection = (props) => {
                 </Content8>
               </AlignWrap>
             )}
-            {scrollPoint > 4700 && (
+            {scrollPoint > 4650 && (
               <AlignWrap>
                 <Content9 />
               </AlignWrap>
@@ -151,7 +155,9 @@ const FourthSection = (props) => {
           <ContentsWrap>
             {scrollPoint > 1200 && (
               <AlignWrap>
-                <Content2 />
+                <Content2>
+                  <Content2Tooltip />
+                </Content2>
               </AlignWrap>
             )}
             {scrollPoint > 1300 && (
@@ -176,7 +182,7 @@ const FourthSection = (props) => {
             )}
           </ContentsWrap>
           <ContentsWrap>
-            {scrollPoint > 1600 && (
+            {scrollPoint > 1800 && (
               <AlignWrap>
                 <Content4>
                   <div className='subTitle'>
@@ -198,16 +204,18 @@ const FourthSection = (props) => {
                 </Content4>
               </AlignWrap>
             )}
-            {scrollPoint > 1900 && (
+            {scrollPoint > 2000 && (
               <AlignWrap>
-                <Content5 />
+                <Content5>
+                  <Content5Tooltip />
+                </Content5>
               </AlignWrap>
             )}
           </ContentsWrap>
           <ContentsWrap>
             {scrollPoint > 2200 && (
               <AlignWrap>
-                <Content6 />
+                <Content6 style={{ marginLeft: '30px' }} />
               </AlignWrap>
             )}
             {scrollPoint > 2400 && (
@@ -218,9 +226,9 @@ const FourthSection = (props) => {
                       <span>중요 성분 확인</span>
                     </div>
                     <h1>
-                      주요 유효성분
+                      제일 유의해서
                       <br />
-                      3개 제공
+                      봐야할 성분들이에요!
                     </h1>
                   </div>
                   <p>
@@ -305,6 +313,14 @@ const Wrapper = styled.div`
   }
 `;
 
+const show = keyframes`
+    from {
+        opacity: 0;
+    } to {
+        opacity:1;
+    }
+`;
+
 const slide = keyframes`
     from {
         transform: translate3d(0, 100%, 0);
@@ -348,6 +364,8 @@ const Content1 = styled.div`
     font-size: 28px;
     font-weight: 700;
     color: #3366ff;
+    text-align: center;
+    margin-bottom: 10px;
   }
   h2 {
     @media screen and (max-width: 1700px) {
@@ -386,6 +404,28 @@ const Content2 = styled.div`
   left: 50px; */
   opacity: 0;
   animation: ${slide} 1s ease-out forwards;
+  position: relative;
+`;
+
+const Content2Tooltip = styled.div`
+  @media screen and (max-width: 1700px) {
+    background-size: 75%;
+    left: 5px;
+    bottom: 135px;
+    animation: ${show} 0.7s 1s ease-in forwards;
+  }
+  background-image: url('/assets/image/성분그래프_팝업.png');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 155px;
+  height: 52px;
+  position: absolute;
+  left: 30px;
+  bottom: 110px;
+  z-index: 999;
+  animation: ${show} 0.8s 1.4s ease-in forwards;
+  opacity: 0;
 `;
 
 const Content3 = styled.div`
@@ -430,7 +470,7 @@ const Content4 = styled.div`
   flex-direction: column;
   justify-content: center;
   opacity: 0;
-  animation: ${slide} 1s 0.5s ease-out forwards;
+  animation: ${slide} 1s ease-out forwards;
   div {
     @media screen and (max-width: 1700px) {
       margin-bottom: 25px;
@@ -480,6 +520,27 @@ const Content5 = styled.div`
   right: 90px; */
   opacity: 0;
   animation: ${slide} 1s ease-out forwards;
+`;
+
+const Content5Tooltip = styled.div`
+  @media screen and (max-width: 1700px) {
+    background-size: 75%;
+    left: 136px;
+    top: 113px;
+    animation: ${show} 0.7s 1s ease-in forwards;
+  }
+  background-image: url('/assets/image/성분그래프2_팝업.png');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 256px;
+  height: 107px;
+  position: absolute;
+  right: -14.5px;
+  top: 78px;
+  z-index: 999;
+  animation: ${show} 0.8s 1.4s ease-in forwards;
+  opacity: 0;
 `;
 
 const Content6 = styled.div`
@@ -573,13 +634,13 @@ const Content9 = styled.div`
   background-size: contain;
   background-repeat: no-repeat;
   width: 600px;
-  height: 60px;
+  height: 241px;
   /* background-color: aliceblue; */
-  /* margin-top: 400px; */
+  margin-top: 100px;
   /* position: absolute;
   top: 2100px;
   left: 90px; */
   opacity: 0;
-  animation: ${slide} 1s 0.5s ease-out forwards;
+  animation: ${slide} 1s 1s ease-out forwards;
 `;
 export default FourthSection;

@@ -101,7 +101,15 @@ const Detail = () => {
         const newMedicineData = {
           material: objGraph?.materialName[i]?.material,
           explain: objGraph?.materialName[i]?.설명,
+          분량: objGraph?.materialName[i]?.분량,
+          allergy: objGraph?.materialName[i]?.allergy,
         };
+        if (objGraph.materialName[i].allergy) {
+          newMedicineData['columnSettings'] = {
+            fill: am5.color(0xff392b),
+            strokeOpacity: 0,
+          };
+        }
         graphData.push(newMedicineData);
       }
       // console.log(graphData);
@@ -110,16 +118,17 @@ const Detail = () => {
   }, [objGraph, query]);
 
   // 그래프
-  const medicine = [];
+  // const medicine = [];
 
-  useLayoutEffect(() => {
-    if (objGraph) {
-      // medicine에 속성 추가
-      for (let i = 0; i < medicineItem.materialName?.length; i++) {
-        medicine.push(medicineItem.materialName[i]);
-      }
-    }
-  }, [objGraph]);
+  // useLayoutEffect(() => {
+  //   if (objGraph) {
+  //     console.log(medicine);
+  //     // medicine에 속성 추가
+  //     for (let i = 0; i < medicineItem.materialName?.length; i++) {
+  //       medicine.push(medicineItem.materialName[i]);
+  //     }
+  //   }
+  // }, [objGraph]);
 
   useLayoutEffect(() => {
     if (objGraph) {
@@ -143,8 +152,8 @@ const Detail = () => {
           am5percent.PieSeries.new(root, {
             valueField: '분량',
             categoryField: 'material',
-            centerX: am5.percent(-22.5),
-            y: am5.percent(-4),
+            centerX: am5.percent(-20),
+            y: am5.percent(-9),
             legendValueText: '{category}',
             legendLabelText: `{value.formatNumber('#.##')}mg`,
           })
@@ -157,77 +166,38 @@ const Detail = () => {
           textAlign: 'left',
         });
 
+        series.slices.template.setAll({
+          templateField: 'columnSettings',
+        });
+
         series.ticks.template.setAll({
           stroke: am5.color(0xffffff),
           strokeWidth: 2,
           strokeOpacity: 0,
         });
 
-        // console.log(objGraph.materialName[0]?.allergy);
-
         series
           .get('colors')
           .set('colors', [
-            objGraph.materialName[0]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#3366FF'),
-            objGraph.materialName[1]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#102693'),
-            objGraph.materialName[2]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#1939B7'),
-            objGraph.materialName[3]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#6690FF'),
-            objGraph.materialName[4]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#091A7A'),
-            objGraph.materialName[5]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#7433FF'),
-            objGraph.materialName[6]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#2D1093'),
-            objGraph.materialName[7]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#4119B7'),
-            objGraph.materialName[8]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#9B66FF'),
-            objGraph.materialName[9]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#1E097A'),
-            objGraph.materialName[10]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#00CFA5'),
-            objGraph.materialName[11]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#006E78'),
-            objGraph.materialName[12]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#009593'),
-            objGraph.materialName[13]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#38E2AF'),
-            objGraph.materialName[14]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#005163'),
-            objGraph.materialName[15]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#5598FC'),
-            objGraph.materialName[16]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#1B3C92'),
-            objGraph.materialName[17]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#2A57B5'),
-            objGraph.materialName[18]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#7FB6FD'),
-            objGraph.materialName[19]?.allergy
-              ? am5.color(0xff392b)
-              : am5.color('#102978'),
+            am5.color(0x091a7a),
+            am5.color(0x1939b7),
+            am5.color(0x3366ff),
+            am5.color(0x6690ff),
+            am5.color(0x84a9ff),
+            am5.color(0xadc8ff),
+            am5.color(0x13097a),
+            am5.color(0x2b19b7),
+            am5.color(0x5033ff),
+            am5.color(0x7e66ff),
+            am5.color(0x9984ff),
+            am5.color(0xbcadff),
+            am5.color(0x0b2d78),
+            am5.color(0x1d5cb5),
+            am5.color(0x2a7bd8),
+            am5.color(0x3a9efc),
+            am5.color(0x6bbdfd),
+            am5.color(0x88d1fe),
+            am5.color(0xb0e4fe),
           ]);
 
         // 그래프 마우스 오버 시 툴팁
@@ -243,16 +213,16 @@ const Detail = () => {
           zIndex: 999,
         });
 
-        series.data.setAll(medicine);
+        series.data.setAll(graphData);
 
         const legend = chart.children.push(
           am5.Legend.new(root, {
             position: 'absolute',
             oversizedBehavior: 'wrap',
             width: 310,
-            height: 230,
-            x: am5.percent(3),
-            y: am5.percent(4),
+            height: 270,
+            x: am5.percent(1),
+            y: am5.percent(-1),
             layout: root.verticalLayout,
             verticalScrollbar: am5.Scrollbar.new(root, {
               orientation: 'vertical',
@@ -267,7 +237,6 @@ const Detail = () => {
           cornerRadiusBR: 20,
           width: 25,
           height: 25,
-          // marginRight: 50,
         });
 
         legend.markers.template.setAll({
@@ -275,23 +244,19 @@ const Detail = () => {
           // minWidth: 30,
           width: 25,
           marginRight: 10,
-          // textAlign: 'right',
-          // display: 'inline-block',
         });
 
         legend.labels.template.setAll({
           // maxWidth: 100,
           // minWidth: 80,
           marginRight: 10,
-          // marginLeft: 60,
           fontSize: 16,
           fontFamily: 'Noto Sans KR',
           fill: '#242424',
+          templateField: 'columnSettings',
           fontWeight: 500,
           lineHeight: 1.7,
           minWidth: 65,
-          // height: 30,
-          //centerY: 0, // if we want labels to be top-aligned
           oversizedBehavior: 'wrap',
           textAlign: 'right',
         });
@@ -302,6 +267,7 @@ const Detail = () => {
           fontSize: 16,
           fontFamily: 'Noto Sans KR',
           fill: '#242424',
+          templateField: 'columnSettings',
           fontWeight: 500,
           lineHeight: 1.7,
           oversizedBehavior: 'truncate',
@@ -496,13 +462,13 @@ const Detail = () => {
               <GraphLabel style={{ marginLeft: '100px' }}>
                 유효성분 함량
               </GraphLabel>
-              <GraphLabel style={{ marginLeft: '170px' }}>
+              <GraphLabel style={{ marginLeft: '190px' }}>
                 성분 그래프
                 {allergy ? (
                   <WarningAllergyTrue>
                     <span>알레르기 주의</span>
                     <div className='allergyTrueIcon'>
-                      <span className='allergyAmountIcon'>
+                      <span className='allergyTrueAmountIcon'>
                         내가 등록한 알레르기를 유발하는 성분이 포함되어
                         있습니다. 복용에 주의하세요!
                       </span>
@@ -512,7 +478,7 @@ const Detail = () => {
                   <WarningAllergyFalse>
                     <span>주의성분 없음</span>
                     <div className='allergyFalseIcon'>
-                      <span className='allergyAmountIcon'>
+                      <span className='allergyFalseAmountIcon'>
                         내가 등록한 알레르기를 유발하는 성분이 포함되어 있지
                         않습니다. 알레르기 등록은 마이페이지에서 가능해요!
                       </span>
@@ -567,85 +533,39 @@ const Detail = () => {
                     <div className='graphTop3List' key={list.material}>
                       <div
                         className={
-                          list.allergy ? 'top1AllergyTrue' : 'top1AllergyFalse'
+                          list.allergy ? 'top3AllergyTrue' : 'top3AllergyFalse'
                         }>
-                        <div className='ContentMaterialPercent'>
+                        1
+                      </div>
+                      <div
+                        className={
+                          list.allergy
+                            ? 'ContentMaterialNameAllergyTrue'
+                            : 'ContentMaterialNameAllergyFalse'
+                        }>
+                        {list.material}
+                        <span>
+                          {' '}
+                          (
                           {Math.round(
                             (Number(list.분량) /
                               medicineTotalAmount(medicineItem)) *
                               100
                           )}
-                          %
-                        </div>
-                      </div>
-                      <div
-                        className={
-                          list.allergy
-                            ? 'ContentMaterialNameAllergyTrue'
-                            : 'ContentMaterialNameAllergyFalse'
-                        }>
-                        {list.material}
+                          %)
+                        </span>
                       </div>
                     </div>
                   ) : medicineItem?.materialName?.indexOf(list) === 1 ? (
                     <div className='graphTop3List' key={list.material}>
-                      <div
-                        style={{
-                          width: '80px',
-                          height: '80px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}>
-                        <div
-                          className={
-                            list.allergy
-                              ? 'top2AllergyTrue'
-                              : 'top2AllergyFalse'
-                          }>
-                          <div className='ContentMaterialPercent'>
-                            {Math.round(
-                              (Number(list.분량) /
-                                medicineTotalAmount(medicineItem)) *
-                                100
-                            )}
-                            %
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        className={
-                          list.allergy
-                            ? 'ContentMaterialNameAllergyTrue'
-                            : 'ContentMaterialNameAllergyFalse'
-                        }>
-                        {list.material}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className='graphTop3List' key={list.material}>
-                      <div
-                        style={{
-                          width: '80px',
-                          height: '80px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}>
+                      <div>
                         <div
                           className={
                             list.allergy
                               ? 'top3AllergyTrue'
                               : 'top3AllergyFalse'
                           }>
-                          <div className='ContentMaterialPercent'>
-                            {Math.round(
-                              (Number(list.분량) /
-                                medicineTotalAmount(medicineItem)) *
-                                100
-                            )}
-                            %
-                          </div>
+                          2
                         </div>
                       </div>
                       <div
@@ -655,6 +575,47 @@ const Detail = () => {
                             : 'ContentMaterialNameAllergyFalse'
                         }>
                         {list.material}
+                        <span>
+                          {' '}
+                          (
+                          {Math.round(
+                            (Number(list.분량) /
+                              medicineTotalAmount(medicineItem)) *
+                              100
+                          )}
+                          %)
+                        </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className='graphTop3List' key={list.material}>
+                      <div>
+                        <div
+                          className={
+                            list.allergy
+                              ? 'top3AllergyTrue'
+                              : 'top3AllergyFalse'
+                          }>
+                          3
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          list.allergy
+                            ? 'ContentMaterialNameAllergyTrue'
+                            : 'ContentMaterialNameAllergyFalse'
+                        }>
+                        {list.material}
+                        <span>
+                          {' '}
+                          (
+                          {Math.round(
+                            (Number(list.분량) /
+                              medicineTotalAmount(medicineItem)) *
+                              100
+                          )}
+                          %)
+                        </span>
                       </div>
                     </div>
                   )
@@ -698,7 +659,7 @@ const BottomSection = styled.div`
   color: #242424;
   display: flex;
   padding: 34px 30px;
-  font-weight: 350;
+  font-weight: 400;
   font-size: 17px;
   line-height: 33px;
   #legenddiv {
@@ -716,22 +677,22 @@ const CardBox = styled.div`
   min-height: 127px;
   margin: auto;
   border-radius: 25px;
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 2px 10px 2px rgba(10, 32, 98, 0.1);
 `;
 
 const MiddleCardBox = styled.div`
   width: 696px;
   height: 400px;
   border-radius: 25px;
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 2px 10px 2px rgba(10, 32, 98, 0.1);
   position: relative;
-  padding: 40px 20px;
+  padding: 30px 20px;
   #chartdiv {
     display: flex;
     margin: auto;
     padding-top: 10px;
     width: 100%;
-    height: 300px;
+    height: 330px;
     font-size: 12px;
     position: absolute;
     top: 90px;
@@ -755,7 +716,7 @@ const TotalAmountWrap = styled.div`
   align-items: center;
   position: absolute;
   top: 230px;
-  right: 126px;
+  right: 142px;
   z-index: 999;
   color: #868686;
   font-size: 15px;
@@ -815,9 +776,9 @@ const TotalAmount = styled.div`
 const RightCardBox = styled.div`
   width: 307px;
   height: 400px;
-  padding: 40px 20px 40px 15px;
+  padding: 40px 20px;
   border-radius: 25px;
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 2px 2px 10px 2px rgba(10, 32, 98, 0.1);
   .graphTop3 {
     width: 330px;
     align-items: center;
@@ -855,26 +816,27 @@ const RightCardBox = styled.div`
     height: 18%;
     display: flex;
     align-items: center;
-    margin-top: 38px;
+    margin-top: 40px;
   }
   .ContentMaterialPercent {
     @media screen and (max-width: 1700px) {
       font-size: 22px;
       line-height: 36px;
     }
-    width: 80px;
+    /* width: 80px; */
     font-size: 28px;
     line-height: 41px;
     font-weight: bold;
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
   }
   .ContentMaterialNameAllergyTrue {
     @media screen and (max-width: 1700px) {
-      font-size: 18px;
+      font-size: 17px;
     }
-    width: 184px;
+    width: 185px;
     font-size: 20px;
+    font-weight: 500;
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -882,23 +844,30 @@ const RightCardBox = styled.div`
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     color: #ff3c26;
-    text-align: center;
-    margin-left: 7px;
+    /* text-align: center; */
+    /* margin-left: 7px; */
+    span {
+      font-weight: 400;
+    }
   }
   .ContentMaterialNameAllergyFalse {
     @media screen and (max-width: 1700px) {
-      font-size: 18px;
+      font-size: 17px;
     }
-    width: 184px;
+    width: 185px;
     font-size: 20px;
+    font-weight: 500;
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    text-align: center;
-    margin-left: 7px;
+    /* text-align: center; */
+    /* margin-left: 7px; */
+    span {
+      font-weight: 400;
+    }
   }
 `;
 
@@ -953,29 +922,45 @@ const GraphTop3 = styled.div`
   height: 300px;
   margin-top: 0px;
   margin-left: 0px;
-  .top1AllergyFalse {
-    width: 80px;
-    height: 80px;
-    background-color: #84a9ff;
-    color: black;
+  .top3AllergyFalse {
+    width: 65px;
+    height: 65px;
+    color: rgb(51, 102, 255);
+    border: 6px solid transparent;
+    background: radial-gradient(rgb(235, 240, 255), rgb(235, 240, 255))
+        padding-box padding-box,
+      radial-gradient(rgb(80, 124, 255) 0%, rgb(201, 214, 255) 100%) border-box
+        border-box;
+    font-size: 34px;
+    line-height: 70px;
+    font-weight: 900;
     border-radius: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    margin-right: 15px;
   }
-  .top1AllergyTrue {
-    width: 80px;
-    height: 80px;
-    background-color: #ffecea;
-    color: #ff3c26;
+  .top3AllergyTrue {
+    width: 65px;
+    height: 65px;
+    border: 6px solid transparent;
+    background: radial-gradient(rgb(255, 236, 234), rgb(255, 236, 234))
+        padding-box padding-box,
+      radial-gradient(rgb(255, 80, 80) 0%, rgb(255, 201, 201) 100%) border-box
+        border-box;
+    color: rgb(255, 60, 38);
+    font-size: 34px;
+    line-height: 70px;
+    font-weight: 900;
     border-radius: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    margin-right: 15px;
   }
-  .top2AllergyFalse {
+  /* .top2AllergyFalse {
     width: 74px;
     height: 74px;
     background-color: #adc8ff;
@@ -1018,7 +1003,7 @@ const GraphTop3 = styled.div`
     align-items: center;
     justify-content: center;
     text-align: center;
-  }
+  } */
 `;
 
 const Image = styled.div`
@@ -1251,7 +1236,7 @@ const GraphLabel = styled.div`
 
 const WarningAllergyTrue = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 130px;
+    width: 120px;
     height: 30px;
     font-size: 16px;
   }
@@ -1286,21 +1271,21 @@ const WarningAllergyTrue = styled.div`
   }
   span {
     font-weight: 700;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 20px;
   }
-  :hover .allergyAmountIcon {
+  :hover .allergyTrueAmountIcon {
     display: block;
   }
-  .allergyAmountIcon {
+  .allergyTrueAmountIcon {
     border-radius: 8px;
     /* box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2); */
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(11.5px);
     display: none;
     position: absolute;
-    top: 80px;
-    right: 14px;
+    top: 70px;
+    right: 2px;
     text-align: center;
     width: 256px;
     padding: 12px 10px;
@@ -1315,7 +1300,7 @@ const WarningAllergyTrue = styled.div`
     word-break: break-all;
     text-align: left;
   }
-  .allergyAmountIcon::after {
+  .allergyTrueAmountIcon::after {
     content: '';
     width: 0px;
     height: 0px;
@@ -1331,7 +1316,7 @@ const WarningAllergyTrue = styled.div`
 
 const WarningAllergyFalse = styled.div`
   @media screen and (max-width: 1700px) {
-    width: 130px;
+    width: 120px;
     height: 30px;
     font-size: 16px;
   }
@@ -1366,21 +1351,21 @@ const WarningAllergyFalse = styled.div`
   }
   span {
     font-weight: 700;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 20px;
   }
-  :hover .allergyAmountIcon {
+  :hover .allergyFalseAmountIcon {
     display: block;
   }
-  .allergyAmountIcon {
+  .allergyFalseAmountIcon {
     border-radius: 8px;
     /* box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2); */
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(11.5px);
     display: none;
     position: absolute;
-    top: 80px;
-    right: 14px;
+    top: 70px;
+    right: 2px;
     text-align: center;
     width: 256px;
     padding: 12px 10px;
@@ -1395,7 +1380,7 @@ const WarningAllergyFalse = styled.div`
     word-break: break-all;
     text-align: left;
   }
-  .allergyAmountIcon::after {
+  .allergyFalseAmountIcon::after {
     content: '';
     width: 0px;
     height: 0px;
@@ -1450,7 +1435,7 @@ const MatrialExplainWrap = styled.div`
   line-height: 34px;
   position: absolute;
   top: -55px;
-  left: 10px;
+  left: -5px;
   z-index: 1;
   color: white;
   text-align: center;

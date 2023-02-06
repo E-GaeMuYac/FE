@@ -9,7 +9,7 @@ const SixthSection = (props) => {
     <Flex>
       <Wrapper>
         <PC>
-          {scrollPoint > 6800 && (
+          {scrollPoint > 6700 && (
             <div className='contentsBox'>
               {/* <Content1>
               <h2>
@@ -25,7 +25,7 @@ const SixthSection = (props) => {
           )}
         </PC>
         <Laptop>
-          {scrollPoint > 4200 && (
+          {scrollPoint > 4570 && (
             <div className='contentsBox'>
               {/* <Content1>
               <h2>

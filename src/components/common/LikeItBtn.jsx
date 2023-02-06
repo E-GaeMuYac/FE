@@ -50,7 +50,7 @@ const LikeItBtnWrap = styled.div`
   width: 38px;
   height: 38px;
   border-radius: 8px;
-  box-shadow: 0 0 6px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 1px 6px 0px rgba(10, 32, 98, 0.2);
   cursor: pointer;
   display: flex;
   align-items: center;
