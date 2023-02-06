@@ -319,7 +319,7 @@ const ChatBox = () => {
   const connectAdminBtn = () => {
     const time = new Date(Date.now()).getHours();
     const day = new Date(Date.now()).getDay();
-    if (14 <= time < 21 && day !== 0 && day !== 6) {
+    if (time > 13 && time < 21 && day !== 0 && day !== 6) {
       return <button onClick={callAdmin}>연결하기</button>;
     }
   };
