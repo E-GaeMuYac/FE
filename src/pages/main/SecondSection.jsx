@@ -19,7 +19,7 @@ const SecondSection = () => {
 };
 
 const Flex = styled.div`
-  background-color: #ebebeb;
+  background-color: #f6f7fa;
   width: 100%;
   display: flex;
   justify-content: center;

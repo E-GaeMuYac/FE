@@ -53,7 +53,7 @@ const Wrapper = styled.div`
   justify-content: center;
   background-color: white;
   border-radius: 40px;
-  box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 2px 2px 32px 2px rgba(10, 32, 98, 0.15);
 `;
 
 const SignupWrapper = styled.div`
@@ -65,7 +65,7 @@ const SignupWrapper = styled.div`
   flex-direction: column;
   align-items: flex-end;
   input {
-    border-bottom: 1px solid #919191;
+    /* border-bottom: 1px solid #919191; */
     :focus {
       outline: none;
       box-shadow: none;
@@ -74,13 +74,14 @@ const SignupWrapper = styled.div`
   }
 
   .successs {
+    border-bottom: 1px solid #3366ff;
     input {
       @media screen and (max-width: 1700px) {
         width: 300px;
       }
       width: 350px;
       border: none;
-      border-bottom: 1px solid #3366ff;
+      /* border-bottom: 1px solid #3366ff; */
       border-radius: 0;
       :focus,
       :active {
@@ -91,13 +92,14 @@ const SignupWrapper = styled.div`
     }
   }
   .errorr {
+    border-bottom: 1px solid #919191;
     input {
       @media screen and (max-width: 1700px) {
         width: 300px;
       }
       width: 350px;
       border: none;
-      border-bottom: 1px solid #919191;
+      /* border-bottom: 1px solid #919191; */
       border-radius: 0;
       :focus,
       :active {

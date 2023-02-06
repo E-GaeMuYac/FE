@@ -68,7 +68,7 @@ const MainContentShow = styled.h1`
   @media screen and (max-width: 1700px) {
     font-size: 40px !important;
     line-height: 65px !important;
-    padding-bottom: 0vh !important;
+    padding-bottom: 2vh !important;
   }
   @media screen and (max-width: 1920px) {
     padding-bottom: 0vh;
@@ -83,8 +83,8 @@ const MainContentShow = styled.h1`
   font-size: 60px;
   line-height: 87px;
   text-align: center;
-  animation: ${show} 1s ease-out forwards;
-  padding-bottom: 5vh;
+  animation: ${slide} 1s ease-out forwards;
+  /* padding-bottom: 5vh; */
   color: #242424;
 `;
 
@@ -100,12 +100,15 @@ const ImgWrap = styled.div`
 const ContentImg = styled.div`
   @media screen and (max-width: 1700px) {
     background-position: top;
-    width: 748.15px;
-    max-height: 486.85px;
+    /* width: 748.15px;
+    max-height: 486.85px; */
+    width: 900px;
+    background-size: 50%;
   }
   @media screen and (max-width: 1920px) {
-    background-size: 85%;
+    background-size: 90%;
     background-position: top;
+    margin-top: -40px;
   }
   background-image: url('/assets/image/메인 섹션1.png');
   background-position: center;
@@ -130,7 +133,7 @@ const ContentImg = styled.div`
   /* justify-content: center; */
   /* margin-top: 150px; */
   opacity: 0;
-  animation: ${show} 1s ease-out forwards;
+  animation: ${show} 2s 1s ease-out forwards;
 `;
 
 export default FirstSection;
