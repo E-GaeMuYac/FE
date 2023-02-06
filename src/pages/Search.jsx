@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router';
 
 import styled from 'styled-components';
@@ -182,6 +182,7 @@ const Search = () => {
     nowPageNum,
     20
   );
+  const inputRef = useRef();
 
   //서치 시작
   const doingSearch = (value) => {
@@ -195,6 +196,7 @@ const Search = () => {
       } else if (searchKinds === '약 분류') {
         setSearchKindsCode('productType');
       }
+      inputRef.current.blur();
     }
   };
 
@@ -304,6 +306,7 @@ const Search = () => {
             onChange={changeInputValue}
             onFocus={focusedInput}
             onBlur={focusOutInput}
+            ref={inputRef}
             placeholder={
               searchKinds === '약 이름'
                 ? '약 이름을 검색해보세요!'
