@@ -108,7 +108,7 @@ const LaptopCompare = () => {
         btn: '확인하기',
         isOpen: true,
       });
-      navigate('/');
+      navigate('/login');
     }
   }, []);
 
