@@ -31,6 +31,7 @@ const ProductList = ({ list }) => {
         count++;
       }
       if (count === 2) {
+        setCompareData({ ...compareData, isOpen: 'open' });
         setAboutAlert({
           msg: '비교함이 가득 찼습니다.',
           btn: '확인하기',
@@ -243,6 +244,6 @@ const SearchListWrap = styled.div`
   .btnInBox.Active {
     background-color: #ebf0ff;
     color: #3366ff;
-    border: 1px solid #3366ff;
+    border: 1.4px solid #8fabff;
   }
 `;

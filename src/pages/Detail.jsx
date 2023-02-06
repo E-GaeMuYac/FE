@@ -345,6 +345,7 @@ const Detail = () => {
         count++;
       }
       if (count === 2) {
+        setCompareData({ ...compareData, isOpen: 'open' });
         setAboutAlert({
           msg: '비교함이 가득 찼습니다.',
           btn: '확인하기',
