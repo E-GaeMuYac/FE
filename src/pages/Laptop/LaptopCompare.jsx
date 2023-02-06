@@ -918,7 +918,8 @@ const VersusCardWrap = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 8px 0 rgba(10, 32, 98, 0.2);
+    border: none;
     border-radius: 25px;
     z-index: 5;
   }
