@@ -379,6 +379,7 @@ const Detail = () => {
       }
       if (count === 2) {
         alert('비교함이 가득 찼습니다.');
+        setCompareData({ ...compareData, isOpen: 'open' });
       }
     }
   };

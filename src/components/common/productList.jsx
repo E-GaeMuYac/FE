@@ -31,6 +31,7 @@ const ProductList = ({ list }) => {
       }
       if (count === 2) {
         alert('비교함이 가득 찼습니다.');
+        setCompareData({ ...compareData, isOpen: 'open' });
       }
     }
   };
@@ -238,6 +239,6 @@ const SearchListWrap = styled.div`
   .btnInBox.Active {
     background-color: #ebf0ff;
     color: #3366ff;
-    border: 1px solid #3366ff;
+    border: 1.4px solid #8fabff;
   }
 `;

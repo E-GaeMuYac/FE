@@ -90,7 +90,11 @@ const CompareBox = () => {
 
   //페이지를 이동하면 자동으로 클로즈
   useEffect(() => {
-    setCompareData({ ...compareData, isOpen: 'hide' });
+    if (compareData.length === 0) {
+      setCompareData({ ...compareData, isOpen: 'hide' });
+    } else {
+      setCompareData({ ...compareData, isOpen: 'close' });
+    }
   }, [nowPage]);
 
   // onclick시 기능
