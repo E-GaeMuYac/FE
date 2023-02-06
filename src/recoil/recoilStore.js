@@ -15,11 +15,26 @@ export const isLogined = atom({
   default: false,
 });
 
+const localStorageEffect =
+  (key) =>
+  ({ setSelf, onSet }) => {
+    const savedValue = localStorage.getItem(key);
+    if (savedValue != null) {
+      setSelf(JSON.parse(savedValue));
+    }
+
+    onSet((newValue, _, isReset) => {
+      isReset
+        ? localStorage.removeItem(key)
+        : localStorage.setItem(key, JSON.stringify(newValue));
+    });
+  };
+
 export const compareBoxData = atom({
   key: 'compareBoxData',
   default: {
     length: 0,
-    isOpen: 'close',
+    isOpen: 'hide',
     arr: [
       {
         medicineId: 1,
@@ -30,5 +45,37 @@ export const compareBoxData = atom({
         itemName: 'null',
       },
     ],
+  },
+  effects: [localStorageEffect('compareBoxData')],
+});
+
+export const userInfoState = atom({
+  key: 'userInfo',
+  default: {
+    email: '',
+    imageUrl: '',
+    loginCount: 0,
+    loginType: '',
+    nickname: '',
+    userId: 0,
+  },
+});
+
+export const alertModalState = atom({
+  key: 'alertModal',
+  default: {
+    msg: '',
+    btn: '',
+    isOpen: false,
+  },
+});
+
+export const confirmModalState = atom({
+  key: 'confirmModal',
+  default: {
+    msg: '',
+    btn: [],
+    isOpen: false,
+    isApprove: false,
   },
 });

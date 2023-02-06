@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { api, userApi } from '../apis/apiInstance';
+import { api } from '../apis/apiInstance';
 import { useCookies } from 'react-cookie';
+import AlertModal from '../components/common/AlertModal';
+import { useRecoilState } from 'recoil';
+import { alertModalState } from '../recoil/recoilStore';
 
-const Login = (props) => {
-  const setUserImage = props.setuserimage;
+const Login = () => {
   const token = localStorage.getItem('accessToken');
+  const [aboutAlert, setAboutAlert] = useRecoilState(alertModalState);
 
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(['rememberEmail']);
@@ -48,7 +51,11 @@ const Login = (props) => {
   const loginHandler = (e) => {
     e.preventDefault();
     if (email === '' || password === '') {
-      alert('아이디와 비밀번호를 모두 입력하세요!');
+      setAboutAlert({
+        msg: '아이디와 비밀번호를 모두 입력하세요!',
+        btn: '확인하기',
+        isOpen: true,
+      });
     } else {
       normalLogin({ email, password });
     }
@@ -64,20 +71,14 @@ const Login = (props) => {
       const refreshtoken = res.headers.refreshtoken;
       localStorage.setItem('accessToken', accesstoken);
       localStorage.setItem('refreshToken', refreshtoken);
-      getProfile();
       navigate('/');
     } catch (e) {
       console.log(e);
-      alert('로그인에 실패하였습니다.');
-    }
-  };
-
-  const getProfile = async () => {
-    try {
-      const res = await userApi.get('api/users/find');
-      setUserImage(res.data.user.imageUrl);
-    } catch (e) {
-      console.log(e);
+      setAboutAlert({
+        msg: '로그인에 실패하였습니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
     }
   };
 
@@ -98,6 +99,7 @@ const Login = (props) => {
 
   return (
     <div>
+      {aboutAlert.isOpen && <AlertModal />}
       <BackGround>
         <Wrapper>
           <LoginWrapper>
@@ -170,7 +172,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   background-color: white;
-  box-shadow: 2px 2px 32px #bdbcbc;
+  box-shadow: 2px 2px 32px rgba(10, 32, 98, 0.15);
   border-radius: 40px;
 `;
 
@@ -184,6 +186,7 @@ const LoginWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `;
 
 const LogoWrapper = styled.div`
@@ -264,6 +267,15 @@ const SaveId = styled.div`
   margin-top: 30px;
   display: flex;
   align-items: center;
+
+  label {
+    @media screen and (max-width: 1700px) {
+      font-size: 14px;
+    }
+    font-size: 16px;
+    color: #868686;
+    font-weight: 400;
+  }
 `;
 
 const CheckBox = styled.input`
@@ -274,9 +286,9 @@ const CheckBox = styled.input`
   appearance: none;
   width: 25px;
   height: 25px;
-  margin: 8px;
+  margin-right: 8px;
   display: inline-block;
-  border: 3px solid #bcbcbc;
+  border: 2px solid #bcbcbc;
   border-radius: 3px;
   cursor: pointer;
 
@@ -297,16 +309,18 @@ const CheckBox = styled.input`
 
 const ManageAccount = styled.div`
   @media screen and (max-width: 1700px) {
-    margin-top: 5px;
+    top: 298px;
   }
   display: flex;
   flex-direction: row;
-  margin-top: 30px;
+  position: absolute;
+  top: 465px;
+  left: 0;
 `;
 
 const SignUp = styled(Link)`
   @media screen and (max-width: 1700px) {
-    font-size: 15px;
+    font-size: 14px;
   }
   width: 90px;
   border-right: 2px solid #eaeaea;
@@ -317,7 +331,8 @@ const SignUp = styled(Link)`
 
 const FindAccount = styled(Link)`
   @media screen and (max-width: 1700px) {
-    font-size: 15px;
+    font-size: 14px;
+    margin-left: 30px;
   }
   margin-left: 28px;
   font-size: 16px;
@@ -327,11 +342,11 @@ const FindAccount = styled(Link)`
 
 const SocialLogin = styled.div`
   @media screen and (max-width: 1700px) {
-    margin-top: 12px;
+    margin-top: 55px;
   }
   width: 100%;
   height: 150px;
-  margin-top: 30px;
+  margin-top: 80px;
   display: flex;
   flex-direction: column;
 `;

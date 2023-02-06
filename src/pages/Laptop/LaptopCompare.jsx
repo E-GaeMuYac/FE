@@ -13,13 +13,13 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 
-import { useRecoilValue } from 'recoil';
-// import { compareBoxData } from '../../recoil/recoilStore';
-import { compareBoxData } from '../../recoil/recoilStore';
+import { useRecoilValue, useRecoilState } from 'recoil';
+import { compareBoxData, alertModalState } from '../../recoil/recoilStore';
 
 import { useGetVersusQuery } from '../../query/versusQuery';
 import LikeItBtn from '../../components/common/LikeItBtn';
 import Layout from '../../components/layout/Layout';
+import AlertModal from '../../components/common/AlertModal';
 
 const VersusContent = ({ medicineInfo, query }) => {
   // ------------------------------------------------------------
@@ -46,45 +46,48 @@ const VersusContent = ({ medicineInfo, query }) => {
   return <div className='versusContentWrap'>{versusContentDesc}</div>;
 };
 
-const VersusCard = ({ info }) => {
+const VersusCard = ({ info, type }) => {
   const navigate = useNavigate();
   const gotoDetail = (id) => {
     navigate(`/detail/${id}?tab=효능 효과`);
   };
   return (
-    <VersusCardWrap image={info.itemImage}>
-      <div className='cardImg'></div>
-      <div className='cardName'>{info.itemName}</div>
-      <div className='cardContentDescWrap'>
-        <div className='cardContentDesc' style={{ textAlign: 'right' }}>
-          {info.etcOtcCode}
-        </div>
-        <hr />
-        <div className='cardContentDesc'>{info.entpName}</div>
-      </div>
-      <div className='cardContentTagWrap'>
-        {info.productType.map((tag) => (
-          <div key={tag} className='cardContentTag'>
-            {tag}
+    <VersusCardWrap image={info.itemImage} type={type}>
+      <div className='card'>
+        <div className='cardImg'></div>
+        <div className='cardName'>{info.itemName}</div>
+        <div className='cardContentDescWrap'>
+          <div className='cardContentDesc' style={{ textAlign: 'right' }}>
+            {info.etcOtcCode}
           </div>
-        ))}
+          <hr />
+          <div className='cardContentDesc'>{info.entpName}</div>
+        </div>
+        <div className='cardContentTagWrap'>
+          {info.productType.map((tag) => (
+            <div key={tag} className='cardContentTag'>
+              {tag}
+            </div>
+          ))}
+        </div>
+        <div className='cardBtnWrap'>
+          <LikeItBtn id={info.medicineId} dibs={info.dibs} />
+          <button
+            className='goToDetailBtn'
+            onClick={() => {
+              gotoDetail(info.medicineId);
+            }}>
+            이 약품만 보러가기
+          </button>
+        </div>
       </div>
-
-      <div className='cardBtnWrap'>
-        <LikeItBtn id={info.medicineId} dibs={info.dibs} />
-        <button
-          className='goToDetailBtn'
-          onClick={() => {
-            gotoDetail(info.medicineId);
-          }}>
-          이 약품만 보러가기
-        </button>
-      </div>
+      <div className='characterImg'></div>
     </VersusCardWrap>
   );
 };
 
 const LaptopCompare = () => {
+  const [aboutAlert, setAboutAlert] = useRecoilState(alertModalState);
   const location = useLocation().pathname;
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
@@ -100,7 +103,11 @@ const LaptopCompare = () => {
 
   useEffect(() => {
     if (!localStorage.getItem('refreshToken')) {
-      alert('로그인 시 이용 가능합니다.');
+      setAboutAlert({
+        msg: '로그인 후 이용 가능합니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
       navigate('/');
     }
   }, []);
@@ -135,6 +142,8 @@ const LaptopCompare = () => {
   const [materialBExplainActive, setMaterialBExplainActive] = useState(false);
   const [materialExplainY, setMaterialExplainY] = useState(0);
   const [materialExplainName, setMaterialExplainName] = useState('');
+  const [materialExplainAmountA, setMaterialExplainAmountA] = useState('');
+  const [materialExplainAmountB, setMaterialExplainAmountB] = useState('');
   const [materialExplainDesc, setMaterialExplainDesc] = useState('');
 
   useLayoutEffect(() => {
@@ -250,9 +259,6 @@ const LaptopCompare = () => {
     if (versusList.length === 2 && query === '성분그래프') {
       for (let i = 0; i < versusList[0].materialName?.length; i++) {
         for (let j = 0; j < versusList[1].materialName?.length; j++) {
-          // console.log(versusList[0].materialName[i].allergy);
-          // console.log(versusList[1].materialName[j].allergy);
-
           const root = am5.Root.new('chartdiv');
 
           const chart = root.container.children.push(
@@ -287,8 +293,8 @@ const LaptopCompare = () => {
               endAngle: -270,
 
               tooltip: tootip,
-              legendValueText: '[{fill}]{category}',
-              legendLabelText: `[bold {fill}]{value.formatNumber('#.#')}mg`,
+              legendValueText: '{category}',
+              legendLabelText: `{value.formatNumber('#.#')}mg`,
             })
           );
           series.slices.template.setAll({
@@ -298,25 +304,26 @@ const LaptopCompare = () => {
           series
             .get('colors')
             .set('colors', [
-              am5.color(0x091a7a),
-              am5.color(0x1939b7),
-              am5.color(0x3366ff),
-              am5.color(0x6690ff),
-              am5.color(0x84a9ff),
-              am5.color(0xadc8ff),
-              am5.color(0x13097a),
-              am5.color(0x2b19b7),
-              am5.color(0x5033ff),
-              am5.color(0x7e66ff),
-              am5.color(0x9984ff),
-              am5.color(0xbcadff),
-              am5.color(0x0b2d78),
-              am5.color(0x1d5cb5),
-              am5.color(0x2a7bd8),
-              am5.color(0x3a9efc),
-              am5.color(0x6bbdfd),
-              am5.color(0x88d1fe),
-              am5.color(0xb0e4fe),
+              am5.color('#3366FF'),
+              am5.color('#102693'),
+              am5.color('#1939B7'),
+              am5.color('#6690FF'),
+              am5.color('#091A7A'),
+              am5.color('#7433FF'),
+              am5.color('#2D1093'),
+              am5.color('#4119B7'),
+              am5.color('#9B66FF'),
+              am5.color('#1E097A'),
+              am5.color('#00CFA5'),
+              am5.color('#006E78'),
+              am5.color('#009593'),
+              am5.color('#38E2AF'),
+              am5.color('#005163'),
+              am5.color('#5598FC'),
+              am5.color('#1B3C92'),
+              am5.color('#2A57B5'),
+              am5.color('#7FB6FD'),
+              am5.color('#102978'),
             ]);
 
           series.data.setAll(graphData);
@@ -341,8 +348,8 @@ const LaptopCompare = () => {
               startAngle: -90,
               endAngle: 90,
               tooltip: tootip,
-              legendValueText: '[{fill}]{category}',
-              legendLabelText: `[bold {fill}]{value.formatNumber('#.#')}mg`,
+              legendValueText: '{category}',
+              legendLabelText: `{value.formatNumber('#.#')}mg`,
             })
           );
 
@@ -350,25 +357,26 @@ const LaptopCompare = () => {
           series2
             .get('colors')
             .set('colors', [
-              am5.color(0x091a7a),
-              am5.color(0x1939b7),
-              am5.color(0x3366ff),
-              am5.color(0x6690ff),
-              am5.color(0x84a9ff),
-              am5.color(0xadc8ff),
-              am5.color(0x13097a),
-              am5.color(0x2b19b7),
-              am5.color(0x5033ff),
-              am5.color(0x7e66ff),
-              am5.color(0x9984ff),
-              am5.color(0xbcadff),
-              am5.color(0x0b2d78),
-              am5.color(0x1d5cb5),
-              am5.color(0x2a7bd8),
-              am5.color(0x3a9efc),
-              am5.color(0x6bbdfd),
-              am5.color(0x88d1fe),
-              am5.color(0xb0e4fe),
+              am5.color('#3366FF'),
+              am5.color('#102693'),
+              am5.color('#1939B7'),
+              am5.color('#6690FF'),
+              am5.color('#091A7A'),
+              am5.color('#7433FF'),
+              am5.color('#2D1093'),
+              am5.color('#4119B7'),
+              am5.color('#9B66FF'),
+              am5.color('#1E097A'),
+              am5.color('#00CFA5'),
+              am5.color('#006E78'),
+              am5.color('#009593'),
+              am5.color('#38E2AF'),
+              am5.color('#005163'),
+              am5.color('#5598FC'),
+              am5.color('#1B3C92'),
+              am5.color('#2A57B5'),
+              am5.color('#7FB6FD'),
+              am5.color('#102978'),
             ]);
           series2.slices.template.setAll({
             templateField: 'columnSettings',
@@ -395,6 +403,8 @@ const LaptopCompare = () => {
             minWidth: 60,
             maxWidth: 100,
             marginRight: 10,
+            fill: '#242424',
+            templateField: 'columnSettings',
             fontSize: 17,
             fontWeight: 500,
             fontFamily: 'Noto Sans KR',
@@ -403,6 +413,8 @@ const LaptopCompare = () => {
             minWidth: 120,
             maxWidth: 120,
             marginRight: 10,
+            fill: '#242424',
+            templateField: 'columnSettings',
             fontSize: 16,
             fontWeight: 500,
             fontFamily: 'Noto Sans KR',
@@ -415,6 +427,9 @@ const LaptopCompare = () => {
             setMaterialAExplainActive(true);
             setMaterialExplainName(
               e.target.dataItem.dataContext.dataContext.material
+            );
+            setMaterialExplainAmountA(
+              e.target.dataItem.dataContext.dataContext.medicineA
             );
             setMaterialExplainY(e.target._privateSettings.y);
             //e.target.dataItem.dataContext.dataContext.material = 성분 이름 추출
@@ -449,6 +464,8 @@ const LaptopCompare = () => {
             minWidth: 60,
             maxWidth: 100,
             marginRight: 10,
+            fill: '#242424',
+            templateField: 'columnSettings',
             fontSize: 17,
             fontWeight: 500,
             fontFamily: 'Noto Sans KR',
@@ -457,6 +474,8 @@ const LaptopCompare = () => {
             minWidth: 120,
             maxWidth: 120,
             marginRight: 10,
+            fill: '#242424',
+            templateField: 'columnSettings',
             fontSize: 16,
             fontWeight: 500,
             fontFamily: 'Noto Sans KR',
@@ -468,6 +487,9 @@ const LaptopCompare = () => {
             setMaterialBExplainActive(true);
             setMaterialExplainName(
               e.target.dataItem.dataContext.dataContext.material
+            );
+            setMaterialExplainAmountB(
+              e.target.dataItem.dataContext.dataContext.medicineB
             );
             setMaterialExplainY(e.target._privateSettings.y);
             //e.target.dataItem.dataContext.dataContext.material = 성분 이름 추출
@@ -575,15 +597,15 @@ const LaptopCompare = () => {
 
   return (
     <>
+      {aboutAlert.isOpen && <AlertModal />}
       {versusList.length === 2 ? (
         <Wrap>
           <Layout>
             <MainWrap>
               <div className='title'>선택한 약품 비교하기</div>
               <div className='versus'>
-                <VersusCard info={versusList[0]} />
-                <div className='versusImage'></div>
-                <VersusCard info={versusList[1]} />
+                <VersusCard info={versusList[0]} type='A' />
+                <VersusCard info={versusList[1]} type='B' />
               </div>
             </MainWrap>
             <TabBar location={location} query={query} />
@@ -596,7 +618,7 @@ const LaptopCompare = () => {
                     <div id='chartdiv'></div>
                     <div className='graphNameWrap'>
                       <div className='graphNameBox'>
-                        <div className='graphName1'>
+                        <div className='graphName A'>
                           {versusList[0].itemName}
                         </div>
                         <div className='totalAmountWrap A'>
@@ -613,7 +635,7 @@ const LaptopCompare = () => {
                         </div>
                       </div>
                       <div className='graphNameBox'>
-                        <div className='graphName2'>
+                        <div className='graphName B'>
                           {versusList[1].itemName}
                         </div>
                         <div className='totalAmountWrap B'>
@@ -640,7 +662,7 @@ const LaptopCompare = () => {
                           style={{ left: '1px' }}>
                           <div className='title'>
                             <span>성분명</span>
-                            {materialExplainName}
+                            {materialExplainName}({materialExplainAmountA}mg)
                           </div>
                           <div className='desc'>{materialExplainDesc}</div>
                         </MatrialExplainWrap>
@@ -684,16 +706,16 @@ const LaptopCompare = () => {
                             해당 의약품에서 가장 중요한 성분 3가지를 뽑아
                             사용자에게 제공합니다. 제공되는 성분 3가지는 용량에
                             상관없이{' '}
-                            <sapn className='mainMaterialDesc'>
+                            <span className='mainMaterialDesc'>
                               오직 중요순서로 기재됩니다.
-                            </sapn>
+                            </span>
                           </span>
                         </div>
                       </div>
                       <ul>
-                        {versusList[0].materialName.map((list) =>
-                          versusList[0].materialName.indexOf(list) < 3 ? (
-                            versusList[0].materialName.indexOf(list) === 0 ? (
+                        {versusList[0].materialName.map(
+                          (list) =>
+                            versusList[0].materialName.indexOf(list) < 3 && (
                               <li key={list.material}>
                                 <div
                                   className={
@@ -702,12 +724,8 @@ const LaptopCompare = () => {
                                       : 'top1AllergyFalse'
                                   }>
                                   <div className='versusContentMaterialPercent'>
-                                    {Math.round(
-                                      (Number(list.분량) /
-                                        medicineTotalAmount(versusList[0])) *
-                                        100
-                                    )}
-                                    %
+                                    {versusList[0].materialName.indexOf(list) +
+                                      1}
                                   </div>
                                 </div>
                                 <div
@@ -716,68 +734,16 @@ const LaptopCompare = () => {
                                       ? 'versusMaterialNameAllergyTrue'
                                       : 'versusMaterialNameAllergyFalse'
                                   }>
-                                  {list.material}
-                                </div>
-                              </li>
-                            ) : versusList[0].materialName.indexOf(list) ===
-                              1 ? (
-                              <li key={list.material}>
-                                <div className='percentBox'>
-                                  <div
-                                    className={
-                                      list.allergy
-                                        ? 'top2AllergyTrue'
-                                        : 'top2AllergyFalse'
-                                    }>
-                                    <div className='versusContentMaterialPercent'>
-                                      {Math.round(
-                                        (Number(list.분량) /
-                                          medicineTotalAmount(versusList[0])) *
-                                          100
-                                      )}
-                                      %
-                                    </div>
-                                  </div>
-                                </div>
-                                <div
-                                  className={
-                                    list.allergy
-                                      ? 'versusMaterialNameAllergyTrue'
-                                      : 'versusMaterialNameAllergyFalse'
-                                  }>
-                                  {list.material}
-                                </div>
-                              </li>
-                            ) : (
-                              <li key={list.material}>
-                                <div className='percentBox'>
-                                  <div
-                                    className={
-                                      list.allergy
-                                        ? 'top3AllergyTrue'
-                                        : 'top3AllergyFalse'
-                                    }>
-                                    <div className='versusContentMaterialPercent'>
-                                      {Math.round(
-                                        (Number(list.분량) /
-                                          medicineTotalAmount(versusList[0])) *
-                                          100
-                                      )}
-                                      %
-                                    </div>
-                                  </div>
-                                </div>
-                                <div
-                                  className={
-                                    list.allergy
-                                      ? 'versusMaterialNameAllergyTrue'
-                                      : 'versusMaterialNameAllergyFalse'
-                                  }>
-                                  {list.material}
+                                  {list.material} (
+                                  {Math.round(
+                                    (Number(list.분량) /
+                                      medicineTotalAmount(versusList[0])) *
+                                      100
+                                  )}
+                                  %)
                                 </div>
                               </li>
                             )
-                          ) : null
                         )}
                       </ul>
                     </div>
@@ -792,7 +758,7 @@ const LaptopCompare = () => {
                           Active={materialBExplainActive}>
                           <div className='title'>
                             <span>성분명</span>
-                            {materialExplainName}
+                            {materialExplainName}({materialExplainAmountB}mg)
                           </div>
                           <div className='desc'>{materialExplainDesc}</div>
                         </MatrialExplainWrap>
@@ -844,16 +810,16 @@ const LaptopCompare = () => {
                             해당 의약품에서 가장 중요한 성분 3가지를 뽑아
                             사용자에게 제공합니다. 제공되는 성분 3가지는 용량에
                             상관없이{' '}
-                            <sapn className='mainMaterialDesc'>
+                            <span className='mainMaterialDesc'>
                               오직 중요순서로 기재됩니다.
-                            </sapn>
+                            </span>
                           </span>
                         </div>
                       </div>
                       <ul>
-                        {versusList[1].materialName.map((list) =>
-                          versusList[1].materialName.indexOf(list) < 3 ? (
-                            versusList[1].materialName.indexOf(list) === 0 ? (
+                        {versusList[1].materialName.map(
+                          (list) =>
+                            versusList[1].materialName.indexOf(list) < 3 && (
                               <li key={list.material}>
                                 <div
                                   className={
@@ -862,12 +828,8 @@ const LaptopCompare = () => {
                                       : 'top1AllergyFalse'
                                   }>
                                   <div className='versusContentMaterialPercent'>
-                                    {Math.round(
-                                      (Number(list.분량) /
-                                        medicineTotalAmount(versusList[1])) *
-                                        100
-                                    )}
-                                    %
+                                    {versusList[1].materialName.indexOf(list) +
+                                      1}
                                   </div>
                                 </div>
                                 <div
@@ -876,68 +838,16 @@ const LaptopCompare = () => {
                                       ? 'versusMaterialNameAllergyTrue'
                                       : 'versusMaterialNameAllergyFalse'
                                   }>
-                                  {list.material}
-                                </div>
-                              </li>
-                            ) : versusList[1].materialName.indexOf(list) ===
-                              1 ? (
-                              <li key={list.material}>
-                                <div className='percentBox'>
-                                  <div
-                                    className={
-                                      list.allergy
-                                        ? 'top2AllergyTrue'
-                                        : 'top2AllergyFalse'
-                                    }>
-                                    <div className='versusContentMaterialPercent'>
-                                      {Math.round(
-                                        (Number(list.분량) /
-                                          medicineTotalAmount(versusList[1])) *
-                                          100
-                                      )}
-                                      %
-                                    </div>
-                                  </div>
-                                </div>
-                                <div
-                                  className={
-                                    list.allergy
-                                      ? 'versusMaterialNameAllergyTrue'
-                                      : 'versusMaterialNameAllergyFalse'
-                                  }>
-                                  {list.material}
-                                </div>
-                              </li>
-                            ) : (
-                              <li key={list.material}>
-                                <div className='percentBox'>
-                                  <div
-                                    className={
-                                      list.allergy
-                                        ? 'top3AllergyTrue'
-                                        : 'top3AllergyFalse'
-                                    }>
-                                    <div className='versusContentMaterialPercent'>
-                                      {Math.round(
-                                        (Number(list.분량) /
-                                          medicineTotalAmount(versusList[1])) *
-                                          100
-                                      )}
-                                      %
-                                    </div>
-                                  </div>
-                                </div>
-                                <div
-                                  className={
-                                    list.allergy
-                                      ? 'versusMaterialNameAllergyTrue'
-                                      : 'versusMaterialNameAllergyFalse'
-                                  }>
-                                  {list.material}
+                                  {list.material} (
+                                  {Math.round(
+                                    (Number(list.분량) /
+                                      medicineTotalAmount(versusList[1])) *
+                                      100
+                                  )}
+                                  %)
                                 </div>
                               </li>
                             )
-                          ) : null
                         )}
                       </ul>
                     </div>
@@ -992,27 +902,26 @@ const MainWrap = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
-  }
-  .versusImage {
-    width: 238px;
-    height: 161px;
-    background-image: url('/assets/image/versusImg.png');
-    background-size: cover;
-    background-position: center;
+    gap: 20px;
   }
 `;
 const VersusCardWrap = styled.div`
-  @media screen and (max-width: 1700px) {
-    width: 280px;
-    min-height: 320px;
-    padding: 20px 24px;
+  position: relative;
+
+  .card {
+    @media screen and (max-width: 1700px) {
+      width: 280px;
+      min-height: 320px;
+      padding: 20px 24px;
+    }
+    width: 324px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
+    border-radius: 25px;
+    z-index: 5;
   }
-  width: 324px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15);
-  border-radius: 25px;
   .cardImg {
     @media screen and (max-width: 1700px) {
       width: 100%;
@@ -1102,25 +1011,6 @@ const VersusCardWrap = styled.div`
     gap: 14px;
     margin-bottom: 30px;
   }
-  .likeBtn {
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    border: none;
-    box-shadow: 0 0 6px 1px rgba(0, 0, 0, 0.2);
-    background-color: white;
-    cursor: pointer;
-  }
-  .likeBtnImg {
-    width: 26px;
-    height: 26px;
-    background-image: url('/assets/image/icon_heart1.png');
-    background-size: cover;
-    background-position: center;
-  }
   .goToDetailBtn {
     @media screen and (max-width: 1700px) {
       width: 170px;
@@ -1135,10 +1025,32 @@ const VersusCardWrap = styled.div`
     line-height: 20px;
     cursor: pointer;
   }
+  .characterImg {
+    position: absolute;
+    bottom: 0;
+    ${({ type }) =>
+      type === 'A'
+        ? `
+    background-image : url("/assets/image/versusCharacterA.png");
+    background-size: cover;
+    background-position: center;
+    width: 141px;
+    height: 132px;
+    left: -112.5px;
+    `
+        : `
+    background-image : url("/assets/image/versusCharacterB.png");
+    background-size: cover;
+    background-position: center;
+    width: 102.75px;
+    height: 179.25px;
+    right: -90px;
+    `}
+  }
 `;
 const SubWrap = styled.div`
   width: 100%;
-  margin-bottom: 60px;
+  margin: 30px 0px 60px;
   .content {
     width: 100%;
     display: flex;
@@ -1154,7 +1066,7 @@ const SubWrap = styled.div`
     width: 100%;
     background-color: #f6f7fa;
     border-radius: 25px;
-    padding: 40px 40px;
+    padding: 30px 30px 130px;
     white-space: pre-wrap;
     word-break: break-all;
     min-height: 530px;
@@ -1165,7 +1077,7 @@ const SubWrap = styled.div`
     display: flex;
     justify-content: space-between;
     gap: 114px;
-    margin-bottom: 78px;
+    margin: 21px 0 78px;
   }
   .materialPercent {
     font-size: 24px;
@@ -1186,7 +1098,7 @@ const SubWrap = styled.div`
     font-size: 25px;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 27px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1247,13 +1159,12 @@ const SubWrap = styled.div`
   .graphNameBox {
     width: 140px;
   }
-  .graphName1 {
+  .graphName {
     @media screen and (max-width: 1700px) {
       padding: 7px 10px;
     }
     padding: 6px 10px;
     white-space: normal;
-    background-color: #c2d2ff;
     word-break: break-all;
     border-radius: 10px;
     color: #242424;
@@ -1263,21 +1174,11 @@ const SubWrap = styled.div`
     text-align: center;
     margin-bottom: 10px;
   }
-  .graphName2 {
-    @media screen and (max-width: 1700px) {
-      padding: 7px 10px;
-    }
-    padding: 6px 10px;
-    white-space: normal;
+  .graphName.A {
+    background-color: #a9beff;
+  }
+  .graphName.B {
     background-color: #7e66ff;
-    word-break: break-all;
-    border-radius: 10px;
-    color: #242424;
-    font-size: 15px;
-    line-height: 22px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 10px;
   }
   .totalAmountWrap {
     display: flex;
@@ -1369,24 +1270,25 @@ const SubWrap = styled.div`
     border-radius: 25px;
   }
   .versusContentMaterialWrap ul {
-    height: 250px;
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 24px;
+    align-items: center;
+    gap: 30px;
+    height: 270px;
   }
   .versusContentMaterialWrap ul li {
+    width: 100%;
     font-size: 20px;
-    height: 80px;
+    height: 70px;
     display: flex;
     align-items: center;
   }
   .versusContentMaterialPercent {
     @media screen and (max-width: 1700px) {
-      font-size: 22px;
+      font-size: 30px;
     }
     width: 80px;
     font-size: 28px;
@@ -1402,9 +1304,8 @@ const SubWrap = styled.div`
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    margin-left: 12px;
+    margin-left: 65px;
     color: #ff3c26;
-    text-align: center;
   }
   .versusMaterialNameAllergyFalse {
     @media screen and (max-width: 1700px) {
@@ -1418,81 +1319,39 @@ const SubWrap = styled.div`
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    margin-left: 12px;
-    text-align: center;
+    margin-left: 65px;
   }
   .top1AllergyFalse {
-    width: 90px;
-    height: 90px;
-    background-color: #84a9ff;
-    color: black;
-    border-radius: 50px;
+    width: 70px;
+    height: 70px;
+    color: #3366ff;
+    border: 7px solid transparent;
+    background: radial-gradient(#ebf0ff, #ebf0ff) padding-box,
+      radial-gradient(#507cff 0%, #c9d6ff 100%) border-box;
+    font-size: 34px;
+    line-height: 49px;
+    font-weight: 900;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
   }
   .top1AllergyTrue {
-    width: 90px;
-    height: 90px;
-    background-color: #ffecea;
+    width: 70px;
+    height: 70px;
+    border: 7px solid transparent;
+    background: radial-gradient(#ffecea, #ffecea) padding-box,
+      radial-gradient(#ff5050 0%, #ffc9c9 100%) border-box;
     color: #ff3c26;
+    font-size: 34px;
+    line-height: 49px;
+    font-weight: 900;
     border-radius: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-  }
-  .top2AllergyFalse {
-    width: 82px;
-    height: 82px;
-    background-color: #adc8ff;
-    color: #434343;
-    border-radius: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-  .top2AllergyTrue {
-    width: 82px;
-    height: 82px;
-    background-color: #ffecea;
-    color: #ff3c26;
-    border-radius: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-  .top3AllergyFalse {
-    width: 75px;
-    height: 75px;
-    background-color: #d6e4ff;
-    color: #686868;
-    border-radius: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-  .top3AllergyTrue {
-    width: 75px;
-    height: 75px;
-    background-color: #ffecea;
-    color: #ff3c26;
-    border-radius: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-  .percentBox {
-    width: 90px;
-    height: 90px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
   .mainMaterialIcon {
     @media screen and (max-width: 1700px) {

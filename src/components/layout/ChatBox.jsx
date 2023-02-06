@@ -315,6 +315,15 @@ const ChatBox = () => {
   }, [socket]);
 
   // ---------------------------------------------------------------
+  //정해진 요일, 시간을 제외한 때에만 버튼 활성화
+  const connectAdminBtn = () => {
+    const time = new Date(Date.now()).getHours();
+    const day = new Date(Date.now()).getDay();
+    if (14 <= time < 21 && day !== 0 && day !== 6) {
+      return <button onClick={callAdmin}>연결하기</button>;
+    }
+  };
+  // ---------------------------------------------------------------
   return (
     <>
       <ChatBoxOpenBtn
@@ -409,9 +418,8 @@ const ChatBox = () => {
                           </div>
                           <div className='messageTime'>{list.time}</div>
                         </li>
-                        {list.message.includes('채팅 상담이 필요하신가요?') && (
-                          <button onClick={callAdmin}>연결하기</button>
-                        )}
+                        {list.message.includes('채팅 상담이 필요하신가요?') &&
+                          connectAdminBtn()}
                       </div>
                     )
                   )}

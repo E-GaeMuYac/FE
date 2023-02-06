@@ -1,85 +1,67 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IoMdSettings } from 'react-icons/io';
-import { api, userApi } from '../apis/apiInstance';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import MypageTab from '../contents/MypageTab';
 import qs from 'qs';
 import MyLikeList from '../contents/MyLikeList';
 import Allergy from '../contents/Allergy';
 import MyReviews from '../contents/MyReview';
 
-import { Mobile, Laptop, PC } from '../query/useMediaQuery';
+//쿼리임포트
+import {
+  useDefaultImage,
+  useDeleteAccount,
+  useEditNickname,
+  useGetPresignedUrl,
+  useGetTips,
+  usePutS3Upload,
+} from '../query/userQuery';
 
-const User = (props) => {
+import { Laptop, PC } from '../query/useMediaQuery';
+import { useRecoilState } from 'recoil';
+import {
+  confirmModalState,
+  alertModalState,
+  userInfoState,
+} from '../recoil/recoilStore';
+import AlertModal from '../components/common/AlertModal';
+
+const User = () => {
   const navigate = useNavigate();
   const [isTextClicked, setIsTextClicked] = useState(false);
   const [isFileClicked, setIsFileClicked] = useState(false);
-  const [nickname, setNickname] = useState('');
-  const [email, setEmail] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [loginCount, setLoginCount] = useState('');
   const [prevImg, setPrevImg] = useState('');
+  const [prevOpen, setPrevOpen] = useState(false);
   const [newImg, setNewImg] = useState();
-  const [newNickname, setNewNickname] = useState(nickname);
   const [serviceMsg, setServiceMsg] = useState('');
   const [delPassword, setDelPassword] = useState('');
   const [isShow, setIsShow] = useState(false);
-  const [loginType, setLoginType] = useState('');
-  const setUserImage = props.setuserimage;
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [aboutConfirm, setAboutConfirm] = useRecoilState(confirmModalState);
+  const [aboutAlert, setAboutAlert] = useRecoilState(alertModalState);
 
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
   }).tab;
 
+  const tipsData = useGetTips().data;
+
   useEffect(() => {
-    getProfile();
-    userMessage();
-  }, []);
-
-  const getProfile = async () => {
-    try {
-      const res = await userApi.get('api/users/find');
-      setNickname(res.data.user.nickname);
-      setLoginCount(res.data.user.loginCount);
-      setImageUrl(res.data.user.imageUrl);
-      setLoginType(res.data.user.loginType);
-      setEmail(res.data.user.email);
-    } catch (e) {
-      console.log(e);
-      alert('로그인 정보가 필요합니다.');
-      navigate('/login');
+    if (tipsData) {
+      setServiceMsg(tipsData.data.post);
     }
-  };
-
-  const userMessage = async () => {
-    try {
-      const res = await api.get('api/posts');
-      setServiceMsg(res.data.post);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  }, [tipsData]);
 
   const changeNickname = () => {
     setIsTextClicked(true);
   };
 
-  const changesDone = () => {
-    modifyNickname({ nickname: newNickname });
-  };
+  const mutateNickname = useEditNickname(userInfo.nickname);
 
-  const modifyNickname = async (payload) => {
-    try {
-      const res = await userApi.put('api/users/update/nickname', payload);
-      setIsTextClicked(false);
-      setNickname(payload.nickname);
-      alert(res.data.message);
-    } catch (e) {
-      console.log(e);
-      alert('정보 수정에 실패하였습니다.');
-    }
+  const modifyNickname = () => {
+    mutateNickname.mutate(userInfo.nickname);
+    setIsTextClicked(false);
   };
 
   const imageInput = (e) => {
@@ -88,16 +70,25 @@ const User = (props) => {
     const sizeLimit = 3 * 1024 * 1024;
 
     if (file.size > sizeLimit) {
-      alert('업로드 가능한 최대 용량은 3MB입니다.');
+      setAboutAlert({
+        msg: '업로드 가능한 최대 용량은 3MB입니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
       e.target.value = '';
     } else if (!file.type.includes('image')) {
-      alert('이미지 파일만 업로드 가능합니다.');
+      setAboutAlert({
+        msg: '이미지 파일만 업로드 가능합니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
       e.target.value = '';
     } else {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         setPrevImg(reader.result);
+        setPrevOpen(true);
       };
       setNewImg(file);
       setIsFileClicked(true);
@@ -105,40 +96,25 @@ const User = (props) => {
   };
 
   const nickInput = (e) => {
-    setNewNickname(e.target.value);
+    setUserInfo({ ...userInfo, nickname: e.target.value });
   };
 
-  //서버에서 presigned url 받아옴
-  const modifyImage = async () => {
-    try {
-      const res = await userApi.put('/api/users/update/image', {
-        filename: newImg.name,
-      });
-      const presignedUrl = res.data.presignedUrl;
-      setIsFileClicked(false);
-      S3Upload(presignedUrl);
-    } catch (e) {
-      console.log(e);
-    }
+  // 서버에서 presigned url 받아온 후 s3에 업로드
+
+  const { mutateAsync: presignedUrlData } = useGetPresignedUrl();
+  const s3Upload = usePutS3Upload();
+
+  const modifyImageHandler = async () => {
+    const presignedUrl = await presignedUrlData(newImg);
+    s3Upload.mutate({ presignedUrl: presignedUrl.data.presignedUrl, newImg });
+    setIsFileClicked(false);
+    setPrevOpen(false);
   };
-  //presigned url로 이미지 보내기
-  const S3Upload = async (presignedUrl) => {
-    try {
-      await axios.put(presignedUrl, newImg);
-      alert('이미지 수정이 완료되었습니다.');
-      setUserImage(prevImg);
-    } catch (e) {
-      alert(e);
-    }
-  };
+
+  const mutateDefaultImg = useDefaultImage();
 
   const defaultImgHandler = async () => {
-    try {
-      await userApi.put('/api/users/update/image');
-      window.location.reload('/mypage');
-    } catch (e) {
-      console.log(e);
-    }
+    mutateDefaultImg.mutate();
   };
 
   const cancelChange = () => {
@@ -147,12 +123,12 @@ const User = (props) => {
 
   const cancelImgChange = () => {
     setIsFileClicked(false);
-    setPrevImg(imageUrl);
+    setPrevImg(userInfo.imageUrl);
   };
 
   const sortLoginType = async () => {
     try {
-      if (loginType !== 'Local') {
+      if (userInfo.loginType !== 'Local') {
         await deleteAccount();
       } else {
         setIsShow(true);
@@ -162,26 +138,32 @@ const User = (props) => {
     }
   };
 
-  const deleteAccount = async (password) => {
-    if (window.confirm('정말 탈퇴하시겠습니까?😢')) {
-      try {
-        await userApi.delete('/api/users/delete', {
-          data: {
-            password,
-          },
-          withCredentials: true,
-        });
+  const { mutateAsync: mutateDelAccount } = useDeleteAccount();
+
+  const deleteAccount = () => {
+    setIsShow(false);
+    setAboutConfirm({
+      msg: '정말 탈퇴하시겠습니까?😢',
+      btn: ['취소하기', '확인하기'],
+      isOpen: true,
+      delPassword,
+    });
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      if (aboutConfirm.isApprove === true && aboutConfirm.delPassword) {
+        await mutateDelAccount(aboutConfirm.delPassword);
         localStorage.clear();
-        alert('회원탈퇴가 완료되었습니다.');
         navigate('/');
-      } catch (e) {
-        alert('비밀번호를 알맞게 입력해주세요.');
       }
     }
-  };
+    fetchData();
+  }, [aboutConfirm]);
 
   return (
     <Wrapper>
+      {(aboutConfirm.isOpen || aboutAlert.isOpen) && <AlertModal />}
       {isShow && (
         <ModalBackground>
           <Modal>
@@ -194,9 +176,9 @@ const User = (props) => {
               </SignupInfo>
               <EmailBox>
                 <EmailBoxBg>
-                  <EmailBoxImg imageUrl={imageUrl} />
+                  <EmailBoxImg imageUrl={userInfo.imageUrl} />
                 </EmailBoxBg>
-                <span>{email}</span>
+                <span>{userInfo.email}</span>
               </EmailBox>
               <div className='form-floating form-width'>
                 <input
@@ -211,11 +193,12 @@ const User = (props) => {
                 />
                 <label>비밀번호</label>
               </div>
-              <ModalBtnWrap>
+              <ModalBtnWrap delPassword={delPassword}>
                 <button
                   className='cancel'
                   onClick={() => {
                     setIsShow(false);
+                    setDelPassword('');
                   }}>
                   취소하기
                 </button>
@@ -238,32 +221,54 @@ const User = (props) => {
       <MyPageWrap>
         <ProfileImg>
           <BackgroundUserImage>
-            <UserImage userImg={imageUrl} prevImg={prevImg}>
-              <label htmlFor='file-input'>
-                <IoMdSettings
-                  style={{
-                    position: 'absolute',
-                    top: 4,
-                    right: 4,
-                    color: 'white',
-                  }}
-                  size='30'
+            {prevOpen ? (
+              <PrevImage prevImg={prevImg}>
+                <label htmlFor='file-input'>
+                  <IoMdSettings
+                    style={{
+                      position: 'absolute',
+                      top: 4,
+                      right: 4,
+                      color: 'white',
+                    }}
+                    size='30'
+                  />
+                </label>
+                <input
+                  id='file-input'
+                  type='file'
+                  accept='image/*'
+                  onChange={imageInput}
                 />
-              </label>
-              <input
-                id='file-input'
-                type='file'
-                accept='image/*'
-                onChange={imageInput}
-              />
-            </UserImage>
+              </PrevImage>
+            ) : (
+              <UserImage userImg={userInfo.imageUrl}>
+                <label htmlFor='file-input'>
+                  <IoMdSettings
+                    style={{
+                      position: 'absolute',
+                      top: 4,
+                      right: 4,
+                      color: 'white',
+                    }}
+                    size='30'
+                  />
+                </label>
+                <input
+                  id='file-input'
+                  type='file'
+                  accept='image/*'
+                  onChange={imageInput}
+                />
+              </UserImage>
+            )}
           </BackgroundUserImage>
           {isFileClicked ? (
             <ModifyBtnBox>
               <CancelBtn type='button' onClick={cancelImgChange}>
                 취소
               </CancelBtn>
-              <FinishBtn type='button' onClick={modifyImage}>
+              <FinishBtn type='button' onClick={modifyImageHandler}>
                 변경완료
               </FinishBtn>
             </ModifyBtnBox>
@@ -277,7 +282,9 @@ const User = (props) => {
           <NicknameBox>
             {!isTextClicked ? (
               <div style={{ display: 'flex', height: '30px' }}>
-                <Nickname>{nickname ? `${nickname}님` : 'OOO님'}</Nickname>
+                <Nickname>
+                  {userInfo.nickname ? `${userInfo.nickname}님` : 'OOO님'}
+                </Nickname>
                 <div className='wrapNickname'>
                   <button className='editNickname' onClick={changeNickname} />
                 </div>
@@ -286,16 +293,12 @@ const User = (props) => {
               <NicknameInput>
                 <input
                   type='text'
-                  defaultValue={nickname}
+                  defaultValue={userInfo.nickname}
                   onChange={nickInput}
                   maxLength={20}
                 />
-                <button className='o' onClick={changesDone}>
-                  O
-                </button>
-                <button className='x' onClick={cancelChange}>
-                  X
-                </button>
+                <button className='o' onClick={modifyNickname} />
+                <button className='x' onClick={cancelChange} />
               </NicknameInput>
             )}
             <PC>
@@ -317,7 +320,7 @@ const User = (props) => {
             <CalenderWrap>
               <div className='calendar'>
                 <span>출석일수</span>
-                <h1>{`${loginCount}일`}</h1>
+                <h1>{`${userInfo.loginCount}일`}</h1>
               </div>
             </CalenderWrap>
           </div>
@@ -389,14 +392,16 @@ const MyPageHeader = styled.div`
   button {
     @media screen and (max-width: 1700px) {
       font-size: 14px;
+      padding: 4px 20px;
     }
-    width: 100px;
-    height: 30px;
+    padding: 5px 22px;
+    line-height: 21px;
     border: none;
     border-radius: 50px;
-    background-color: #242424;
+    background-color: #868686;
     color: #f0f0f0;
     font-size: 15px;
+    font-weight: 350;
   }
   .deleteAccount {
     position: relative;
@@ -407,6 +412,7 @@ const MyPageHeader = styled.div`
       margin: 25px 10px 10px 10px;
     }
     span {
+      background-color: pink;
       font-size: 18px;
       margin: auto;
     }
@@ -421,11 +427,6 @@ const MyPageHeader = styled.div`
       margin-top: 15px;
       margin-bottom: 3px;
       padding: 0 10px;
-    }
-    button {
-      border: none;
-      border-radius: 50px;
-      width: 90px;
     }
   }
 `;
@@ -527,7 +528,8 @@ const ModalBtnWrap = styled.div`
     height: 44px;
     border-radius: 50px;
     border: none;
-    background-color: #ffb0aa;
+    background-color: ${({ delPassword }) =>
+      delPassword === '' ? '#ffb0aa ' : '#ff392b'};
     color: white;
   }
 `;
@@ -654,12 +656,41 @@ const UserImage = styled.div`
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  background-image: ${(props) =>
-    props.prevImg
-      ? `url(${props.prevImg})`
-      : props.userImg
-      ? `url(${props.userImg})`
-      : null};
+  background-image: ${({ userImg }) => `url(${userImg})`};
+  background-size: cover;
+  background-position: center;
+  position: relative;
+
+  label {
+    @media screen and (max-width: 1700px) {
+      top: 76px;
+      left: 84px;
+    }
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    position: absolute;
+    top: 110px;
+    left: 120px;
+    background-color: #868686;
+    cursor: pointer;
+  }
+  input {
+    display: none;
+  }
+`;
+
+const PrevImage = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 108px;
+    height: 108px;
+    margin: 11px 11px;
+  }
+  margin: 15px 15px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-image: ${({ prevImg }) => `url(${prevImg})`};
   background-size: cover;
   background-position: center;
   position: relative;
@@ -843,31 +874,31 @@ const NicknameInput = styled.div`
     }
   }
   button {
-    padding: 0;
-    width: 25px;
-    height: 25px;
-    border: none;
-    border-radius: 50px;
-    background-color: #d0d0d0;
+    width: 32px;
+    height: 32px;
     cursor: pointer;
   }
   .x {
     @media screen and (max-width: 1700px) {
-      top: 4px;
-      right: 5px;
+      top: 0px;
+      right: 4px;
     }
+    background-image: url('/assets/image/CloseCircle.png');
+    background-size: cover;
     position: absolute;
-    top: 12px;
+    top: 8px;
     right: 15px;
   }
   .o {
     @media screen and (max-width: 1700px) {
-      top: 4px;
-      right: 36px;
+      top: 0px;
+      right: 31px;
     }
+    background-image: url('/assets/image/CheckCircle.png');
+    background-size: cover;
     position: absolute;
-    top: 12px;
-    right: 45px;
+    top: 8px;
+    right: 43px;
   }
 `;
 
@@ -876,7 +907,6 @@ const ProfileMsg = styled.div`
     width: 260px;
     font-size: 16px;
     margin-top: 35px;
-    /* background-color: aqua; */
   }
   width: 220px;
   height: 72px;
@@ -1028,6 +1058,10 @@ const Box = styled.div`
     border-radius: 24px;
     color: #2649d8;
     cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-use-select: none;
+    user-select: none;
 
     h1 {
       @media screen and (max-width: 1700px) {

@@ -41,8 +41,7 @@ const AddReviews = () => {
 
   const submitReview = async () => {
     try {
-      const res = await userApi.post(`/api/reviews/${id}`, { review: content });
-      alert(res.data.message);
+      await userApi.post(`/api/reviews/${id}`, { review: content });
       navigate(-1);
     } catch (error) {
       console.log(error);
@@ -55,7 +54,7 @@ const AddReviews = () => {
       <CardBox>
         <WrapContents>
           <Image imgUrl={medicineItem?.itemImage} />
-          <div style={{ marginRight: '20px' }}>
+          <div className='firstWrap'>
             <Name>{medicineItem?.itemName}</Name>
             <Categorize>
               {medicineItem?.productType?.map((list) => {
@@ -65,24 +64,7 @@ const AddReviews = () => {
           </div>
           <div className='labelWrap'>
             <TopLabel>{medicineItem?.entpName}</TopLabel>
-            <BottomLabel>
-              {medicineItem?.etcOtcCode}
-              <div className='etcOtcCodeDesc'>
-                {medicineItem?.etcOtcCode === '전문의약품' ? (
-                  <span className='tooltipText'>
-                    의사 또는 치과의사의 지시와 감독에 따라 사용되어야 하는
-                    의약품으로, 의사의 처방전에 의해서만 구입하여 사용할 수
-                    있습니다.
-                  </span>
-                ) : (
-                  <span className='tooltipText'>
-                    처방전 없이 약국에서 구입할 수 있는 의약품으로, 포장 용기에
-                    기재된 설명대로 올바르게 복용한다면 비교적 안전하게 사용할
-                    수 있습니다.
-                  </span>
-                )}
-              </div>
-            </BottomLabel>
+            <BottomLabel>{medicineItem?.etcOtcCode}</BottomLabel>
           </div>
         </WrapContents>
       </CardBox>
@@ -135,101 +117,57 @@ const PageTitle = styled.h3`
 `;
 
 const CardBox = styled.div`
+  @media screen and (max-width: 1700px) {
+    padding: 18px 26px;
+  }
   width: 100%;
-  margin: auto;
   border-radius: 25px;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  padding: 22px 30px;
 `;
 
 const WrapContents = styled.div`
-  padding: 21px 30px;
+  @media screen and (max-width: 1700px) {
+    padding: 0;
+  }
+  width: 100%;
   margin: auto;
   align-items: center;
   display: flex;
-  position: relative;
+
+  .firstWrap {
+    @media screen and (max-width: 1700px) {
+      width: 280px;
+      margin-right: 15px;
+    }
+    width: 350px;
+    height: 85px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-right: 30px;
+  }
   .labelWrap {
-    justify-content: center;
-    text-align: left;
+    @media screen and (max-width: 1700px) {
+      min-width: 265px;
+    }
+    display: flex;
+    width: 300px;
+    height: 85px;
+    flex-direction: column;
   }
   .boxWrap {
     display: flex;
     position: absolute;
     right: 30px;
   }
-  .etcOtcCodeDesc {
-    @media screen and (max-width: 1700px) {
-      width: 18px;
-      height: 18px;
-    }
-    width: 20px;
-    height: 20px;
-    position: relative;
-    background-image: url('/assets/image/의약품목설명아이콘.png');
-    background-size: cover;
-    background-position: center;
-    margin-left: 5px;
-    display: inline-block;
-    :hover .tooltipText {
-      display: block;
-    }
-    .tooltipText {
-      border-radius: 8px;
-      background-color: rgba(0, 0, 0, 0.8);
-      box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
-      display: none;
-      position: absolute;
-      top: 30px;
-      left: -30px;
-      width: 310px;
-      padding: 13px;
-      font-size: 15px;
-      line-height: 21px;
-      color: #ffffff;
-      opacity: 1;
-      z-index: 2;
-      font-weight: 400;
-      font-size: 14px;
-    }
-    .tooltipText::after {
-      content: '';
-      width: 0px;
-      height: 0px;
-      border-bottom: 10px solid rgba(0, 0, 0, 0.8);
-      border-top: 10px solid transparent;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      position: absolute;
-      left: 36.5px;
-      top: -20px;
-    }
-  }
-  .compareBox {
-    width: 276px;
-    height: 50px;
-    background-color: #cccccc;
-    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
-    color: #ffffff;
-    border-radius: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 20px;
-    cursor: pointer;
-  }
-  .compareBox.active {
-    background-color: #3366ff;
-    cursor: pointer;
-    border: 0;
-    :active {
-      background-color: #1a50f3;
-    }
-  }
 `;
 
 const Image = styled.div`
   width: 160px;
+  min-width: 150px;
   height: 85px;
   border-radius: 8px;
   background-image: ${({ imgUrl }) =>
@@ -242,35 +180,30 @@ const Image = styled.div`
 const Name = styled.div`
   @media screen and (max-width: 1700px) {
     font-size: 20px;
-    min-width: 220px;
-    max-width: 250px;
+    width: 308px;
   }
-  min-width: 360px;
-  max-width: 380px;
-  margin: auto;
+  width: 350px;
+  height: 33px;
+  color: black !important;
+  text-decoration: none;
   font-size: 24px;
   font-weight: 700;
   line-height: 35px;
-  justify-content: center;
 `;
 
 const Categorize = styled.div`
   div {
     @media screen and (max-width: 1700px) {
       font-size: 14px;
-      min-width: 54px;
-      height: 30px;
-      padding: 0 5px;
+      padding: 8px 10px;
     }
-    padding: 0 5px;
-    min-width: 69px;
-    height: 35px;
+    padding: 10px 12px;
     background: #ebf0ff;
     color: #3366ff;
     font-size: 16px;
     justify-content: center;
     align-items: center;
-    font-weight: 700;
+    font-weight: 500;
     line-height: 20px;
     border-radius: 8px;
     display: flex;
@@ -282,13 +215,13 @@ const Categorize = styled.div`
 
 const TopLabel = styled.div`
   @media screen and (max-width: 1700px) {
-    font-size: 15px;
-    line-height: 22px;
+    font-size: 16px;
+    line-height: 40px;
   }
-  height: 24px;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 24px;
+  height: 34px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 42px;
   color: #868686;
   margin-bottom: 10px;
   text-align: left;
@@ -296,12 +229,12 @@ const TopLabel = styled.div`
 
 const BottomLabel = styled.div`
   @media screen and (max-width: 1700px) {
-    font-size: 15px;
-    line-height: 22px;
+    font-size: 16px;
+    line-height: 24px;
   }
-  height: 24px;
-  font-size: 16px;
-  font-weight: 700;
+  height: 30px;
+  font-size: 18px;
+  font-weight: 400;
   line-height: 24px;
   color: #868686;
   display: flex;
@@ -327,6 +260,7 @@ const ReviewGuide = styled.div`
       font-size: 16px;
     }
     font-size: 20px;
+    font-weight: 350;
   }
 
   span {
@@ -334,7 +268,7 @@ const ReviewGuide = styled.div`
       font-size: 16px;
     }
     font-size: 20px;
-    font-weight: bold;
+    font-weight: 500;
     color: #ff392b;
   }
 `;
@@ -370,6 +304,7 @@ const ReviewArea = styled.textarea`
   outline: none;
   resize: none;
   font-size: 24px;
+  font-weight: 350;
 
   ::placeholder {
     @media screen and (max-width: 1700px) {
@@ -396,9 +331,9 @@ const ReviewArea = styled.textarea`
 const CountText = styled.span`
   position: absolute;
   bottom: 20px;
-  right: 60px;
+  right: 50px;
   font-size: 15px;
-  font-weight: bold;
+  font-weight: 600;
   color: ${(props) =>
     props.count !== 1000 && props.count >= 10 ? '#242424' : '#FF392B'};
 `;

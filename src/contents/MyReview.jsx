@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { IoIosWarning } from 'react-icons/io';
-import { AiFillLike, AiFillDislike } from 'react-icons/ai';
 import { useEffect } from 'react';
 import { userApi } from '../apis/apiInstance';
 import { Link } from 'react-router-dom';
+import { useRecoilValue, useRecoilState } from 'recoil';
+import { userInfoState, confirmModalState } from '../recoil/recoilStore';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
@@ -96,7 +96,9 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   );
 };
 
-const MyReviews = ({ userId }) => {
+const MyReviews = () => {
+  const userId = useRecoilValue(userInfoState).userId;
+  const [aboutConfirm, setAboutConfirm] = useRecoilState(confirmModalState);
   const [moreShow, setMoreShow] = useState(0);
   const [myReviewArr, setMyReviewArr] = useState([]);
   const [searchLength, setSearchLength] = useState(0);
@@ -106,7 +108,7 @@ const MyReviews = ({ userId }) => {
 
   useEffect(() => {
     getMyReviews();
-  }, [nowPageNum]);
+  }, [userId, nowPageNum]);
 
   const getMyReviews = async () => {
     try {
@@ -115,21 +117,42 @@ const MyReviews = ({ userId }) => {
       );
       setSearchLength(res.data.totalReview);
       setMyReviewArr(res.data.reviewList);
-      setSearchLength(res.data.totalReview);
+      console.log(res);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const deleteReview = async (id) => {
-    if (window.confirm('리뷰를 삭제하시겠습니까?')) {
-      try {
-        const res = await userApi.delete(`/api/reviews/${id}`);
-        alert(res.data.message);
-        getMyReviews();
-      } catch (error) {
-        console.log(error);
+  const deleteConfirm = async (reviewId) => {
+    setAboutConfirm({
+      msg: '리뷰를 삭제하시겠습니까?',
+      btn: ['취소하기', '삭제하기'],
+      isOpen: true,
+      reviewId,
+    });
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      if (aboutConfirm.isApprove === true) {
+        deleteReview();
       }
+    }
+    fetchData();
+  }, [aboutConfirm]);
+
+  const deleteReview = async () => {
+    try {
+      await userApi.delete(`/api/reviews/${aboutConfirm.reviewId}`);
+      getMyReviews();
+      setAboutConfirm({
+        msg: '',
+        btn: [],
+        isOpen: false,
+        isApprove: false,
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -179,7 +202,7 @@ const MyReviews = ({ userId }) => {
               </Link>
               <button
                 className='reviewBtn delete'
-                onClick={() => deleteReview(review.reviewId)}>
+                onClick={() => deleteConfirm(review.reviewId)}>
                 삭제하기
               </button>
             </div>
@@ -233,7 +256,7 @@ const MyReviews = ({ userId }) => {
                 disLike={review.dislike}
                 onClick={() => handleDisLike(review.reviewId)}>
                 <div />
-                도움 안돼요
+                도움 안돼요 {review.dislikeCount}
               </DislikeBtn>
             </Recommend>
             <DateWrited>
@@ -287,7 +310,6 @@ const WrapContents = styled.div`
   margin: auto;
   align-items: center;
   display: flex;
-  /* justify-content: space-between; */
 
   .firstWrap {
     @media screen and (max-width: 1700px) {
@@ -391,7 +413,7 @@ const WrapContents = styled.div`
       justify-content: center;
     }
     .delete {
-      background-color: red;
+      background-color: #242424;
     }
   }
 `;

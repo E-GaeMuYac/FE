@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { userApi } from '../../apis/apiInstance';
+import { useRecoilState } from 'recoil';
+import { userInfoState } from '../../recoil/recoilStore';
+import { useGetProfile } from '../../query/userQuery';
 
 const Nav = ({ page }) => {
   const location = useLocation();
@@ -32,27 +35,27 @@ const Nav = ({ page }) => {
   );
 };
 
-const Header = (props) => {
+const Header = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem('refreshToken');
 
-  const userImage = props.userimage;
-  const setUserImage = props.setuserimage;
-  const token = localStorage.getItem('accessToken');
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const userData = useGetProfile(token).data;
 
   useEffect(() => {
-    getProfile();
-  }, []);
-
-  const getProfile = async () => {
-    try {
-      const res = await userApi.get('api/users/find');
-      setUserImage(res.data.user.imageUrl);
-    } catch (e) {
-      console.error(e);
-      localStorage.clear();
-      navigate('/login');
+    if (token) {
+      if (userData) {
+        setUserInfo({
+          email: userData.data.user.email,
+          imageUrl: userData.data.user.imageUrl,
+          loginCount: userData.data.user.loginCount,
+          loginType: userData.data.user.loginType,
+          nickname: userData.data.user.nickname,
+          userId: userData.data.user.userId,
+        });
+      }
     }
-  };
+  }, [userData]);
 
   const logoutHandler = async () => {
     try {
@@ -90,13 +93,12 @@ const Header = (props) => {
           {!token ? (
             <SignBox>
               <LoginBtn to='/login'>로그인</LoginBtn>
-              <SignupBtn to='/signup'>회원가입</SignupBtn>
             </SignBox>
           ) : (
             <SignBox>
               <BackgroundMypageBtn onClick={goToMypage}>
                 <div className='myinfoImg'>
-                  <MypageBtn props={userImage} />
+                  <MypageBtn props={userInfo.imageUrl} />
                 </div>
                 <div className='mypage'>마이페이지</div>
               </BackgroundMypageBtn>
@@ -195,10 +197,8 @@ const StyledLink = styled.div`
 `;
 
 const SignBox = styled.div`
-  /* width: 25%; */
   height: 100%;
   display: flex;
-  /* justify-content: right; */
   gap: 18px;
   align-items: center;
   position: absolute;
@@ -227,27 +227,6 @@ const LoginBtn = styled(Link)`
   cursor: pointer;
 `;
 
-const SignupBtn = styled(Link)`
-  @media screen and (max-width: 1700px) {
-    width: 80px;
-    height: 34px;
-    font-size: 13px;
-    font-weight: 500;
-  }
-  background-color: #ebf0ff;
-  width: 100px;
-  height: 39px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: 700;
-  color: #3366ff !important;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-`;
 const BackgroundMypageBtn = styled.div`
   @media screen and (max-width: 1700px) {
     height: 44px;
