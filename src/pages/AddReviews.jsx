@@ -4,27 +4,19 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import styled from 'styled-components';
 import { userApi } from '../apis/apiInstance';
+import { useRecoilValue } from 'recoil';
+import { userInfoState } from '../recoil/recoilStore';
 
 const AddReviews = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [medicineItem, setMedicineItem] = useState({});
   const [content, setContent] = useState('');
-  const [nickname, setNickname] = useState('');
+  const userInfo = useRecoilValue(userInfoState);
 
   useEffect(() => {
     getMedicine();
-    getProfile();
   }, []);
-
-  const getProfile = async () => {
-    try {
-      const res = await userApi.get('api/users/find');
-      setNickname(res.data.user.nickname);
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   const getMedicine = async () => {
     try {
@@ -70,7 +62,8 @@ const AddReviews = () => {
       </CardBox>
       <ReviewGuide>
         <p>
-          {nickname}님의 리뷰로 같은 고민을 가진 분들이 도움이 될 수 있어요.
+          {userInfo.nickname}님의 리뷰로 같은 고민을 가진 분들이 도움이 될 수
+          있어요.
         </p>
         <span>
           리뷰에 해당 의약품과 무관한 내용이 포함되었거나, 어뷰징으로 판단된
