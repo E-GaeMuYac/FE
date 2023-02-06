@@ -48,6 +48,12 @@ const Login = () => {
     }
   };
 
+  const handleEnter = (e) => {
+    if (e.code === 'Enter') {
+      loginHandler(e);
+    }
+  };
+
   const loginHandler = (e) => {
     e.preventDefault();
     if (email === '' || password === '') {
@@ -113,7 +119,8 @@ const Login = () => {
               <Input
                 type='password'
                 placeholder='패스워드'
-                onChange={pwHandler}></Input>
+                onChange={pwHandler}
+                onKeyDown={handleEnter}></Input>
               <SubmitBtn type='button' onClick={loginHandler}>
                 로그인
               </SubmitBtn>
