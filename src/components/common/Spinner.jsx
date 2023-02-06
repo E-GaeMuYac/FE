@@ -13,7 +13,7 @@ const Wrap = styled.div`
   @media screen and (max-width: 1700px) {
     margin-top: 220px;
   }
-  background-color: transparent;
+  background-color: white;
   width: 100%;
   height: 100vh;
   position: fixed;
