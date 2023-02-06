@@ -145,7 +145,7 @@ const Signup = () => {
         setErrorEmail(errMsgEmail);
       }
       // console.log(error.response?.status);
-      // console.log(error);
+      console.log(error);
       // setErrorEmailCode(error.response?.status);
     }
   };
@@ -166,6 +166,7 @@ const Signup = () => {
         // enabled: true,
         // 자동 리랜더링 삭제
         refetchOnWindowFocus: false,
+        staleTime: 3000,
       }
     );
     // if (isFetching) {
@@ -180,10 +181,13 @@ const Signup = () => {
     // if (isSuccess) {
     //   console.log('success', data);
     // }
+
     return data;
   };
 
   const data = useGetVerifyEmailQuery(email);
+
+  // console.log(data);
 
   // 이메일 주소 입력
   const onChangeEmail = (e) => {
@@ -225,6 +229,10 @@ const Signup = () => {
 
   // 이메일 중복확인 및 인증번호 전송 버튼
   const onClickIsSendEmailCode = (e) => {
+    const errMsgEmail = data?.response?.data.errorMessage;
+    setErrorEmail(errMsgEmail);
+    // console.log(data?.response?.data.errorMessage);
+    // console.log(errorEmail);
     e.preventDefault();
     if (emailCodeBtnLabel === '중복확인') {
       // setEmailCodeBtn(true);
@@ -238,18 +246,22 @@ const Signup = () => {
         // postSendEmailCode({ email: email });
         // setEmailCode('');
         // setEmailCodeConfirmMessage('');
-      } else if (errorEmail === '중복인 유저가 있습니다.') {
+      } else if (
+        data?.response?.data.errorMessage === '중복인 유저가 있습니다.'
+      ) {
         setEmailMessage('이미 존재하는 이메일입니다. 다시 시도해 주세요.');
         setIsEmail(false);
         // setEmailCodeBtn(false);
-      } else if (errorEmail === '데이터 형식이 잘못되었습니다.') {
+      } else if (
+        data?.response?.data.errorMessage === '데이터 형식이 잘못되었습니다.'
+      ) {
         setEmailMessage('잘못된 형식입니다. 다시 시도해 주세요.');
         setIsEmail(false);
         // setEmailCodeBtn(false);
       }
-      // else if (emailMessage === '사용 가능한 이메일입니다.') {
-      //   setIsEmail(true);
-      // }
+      if (emailMessage === '사용 가능한 이메일입니다.') {
+        setEmailCheckBtn(false);
+      }
     }
   };
 
@@ -343,16 +355,34 @@ const Signup = () => {
         { phoneNumber: payload.phoneNumber } //data(req.body)
       );
       // console.log('인증번호 전송 성공', data);
-      setResponsePhoneCode(data.data.code);
-      setPhoneCodeConfirmMessage(
-        '인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.'
-      );
-      setPhoneCodeBtn(false);
-      setReadOnlyPhoneCode(false);
+      // console.log(data?.response?.status);
+      // if (data.response.data.message === '3분에 1번만 요청이 가능합니다.') {
+      //   setPhoneCodeConfirmMessage('3분에 1번만 요청이 가능합니다.');
+      //   setIsPhoneCode(false);
+      // }
+      if (data?.response?.status === 429) {
+        setPhoneCodeConfirmMessage('3분에 1번만 요청이 가능합니다.');
+        setIsPhoneCode(false);
+        setSendPhoneCode(false);
+      }
+      if (data?.status === 201) {
+        setPhoneNumberMessage(
+          '인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.'
+        );
+        setIsPhoneNumber(true);
+        setPhoneCodeBtn(false);
+        setPhoneCodeBtn(false);
+        setReadOnlyPhoneCode(false);
+        setPhoneCodeConfirmMessage('');
+        setPhoneCode('');
+        setSendPhoneCode(true);
+      }
+      setErrorPhoneCode(data?.response?.status);
+      setResponsePhoneCode(data?.data?.code);
+
       // // setPhoneCodebtnLabel('인증번호 재전송');
-      setPhoneCode('');
-      setSendPhoneCode(true);
     } catch (error) {
+      console.log(error);
       // console.log(error.response?.status);
       setErrorPhoneCode(error.response?.status);
       if (error.response?.status === 429) {
@@ -366,6 +396,7 @@ const Signup = () => {
   // 휴대폰 번호 중복확인 및 휴대폰 인증번호 전송 버튼
   const onClickIsSendPhoneCode = useCallback(
     (e) => {
+      // console.log(errorPhoneCode);
       const regExp = /[^0-9/]/g;
       const strPhoneNumber = phoneNumber.replace(regExp, '');
       // setPhoneNumber(strPhoneNumber);
@@ -380,13 +411,18 @@ const Signup = () => {
           setPhoneCodebtnLabel('인증번호 전송');
           setPhoneCode('');
           // setPhoneCodeConfirmMessage('');
-        } else if (errorPhoneNumber === '중복인 유저가 있습니다.') {
+        } else if (
+          dataPhone?.response?.data.errorMessage === '중복인 유저가 있습니다.'
+        ) {
           setPhoneNumberMessage(
             '이미 존재하는 번호입니다. 다시 시도해 주세요.'
           );
           setIsPhoneNumber(false);
           setPhoneCodeBtn(false);
-        } else if (errorPhoneNumber === '데이터 형식이 잘못되었습니다.') {
+        } else if (
+          dataPhone?.response?.data.errorMessage ===
+          '데이터 형식이 잘못되었습니다.'
+        ) {
           setPhoneNumberMessage('잘못된 형식입니다. 다시 시도해 주세요.');
           setIsPhoneNumber(false);
           setPhoneCodeBtn(false);
@@ -397,17 +433,18 @@ const Signup = () => {
         phoneCodebtnLabel === '인증번호 재전송'
       ) {
         postSendPhoneCode({ phoneNumber: strPhoneNumber });
-        if (responsePhoneCode === 201) {
-          setPhoneCodeConfirmMessage(
-            '인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.'
-          );
-          setReadOnlyPhoneCode(false);
-          // setPhoneCodebtnLabel('인증번호 재전송');
-          setPhoneCode('');
-          setSendPhoneCode(true);
-        } else {
-          // console.log(responsePhoneCode);
-        }
+        // if (responsePhoneCode === 201) {
+        //   setPhoneCodeConfirmMessage(
+        //     '인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.'
+        //   );
+        //   setReadOnlyPhoneCode(false);
+        //   // setPhoneCodebtnLabel('인증번호 재전송');
+        //   setPhoneCode('');
+        //   setSendPhoneCode(true);
+        // } else if (errorPhoneCode === 429) {
+        //   setPhoneCodeConfirmMessage('3분에 1번만 요청이 가능합니다.');
+        //   setIsPhoneCode(false);
+        // }
       }
       // if (errorPhoneCode === 429) {
       //   setPhoneCodeConfirmMessage('3분에 1번만 요청이 가능합니다.');
@@ -578,7 +615,7 @@ const Signup = () => {
     if (email === '') {
       setEmailCheckBtn(false);
     } else {
-      setEmailCheckBtn(true);
+      // setEmailCheckBtn(true);
     }
   }, [
     isEmail,

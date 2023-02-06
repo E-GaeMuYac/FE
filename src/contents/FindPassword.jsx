@@ -20,6 +20,7 @@ const Timer = ({
   setReadOnlyPhoneCode,
   disabledSubmit,
   setDisabledSubmit,
+  setPhoneCode,
 }) => {
   const [min, setMin] = useState(3);
   const [sec, setSec] = useState(0);
@@ -46,6 +47,7 @@ const Timer = ({
         '인증 시간이 만료되었습니다. 다시 시도해 주세요.'
       );
       setPhoneCodebtnLabel('인증번호 재전송');
+      setPhoneCode('');
       setSendPhoneCode(false);
       setIsPhoneCode(false);
       setPhoneCodeBtn(true);
@@ -68,6 +70,7 @@ const Timer = ({
     setPhoneCodeConfirmBtn,
     setPhoneCodebtnLabel,
     setReadOnlyPhoneCode,
+    setPhoneCode,
   ]);
 
   return (
@@ -126,17 +129,39 @@ const BottomContents = ({
       const data = await api.post('/api/users/authentication/phone', {
         phoneNumber: payload.phoneNumber,
       });
-      setResponsePhoneCode(data.data.code);
-    } catch (error) {
-      if (error.response?.status === 429) {
-        setResponsePhoneCode(error.response?.status);
+      // console.log(data);
+      // console.log(data?.response?.status);
+      setResponsePhoneCode(data?.data?.code);
+      if (data?.response?.status === 429) {
         setPhoneCodeConfirmMessage('3분에 1번만 요청이 가능합니다.');
         setIsPhoneCode(false);
         setSendPhoneCode(false);
-        setIsPhoneNumber(true);
         setPhoneCodeBtn(true);
-        setPhoneNumberMessage('휴대폰 번호를 인증해주세요.');
+        setPhoneNumberMessage('');
+        setIsPhoneNumber(true);
       }
+      if (data?.status === 201) {
+        setPhoneNumberMessage(
+          '인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.'
+        );
+        setIsPhoneNumber(true);
+        setReadOnlyPhoneCode(false);
+        setPhoneCode('');
+        setPhoneCodeConfirmMessage('');
+        setPhoneCodeBtn(false);
+        setSendPhoneCode(true);
+      }
+    } catch (error) {
+      console.log(error);
+      // if (error.response?.status === 429) {
+      //   setResponsePhoneCode(error.response?.status);
+      //   setPhoneCodeConfirmMessage('3분에 1번만 요청이 가능합니다.');
+      //   setIsPhoneCode(false);
+      //   setSendPhoneCode(false);
+      //   setIsPhoneNumber(true);
+      //   setPhoneCodeBtn(true);
+      //   setPhoneNumberMessage('휴대폰 번호를 인증해주세요.');
+      // }
       return error;
     }
   };
@@ -146,16 +171,20 @@ const BottomContents = ({
     const regExp = /[^0-9/]/g;
     const strPhoneNumber = phoneNumber.replace(regExp, '');
     e.preventDefault();
-    setPhoneNumberMessage(
-      '인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.'
-    );
-    setReadOnlyPhoneCode(false);
-    setPhoneCode('');
-    setPhoneCodebtnLabel('인증번호 재전송');
-    setPhoneCodeConfirmMessage('');
-    postSendPhoneCode({ phoneNumber: strPhoneNumber });
-    setSendPhoneCode(true);
-    setPhoneCodeBtn(false);
+    // setPhoneNumberMessage(
+    //   '인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.'
+    // );
+    // setIsPhoneNumber(true);
+    // setReadOnlyPhoneCode(false);
+    // setPhoneCode('');
+    // setPhoneCodebtnLabel('인증번호 재전송');
+    // setPhoneCodeConfirmMessage('');
+    // postSendPhoneCode({ phoneNumber: strPhoneNumber });
+    // setSendPhoneCode(true);
+    // setPhoneCodeBtn(false);
+    if (responsePhoneCode !== 429) {
+      postSendPhoneCode({ phoneNumber: strPhoneNumber });
+    }
   };
 
   //휴대폰 인증번호 입력
@@ -328,6 +357,7 @@ const BottomContents = ({
               disabledSubmit={disabledSubmit}
               setDisabledSubmit={setDisabledSubmit}
               setIsPhoneNumber={setIsPhoneNumber}
+              setPhoneCode={setPhoneCode}
             />
           ) : null}
         </div>
@@ -585,13 +615,18 @@ const FindPassword = () => {
         navigate('/login');
         alert('비밀번호 변경이 완료되었습니다.\n로그인 페이지로 이동합니다.');
       }
+      if (data?.response?.data.errorMessage === '동일한 비밀번호입니다.') {
+        // console.log(error.response?.data.errorMessage);
+        setResponsePassword(data?.response?.data.errorMessage);
+        alert('동일한 비밀번호입니다.');
+      }
     } catch (error) {
-      if (error instanceof AxiosError)
-        if (error.response?.data.errorMessage === '동일한 비밀번호입니다.') {
-          // console.log(error.response?.data.errorMessage);
-          setResponsePassword(error.response?.data.errorMessage);
-          alert('동일한 비밀번호입니다.');
-        }
+      // if (error instanceof AxiosError)
+      // if (error.response?.data.errorMessage === '동일한 비밀번호입니다.') {
+      //   // console.log(error.response?.data.errorMessage);
+      //   setResponsePassword(error.response?.data.errorMessage);
+      //   alert('동일한 비밀번호입니다.');
+      // }
       // console.log(error);
       return error;
     }
