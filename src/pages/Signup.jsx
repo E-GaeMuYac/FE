@@ -39,7 +39,7 @@ const Timer = ({
     }
     // 만약 타임 아웃이 발생했을 경우
     if (time.current <= 0) {
-      console.log('타임아웃');
+      // console.log('타임아웃');
       setPhoneCodeConfirmMessage(
         '인증 시간이 만료되었습니다. 다시 시도해 주세요.'
       );
@@ -308,7 +308,6 @@ const Signup = () => {
   const strPhoneNumber = phoneNumber.replace(regExp, '');
 
   const dataPhone = useGetVerifyPhoneQuery(strPhoneNumber);
-  console.log(dataPhone);
 
   // 휴대폰 번호 입력
   const onChangePhoneNumber = (e) => {
@@ -399,7 +398,6 @@ const Signup = () => {
       ) {
         postSendPhoneCode({ phoneNumber: strPhoneNumber });
         if (responsePhoneCode === 201) {
-          console.log(responsePhoneCode);
           setPhoneCodeConfirmMessage(
             '인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.'
           );
@@ -448,10 +446,8 @@ const Signup = () => {
 
   // 휴대폰 인증번호 입력 후 인증확인 버튼
   const onClickIsConfirmPhoneCode = (e) => {
-    console.log(isPhoneCode);
     if (Number(responsePhoneCode) === Number(phoneCode)) {
       // alert('휴대폰 인증이 완료되었습니다.');
-      console.log(isPhoneCode);
       setPhoneCodeConfirmMessage('인증 완료!');
       setPhoneNumberMessage('');
       setPhoneCodeConfirmBtn(false);
