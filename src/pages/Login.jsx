@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { api } from '../apis/apiInstance';
 import { useCookies } from 'react-cookie';
 import AlertModal from '../components/common/AlertModal';
 import { useRecoilState } from 'recoil';
 import { alertModalState } from '../recoil/recoilStore';
+import { useNormalLogin } from '../query/userQuery';
 
 const Login = () => {
   const token = localStorage.getItem('accessToken');
@@ -54,7 +54,9 @@ const Login = () => {
     }
   };
 
-  const loginHandler = (e) => {
+  const { mutateAsync: mutateLogin } = useNormalLogin();
+
+  const loginHandler = async (e) => {
     e.preventDefault();
     if (email === '' || password === '') {
       setAboutAlert({
@@ -63,28 +65,20 @@ const Login = () => {
         isOpen: true,
       });
     } else {
-      normalLogin({ email, password });
-    }
-  };
-
-  const normalLogin = async ({ email, password }) => {
-    try {
-      const res = await api.post(`/api/users/login/normal`, {
-        email,
-        password,
-      });
-      const accesstoken = res.headers.accesstoken;
-      const refreshtoken = res.headers.refreshtoken;
-      localStorage.setItem('accessToken', accesstoken);
-      localStorage.setItem('refreshToken', refreshtoken);
-      navigate('/');
-    } catch (e) {
-      console.log(e);
-      setAboutAlert({
-        msg: '로그인에 실패하였습니다.',
-        btn: '확인하기',
-        isOpen: true,
-      });
+      const data = await mutateLogin({ email, password });
+      if (data.status === 201) {
+        const accesstoken = data.headers.accesstoken;
+        const refreshtoken = data.headers.refreshtoken;
+        localStorage.setItem('accessToken', accesstoken);
+        localStorage.setItem('refreshToken', refreshtoken);
+        navigate('/');
+      } else {
+        setAboutAlert({
+          msg: '로그인에 실패하였습니다.',
+          btn: '확인하기',
+          isOpen: true,
+        });
+      }
     }
   };
 
