@@ -5,8 +5,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { userApi } from '../apis/apiInstance';
 import { Laptop, PC } from '../query/useMediaQuery';
-import { useSetRecoilState } from 'recoil';
-import { alertModalState } from '../recoil/recoilStore';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { alertModalState, userInfoState } from '../recoil/recoilStore';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
@@ -102,11 +102,9 @@ const Reviews = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('accessToken');
   const setAboutAlert = useSetRecoilState(alertModalState);
-
+  const userInfo = useRecoilValue(userInfoState);
   const [moreShow, setMoreShow] = useState(0);
   const [reviewArr, setReviewArr] = useState([]);
-  const [nickname, setNickname] = useState('');
-  const [userId, setUserId] = useState(0);
   const [searchLength, setSearchLength] = useState(0);
   const [sort, setSort] = useState('updatedAt');
   const [sortText, setSortText] = useState('최신순');
@@ -135,23 +133,8 @@ const Reviews = () => {
   ];
 
   useEffect(() => {
-    if (token) {
-      getReviews();
-      getProfile();
-    } else {
-      getReviews();
-    }
+    getReviews();
   }, [nowPageNum, pickTag, sort]);
-
-  const getProfile = async () => {
-    try {
-      const res = await userApi.get('api/users/find');
-      setNickname(res.data.user.nickname);
-      setUserId(res.data.user.userId);
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
   const getReviews = async () => {
     if (pickTag === '전체보기') {
@@ -275,7 +258,8 @@ const Reviews = () => {
         <ReviewDesc>
           {token ? (
             <p>
-              {nickname}님의 리뷰로 같은 고민을 가진 분들께 도움이 될 수 있어요.
+              {userInfo.nickname}님의 리뷰로 같은 고민을 가진 분들께 도움이 될
+              수 있어요.
             </p>
           ) : (
             <p>
@@ -416,7 +400,7 @@ const Reviews = () => {
                         도움 안돼요
                       </DislikeBtn>
                     </Recommend>
-                    {review.userId === userId ? (
+                    {review.userId === userInfo.userId ? (
                       <EditBtn
                         to={`/detail/${review.medicineId}/editform/${review.reviewId}`}>
                         <div />
@@ -516,7 +500,7 @@ const Reviews = () => {
                       도움 안돼요
                     </DislikeBtn>
                   </Recommend>
-                  {review.userId === userId ? (
+                  {review.userId === userInfo.userId ? (
                     <EditBtn
                       to={`/detail/${review.medicineId}/editform/${review.reviewId}`}>
                       <div />
