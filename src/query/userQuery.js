@@ -3,6 +3,15 @@ import { api, userApi } from '../apis/apiInstance';
 
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 
+// 로그인
+const normalLogin = async ({ email, password }) => {
+  const data = await api.post(`/api/users/login/normal`, {
+    email,
+    password,
+  });
+  return data;
+};
+
 // 유저정보조회
 const getProfile = async () => {
   const data = await userApi.get('api/users/find');
@@ -40,6 +49,7 @@ const putS3Upload = async ({ presignedUrl, newImg }) => {
   await axios.put(presignedUrl, newImg);
 };
 
+// 회원 탈퇴
 const deleteAccount = async (password) => {
   await userApi.delete('/api/users/delete', {
     data: {
@@ -112,5 +122,12 @@ export const useDeleteAccount = () => {
   return useMutation({
     mutationKey: ['deleteAccount'],
     mutationFn: deleteAccount,
+  });
+};
+
+export const useNormalLogin = () => {
+  return useMutation({
+    mutationKey: ['normalLogin'],
+    mutationFn: normalLogin,
   });
 };
