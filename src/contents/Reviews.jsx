@@ -5,8 +5,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { userApi } from '../apis/apiInstance';
 import { Laptop, PC } from '../query/useMediaQuery';
-import AlertModal from '../components/common/AlertModal';
-import { useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { alertModalState } from '../recoil/recoilStore';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
@@ -102,7 +101,7 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
 const Reviews = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('accessToken');
-  const [aboutAlert, setAboutAlert] = useRecoilState(alertModalState);
+  const setAboutAlert = useSetRecoilState(alertModalState);
 
   const [moreShow, setMoreShow] = useState(0);
   const [reviewArr, setReviewArr] = useState([]);
@@ -136,8 +135,12 @@ const Reviews = () => {
   ];
 
   useEffect(() => {
-    getReviews();
-    getProfile();
+    if (token) {
+      getReviews();
+      getProfile();
+    } else {
+      getReviews();
+    }
   }, [nowPageNum, pickTag, sort]);
 
   const getProfile = async () => {
@@ -236,22 +239,50 @@ const Reviews = () => {
     }
   };
 
-  const handleReport = () => {
-    setAboutAlert({
-      msg: '구현중입니다! 😉',
-      btn: '확인하기',
-      isOpen: true,
-    });
+  const handleReport = async (reviewId) => {
+    if (token) {
+      try {
+        const res = await userApi.put(`/api/reviews/${reviewId}/report`);
+        if (res.data.message === '이미 신고한 리뷰입니다') {
+          setAboutAlert({
+            msg: '이미 신고한 리뷰입니다.',
+            btn: '확인하기',
+            isOpen: true,
+          });
+        } else if (res.data.message === '신고하기 성공') {
+          setAboutAlert({
+            msg: '신고가 접수되었습니다.',
+            btn: '확인하기',
+            isOpen: true,
+          });
+        }
+        getReviews();
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      setAboutAlert({
+        msg: '로그인 후 이용 가능합니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
+    }
   };
 
   return (
     <Wrapper>
-      {aboutAlert.isOpen && <AlertModal />}
       <ReviewBtnWrap>
         <ReviewDesc>
-          <p>
-            {nickname}님의 리뷰로 같은 고민을 가진 분들이 도움이 될 수 있어요.
-          </p>
+          {token ? (
+            <p>
+              {nickname}님의 리뷰로 같은 고민을 가진 분들께 도움이 될 수 있어요.
+            </p>
+          ) : (
+            <p>
+              리뷰를 남겨주시면 같은 고민을 가진 분들께 도움이 될 수 있어요.
+            </p>
+          )}
+
           <span>
             리뷰에 해당 의약품과 무관한 내용이 포함되었거나, 어뷰징으로 판단된
             리뷰는 안내 없이 즉시 삭제 처리됩니다.
@@ -299,101 +330,208 @@ const Reviews = () => {
       </ReviewNav>
       {reviewArr.map((review) =>
         review.review.includes(pickTag) || pickTag === '전체보기' ? (
-          <Contents key={review.reviewId}>
-            <ReviewInfo>
-              <AccountBox>
-                <AccountBoxBg>
-                  <AccountBoxImg imageUrl={review.userImage} />
-                </AccountBoxBg>
-                <span>{review.nickname}</span>
-              </AccountBox>
-              <DateWrited>
-                {review.updatedAt
-                  .replace('T', '. ')
-                  .split(' ')[0]
-                  .split('-')
-                  .join('.')
-                  .replace('.', '년 ')
-                  .replace('.', '월 ')
-                  .replace('.', '일')}
-              </DateWrited>
-            </ReviewInfo>
-            <Description>
-              {review.review.length > 260 ? (
-                moreShow !== review.reviewId ? (
-                  <>
-                    <DescSum>{review.review}</DescSum>
-                    <MoreBtn
-                      className='more'
-                      onClick={() => {
-                        setMoreShow(review.reviewId);
-                      }}>
-                      리뷰 자세히 보기
+          <>
+            {review.report.length > 4 ? (
+              <BlindWrap>
+                <BlindContents key={review.reviewId}>
+                  <ReviewInfo>
+                    <AccountBox>
+                      <AccountBoxBg>
+                        <AccountBoxImg imageUrl={review.userImage} />
+                      </AccountBoxBg>
+                      <span>{review.nickname}</span>
+                    </AccountBox>
+                    <DateWrited>
+                      {review.updatedAt
+                        .replace('T', '. ')
+                        .split(' ')[0]
+                        .split('-')
+                        .join('.')
+                        .replace('.', '년 ')
+                        .replace('.', '월 ')
+                        .replace('.', '일')}
+                    </DateWrited>
+                  </ReviewInfo>
+                  <Description>
+                    {review.review.length > 260 ? (
+                      moreShow !== review.reviewId ? (
+                        <>
+                          <DescSum>{review.review}</DescSum>
+                          <MoreBtn
+                            className='more'
+                            onClick={() => {
+                              setMoreShow(review.reviewId);
+                            }}>
+                            리뷰 자세히 보기
+                            <div />
+                          </MoreBtn>
+                        </>
+                      ) : (
+                        <>
+                          <DescWhole>{review.review}</DescWhole>
+                          <FoldBtn
+                            onClick={() => {
+                              setMoreShow(false);
+                            }}>
+                            접기
+                            <div />
+                          </FoldBtn>
+                        </>
+                      )
+                    ) : (
+                      <DescWhole style={{ marginBottom: '10px' }}>
+                        {review.review}
+                      </DescWhole>
+                    )}
+                  </Description>
+                  <Exception>
+                    <PC>
+                      <IoIosWarning size='25' color='#868686' />
+                    </PC>
+                    <Laptop>
+                      <IoIosWarning size='19' color='#868686' />
+                    </Laptop>
+                    <span>면책사항:</span>
+                    <div>
+                      의학적 또는 전문가의 조언이 아닌 사용자의 의견입니다.
+                    </div>
+                  </Exception>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                    }}>
+                    <Recommend>
+                      <LikeBtn
+                        like={review.like}
+                        onClick={() => handleLike(review.reviewId)}>
+                        <div />
+                        도움 돼요 {review.likeCount}
+                      </LikeBtn>
+                      <DislikeBtn
+                        disLike={review.dislike}
+                        onClick={() => handleDisLike(review.reviewId)}>
+                        <div />
+                        도움 안돼요
+                      </DislikeBtn>
+                    </Recommend>
+                    {review.userId === userId ? (
+                      <EditBtn
+                        to={`/detail/${review.medicineId}/editform/${review.reviewId}`}>
+                        <div />
+                        수정하기
+                      </EditBtn>
+                    ) : (
+                      <ReportBtn onClick={() => handleReport(review.reviewId)}>
+                        <div />
+                        신고하기
+                      </ReportBtn>
+                    )}
+                  </div>
+                </BlindContents>
+                <Blind>신고가 누적되어 관리자가 확인 중인 리뷰입니다.</Blind>
+              </BlindWrap>
+            ) : (
+              <Contents key={review.reviewId}>
+                <ReviewInfo>
+                  <AccountBox>
+                    <AccountBoxBg>
+                      <AccountBoxImg imageUrl={review.userImage} />
+                    </AccountBoxBg>
+                    <span>{review.nickname}</span>
+                  </AccountBox>
+                  <DateWrited>
+                    {review.updatedAt
+                      .replace('T', '. ')
+                      .split(' ')[0]
+                      .split('-')
+                      .join('.')
+                      .replace('.', '년 ')
+                      .replace('.', '월 ')
+                      .replace('.', '일')}
+                  </DateWrited>
+                </ReviewInfo>
+                <Description>
+                  {review.review.length > 260 ? (
+                    moreShow !== review.reviewId ? (
+                      <>
+                        <DescSum>{review.review}</DescSum>
+                        <MoreBtn
+                          className='more'
+                          onClick={() => {
+                            setMoreShow(review.reviewId);
+                          }}>
+                          리뷰 자세히 보기
+                          <div />
+                        </MoreBtn>
+                      </>
+                    ) : (
+                      <>
+                        <DescWhole>{review.review}</DescWhole>
+                        <FoldBtn
+                          onClick={() => {
+                            setMoreShow(false);
+                          }}>
+                          접기
+                          <div />
+                        </FoldBtn>
+                      </>
+                    )
+                  ) : (
+                    <DescWhole style={{ marginBottom: '10px' }}>
+                      {review.review}
+                    </DescWhole>
+                  )}
+                </Description>
+                <Exception>
+                  <PC>
+                    <IoIosWarning size='25' color='#868686' />
+                  </PC>
+                  <Laptop>
+                    <IoIosWarning size='19' color='#868686' />
+                  </Laptop>
+                  <span>면책사항:</span>
+                  <div>
+                    의학적 또는 전문가의 조언이 아닌 사용자의 의견입니다.
+                  </div>
+                </Exception>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <Recommend>
+                    <LikeBtn
+                      like={review.like}
+                      onClick={() => handleLike(review.reviewId)}>
                       <div />
-                    </MoreBtn>
-                  </>
-                ) : (
-                  <>
-                    <DescWhole>{review.review}</DescWhole>
-                    <FoldBtn
-                      onClick={() => {
-                        setMoreShow(false);
-                      }}>
-                      접기
+                      도움 돼요 {review.likeCount}
+                    </LikeBtn>
+                    <DislikeBtn
+                      disLike={review.dislike}
+                      onClick={() => handleDisLike(review.reviewId)}>
                       <div />
-                    </FoldBtn>
-                  </>
-                )
-              ) : (
-                <DescWhole style={{ marginBottom: '10px' }}>
-                  {review.review}
-                </DescWhole>
-              )}
-            </Description>
-            <Exception>
-              <PC>
-                <IoIosWarning size='25' color='#868686' />
-              </PC>
-              <Laptop>
-                <IoIosWarning size='19' color='#868686' />
-              </Laptop>
-              <span>면책사항:</span>
-              <div>의학적 또는 전문가의 조언이 아닌 사용자의 의견입니다.</div>
-            </Exception>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <Recommend>
-                <LikeBtn
-                  like={review.like}
-                  onClick={() => handleLike(review.reviewId)}>
-                  <div />
-                  도움 돼요 {review.likeCount}
-                </LikeBtn>
-                <DislikeBtn
-                  disLike={review.dislike}
-                  onClick={() => handleDisLike(review.reviewId)}>
-                  <div />
-                  도움 안돼요
-                </DislikeBtn>
-              </Recommend>
-              {review.userId === userId ? (
-                <EditBtn
-                  to={`/detail/${review.medicineId}/editform/${review.reviewId}`}>
-                  <div />
-                  수정하기
-                </EditBtn>
-              ) : (
-                <ReportBtn onClick={handleReport}>
-                  <div />
-                  신고하기
-                </ReportBtn>
-              )}
-            </div>
-          </Contents>
+                      도움 안돼요
+                    </DislikeBtn>
+                  </Recommend>
+                  {review.userId === userId ? (
+                    <EditBtn
+                      to={`/detail/${review.medicineId}/editform/${review.reviewId}`}>
+                      <div />
+                      수정하기
+                    </EditBtn>
+                  ) : (
+                    <ReportBtn onClick={() => handleReport(review.reviewId)}>
+                      <div />
+                      신고하기
+                    </ReportBtn>
+                  )}
+                </div>
+              </Contents>
+            )}
+          </>
         ) : null
       )}
       <Pagenation
@@ -649,6 +787,43 @@ const SortTag = styled.span`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+`;
+
+const BlindWrap = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
+const Blind = styled.div`
+  @media screen and (max-width: 1700px) {
+    font-size: 24px;
+  }
+  width: 100%;
+  height: 100%;
+  border-radius: 23px;
+  background-color: transparent;
+  backdrop-filter: blur(10px);
+  color: #ff6458;
+  font-weight: 500;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
+const BlindContents = styled.div`
+  @media screen and (max-width: 1700px) {
+    padding: 20px 30px;
+  }
+  width: 100%;
+  border-radius: 23px;
+  background-color: #f6f7fa;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 60px;
 `;
 
 const Contents = styled.div`
