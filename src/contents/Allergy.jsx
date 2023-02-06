@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { userApi } from '../apis/apiInstance';
+import { useRecoilState } from 'recoil';
+import { confirmModalState } from '../recoil/recoilStore';
+import AlertModal from '../components/common/AlertModal';
 
 const Allergy = () => {
   const navigate = useNavigate();
+  const [aboutConfirm, setAboutConfirm] = useRecoilState(confirmModalState);
 
   //내 알러지 성분
   const [myAllergy, setMyAllergy] = useState([]);
@@ -25,11 +29,34 @@ const Allergy = () => {
     getAllergyList();
   }, []);
 
-  const toggleMaterial = async (materialId) => {
+  const toggleConfirm = async (materialId) => {
+    setAboutConfirm({
+      msg: '알레르기 등록을 해제 하시겠습니까?',
+      btn: ['취소하기', '해제하기'],
+      isOpen: true,
+      materialId,
+    });
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      if (aboutConfirm.isApprove === true) {
+        toggleMaterial();
+      }
+    }
+    fetchData();
+  }, [aboutConfirm]);
+
+  const toggleMaterial = async () => {
     try {
-      const res = await userApi.put(`/api/allergies/${materialId}`);
-      alert(res.data.msg);
+      await userApi.put(`/api/allergies/${aboutConfirm.materialId}`);
       getAllergyList();
+      setAboutConfirm({
+        msg: '',
+        btn: [],
+        isOpen: false,
+        isApprove: false,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +90,7 @@ const Allergy = () => {
                         }}
                       />
                       <CancelBtn
-                        onClick={() => toggleMaterial(result.materialId)}>
+                        onClick={() => toggleConfirm(result.materialId)}>
                         등록 해제
                       </CancelBtn>
                     </MoreInfoList>
@@ -77,8 +104,7 @@ const Allergy = () => {
                   <ResultList key={result.materialId}>
                     <PillTitle>{result.name}</PillTitle>
                     <MoreBtn onClick={() => setIsOpen(result.materialId)} />
-                    <CancelBtn
-                      onClick={() => toggleMaterial(result.materialId)}>
+                    <CancelBtn onClick={() => toggleConfirm(result.materialId)}>
                       등록 해제
                     </CancelBtn>
                   </ResultList>
@@ -214,7 +240,7 @@ const ResultList = styled.div`
   justify-content: space-between;
   padding: 40px;
   position: relative;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 2px 2px 10px 2px rgba(10, 32, 98, 0.15);
 `;
 
 const PillTitle = styled.span`
@@ -254,7 +280,7 @@ const CancelBtn = styled.button`
   background-color: #242424;
   color: #ffffff;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 400;
 `;
 
 const MoreInfoWrap = styled.div`
@@ -266,7 +292,7 @@ const MoreInfoWrap = styled.div`
   min-height: 170px;
   max-height: 500px;
   border-radius: 20px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 2px 2px 10px 2px rgba(10, 32, 98, 0.15);
 `;
 
 const MoreInfoList = styled.div`
@@ -412,7 +438,7 @@ const FirstCard = styled.div`
     width: 70%;
     height: 400px;
   }
-  background-image: url('/assets/image/allergyGuide1.png');
+  background-image: url('/assets/image/가이드1.png');
   background-size: contain;
   background-repeat: no-repeat;
   width: 930px;
@@ -424,7 +450,7 @@ const SecondCard = styled.div`
     width: 30%;
     height: 372px;
   }
-  background-image: url('/assets/image/allergyGuide2.png');
+  background-image: url('/assets/image/가이드2.png');
   background-size: contain;
   background-repeat: no-repeat;
   width: 380px;

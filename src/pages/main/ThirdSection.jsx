@@ -1,9 +1,15 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
 import styled, { keyframes } from 'styled-components';
 import { Mobile, Laptop, PC } from '../../query/useMediaQuery';
 
 const ThirdSection = (props) => {
   const scrollPoint = props.scrollpoint;
+  const navigate = useNavigate();
+
+  const onClickAnimation = () => {
+    navigate('/search');
+  };
   return (
     <Flex>
       <Wrapper>
@@ -18,7 +24,7 @@ const ThirdSection = (props) => {
               </h1>
             </Content1>
           )}
-          {scrollPoint > 1400 && <Content2 />}
+          {scrollPoint > 1400 && <Content2 onClick={onClickAnimation} />}
         </PC>
         <Laptop>
           {scrollPoint > 600 && (
@@ -31,7 +37,7 @@ const ThirdSection = (props) => {
               </h1>
             </Content1>
           )}
-          {scrollPoint > 850 && <Content2 />}
+          {scrollPoint > 850 && <Content2 onClick={onClickAnimation} />}
         </Laptop>
       </Wrapper>
     </Flex>
@@ -97,6 +103,8 @@ const Content1 = styled.div`
     font-size: 28px;
     font-weight: 700;
     color: #3366ff;
+    text-align: center;
+    margin-bottom: 10px;
   }
   h1 {
     @media screen and (max-width: 1700px) {
@@ -104,6 +112,7 @@ const Content1 = styled.div`
       line-height: 55px;
     }
     font-size: 50px;
+    line-height: 72px;
     text-align: center;
     font-weight: 700;
   }
@@ -130,5 +139,6 @@ const Content2 = styled.div`
   align-items: center; */
   opacity: 0;
   animation: ${slide} 1s 0.5s ease-out forwards;
+  cursor: pointer;
 `;
 export default ThirdSection;

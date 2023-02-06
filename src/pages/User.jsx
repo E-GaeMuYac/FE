@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { IoMdSettings } from 'react-icons/io';
-import { userApi } from '../apis/apiInstance';
 import { Link, useNavigate } from 'react-router-dom';
 import MypageTab from '../contents/MypageTab';
 import qs from 'qs';
@@ -21,8 +20,12 @@ import {
 
 import { Laptop, PC } from '../query/useMediaQuery';
 import { useRecoilState } from 'recoil';
-import { userInfoState } from '../recoil/recoilStore';
-//수정시작ㄱ
+import {
+  confirmModalState,
+  alertModalState,
+  userInfoState,
+} from '../recoil/recoilStore';
+import AlertModal from '../components/common/AlertModal';
 
 const User = () => {
   const navigate = useNavigate();
@@ -35,6 +38,8 @@ const User = () => {
   const [delPassword, setDelPassword] = useState('');
   const [isShow, setIsShow] = useState(false);
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [aboutConfirm, setAboutConfirm] = useRecoilState(confirmModalState);
+  const [aboutAlert, setAboutAlert] = useRecoilState(alertModalState);
 
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
@@ -65,10 +70,18 @@ const User = () => {
     const sizeLimit = 3 * 1024 * 1024;
 
     if (file.size > sizeLimit) {
-      alert('업로드 가능한 최대 용량은 3MB입니다.');
+      setAboutAlert({
+        msg: '업로드 가능한 최대 용량은 3MB입니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
       e.target.value = '';
     } else if (!file.type.includes('image')) {
-      alert('이미지 파일만 업로드 가능합니다.');
+      setAboutAlert({
+        msg: '이미지 파일만 업로드 가능합니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
       e.target.value = '';
     } else {
       const reader = new FileReader();
@@ -125,19 +138,32 @@ const User = () => {
     }
   };
 
-  const mutateDelAccount = useDeleteAccount();
+  const { mutateAsync: mutateDelAccount } = useDeleteAccount();
 
-  const deleteAccount = async (password) => {
-    if (window.confirm('정말 탈퇴하시겠습니까?😢')) {
-      mutateDelAccount.mutate(password);
-    }
-    localStorage.clear();
-    alert('회원탈퇴가 완료되었습니다.');
-    navigate('/');
+  const deleteAccount = () => {
+    setIsShow(false);
+    setAboutConfirm({
+      msg: '정말 탈퇴하시겠습니까?😢',
+      btn: ['취소하기', '확인하기'],
+      isOpen: true,
+      delPassword,
+    });
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      if (aboutConfirm.isApprove === true && aboutConfirm.delPassword) {
+        await mutateDelAccount(aboutConfirm.delPassword);
+        localStorage.clear();
+        navigate('/');
+      }
+    }
+    fetchData();
+  }, [aboutConfirm]);
 
   return (
     <Wrapper>
+      {(aboutConfirm.isOpen || aboutAlert.isOpen) && <AlertModal />}
       {isShow && (
         <ModalBackground>
           <Modal>
@@ -167,11 +193,12 @@ const User = () => {
                 />
                 <label>비밀번호</label>
               </div>
-              <ModalBtnWrap>
+              <ModalBtnWrap delPassword={delPassword}>
                 <button
                   className='cancel'
                   onClick={() => {
                     setIsShow(false);
+                    setDelPassword('');
                   }}>
                   취소하기
                 </button>
@@ -270,12 +297,8 @@ const User = () => {
                   onChange={nickInput}
                   maxLength={20}
                 />
-                <button className='o' onClick={modifyNickname}>
-                  O
-                </button>
-                <button className='x' onClick={cancelChange}>
-                  X
-                </button>
+                <button className='o' onClick={modifyNickname} />
+                <button className='x' onClick={cancelChange} />
               </NicknameInput>
             )}
             <PC>
@@ -505,7 +528,8 @@ const ModalBtnWrap = styled.div`
     height: 44px;
     border-radius: 50px;
     border: none;
-    background-color: #ffb0aa;
+    background-color: ${({ delPassword }) =>
+      delPassword === '' ? '#ffb0aa ' : '#ff392b'};
     color: white;
   }
 `;
@@ -850,31 +874,31 @@ const NicknameInput = styled.div`
     }
   }
   button {
-    padding: 0;
-    width: 25px;
-    height: 25px;
-    border: none;
-    border-radius: 50px;
-    background-color: #d0d0d0;
+    width: 32px;
+    height: 32px;
     cursor: pointer;
   }
   .x {
     @media screen and (max-width: 1700px) {
-      top: 4px;
-      right: 5px;
+      top: 0px;
+      right: 4px;
     }
+    background-image: url('/assets/image/CloseCircle.png');
+    background-size: cover;
     position: absolute;
-    top: 12px;
+    top: 8px;
     right: 15px;
   }
   .o {
     @media screen and (max-width: 1700px) {
-      top: 4px;
-      right: 36px;
+      top: 0px;
+      right: 31px;
     }
+    background-image: url('/assets/image/CheckCircle.png');
+    background-size: cover;
     position: absolute;
-    top: 12px;
-    right: 45px;
+    top: 8px;
+    right: 43px;
   }
 `;
 
@@ -883,7 +907,6 @@ const ProfileMsg = styled.div`
     width: 260px;
     font-size: 16px;
     margin-top: 35px;
-    /* background-color: aqua; */
   }
   width: 220px;
   height: 72px;
@@ -1035,6 +1058,10 @@ const Box = styled.div`
     border-radius: 24px;
     color: #2649d8;
     cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-use-select: none;
+    user-select: none;
 
     h1 {
       @media screen and (max-width: 1700px) {

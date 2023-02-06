@@ -308,12 +308,12 @@ const InputWrap = styled.div`
   display: flex;
   justify-content: center;
   background-color: #ffffff;
-  z-index: 9999;
+  z-index: 9990;
   position: relative;
 
   .wrap {
     position: relative;
-    z-index: 9999;
+    z-index: 9990;
   }
 `;
 

@@ -10,8 +10,6 @@ const MaterialList = (props) => {
   const toggleMaterial = async (materialId) => {
     try {
       const res = await userApi.put(`/api/allergies/${materialId}`);
-      console.log(res);
-      alert(res.data.msg);
       if (res.data.msg === '알러지 등록에 성공하였습니다.') {
         setIsToggle(true);
       } else {
@@ -94,7 +92,7 @@ const ResultList = styled.div`
   justify-content: space-between;
   padding: 40px;
   position: relative;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 2px 2px 10px 2px rgba(10, 32, 98, 0.15);
 `;
 
 const PillTitle = styled.span`
@@ -138,7 +136,7 @@ const CancelBtn = styled.button`
   background-color: #242424;
   color: #ffffff;
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 400;
 `;
 
 const MoreBtn = styled.div`
@@ -165,7 +163,7 @@ const MoreInfoWrap = styled.div`
   min-height: 170px;
   max-height: 500px;
   border-radius: 20px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 2px 2px 10px 2px rgba(10, 32, 98, 0.15);
 `;
 
 const MoreInfoList = styled.div`

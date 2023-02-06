@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { IoIosWarning } from 'react-icons/io';
-import { AiFillLike, AiFillDislike } from 'react-icons/ai';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { userApi } from '../apis/apiInstance';
-import { Mobile, Laptop, PC } from '../query/useMediaQuery';
-import AddReviews from '../pages/AddReviews';
+import { Laptop, PC } from '../query/useMediaQuery';
+import AlertModal from '../components/common/AlertModal';
+import { useRecoilState } from 'recoil';
+import { alertModalState } from '../recoil/recoilStore';
 
 const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
   const [numArr, setNumArr] = useState([]);
@@ -101,6 +102,7 @@ const Pagenation = ({ nowPageNum, setNowPageNum, searchLength }) => {
 const Reviews = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('accessToken');
+  const [aboutAlert, setAboutAlert] = useRecoilState(alertModalState);
 
   const [moreShow, setMoreShow] = useState(0);
   const [reviewArr, setReviewArr] = useState([]);
@@ -186,7 +188,11 @@ const Reviews = () => {
         console.log(error);
       }
     } else {
-      alert('로그인 후 이용 가능합니다.');
+      setAboutAlert({
+        msg: '로그인 후 이용 가능합니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
     }
   };
 
@@ -199,7 +205,11 @@ const Reviews = () => {
         console.log(error);
       }
     } else {
-      alert('로그인 후 이용 가능합니다.');
+      setAboutAlert({
+        msg: '로그인 후 이용 가능합니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
     }
   };
 
@@ -218,16 +228,25 @@ const Reviews = () => {
     if (token) {
       navigate(`/detail/${id}/reviewform`);
     } else {
-      alert('로그인 후 이용 가능합니다.');
+      setAboutAlert({
+        msg: '로그인 후 이용 가능합니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
     }
   };
 
   const handleReport = () => {
-    alert('구현중입니다! 😉');
+    setAboutAlert({
+      msg: '구현중입니다! 😉',
+      btn: '확인하기',
+      isOpen: true,
+    });
   };
 
   return (
     <Wrapper>
+      {aboutAlert.isOpen && <AlertModal />}
       <ReviewBtnWrap>
         <ReviewDesc>
           <p>

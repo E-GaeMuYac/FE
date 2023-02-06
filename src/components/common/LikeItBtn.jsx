@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { usePutLikeMutation } from '../../query/likeQuery';
+import { useSetRecoilState } from 'recoil';
+import { alertModalState } from '../../recoil/recoilStore';
 
 const LikeItBtn = ({ id, dibs }) => {
   const [heartActive, setHeartBtn] = useState(false);
+
+  const setAboutAlert = useSetRecoilState(alertModalState);
 
   const LikeMutate = usePutLikeMutation(id);
 
@@ -13,7 +17,11 @@ const LikeItBtn = ({ id, dibs }) => {
       LikeMutate.mutate(id);
       setHeartBtn(!heartActive);
     } else {
-      alert('로그인이 필요한 기능입니다.');
+      setAboutAlert({
+        msg: '로그인 후 이용 가능합니다.',
+        btn: '확인하기',
+        isOpen: true,
+      });
     }
   };
 
@@ -42,7 +50,7 @@ const LikeItBtnWrap = styled.div`
   width: 38px;
   height: 38px;
   border-radius: 8px;
-  box-shadow: 0 0 6px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 1px 6px 0px rgba(10, 32, 98, 0.2);
   cursor: pointer;
   display: flex;
   align-items: center;

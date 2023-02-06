@@ -1,8 +1,78 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { api } from '../apis/apiInstance';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useRef } from 'react';
+import { AxiosError } from 'axios';
+import { useQuery } from 'react-query';
+
+const Timer = ({
+  phoneCodeConfirmMessage,
+  setPhoneCodeConfirmMessage,
+  setSendPhoneCode,
+  sendPhoneCode,
+  setIsPhoneCode,
+  setPhoneCodeBtn,
+  completedPhoneCode,
+  setPhoneCodeConfirmBtn,
+  setPhoneCodebtnLabel,
+  setReadOnlyPhoneCode,
+}) => {
+  const [min, setMin] = useState(3);
+  const [sec, setSec] = useState(0);
+  const time = useRef(180);
+  const timerId = useRef(null);
+
+  useEffect(() => {
+    if (sendPhoneCode) {
+      if (time.current > 0) {
+        timerId.current = setInterval(() => {
+          setMin(parseInt(time.current / 60));
+          setSec(time.current % 60);
+          // setPhoneCodeConfirmMessage(' ');
+          setPhoneCodeConfirmBtn(true);
+          time.current -= 1;
+        }, 1000);
+        return () => clearInterval(timerId.current);
+      }
+    }
+    // 만약 타임 아웃이 발생했을 경우
+    if (time.current <= 0) {
+      // console.log('타임아웃');
+      setPhoneCodeConfirmMessage(
+        '인증 시간이 만료되었습니다. 다시 시도해 주세요.'
+      );
+      setPhoneCodebtnLabel('인증번호 재전송');
+      setSendPhoneCode(false);
+      setIsPhoneCode(false);
+      setPhoneCodeBtn(true);
+      setPhoneCodeConfirmBtn(false);
+      setReadOnlyPhoneCode(true);
+      clearInterval(timerId.current);
+      setMin(3);
+      setSec(0);
+      // dispatch event
+    }
+  }, [
+    sec,
+    sendPhoneCode,
+    setPhoneCodeBtn,
+    setIsPhoneCode,
+    setSendPhoneCode,
+    phoneCodeConfirmMessage,
+    setPhoneCodeConfirmMessage,
+    completedPhoneCode,
+    setPhoneCodeConfirmBtn,
+    setPhoneCodebtnLabel,
+    setReadOnlyPhoneCode,
+  ]);
+
+  return (
+    <div className='timer'>
+      {min}:{sec < 10 ? `0${sec}` : sec}
+    </div>
+  );
+};
 
 const FindId = () => {
   // 기본 input 상태값
@@ -20,6 +90,9 @@ const FindId = () => {
   // 이메일, 휴대폰번호 인증코드
   const [responsePhoneCode, setResponsePhoneCode] = useState();
 
+  // 이메일, 휴대폰번호 중복검사
+  const [errorPhoneNumber, setErrorPhoneNumber] = useState();
+
   // 유효성 검사 통과 시 인증버튼 라벨 변경
   const [phoneCodebtnLabel, setPhoneCodebtnLabel] = useState('인증번호 전송');
 
@@ -30,12 +103,71 @@ const FindId = () => {
   // 인증완료 시 input 비활성화
   const [readOnlyPhoneCode, setReadOnlyPhoneCode] = useState(false);
 
+  const [sendPhoneCode, setSendPhoneCode] = useState(false);
+
+  const [disabledSubmit, setDisabledSubmit] = useState(true);
+
   // API 응답값
   const [resMsg, setResMsg] = useState('');
   const [resImg, setResImg] = useState('');
   const [resEmail, setResEmail] = useState('');
   const [msgState, setMsgState] = useState(false);
 
+  // 휴대폰 번호 중복확인 api 호출 함수
+  const getVerifyPhone = async (params) => {
+    try {
+      const data = await api.get(
+        `/api/users/signup/phone?phoneNumber=${params.queryKey[1]}`
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errMsgPhoneNumber = error.response?.data.errorMessage;
+        setErrorPhoneNumber(errMsgPhoneNumber);
+      }
+      // console.log(error.response?.status);
+      //   console.log(error.response?.data.errorMessage);
+      // console.log(error);
+    }
+  };
+
+  // query hooks
+
+  // 휴대폰 번호 중복확인 query hook
+  const useGetVerifyPhoneQuery = (strPhoneNumber) => {
+    const { isSuccess, isError, isLoading, isFetching, data, error } = useQuery(
+      {
+        // query 키
+        queryKey: ['getVerifyPhone', strPhoneNumber],
+        // query 함수
+        queryFn: (params) => {
+          return getVerifyPhone(params);
+        },
+        // 자동 랜더링 삭제
+        // enabled: true,
+        // 자동 리랜더링 삭제
+        refetchOnWindowFocus: false,
+      }
+    );
+    // if (isFetching) {
+    //   console.log('fetching...');
+    // }
+    // if (isLoading) {
+    //   console.log('loading...');
+    // }
+    // if (isError) {
+    //   console.log('error', error);
+    // }
+    // if (isSuccess) {
+    //   console.log('success', data);
+    // }
+    return data;
+  };
+
+  const regExp = /[^0-9/]/g;
+  const strPhoneNumber = phoneNumber.replace(regExp, '');
+
+  const dataPhone = useGetVerifyPhoneQuery(strPhoneNumber);
   // 휴대폰 번호 입력
   const onChangePhoneNumber = (e) => {
     const phoneNumberRegExp = /^(\d{3})-(\d{3,4})-(\d{4})$/;
@@ -51,6 +183,7 @@ const FindId = () => {
       setPhoneNumberMessage('올바른 형식의 휴대폰 번호를 입력해 주세요.');
       setIsPhoneNumber(false);
       setPhoneCodebtnLabel('인증번호 전송');
+      setPhoneCodeBtn(false);
     } else {
       setPhoneNumberMessage(' ');
       setIsPhoneNumber(true);
@@ -64,7 +197,20 @@ const FindId = () => {
         phoneNumber: payload.phoneNumber,
       });
       setResponsePhoneCode(data.data.code);
+      // setPhoneCodeBtn(false);
+      // setReadOnlyPhoneCode(false);
+      // setPhoneCode('');
+      // setSendPhoneCode(true);
     } catch (error) {
+      if (error.response?.status === 429) {
+        setResponsePhoneCode(error.response?.status);
+        setPhoneCodeConfirmMessage('3분에 1번만 요청이 가능합니다.');
+        setIsPhoneCode(false);
+        setSendPhoneCode(false);
+        setPhoneCodeBtn(true);
+        setPhoneNumberMessage('');
+        setIsPhoneNumber(true);
+      }
       return error;
     }
   };
@@ -74,11 +220,27 @@ const FindId = () => {
     const regExp = /[^0-9/]/g;
     const strPhoneNumber = phoneNumber.replace(regExp, '');
     e.preventDefault();
-    alert('인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.');
-    setReadOnlyPhoneCode(false);
-    setPhoneCode('');
-    setPhoneCodebtnLabel('인증번호 재전송');
-    postSendPhoneCode({ phoneNumber: strPhoneNumber });
+    if (
+      errorPhoneNumber === '중복인 유저가 있습니다.' &&
+      responsePhoneCode !== 429
+    ) {
+      setPhoneNumberMessage(
+        '인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.'
+      );
+      setReadOnlyPhoneCode(false);
+      setPhoneCode('');
+      // setPhoneCodebtnLabel('인증번호 재전송');
+      setPhoneCodeBtn(false);
+      postSendPhoneCode({ phoneNumber: strPhoneNumber });
+      setSendPhoneCode(true);
+    } else if (dataPhone?.status === 200) {
+      setPhoneNumberMessage('해당 휴대폰 번호로 가입된 계정이 없습니다.');
+      setSendPhoneCode(false);
+      setIsPhoneNumber(false);
+    }
+    // if (dataPhone?.status === 200) {
+
+    // }
   };
 
   // 휴대폰 인증번호 입력
@@ -94,7 +256,7 @@ const FindId = () => {
       setPhoneCode(PhoneCodeCurrent);
     } else {
       setPhoneCodeConfirmMessage('');
-      setIsPhoneCode(true);
+      // setIsPhoneCode(true);
       setPhoneCodeConfirmBtn(true);
     }
   };
@@ -102,12 +264,14 @@ const FindId = () => {
   // 휴대폰 인증번호 입력 후 인증확인 버튼
   const onClickIsConfirmPhoneCode = (e) => {
     if (Number(responsePhoneCode) === Number(phoneCode)) {
-      alert('휴대폰 인증이 완료되었습니다.');
+      // alert('휴대폰 인증이 완료되었습니다.');
       setPhoneCodeConfirmMessage('인증 완료!');
       setPhoneCodeConfirmBtn(false);
       setReadOnlyPhoneCode(!readOnlyPhoneCode);
       setPhoneCodeBtn(false);
+      setIsPhoneCode(true);
       setPhoneCodebtnLabel('인증번호 전송');
+      setSendPhoneCode(false); // 인증번호 인증 완료 되면 false로 바꾸기
     } else {
       setPhoneCodeConfirmMessage('인증번호가 틀렸습니다. 다시 입력해 주세요.');
       setIsPhoneCode(false);
@@ -154,6 +318,14 @@ const FindId = () => {
     }
   };
 
+  useEffect(() => {
+    if (isPhoneNumber && isPhoneCode) {
+      setDisabledSubmit(false);
+    } else {
+      setDisabledSubmit(true);
+    }
+  }, [isPhoneNumber, isPhoneCode]);
+
   return (
     <IdWrapper>
       <CombinedForm>
@@ -192,7 +364,7 @@ const FindId = () => {
       {/* 휴대폰 인증번호 입력 */}
       <CombinedForm>
         <div
-          className={`form-floating mb-3 ${
+          className={`form-floating mb-3 phoneForm ${
             isPhoneCode ? 'successs' : 'errorr'
           }`}>
           <input
@@ -206,6 +378,20 @@ const FindId = () => {
             autoComplete='one-time-code'
           />
           <label htmlFor='floatingInput'>휴대폰 인증번호</label>
+          {sendPhoneCode ? (
+            <Timer
+              setPhoneCodeConfirmMessage={setPhoneCodeConfirmMessage}
+              setSendPhoneCode={setSendPhoneCode}
+              sendPhoneCode={sendPhoneCode}
+              setIsPhoneCode={setIsPhoneCode}
+              setPhoneCodeBtn={setPhoneCodeBtn}
+              phoneCodeConfirmMessage={phoneCodeConfirmMessage}
+              // completedPhoneCode={completedPhoneCode}
+              setPhoneCodeConfirmBtn={setPhoneCodeConfirmBtn}
+              setPhoneCodebtnLabel={setPhoneCodebtnLabel}
+              setReadOnlyPhoneCode={setReadOnlyPhoneCode}
+            />
+          ) : null}
         </div>
 
         {/* 휴대폰 인증번호 입력 후 인증확인 버튼 */}
@@ -218,7 +404,7 @@ const FindId = () => {
 
       {/* 휴대폰 인증번호 입력 유효성 검사 문구 */}
       <FormBox>
-        {phoneCode.length > 0 && (
+        {phoneCode.length >= 0 && (
           <span className={`message ${isPhoneCode ? 'success' : 'error'}`}>
             {phoneCodeConfirmMessage}
           </span>
@@ -240,7 +426,10 @@ const FindId = () => {
         </EmailBox>
       </ResponseBox>
       <NavBtnWrapper>
-        <NavSubmitBtn type='submit' onClick={onSubmitHandler}>
+        <NavSubmitBtn
+          disabled={disabledSubmit}
+          type='submit'
+          onClick={onSubmitHandler}>
           아이디찾기
         </NavSubmitBtn>
       </NavBtnWrapper>
@@ -257,13 +446,26 @@ const IdWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  input {
-    display: block;
+
+  .timer {
+    height: 30px;
+    margin-top: auto;
+    float: right;
+  }
+  .phoneForm {
+    @media screen and (max-width: 1700px) {
+      width: 310px !important;
+    }
+    width: 350px !important;
     border-bottom: 1px solid #919191;
-    :focus {
-      outline: none;
-      box-shadow: none;
-      border-bottom: 1px solid #919191;
+    display: flex;
+    input {
+      @media screen and (max-width: 1700px) {
+        width: 260px;
+      }
+      margin-right: 10px;
+      border: 0 !important;
+      width: 310px !important;
     }
   }
 `;
@@ -298,7 +500,7 @@ const ButtonSt = styled.button`
   margin-left: 5px;
   font-size: 15px;
   font-weight: 500;
-  color: ${(props) => (props.disabled ? '' : '#868686;')};
+  color: ${(props) => (props.disabled ? '' : '#3366FF')};
   background-color: ${(props) => (props.disabled ? '' : '#f6f7fa')};
   :active {
     /* box-shadow: 0px 0px 0 rgb(0, 0, 0, 0.3);
@@ -402,13 +604,13 @@ const NavSubmitBtn = styled.button`
   border: none;
   border-radius: 50px;
   background-color: #e7e7e7;
-  cursor: pointer;
-  background-color: #3366ff;
+  /* cursor: pointer; */
+  background-color: ${(props) => (props.disabled ? '#c2d1ff' : '#3366FF')};
   color: #ffffff;
-  :active {
+  /* :active {
     background-color: #1d51ee;
     color: #ffffff;
-  }
+  } */
 `;
 
 export default FindId;
