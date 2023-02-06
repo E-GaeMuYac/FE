@@ -451,7 +451,7 @@ const WrapContents = styled.div`
           width: 35px;
           height: 35px;
         }
-        background-image: url('/assets/image/RedWarn.png');
+        background-image: url('/assets/image/redWarn.png');
         background-size: cover;
         width: 44px;
         height: 44px;
