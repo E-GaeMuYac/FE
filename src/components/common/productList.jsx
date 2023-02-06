@@ -109,7 +109,7 @@ const SearchListWrap = styled.div`
     align-items: center;
     flex-direction: column;
     cursor: pointer;
-    box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 8px 0px rgba(10, 32, 98, 0.2);
   }
   .listImg {
     @media screen and (max-width: 1700px) {
