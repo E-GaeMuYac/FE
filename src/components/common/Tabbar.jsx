@@ -22,7 +22,8 @@ const Tab = ({ list, query, location, totalCount }) => {
     <>
       {list === '리뷰' ? (
         <TabName isActive={isActive} onClick={changeTab}>
-          {list}({totalCount})
+          {list}
+          <div>({totalCount})</div>
         </TabName>
       ) : (
         <TabName isActive={isActive} onClick={changeTab}>
@@ -101,6 +102,10 @@ const TabName = styled.li`
   @media screen and (max-width: 1700px) {
     font-size: 16px;
     width: 120px;
+  }
+  div {
+    margin-left: 2px;
+    font-weight: 500;
   }
   width: 140px;
   height: 100%;

@@ -194,6 +194,7 @@ const LeftCard = styled.div`
   @media screen and (max-width: 1700px) {
     animation: ${leftSlide} 1.5s 0.8s ease-in forwards;
     background-size: 80%;
+    margin-right: -158px;
   }
   background-image: url('/assets/image/섹션5_left.png');
   background-position: center;
@@ -201,7 +202,7 @@ const LeftCard = styled.div`
   background-repeat: no-repeat;
   width: 600px;
   height: 784px;
-  margin-right: -150px;
+  margin-right: -125px;
   opacity: 0;
   animation: ${leftSlide} 1s 1.2s ease-in forwards;
 `;
@@ -209,6 +210,7 @@ const RightCard = styled.div`
   @media screen and (max-width: 1700px) {
     animation: ${rightSlide} 1.5s 0.8s ease-in forwards;
     background-size: 76%;
+    margin-left: -158px;
   }
   background-image: url('/assets/image/섹션5_right.png');
   background-position: center;
@@ -216,7 +218,7 @@ const RightCard = styled.div`
   background-repeat: no-repeat;
   width: 600px;
   height: 784px;
-  margin-left: -150px;
+  margin-left: -125px;
   opacity: 0;
   animation: ${rightSlide} 1s 1.2s ease-in forwards;
 `;
