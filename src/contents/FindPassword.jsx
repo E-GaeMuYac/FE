@@ -6,6 +6,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from 'react-query';
 import { useEffect } from 'react';
 import { useRef } from 'react';
+import { useRecoilState } from 'recoil';
+import { alertModalState } from '../recoil/recoilStore';
+import AlertModal from '../components/common/AlertModal';
 
 const Timer = ({
   phoneCodeConfirmMessage,
@@ -441,6 +444,7 @@ const BottomContents = ({
   );
 };
 const FindPassword = () => {
+  const [aboutAlert, setAboutAlert] = useRecoilState(alertModalState);
   // 기본 input 상태값
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -613,12 +617,21 @@ const FindPassword = () => {
       if (data?.status === 200) {
         setResponsePassword(data.data.code);
         navigate('/login');
-        alert('비밀번호 변경이 완료되었습니다.\n로그인 페이지로 이동합니다.');
+        setAboutAlert({
+          msg: '비밀번호 변경이 완료되었습니다.',
+          btn: '확인하기',
+          isOpen: true,
+        });
+        // alert('비밀번호 변경이 완료되었습니다.\n로그인 페이지로 이동합니다.');
       }
       if (data?.response?.data.errorMessage === '동일한 비밀번호입니다.') {
         // console.log(error.response?.data.errorMessage);
         setResponsePassword(data?.response?.data.errorMessage);
-        alert('동일한 비밀번호입니다.');
+        setAboutAlert({
+          msg: '동일한 비밀번호입니다.',
+          btn: '확인하기',
+          isOpen: true,
+        });
       }
     } catch (error) {
       // if (error instanceof AxiosError)
@@ -725,6 +738,7 @@ const FindPassword = () => {
 
   return (
     <PasswordWrapper>
+      {aboutAlert.isOpen && <AlertModal />}
       {/* 이메일 주소 입력 */}
       <CombinedForm>
         <div

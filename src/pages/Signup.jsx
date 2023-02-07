@@ -7,6 +7,8 @@ import { postSignup } from '../query/signupQuery';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useRef } from 'react';
+import { useRecoilState } from 'recoil';
+import { alertModalState } from '../recoil/recoilStore';
 
 const Timer = ({
   phoneCodeConfirmMessage,
@@ -81,6 +83,7 @@ const Timer = ({
 };
 
 const Signup = () => {
+  const [aboutAlert, setAboutAlert] = useRecoilState(alertModalState);
   // 기본 input 상태값
   const [email, setEmail] = useState('');
   // const [emailCode, setEmailCode] = useState('');
@@ -671,7 +674,11 @@ const Signup = () => {
         phoneNumber: strPhoneNumber,
       });
       navigate('/login');
-      alert('회원가입 완료!\npillnuts에 오신 것을 환영합니다 :)');
+      setAboutAlert({
+        msg: 'pillnuts에 오신 것을 환영합니다 :)',
+        btn: '확인하기',
+        isOpen: true,
+      });
     }
   };
 
