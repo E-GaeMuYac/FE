@@ -9,6 +9,7 @@ import { useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { alertModalState } from '../recoil/recoilStore';
 import AlertModal from '../components/common/AlertModal';
+import { debounce } from 'lodash';
 
 const Timer = ({
   phoneCodeConfirmMessage,
@@ -484,7 +485,7 @@ const FindPassword = () => {
   const [disabledSubmit, setDisabledSubmit] = useState(true);
 
   // 이메일 주소 입력
-  const onChangeEmail = (e) => {
+  const onChangeEmail = debounce((e) => {
     const emailRegExp =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     const emailCurrent = e.target.value;
@@ -498,7 +499,7 @@ const FindPassword = () => {
       setIsEmail(false);
       setEmailCheckBtn(true);
     }
-  };
+  }, 500);
 
   // 이메일 확인 api 호출 함수
   const getCheckEmail = async (params) => {
@@ -746,7 +747,7 @@ const FindPassword = () => {
           <input
             type='email'
             className='form-control'
-            value={email}
+            // value={email}
             onChange={onChangeEmail}
             placeholder='이메일'
             readOnly={readOnlyEmail}

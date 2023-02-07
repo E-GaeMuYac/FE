@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { useRef } from 'react';
 import { useRecoilState } from 'recoil';
 import { alertModalState } from '../recoil/recoilStore';
+import { debounce } from 'lodash';
 
 const Timer = ({
   phoneCodeConfirmMessage,
@@ -143,13 +144,10 @@ const Signup = () => {
       );
       return data;
     } catch (error) {
-      if (error instanceof AxiosError) {
-        const errMsgEmail = error.response?.data.errorMessage;
-        setErrorEmail(errMsgEmail);
-      }
-      // console.log(error.response?.status);
-      console.log(error);
-      // setErrorEmailCode(error.response?.status);
+      // if (error instanceof AxiosError) {
+      //   const errMsgEmail = error.response?.data.errorMessage;
+      //   setErrorEmail(errMsgEmail);
+      // }
     }
   };
 
@@ -166,9 +164,9 @@ const Signup = () => {
           return getVerifyEmail(params);
         },
         // 자동 랜더링 삭제
-        // enabled: true,
+        enabled: true,
         // 자동 리랜더링 삭제
-        refetchOnWindowFocus: false,
+        refetchOnWindowFocus: true,
         staleTime: 3000,
       }
     );
@@ -189,11 +187,10 @@ const Signup = () => {
   };
 
   const data = useGetVerifyEmailQuery(email);
-
   // console.log(data);
 
   // 이메일 주소 입력
-  const onChangeEmail = (e) => {
+  const onChangeEmail = debounce((e) => {
     const emailRegExp =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     const emailCurrent = e.target.value;
@@ -213,22 +210,7 @@ const Signup = () => {
       // setEmailCodeBtn(true);
       // setEmailBtnColor('#4fc759');
     }
-  };
-
-  // 이메일 인증번호 전송 api 호출 함수
-  // const postSendEmailCode = async (payload) => {
-  //   try {
-  //     const data = await api.post(
-  //       `/api/users/authentication/email`,
-  //       { email: payload.email } //data(req.body));
-  //     );
-  //     // console.log('인증번호 전송 성공', data);
-  //     // console.log('인증번호', data.data.body.code);
-  //     setResponseEmailCode(data.data.body.code);
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
+  }, 500);
 
   // 이메일 중복확인 및 인증번호 전송 버튼
   const onClickIsSendEmailCode = (e) => {
@@ -289,11 +271,11 @@ const Signup = () => {
   // query hooks
 
   // 휴대폰 번호 중복확인 query hook
-  const useGetVerifyPhoneQuery = (strPhoneNumber) => {
+  const useGetVerifyPhoneQuery = (phoneNumber) => {
     const { isSuccess, isError, isLoading, isFetching, data, error } = useQuery(
       {
         // query 키
-        queryKey: ['getVerifyPhone', strPhoneNumber],
+        queryKey: ['getVerifyPhone', phoneNumber],
         // query 함수
         queryFn: (params) => {
           return getVerifyPhone(params);
@@ -323,19 +305,20 @@ const Signup = () => {
   const strPhoneNumber = phoneNumber.replace(regExp, '');
 
   const dataPhone = useGetVerifyPhoneQuery(strPhoneNumber);
+  // console.log(phoneNumber);
+  // console.log(strPhoneNumber);
+  // console.log(dataPhone);
 
   // 휴대폰 번호 입력
-  const onChangePhoneNumber = (e) => {
+  const onChangePhoneNumber = debounce((e) => {
     const phoneNumberRegExp = /^(\d{3})-(\d{3,4})-(\d{4})$/;
-    const phoneNumberCurrent = e.target.value;
-
-    const Num2 = phoneNumberCurrent
+    e.target.value = e.target.value
       .replace(/[^0-9]/g, '') // 공백이 들어있다면 지워주고
-      .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`); // 숫자그룹을 나눠 사이에 하이픈(-)추가
-
-    setPhoneNumber(Num2);
-
-    if (!phoneNumberRegExp.test(Num2)) {
+      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3') // 숫자그룹을 나눠 사이에 하이픈(-)추가
+      .replace(/(\-{1,2})$/g, '');
+    const hyphenNumber = e.target.value;
+    setPhoneNumber(hyphenNumber);
+    if (!phoneNumberRegExp.test(hyphenNumber)) {
       setPhoneNumberMessage('올바른 형식의 휴대폰 번호를 입력해 주세요.');
       setIsPhoneNumber(false);
       // setEmailBtnColor('#8bc790');
@@ -349,7 +332,7 @@ const Signup = () => {
       // setEmailCodeBtn(true);
       // setEmailBtnColor('#4fc759');
     }
-  };
+  }, 400);
 
   const postSendPhoneCode = async (payload) => {
     try {
@@ -397,73 +380,60 @@ const Signup = () => {
   };
 
   // 휴대폰 번호 중복확인 및 휴대폰 인증번호 전송 버튼
-  const onClickIsSendPhoneCode = useCallback(
-    (e) => {
-      // console.log(errorPhoneCode);
-      const regExp = /[^0-9/]/g;
-      const strPhoneNumber = phoneNumber.replace(regExp, '');
-      // setPhoneNumber(strPhoneNumber);
-      e.preventDefault();
-      if (phoneCodebtnLabel === '중복확인') {
-        if (dataPhone?.status === 200) {
-          setPhoneNumberMessage(
-            '사용 가능한 휴대폰 번호입니다. 해당 번호를 인증해 주세요.'
-          );
-          setIsPhoneNumber(true);
-          setPhoneCodeBtn(true);
-          setPhoneCodebtnLabel('인증번호 전송');
-          setPhoneCode('');
-          // setPhoneCodeConfirmMessage('');
-        } else if (
-          dataPhone?.response?.data.errorMessage === '중복인 유저가 있습니다.'
-        ) {
-          setPhoneNumberMessage(
-            '이미 존재하는 번호입니다. 다시 시도해 주세요.'
-          );
-          setIsPhoneNumber(false);
-          setPhoneCodeBtn(false);
-        } else if (
-          dataPhone?.response?.data.errorMessage ===
-          '데이터 형식이 잘못되었습니다.'
-        ) {
-          setPhoneNumberMessage('잘못된 형식입니다. 다시 시도해 주세요.');
-          setIsPhoneNumber(false);
-          setPhoneCodeBtn(false);
-        }
-      }
-      if (
-        phoneCodebtnLabel === '인증번호 전송' ||
-        phoneCodebtnLabel === '인증번호 재전송'
+  const onClickIsSendPhoneCode = (e) => {
+    // console.log(errorPhoneCode);
+    const regExp = /[^0-9/]/g;
+    const strPhoneNumber = phoneNumber.replace(regExp, '');
+    // setPhoneNumber(strPhoneNumber);
+    e.preventDefault();
+    if (phoneCodebtnLabel === '중복확인') {
+      if (dataPhone?.status === 200) {
+        setPhoneNumberMessage(
+          '사용 가능한 휴대폰 번호입니다. 해당 번호를 인증해 주세요.'
+        );
+        setIsPhoneNumber(true);
+        setPhoneCodeBtn(true);
+        setPhoneCodebtnLabel('인증번호 전송');
+        setPhoneCode('');
+        // setPhoneCodeConfirmMessage('');
+      } else if (
+        dataPhone?.response?.data?.errorMessage === '중복인 유저가 있습니다.'
       ) {
-        postSendPhoneCode({ phoneNumber: strPhoneNumber });
-        // if (responsePhoneCode === 201) {
-        //   setPhoneCodeConfirmMessage(
-        //     '인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.'
-        //   );
-        //   setReadOnlyPhoneCode(false);
-        //   // setPhoneCodebtnLabel('인증번호 재전송');
-        //   setPhoneCode('');
-        //   setSendPhoneCode(true);
-        // } else if (errorPhoneCode === 429) {
-        //   setPhoneCodeConfirmMessage('3분에 1번만 요청이 가능합니다.');
-        //   setIsPhoneCode(false);
-        // }
+        setPhoneNumberMessage('이미 존재하는 번호입니다. 다시 시도해 주세요.');
+        setIsPhoneNumber(false);
+        setPhoneCodeBtn(false);
+      } else if (
+        dataPhone?.response?.data?.errorMessage ===
+        '데이터 형식이 잘못되었습니다.'
+      ) {
+        setPhoneNumberMessage('잘못된 형식입니다. 다시 시도해 주세요.');
+        setIsPhoneNumber(false);
+        setPhoneCodeBtn(false);
       }
-      // if (errorPhoneCode === 429) {
+    }
+    if (
+      phoneCodebtnLabel === '인증번호 전송' ||
+      phoneCodebtnLabel === '인증번호 재전송'
+    ) {
+      postSendPhoneCode({ phoneNumber: strPhoneNumber });
+      // if (responsePhoneCode === 201) {
+      //   setPhoneCodeConfirmMessage(
+      //     '인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.'
+      //   );
+      //   setReadOnlyPhoneCode(false);
+      //   // setPhoneCodebtnLabel('인증번호 재전송');
+      //   setPhoneCode('');
+      //   setSendPhoneCode(true);
+      // } else if (errorPhoneCode === 429) {
       //   setPhoneCodeConfirmMessage('3분에 1번만 요청이 가능합니다.');
       //   setIsPhoneCode(false);
       // }
-    },
-    [
-      phoneCodebtnLabel,
-      dataPhone?.status,
-      // errorPhoneCode,
-      errorPhoneNumber,
-      phoneNumber,
-      responsePhoneCode,
-    ]
-  );
-
+    }
+    // if (errorPhoneCode === 429) {
+    //   setPhoneCodeConfirmMessage('3분에 1번만 요청이 가능합니다.');
+    //   setIsPhoneCode(false);
+    // }
+  };
   // 휴대폰 인증번호 입력
   const onChangePhoneCodeConfirm = (e) => {
     const PhoneCodeRegExp = /[0-9]{6}$/g;
@@ -487,7 +457,6 @@ const Signup = () => {
   // 휴대폰 인증번호 입력 후 인증확인 버튼
   const onClickIsConfirmPhoneCode = (e) => {
     if (Number(responsePhoneCode) === Number(phoneCode)) {
-      // alert('휴대폰 인증이 완료되었습니다.');
       setPhoneCodeConfirmMessage('인증 완료!');
       setPhoneNumberMessage('');
       setPhoneCodeConfirmBtn(false);
@@ -507,9 +476,6 @@ const Signup = () => {
       );
       setIsPhoneCode(false);
     }
-    // if (phoneCodeConfirmMessage === '인증 완료!') {
-    //   setIsPhoneCode(true);
-    // }
   };
 
   // 비밀번호
@@ -586,13 +552,9 @@ const Signup = () => {
     if (!nicknameRegExp.test(nicknameCurrent)) {
       setNicknameMessage('1-20자의 닉네임을 입력해 주세요.');
       setIsNickname(false);
-      // setEmailBtnColor('#8bc790');
-      // setEmailCodebtn('인증번호 전송');
     } else {
       setNicknameMessage('사용 가능한 닉네임입니다. (중복 허용)');
       setIsNickname(true);
-      // setEmailCodeBtn(true);
-      // setEmailBtnColor('#4fc759');
     }
   };
 
@@ -617,8 +579,6 @@ const Signup = () => {
     }
     if (email === '') {
       setEmailCheckBtn(false);
-    } else {
-      // setEmailCheckBtn(true);
     }
   }, [
     isEmail,
@@ -659,11 +619,7 @@ const Signup = () => {
       !isPhoneCode
     ) {
       alert('조건에 맞게 입력해 주세요!');
-    }
-    // else if (emailCodeConfirmMessage !== '인증 완료!') {
-    //   alert('이메일을 인증해 주세요!');
-    // }
-    else if (phoneCodeConfirmMessage !== '인증 완료!') {
+    } else if (phoneCodeConfirmMessage !== '인증 완료!') {
       alert('휴대폰 인증번호를 확인해 주세요!');
     } else {
       postSignup({
@@ -700,14 +656,9 @@ const Signup = () => {
               <input
                 type='email'
                 className='form-control'
-                value={email}
+                // value={email}
                 onChange={onChangeEmail}
-                // onBlur={onBlurEmail}
                 placeholder='이메일'
-                // style={{
-                //   borderBottom: `1px solid ${borderEmailColor}`,
-                //   background: 'none',
-                // }}
               />
               <label htmlFor='floatingInput'>이메일</label>
             </div>
@@ -716,9 +667,6 @@ const Signup = () => {
             <ButtonSt
               className={`${isEmail ? 'successBtn' : 'errorrBtn'}`}
               disabled={!emailCheckBtn}
-              // style={{
-              //   backgroundColor: `${emailBtnColor}`,
-              // }}
               onClick={onClickIsSendEmailCode}>
               {emailCodeBtnLabel}
             </ButtonSt>
@@ -733,44 +681,6 @@ const Signup = () => {
             )}
           </FormBox>
 
-          {/* 이메일 인증번호 입력 */}
-          {/* <CombinedForm>
-            <div
-              className={`form-floating mb-3 ${
-                isEmailCode ? 'successs' : 'errorr'
-              }`}>
-              <input
-                type='text'
-                className='form-control'
-                value={emailCode}
-                onChange={onChangeEmailCodeConfirm}
-                readOnly={readOnlyEmailCode}
-                maxLength={6}
-                placeholder='이메일 인증번호'
-              />
-              <label htmlFor='floatingInput'>이메일 인증번호</label>
-            </div> */}
-
-          {/* 이메일 인증번호 입력 후 인증확인 버튼 */}
-          {/* <ButtonSt
-              disabled={!emailCodeConfirmBtn}
-              // style={{
-              //   backgroundColor: `${emailCodeBtnColor}`,
-              // }}
-              onClick={onClickIsConfirmEmailCode}>
-              인증번호 확인
-            </ButtonSt>
-          </CombinedForm> */}
-
-          {/* 이메일 인증번호 입력 유효성 검사 문구 */}
-          {/* <FormBox>
-            {emailCode.length > 0 && (
-              <span className={`message ${isEmailCode ? 'success' : 'error'}`}>
-                {emailCodeConfirmMessage}
-              </span>
-            )}
-          </FormBox> */}
-
           {/* 휴대폰 번호 입력 */}
           <CombinedForm>
             <div
@@ -780,7 +690,8 @@ const Signup = () => {
               <input
                 type='text'
                 className='form-control'
-                value={phoneNumber}
+                // value={phoneNumber}
+                // onInput={onChangePhoneNumber}
                 onChange={onChangePhoneNumber}
                 readOnly={readOnlyPhoneNumber}
                 maxLength={13}
@@ -841,9 +752,6 @@ const Signup = () => {
             {/* 휴대폰 인증번호 입력 후 인증확인 버튼 */}
             <ButtonSt
               disabled={!phoneCodeConfirmBtn}
-              // style={{
-              //   backgroundColor: `${emailCodeBtnColor}`,
-              // }}
               onClick={onClickIsConfirmPhoneCode}>
               인증번호 확인
             </ButtonSt>
