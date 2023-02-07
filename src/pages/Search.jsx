@@ -316,7 +316,7 @@ const Search = () => {
                 : '약 분류를 검색해보세요!'
             }
             onKeyDown={(e) => {
-              if (e.key === 'Enter') {
+              if (e.key === 'Enter' && e.nativeEvent.isComposing === false) {
                 doingSearch(inputValue);
               }
             }}
