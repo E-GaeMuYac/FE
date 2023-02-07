@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useRef } from 'react';
 import { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
+import { debounce } from 'lodash';
 
 const Timer = ({
   phoneCodeConfirmMessage,
@@ -173,17 +174,17 @@ const FindId = () => {
   const dataPhone = useGetVerifyPhoneQuery(strPhoneNumber);
 
   // 휴대폰 번호 입력
-  const onChangePhoneNumber = (e) => {
+  const onChangePhoneNumber = debounce((e) => {
     const phoneNumberRegExp = /^(\d{3})-(\d{3,4})-(\d{4})$/;
-    const phoneNumberCurrent = e.target.value;
 
-    const Num2 = phoneNumberCurrent
+    e.target.value = e.target.value
       .replace(/[^0-9]/g, '') // 공백이 들어있다면 지워주고
-      .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`); // 숫자그룹을 나눠 사이에 하이픈(-)추가
+      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3') // 숫자그룹을 나눠 사이에 하이픈(-)추가
+      .replace(/(\-{1,2})$/g, '');
+    const hyphenNumber = e.target.value;
+    setPhoneNumber(hyphenNumber);
 
-    setPhoneNumber(Num2);
-
-    if (!phoneNumberRegExp.test(Num2)) {
+    if (!phoneNumberRegExp.test(hyphenNumber)) {
       setPhoneNumberMessage('올바른 형식의 휴대폰 번호를 입력해 주세요.');
       setIsPhoneNumber(false);
       setPhoneCodebtnLabel('인증번호 전송');
@@ -193,7 +194,7 @@ const FindId = () => {
       setIsPhoneNumber(true);
       setPhoneCodeBtn(true);
     }
-  };
+  }, 400);
 
   const postSendPhoneCode = async (payload) => {
     try {
@@ -377,7 +378,7 @@ const FindId = () => {
           <input
             type='text'
             className='form-control'
-            value={phoneNumber}
+            // value={phoneNumber}
             onChange={onChangePhoneNumber}
             readOnly={readOnlyPhoneCode}
             maxLength={13}
