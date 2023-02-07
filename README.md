@@ -1,6 +1,6 @@
 # 필넛츠 실전 프로젝트
 
-<img src="https://files.slack.com/files-pri/T01L2TNGW3T-F04NCHRNG1G/______-_______________.png"/>
+<img src="https://user-images.githubusercontent.com/118005495/217158744-c1e8c6a6-e184-4799-ba16-ea9a76a934bd.png"/>
 
 ## 프로젝트 개요
 
