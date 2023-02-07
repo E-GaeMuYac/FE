@@ -488,12 +488,12 @@ const Detail = () => {
               </GraphLabel>
               <TotalAmountWrap>
                 총 용량
-                <TotalAmount>
-                  더보기
+                <TotalAmount>더보기</TotalAmount>
+                <Box>
                   <span className='totalAmountIcon'>
                     {medicineItem?.totalAmount}
                   </span>
-                </TotalAmount>
+                </Box>
               </TotalAmountWrap>
             </div>
             <div
@@ -689,6 +689,7 @@ const MiddleCardBox = styled.div`
     font-size: 12px;
     position: absolute;
     top: 90px;
+    background: none;
     /* z-index: 1; */
   }
   .legendBox {
@@ -710,7 +711,7 @@ const TotalAmountWrap = styled.div`
   position: absolute;
   top: 271px;
   right: 219px;
-  z-index: 999;
+  /* z-index: 999; */
   color: #868686;
 `;
 
@@ -728,6 +729,16 @@ const TotalAmount = styled.div`
   margin-left: 5px;
   text-align: center;
   /* display: inline-block; */
+`;
+
+const Box = styled.div`
+  width: 44px;
+  height: 20px;
+  /* background-color: aqua; */
+  position: absolute;
+  top: 2px;
+  right: 0;
+  z-index: 999;
   :hover .totalAmountIcon {
     display: block;
   }
@@ -738,13 +749,13 @@ const TotalAmount = styled.div`
     display: none;
     position: absolute;
     top: 32px;
-    right: -25px;
+    right: -15px;
     text-align: center;
-    min-width: 150px;
+    min-width: 120px;
     max-width: 177px;
-    padding: 12px 10px;
-    font-size: 15px;
-    line-height: 24px;
+    padding: 10px;
+    font-size: 13px;
+    line-height: 22px;
     font-weight: 350;
     color: #f0f0f0;
     opacity: 1;
@@ -760,7 +771,7 @@ const TotalAmount = styled.div`
     border-left: 4px solid transparent;
     border-right: 4px solid transparent;
     position: absolute;
-    right: 44px;
+    right: 33px;
     top: -20px;
   }
 `;
