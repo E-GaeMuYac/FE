@@ -260,7 +260,7 @@ const MyReviews = () => {
                 like={review.like}
                 onClick={() => handleLike(review.reviewId)}>
                 <div />
-                도움 돼요
+                도움 돼요 {review.likeCount}
               </LikeBtn>
               <DislikeBtn
                 disLike={review.dislike}
