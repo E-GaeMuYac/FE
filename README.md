@@ -1,7 +1,5 @@
-# 필넛츠 실전 프로젝트
-
 <img src="https://user-images.githubusercontent.com/118005495/217158744-c1e8c6a6-e184-4799-ba16-ea9a76a934bd.png"/>
-
+<h1 align="center">🥜필너츠🥜</h1>
 ## 프로젝트 개요
 
 - 주제 : 약 서치 및 성분 비교 분석 사이트
