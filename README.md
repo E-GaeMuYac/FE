@@ -1,5 +1,7 @@
 # 필넛츠 실전 프로젝트
 
+<img src="https://files.slack.com/files-pri/T01L2TNGW3T-F04NCHRNG1G/______-_______________.png"/>
+
 ## 프로젝트 개요
 
 - 주제 : 약 서치 및 성분 비교 분석 사이트
