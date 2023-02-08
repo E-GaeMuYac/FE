@@ -158,6 +158,12 @@ const User = () => {
       ) {
         await mutateDelAccount(aboutConfirm.delPassword);
         localStorage.clear();
+        setAboutConfirm({
+          msg: '',
+          btn: [],
+          isOpen: false,
+          isApprove: false,
+        });
         navigate('/');
       }
     }
