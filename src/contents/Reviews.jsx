@@ -808,6 +808,10 @@ const BlindContents = styled.div`
   display: flex;
   flex-direction: column;
   padding: 30px 60px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-use-select: none;
+  user-select: none;
 `;
 
 const Contents = styled.div`
