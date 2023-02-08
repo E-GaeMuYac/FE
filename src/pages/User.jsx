@@ -126,10 +126,10 @@ const User = () => {
     setPrevImg(userInfo.imageUrl);
   };
 
-  const sortLoginType = async () => {
+  const sortLoginType = () => {
     try {
       if (userInfo.loginType !== 'Local') {
-        await deleteAccount();
+        deleteAccount();
       } else {
         setIsShow(true);
       }
@@ -152,7 +152,10 @@ const User = () => {
 
   useEffect(() => {
     async function fetchData() {
-      if (aboutConfirm.isApprove === true && aboutConfirm.delPassword) {
+      if (
+        aboutConfirm.isApprove === true &&
+        aboutConfirm.msg.includes('탈퇴')
+      ) {
         await mutateDelAccount(aboutConfirm.delPassword);
         localStorage.clear();
         navigate('/');
