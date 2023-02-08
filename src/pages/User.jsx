@@ -19,7 +19,7 @@ import {
 } from '../query/userQuery';
 
 import { Laptop, PC } from '../query/useMediaQuery';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   confirmModalState,
   alertModalState,
@@ -37,9 +37,10 @@ const User = () => {
   const [serviceMsg, setServiceMsg] = useState('');
   const [delPassword, setDelPassword] = useState('');
   const [isShow, setIsShow] = useState(false);
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const userInfo = useRecoilValue(userInfoState);
   const [aboutConfirm, setAboutConfirm] = useRecoilState(confirmModalState);
   const [aboutAlert, setAboutAlert] = useRecoilState(alertModalState);
+  const [inputValue, setInputValue] = useState('');
 
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
@@ -53,14 +54,10 @@ const User = () => {
     }
   }, [tipsData]);
 
-  const changeNickname = () => {
-    setIsTextClicked(true);
-  };
-
-  const mutateNickname = useEditNickname(userInfo.nickname);
+  const mutateNickname = useEditNickname(inputValue);
 
   const modifyNickname = () => {
-    mutateNickname.mutate(userInfo.nickname);
+    mutateNickname.mutate(inputValue);
     setIsTextClicked(false);
   };
 
@@ -96,7 +93,7 @@ const User = () => {
   };
 
   const nickInput = (e) => {
-    setUserInfo({ ...userInfo, nickname: e.target.value });
+    setInputValue(e.target.value);
   };
 
   // 서버에서 presigned url 받아온 후 s3에 업로드
@@ -115,10 +112,6 @@ const User = () => {
 
   const defaultImgHandler = async () => {
     mutateDefaultImg.mutate();
-  };
-
-  const cancelChange = () => {
-    setIsTextClicked(false);
   };
 
   const cancelImgChange = () => {
@@ -156,15 +149,29 @@ const User = () => {
         aboutConfirm.isApprove === true &&
         aboutConfirm.msg.includes('탈퇴')
       ) {
-        await mutateDelAccount(aboutConfirm.delPassword);
-        localStorage.clear();
-        setAboutConfirm({
-          msg: '',
-          btn: [],
-          isOpen: false,
-          isApprove: false,
-        });
-        navigate('/');
+        const res = await mutateDelAccount(aboutConfirm.delPassword);
+        if (res.status === 200) {
+          localStorage.clear();
+          setAboutConfirm({
+            msg: '',
+            btn: [],
+            isOpen: false,
+            isApprove: false,
+          });
+          navigate('/');
+        } else {
+          setAboutConfirm({
+            msg: '',
+            btn: [],
+            isOpen: false,
+            isApprove: false,
+          });
+          setAboutAlert({
+            msg: '알맞은 비밀번호를 입력해주세요.',
+            btn: '확인하기',
+            isOpen: true,
+          });
+        }
       }
     }
     fetchData();
@@ -295,7 +302,10 @@ const User = () => {
                   {userInfo.nickname ? `${userInfo.nickname}님` : 'OOO님'}
                 </Nickname>
                 <div className='wrapNickname'>
-                  <button className='editNickname' onClick={changeNickname} />
+                  <button
+                    className='editNickname'
+                    onClick={() => setIsTextClicked(true)}
+                  />
                 </div>
               </div>
             ) : (
@@ -307,7 +317,7 @@ const User = () => {
                   maxLength={20}
                 />
                 <button className='o' onClick={modifyNickname} />
-                <button className='x' onClick={cancelChange} />
+                <button className='x' onClick={() => setIsTextClicked(false)} />
               </NicknameInput>
             )}
             <PC>
@@ -746,7 +756,7 @@ const CancelBtn = styled.button`
   border-radius: 50px;
   background-color: #d0d0d0;
   color: #242424;
-  font-weight: 700;
+  font-weight: 500;
   cursor: pointer;
 `;
 
@@ -763,7 +773,7 @@ const FinishBtn = styled.button`
   border-radius: 50px;
   background-color: #242424;
   color: white;
-  font-weight: 700;
+  font-weight: 400;
   cursor: pointer;
 `;
 
