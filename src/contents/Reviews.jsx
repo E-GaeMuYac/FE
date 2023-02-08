@@ -106,7 +106,7 @@ const Reviews = () => {
   const [moreShow, setMoreShow] = useState(0);
   const [reviewArr, setReviewArr] = useState([]);
   const [searchLength, setSearchLength] = useState(0);
-  const [sort, setSort] = useState('updatedAt');
+  const [sort, setSort] = useState('createdAt');
   const [sortText, setSortText] = useState('최신순');
   const [pickTag, setpickTag] = useState('전체보기');
   const [openDrop, setOpenDrop] = useState(false);
@@ -203,7 +203,7 @@ const Reviews = () => {
     setSort(sort);
     setNowPageNum(1);
     setOpenDrop(false);
-    if (sort === 'updatedAt') {
+    if (sort === 'createdAt') {
       setSortText('최신순');
     } else if (sort === 'likeCount') {
       setSortText('추천순');
@@ -286,7 +286,7 @@ const Reviews = () => {
                 <SortName>{sortText}</SortName>
                 <UpArrow />
               </SortDefault>
-              <CreatedAt onClick={() => handleDropdown('updatedAt')}>
+              <CreatedAt onClick={() => handleDropdown('createdAt')}>
                 최신순
               </CreatedAt>
               <LikeCount onClick={() => handleDropdown('likeCount')}>
@@ -326,7 +326,7 @@ const Reviews = () => {
                       <span>{review.nickname}</span>
                     </AccountBox>
                     <DateWrited>
-                      {review.updatedAt
+                      {review.createdAt
                         .replace('T', '. ')
                         .split(' ')[0]
                         .split('-')
@@ -426,7 +426,7 @@ const Reviews = () => {
                     <span>{review.nickname}</span>
                   </AccountBox>
                   <DateWrited>
-                    {review.updatedAt
+                    {review.createdAt
                       .replace('T', '. ')
                       .split(' ')[0]
                       .split('-')
