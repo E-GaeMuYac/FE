@@ -183,6 +183,16 @@ const AllergySearch = () => {
     setNowPageNum(1);
   };
 
+  const guideKeyword = [
+    '아스피린',
+    '아세클로페낙',
+    '덱시부프로펜',
+    '아세트아미노펜',
+    '페니실린',
+    '세팔로',
+    '스포린',
+  ];
+
   return (
     <Wrapper>
       <Header>
@@ -206,7 +216,9 @@ const AllergySearch = () => {
             <AutoResult text={inputValue}>
               {autoValueList ? (
                 autoValueList.map((autoValue) => (
-                  <SingleResult onClick={pickSingleValue}>
+                  <SingleResult
+                    key={autoValue.materialId}
+                    onClick={pickSingleValue}>
                     {autoValue.name}
                   </SingleResult>
                 ))
@@ -240,22 +252,16 @@ const AllergySearch = () => {
           </ListWrap>
         </>
       ) : (
-        <GuideWrap>
-          <GuideBox>
-            <GuideTop>
-              <button type='button' onClick={pickSingleValue}>
-                아세트아미노펜
-              </button>
-              <div />
-              <h3>
-                알레르기 등록 후에
-                <br />
-                <span>게보린</span>을 검색해보세요!
-              </h3>
-            </GuideTop>
-            <GuideBottom>테스트를 위한 가이드입니다!</GuideBottom>
-          </GuideBox>
-        </GuideWrap>
+        <TopSearchWrap>
+          <div className='title'>인기 검색어</div>
+          <ul className='desc'>
+            {guideKeyword.map((list) => (
+              <li key={list} onClick={pickSingleValue}>
+                {list}
+              </li>
+            ))}
+          </ul>
+        </TopSearchWrap>
       )}
     </Wrapper>
   );
@@ -441,58 +447,53 @@ const SearchSum = styled.span`
   font-size: 20px;
 `;
 
-const GuideWrap = styled.div`
-  width: 860px;
-  height: 70vh;
-  display: flex;
-  align-items: center;
-`;
-const GuideBox = styled.div`
-  width: 100%;
-  height: 260px;
+const TopSearchWrap = styled.div`
+  @media screen and (max-width: 1700px) {
+    width: 400px;
+  }
+  width: 520px;
+  height: 316px;
+  margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-`;
-
-const GuideTop = styled.div`
-  width: 100%;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  button {
-    width: 144px;
-    height: 43px;
-    border-radius: 40px;
-    background-color: #f6f7fa;
-    font-size: 16px;
-    font-weight: medium;
-    border: none;
-  }
-
-  div {
-    width: 229px;
-    height: 24px;
-    background-image: url('/assets/image/LongArrow.png');
-    background-size: cover;
-  }
-
-  h3 {
-    font-size: 35px;
-  }
-
-  span {
-    color: #3366ff;
+  margin: 144px auto;
+  .title {
+    @media screen and (max-width: 1700px) {
+      font-size: 20px;
+      line-height: 32px;
+    }
+    width: 100%;
+    font-size: 24px;
+    line-height: 35px;
+    color: #242424;
     font-weight: bold;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e7e7e7;
+    margin-bottom: 24px;
   }
-`;
-
-const GuideBottom = styled.span`
-  font-size: 16px;
-  color: #868686;
+  .desc {
+    @media screen and (max-width: 1700px) {
+      gap: 18px 14px;
+    }
+    width: 100%;
+    display: flex;
+    gap: 18px 14px;
+    flex-wrap: wrap;
+  }
+  .desc li {
+    @media screen and (max-width: 1700px) {
+      font-size: 16px;
+      width: auto;
+    }
+    background-color: #e7e7e7;
+    padding: 6.5px 15px;
+    height: 34px;
+    border-radius: 20px;
+    font-size: 16px;
+    line-height: 23px;
+    cursor: pointer;
+  }
 `;
 
 const PagenationWrap = styled.div`
