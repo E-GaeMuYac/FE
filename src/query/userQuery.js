@@ -51,12 +51,13 @@ const putS3Upload = async ({ presignedUrl, newImg }) => {
 
 // 회원 탈퇴
 const deleteAccount = async (password) => {
-  await userApi.delete('/api/users/delete', {
+  const data = await userApi.delete('/api/users/delete', {
     data: {
       password,
     },
     withCredentials: true,
   });
+  return data;
 };
 
 // ------------------------------------------------------------------------

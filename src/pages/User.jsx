@@ -156,15 +156,29 @@ const User = () => {
         aboutConfirm.isApprove === true &&
         aboutConfirm.msg.includes('탈퇴')
       ) {
-        await mutateDelAccount(aboutConfirm.delPassword);
-        localStorage.clear();
-        setAboutConfirm({
-          msg: '',
-          btn: [],
-          isOpen: false,
-          isApprove: false,
-        });
-        navigate('/');
+        const res = await mutateDelAccount(aboutConfirm.delPassword);
+        if (res.status === 200) {
+          localStorage.clear();
+          setAboutConfirm({
+            msg: '',
+            btn: [],
+            isOpen: false,
+            isApprove: false,
+          });
+          navigate('/');
+        } else {
+          setAboutConfirm({
+            msg: '',
+            btn: [],
+            isOpen: false,
+            isApprove: false,
+          });
+          setAboutAlert({
+            msg: '알맞은 비밀번호를 입력해주세요.',
+            btn: '확인하기',
+            isOpen: true,
+          });
+        }
       }
     }
     fetchData();
