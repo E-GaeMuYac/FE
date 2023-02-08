@@ -270,7 +270,7 @@ const MyReviews = () => {
               </DislikeBtn>
             </Recommend>
             <DateWrited>
-              {review.updatedAt
+              {review.createdAt
                 .replace('T', '. ')
                 .split(' ')[0]
                 .split('-')
