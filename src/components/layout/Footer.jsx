@@ -86,14 +86,14 @@ const LogoBox = styled.div`
 `;
 
 const Kogl = styled.div`
-  background-image: url('assets/image/공공누리.png');
+  background-image: url('/assets/image/공공누리.png');
   background-size: cover;
   width: 93px;
   height: 35px;
 `;
 
 const Mfds = styled.div`
-  background-image: url('assets/image/식약처로고.png');
+  background-image: url('/assets/image/식약처로고.png');
   background-size: cover;
   width: 149px;
   height: 43px;
