@@ -922,7 +922,6 @@ const CalenderWrap = styled.div`
     width: 100%;
     margin-top: 5px;
   }
-  /* background-color: aqua; */
   width: 100%;
   display: flex;
   align-items: center;
@@ -947,7 +946,7 @@ const CalenderWrap = styled.div`
     span {
       @media screen and (max-width: 1700px) {
         font-size: 13px;
-        margin-top: 34px;
+        margin-top: 29px;
       }
       margin-top: 40px;
       font-size: 18px;
