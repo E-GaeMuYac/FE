@@ -453,6 +453,7 @@ export default ChatBox;
 
 const ChatBoxOpenBtn = styled.div`
   position: fixed;
+  z-index: 500;
   right: 100px;
   bottom: 130px;
   width: 70px;
@@ -468,6 +469,7 @@ const ChatBoxOpenBtn = styled.div`
 `;
 const ChatBoxWrap = styled.div`
   position: fixed;
+  z-index: 500;
   right: 100px;
   bottom: 220px;
   overflow: hidden;
