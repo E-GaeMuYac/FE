@@ -485,7 +485,7 @@ const FindPassword = () => {
   const [disabledSubmit, setDisabledSubmit] = useState(true);
 
   // 이메일 주소 입력
-  const onChangeEmail = debounce((e) => {
+  const onChangeEmail = (e) => {
     const emailRegExp =
       /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     const emailCurrent = e.target.value;
@@ -499,40 +499,24 @@ const FindPassword = () => {
       setIsEmail(false);
       setEmailCheckBtn(true);
     }
-  }, 500);
+  };
 
   // 이메일 확인 api 호출 함수
   const getCheckEmail = async (params) => {
-    try {
-      const data = await api.get(
-        `/api/users/find/phoneNumber?email=${params.queryKey[1]}`
-      );
-      // return setResponsePhoneNumber(data.status);
-      if (data?.status === 200) {
-        setResponsePhoneNumber(data.data.phoneNumber);
-        setPhoneNumber(data.data.phoneNumber);
-        setResponseEmail(data?.status);
-        // setIsVisible(true);
-        // setIsEmail(true);
-        // setPhoneNumberMessage('휴대폰 번호를 인증해주세요.');
-        // setIsPhoneNumber(false);
-        // setEmailMessage('이메일 확인 완료!');
-      }
-    } catch (error) {
-      if (error instanceof AxiosError)
-        if (error.response?.status === 400) {
-          // console.log(error.response?.status);
-          // console.log(error);
-          // setEmailMessage('해당하는 사용자가 없습니다.');
-          // setReadOnlyEmail(false);
-          // setIsEmail(false);
-          // setEmailCheckBtn(true);
-        }
+    const data = await api.get(
+      `/api/users/find/phoneNumber?email=${params.queryKey[1]}`
+    );
+    if (data?.status === 200) {
+      setResponsePhoneNumber(data.data.phoneNumber);
+      setPhoneNumber(data.data.phoneNumber);
+      setResponseEmail(data?.status);
     }
   };
 
   // 이메일 확인 query hook
   const useGetCheckEmailQuery = (email) => {
+    const emailRegExp =
+      /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     const { isSuccess, isError, isLoading, isFetching, data, error } = useQuery(
       {
         // query 키
@@ -542,7 +526,7 @@ const FindPassword = () => {
           return getCheckEmail(params);
         },
         // 자동 랜더링 삭제
-        // enabled: true,
+        enabled: !!emailRegExp.test(email),
         // 자동 리랜더링 삭제
         refetchOnWindowFocus: false,
       }
@@ -562,7 +546,7 @@ const FindPassword = () => {
     return data;
   };
 
-  const data = useGetCheckEmailQuery(email);
+  useGetCheckEmailQuery(email);
 
   // 휴대폰 번호 가리기
   const replaceAt = function (input, index, character) {
