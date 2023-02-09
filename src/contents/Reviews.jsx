@@ -252,6 +252,20 @@ const Reviews = () => {
     }
   };
 
+  const koreaCurrent = (date) => {
+    let localDate = new Date(date);
+    let nowMonth = (localDate.getMonth() + 1).toString();
+    if (nowMonth.length === 1) {
+      nowMonth = '0' + nowMonth;
+    }
+    let nowDate = localDate.getDate().toString();
+    if (nowDate.length === 1) {
+      nowDate = '0' + nowDate;
+    }
+    let koreaDate = `${localDate.getFullYear()}년 ${nowMonth}월 ${nowDate}일`;
+    return koreaDate;
+  };
+
   return (
     <Wrapper>
       <ReviewBtnWrap>
@@ -325,16 +339,7 @@ const Reviews = () => {
                       </AccountBoxBg>
                       <span>{review.nickname}</span>
                     </AccountBox>
-                    <DateWrited>
-                      {review.createdAt
-                        .replace('T', '. ')
-                        .split(' ')[0]
-                        .split('-')
-                        .join('.')
-                        .replace('.', '년 ')
-                        .replace('.', '월 ')
-                        .replace('.', '일')}
-                    </DateWrited>
+                    <DateWrited>{koreaCurrent(review.createdAt)}</DateWrited>
                   </ReviewInfo>
                   <Description>
                     {review.review.length > 260 ? (
@@ -425,16 +430,7 @@ const Reviews = () => {
                     </AccountBoxBg>
                     <span>{review.nickname}</span>
                   </AccountBox>
-                  <DateWrited>
-                    {review.createdAt
-                      .replace('T', '. ')
-                      .split(' ')[0]
-                      .split('-')
-                      .join('.')
-                      .replace('.', '년 ')
-                      .replace('.', '월 ')
-                      .replace('.', '일')}
-                  </DateWrited>
+                  <DateWrited>{koreaCurrent(review.createdAt)}</DateWrited>
                 </ReviewInfo>
                 <Description>
                   {review.review.length > 260 ? (
