@@ -119,36 +119,31 @@ const FindId = () => {
 
   // 휴대폰 번호 중복확인 api 호출 함수
   const getVerifyPhone = async (params) => {
-    try {
-      const data = await api.get(
-        `/api/users/signup/phone?phoneNumber=${params.queryKey[1]}`
-      );
-      return data;
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        // const errMsgPhoneNumber = error.response?.data.errorMessage;
-        // setErrorPhoneNumber(errMsgPhoneNumber);
-      }
-      // console.log(error.response?.status);
-      //   console.log(error.response?.data.errorMessage);
-      // console.log(error);
-    }
+    const data = await api.get(
+      `/api/users/signup/phone?phoneNumber=${params.queryKey[1]}`
+    );
+    return data;
   };
 
   // query hooks
 
   // 휴대폰 번호 중복확인 query hook
-  const useGetVerifyPhoneQuery = (strPhoneNumber) => {
+  const useGetVerifyPhoneQuery = (phoneNumber) => {
+    const phoneNumberRegExp = /^(\d{3})-(\d{3,4})-(\d{4})$/;
+    const hyphenNumber = phoneNumber
+      .replace(/[^0-9]/g, '') // 공백이 들어있다면 지워주고
+      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3') // 숫자그룹을 나눠 사이에 하이픈(-)추가
+      .replace(/(\-{1,2})$/g, '');
     const { isSuccess, isError, isLoading, isFetching, data, error } = useQuery(
       {
         // query 키
-        queryKey: ['getVerifyPhone', strPhoneNumber],
+        queryKey: ['getVerifyPhone', phoneNumber],
         // query 함수
         queryFn: (params) => {
           return getVerifyPhone(params);
         },
         // 자동 랜더링 삭제
-        // enabled: true,
+        enabled: !!phoneNumberRegExp.test(hyphenNumber),
         // 자동 리랜더링 삭제
         refetchOnWindowFocus: false,
       }
@@ -174,9 +169,8 @@ const FindId = () => {
   const dataPhone = useGetVerifyPhoneQuery(strPhoneNumber);
 
   // 휴대폰 번호 입력
-  const onChangePhoneNumber = debounce((e) => {
+  const onChangePhoneNumber = (e) => {
     const phoneNumberRegExp = /^(\d{3})-(\d{3,4})-(\d{4})$/;
-
     e.target.value = e.target.value
       .replace(/[^0-9]/g, '') // 공백이 들어있다면 지워주고
       .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3') // 숫자그룹을 나눠 사이에 하이픈(-)추가
@@ -194,14 +188,13 @@ const FindId = () => {
       setIsPhoneNumber(true);
       setPhoneCodeBtn(true);
     }
-  }, 400);
+  };
 
   const postSendPhoneCode = async (payload) => {
     try {
       const data = await api.post('/api/users/authentication/phone', {
         phoneNumber: payload.phoneNumber,
       });
-      // setResponsePhoneCode(data.data.code);
       if (data?.response?.status === 429) {
         setPhoneCodeConfirmMessage('3분에 1번만 요청이 가능합니다.');
         setIsPhoneCode(false);
@@ -226,30 +219,7 @@ const FindId = () => {
       }
       // setErrorPhoneCode(data?.response?.status);
       setResponsePhoneCode(data?.data?.code);
-      // else if (data?.status === 201) {
-      //   setPhoneCodeConfirmMessage(
-      //     '인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.'
-      //   );
-      //   setPhoneCodeBtn(false);
-      //   setPhoneCodeBtn(false);
-      //   setReadOnlyPhoneCode(false);
-      //   setPhoneCode('');
-      //   setSendPhoneCode(true);
-      // }
-      // setPhoneCodeBtn(false);
-      // setReadOnlyPhoneCode(false);
-      // setPhoneCode('');
-      // setSendPhoneCode(true);
     } catch (error) {
-      // if (error.response?.status === 429) {
-      //   setResponsePhoneCode(error.response?.status);
-      //   setPhoneCodeConfirmMessage('3분에 1번만 요청이 가능합니다.');
-      //   setIsPhoneCode(false);
-      //   setSendPhoneCode(false);
-      //   setPhoneCodeBtn(true);
-      //   setPhoneNumberMessage('');
-      //   setIsPhoneNumber(true);
-      // }
       return error;
     }
   };
@@ -263,15 +233,7 @@ const FindId = () => {
       dataPhone?.response?.data?.errorMessage === '중복인 유저가 있습니다.' &&
       responsePhoneCode !== 429
     ) {
-      // setPhoneNumberMessage(
-      //   '인증번호가 전송되었습니다. 문자메시지를 확인해 주세요.'
-      // );
-      // setIsPhoneNumber(true);
-      // setReadOnlyPhoneCode(false);
-      // setPhoneCode('');
-      // setPhoneCodeBtn(false);
       postSendPhoneCode({ phoneNumber: strPhoneNumber });
-      // setSendPhoneCode(true);
     } else if (dataPhone?.status === 200) {
       setPhoneNumberMessage('해당 휴대폰 번호로 가입된 계정이 없습니다.');
       setSendPhoneCode(false);
