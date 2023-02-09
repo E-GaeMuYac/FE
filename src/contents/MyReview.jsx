@@ -173,6 +173,20 @@ const MyReviews = () => {
     }
   };
 
+  const koreaCurrent = (date) => {
+    let localDate = new Date(date);
+    let nowMonth = (localDate.getMonth() + 1).toString();
+    if (nowMonth.length === 1) {
+      nowMonth = '0' + nowMonth;
+    }
+    let nowDate = localDate.getDate().toString();
+    if (nowDate.length === 1) {
+      nowDate = '0' + nowDate;
+    }
+    let koreaDate = `${localDate.getFullYear()}년 ${nowMonth}월 ${nowDate}일`;
+    return koreaDate;
+  };
+
   return (
     <Wrapper>
       {myReviewArr.map((review) => (
@@ -269,16 +283,7 @@ const MyReviews = () => {
                 도움 안돼요 {review.dislikeCount}
               </DislikeBtn>
             </Recommend>
-            <DateWrited>
-              {review.createdAt
-                .replace('T', '. ')
-                .split(' ')[0]
-                .split('-')
-                .join('.')
-                .replace('.', '년 ')
-                .replace('.', '월 ')
-                .replace('.', '일')}
-            </DateWrited>
+            <DateWrited>{koreaCurrent(review.createdAt)}</DateWrited>
           </div>
         </Contents>
       ))}
