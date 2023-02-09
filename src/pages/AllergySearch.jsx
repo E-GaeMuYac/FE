@@ -253,7 +253,7 @@ const AllergySearch = () => {
         </>
       ) : (
         <TopSearchWrap>
-          <div className='title'>인기 검색어</div>
+          <div className='title'>알레르기 빈도가 높은 성분</div>
           <ul className='desc'>
             {guideKeyword.map((list) => (
               <li key={list} onClick={pickSingleValue}>
@@ -305,12 +305,7 @@ const Header = styled.div`
 `;
 
 const InputWrap = styled.div`
-  @media screen and (max-width: 1700px) {
-    width: 70%;
-  }
-  width: 860px;
   margin-bottom: 70px;
-  border-radius: 163px;
   display: flex;
   justify-content: center;
   background-color: #ffffff;
