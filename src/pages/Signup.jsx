@@ -187,6 +187,7 @@ const Signup = () => {
   };
 
   const data = useGetVerifyEmailQuery(email);
+
   // console.log(data);
 
   // 이메일 주소 입력
@@ -223,14 +224,8 @@ const Signup = () => {
       // setEmailCodeBtn(true);
       if (data?.status === 200) {
         setEmailMessage('사용 가능한 이메일입니다.');
-        // setIsEmail(true);
+        setIsEmail(true);
         setEmailCheckBtn(false);
-        // setEmailCodeBtn(true);
-        // setEmailCodeBtnLabel('인증번호 전송');
-        // alert('인증번호가 전송되었습니다. 이메일을 확인해 주세요.');
-        // postSendEmailCode({ email: email });
-        // setEmailCode('');
-        // setEmailCodeConfirmMessage('');
       } else if (
         data?.response?.data.errorMessage === '중복인 유저가 있습니다.'
       ) {
@@ -368,7 +363,7 @@ const Signup = () => {
 
       // // setPhoneCodebtnLabel('인증번호 재전송');
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       // console.log(error.response?.status);
       setErrorPhoneCode(error.response?.status);
       if (error.response?.status === 429) {
@@ -439,7 +434,7 @@ const Signup = () => {
     const PhoneCodeRegExp = /[0-9]{6}$/g;
     const PhoneCodeCurrent = e.target.value;
     setPhoneCode(PhoneCodeCurrent);
-
+    setCompletedPhoneCode(false);
     if (!PhoneCodeRegExp.test(PhoneCodeCurrent)) {
       setPhoneCodeConfirmMessage('인증번호 6자리를 입력해 주세요.');
       setIsPhoneCode(false);
@@ -466,15 +461,18 @@ const Signup = () => {
       setReadOnlyPhoneNumber(!readOnlyPhoneCode);
       setIsPhoneCode(true);
       setSendPhoneCode(false); // 인증번호 인증 완료 되면 false로 바꾸기
+      setCompletedPhoneCode(true);
     } else {
       setPhoneCodeConfirmMessage('인증번호가 틀렸습니다. 다시 입력해 주세요.');
       setIsPhoneCode(false);
+      setCompletedPhoneCode(false);
     }
     if (!responsePhoneCode) {
       setPhoneCodeConfirmMessage(
         '전송된 인증번호가 없습니다. 인증번호를 전송해주세요.'
       );
       setIsPhoneCode(false);
+      setCompletedPhoneCode(false);
     }
   };
 
@@ -574,9 +572,6 @@ const Signup = () => {
     if (phoneCodeConfirmMessage === '인증 완료!') {
       setIsPhoneCode(true);
     }
-    if (emailMessage === '사용 가능한 이메일입니다.') {
-      setIsEmail(true);
-    }
     if (email === '') {
       setEmailCheckBtn(false);
     }
@@ -628,6 +623,7 @@ const Signup = () => {
         confirm: passwordConfirm,
         nickname: nickname,
         phoneNumber: strPhoneNumber,
+        certification: completedPhoneCode,
       });
       navigate('/login');
       setAboutAlert({
