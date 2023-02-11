@@ -2,7 +2,7 @@
 <br/>
 <h1 align="center">🥜필너츠🥜</h1>
 <h4 align="center">Pillnuts는 알약(pill)과 땅콩(peanuts)의 합성어로, 땅콩의 껍질을 까서 먹는 것을 <br/>모티브로 하여 ‘약의 속(성분)을 파헤쳐보자’ 라는 의미입니다.</h4><br/><h3 align="center"><a href="https://www.pillnuts.store/" target="_blank">필너츠 보러가기</a> &nbsp; &nbsp; |&nbsp; &nbsp; 
-    <a href="" target="_blank">필너츠 시연영상</a></h3>
+    <a href="https://youtu.be/Rg6NAF8MU28" target="_blank">필너츠 시연영상</a></h3>
  <br/>
 
 ## 🥜프로젝트 소개
